@@ -4,6 +4,8 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import { execSync } from "child_process";
+import path from "path";
 
 // The Windows Agent Script (Python)
 const AGENT_SCRIPT = `
@@ -184,6 +186,53 @@ export async function registerRoutes(
   app.delete(api.configs.delete.path, async (req, res) => {
     await storage.deleteConfig(Number(req.params.id));
     res.status(204).end();
+  });
+
+  // Check if software for a specific config is running
+  app.get(api.configs.status.path, async (req, res) => {
+    try {
+      const config = await storage.getConfig(Number(req.params.id));
+      if (!config) {
+        return res.status(404).json({ message: "Config not found" });
+      }
+
+      // Extract process name from trigger path
+      const processName = path.basename(config.triggerPath);
+      let isRunning = false;
+      let details = "Process not found";
+
+      // Check if process is running (Windows-specific)
+      try {
+        if (process.platform === "win32") {
+          // Use tasklist command on Windows
+          const tasklist = execSync("tasklist", { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] });
+          isRunning = tasklist.toLowerCase().includes(processName.toLowerCase());
+          details = isRunning ? "Process is currently running" : "Process is not running";
+        } else if (process.platform === "darwin" || process.platform === "linux") {
+          // For Mac/Linux - use ps command
+          try {
+            const psList = execSync("ps aux", { encoding: "utf-8" });
+            isRunning = psList.toLowerCase().includes(processName.toLowerCase());
+            details = isRunning ? "Process is currently running" : "Process is not running";
+          } catch {
+            details = "Could not check process status on this OS";
+          }
+        } else {
+          details = "Process checking not supported on this platform";
+        }
+      } catch (err) {
+        details = "Error checking process status";
+      }
+
+      res.json({
+        id: config.id,
+        isRunning,
+        processName,
+        details,
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Error checking config status", details: String(err) });
+    }
   });
 
   // Log Routes

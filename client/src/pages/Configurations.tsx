@@ -1,5 +1,6 @@
 import { useUsbConfigs, useCreateUsbConfig, useDeleteUsbConfig, useUpdateUsbConfig } from "@/hooks/use-usb-configs";
-import { Plus, Trash2, Edit2, Play, Search, Power } from "lucide-react";
+import { useConfigStatus } from "@/hooks/use-config-status";
+import { Plus, Trash2, Edit2, Play, Search, Power, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -13,12 +14,6 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm } from "react-hook-form";
@@ -26,6 +21,104 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { insertUsbConfigSchema } from "@shared/schema";
 import { type InsertUsbConfig } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
+
+// Configuration card with live status checking
+function ConfigurationCard({ config, i, onEdit, onDelete, onToggle }: any) {
+  const { data: status, isLoading: statusLoading } = useConfigStatus(config.id);
+
+  return (
+    <motion.div
+      key={config.id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: i * 0.05 }}
+      className="group relative bg-card hover:bg-card/80 border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-4">
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${config.isEnabled ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
+            <Play className="w-6 h-6" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h3 className="font-bold text-lg text-foreground">{config.friendlyName}</h3>
+              <Badge variant={config.isEnabled ? "default" : "secondary"} className={config.isEnabled ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200" : ""}>
+                {config.isEnabled ? 'Active' : 'Disabled'}
+              </Badge>
+              {/* Software Status Badge */}
+              <Badge 
+                variant="outline" 
+                className={statusLoading ? "opacity-50" : (status?.isRunning 
+                  ? "bg-green-100 text-green-800 border-green-300 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800" 
+                  : "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-800/30 dark:text-gray-400 dark:border-gray-700"
+                )}
+              >
+                <Circle className="w-2 h-2 mr-1.5" fill="currentColor" />
+                {statusLoading ? "Checking..." : (status?.isRunning ? "Running" : "Stopped")}
+              </Badge>
+            </div>
+            <code className="text-xs bg-muted/50 px-1.5 py-0.5 rounded text-muted-foreground mt-1 block w-fit">
+              {config.deviceId}
+            </code>
+            <div className="mt-3 text-sm text-muted-foreground flex items-center gap-2">
+              <span className="font-medium text-foreground">Triggers:</span> 
+              <span className="truncate max-w-md bg-muted/30 px-2 py-0.5 rounded border border-border/50 font-mono text-xs">
+                {config.triggerPath} {config.triggerParams}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button 
+            size="icon" 
+            variant="ghost" 
+            className="text-primary hover:text-primary hover:bg-primary/10"
+            onClick={() => onEdit(config)}
+            title="Edit"
+            data-testid={`button-edit-config-${config.id}`}
+          >
+            <Edit2 className="w-4 h-4" />
+          </Button>
+          <Button 
+            size="icon" 
+            variant="ghost" 
+            className={config.isEnabled ? "text-amber-600 hover:text-amber-700 hover:bg-amber-50" : "text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"}
+            onClick={() => onToggle(config.id, config.isEnabled)}
+            title={config.isEnabled ? "Disable" : "Enable"}
+          >
+            <Power className="w-4 h-4" />
+          </Button>
+          <Button 
+            size="icon" 
+            variant="ghost" 
+            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+            onClick={() => {
+              if (confirm('Are you sure you want to delete this config?')) {
+                onDelete.mutate(config.id);
+              }
+            }}
+            data-testid={`button-delete-config-${config.id}`}
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+      
+      <div className="mt-4 flex gap-2 text-xs text-muted-foreground flex-wrap">
+        {config.runSilently && (
+          <span className="flex items-center gap-1 bg-muted/30 px-2 py-1 rounded">Run Silently</span>
+        )}
+        {config.forceMinimize && (
+          <span className="flex items-center gap-1 bg-muted/30 px-2 py-1 rounded">Minimize Window</span>
+        )}
+        {config.port && (
+          <span className="flex items-center gap-1 bg-muted/30 px-2 py-1 rounded">Port: {config.port}</span>
+        )}
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Configurations() {
   const { data: configs, isLoading } = useUsbConfigs();
@@ -97,85 +190,7 @@ export default function Configurations() {
             </motion.div>
           ) : (
             filteredConfigs?.map((config, i) => (
-              <motion.div
-                key={config.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="group relative bg-card hover:bg-card/80 border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${config.isEnabled ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
-                      <Play className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <h3 className="font-bold text-lg text-foreground">{config.friendlyName}</h3>
-                        <Badge variant={config.isEnabled ? "default" : "secondary"} className={config.isEnabled ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200" : ""}>
-                          {config.isEnabled ? 'Active' : 'Disabled'}
-                        </Badge>
-                      </div>
-                      <code className="text-xs bg-muted/50 px-1.5 py-0.5 rounded text-muted-foreground mt-1 block w-fit">
-                        {config.deviceId}
-                      </code>
-                      <div className="mt-3 text-sm text-muted-foreground flex items-center gap-2">
-                        <span className="font-medium text-foreground">Triggers:</span> 
-                        <span className="truncate max-w-md bg-muted/30 px-2 py-0.5 rounded border border-border/50 font-mono text-xs">
-                          {config.triggerPath} {config.triggerParams}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      className="text-primary hover:text-primary hover:bg-primary/10"
-                      onClick={() => handleEdit(config)}
-                      title="Edit"
-                      data-testid={`button-edit-config-${config.id}`}
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      className={config.isEnabled ? "text-amber-600 hover:text-amber-700 hover:bg-amber-50" : "text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"}
-                      onClick={() => toggleStatus(config.id, config.isEnabled)}
-                      title={config.isEnabled ? "Disable" : "Enable"}
-                    >
-                      <Power className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                      onClick={() => {
-                        if (confirm('Are you sure you want to delete this config?')) {
-                          deleteConfig.mutate(config.id);
-                        }
-                      }}
-                      data-testid={`button-delete-config-${config.id}`}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="mt-4 flex gap-2 text-xs text-muted-foreground">
-                  {config.runSilently && (
-                    <span className="flex items-center gap-1 bg-muted/30 px-2 py-1 rounded">Run Silently</span>
-                  )}
-                  {config.forceMinimize && (
-                    <span className="flex items-center gap-1 bg-muted/30 px-2 py-1 rounded">Minimize Window</span>
-                  )}
-                  {config.port && (
-                    <span className="flex items-center gap-1 bg-muted/30 px-2 py-1 rounded">Port: {config.port}</span>
-                  )}
-                </div>
-              </motion.div>
+              <ConfigurationCard key={config.id} config={config} i={i} onEdit={handleEdit} onDelete={deleteConfig} onToggle={toggleStatus} />
             ))
           )}
         </AnimatePresence>

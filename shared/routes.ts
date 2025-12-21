@@ -50,6 +50,18 @@ export const api = {
         404: errorSchemas.notFound,
       },
     },
+    status: {
+      method: 'GET' as const,
+      path: '/api/configs/status/:id',
+      responses: {
+        200: z.object({
+          id: z.number(),
+          isRunning: z.boolean(),
+          processName: z.string(),
+          details: z.string().optional(),
+        }),
+      },
+    },
   },
   logs: {
     list: {
