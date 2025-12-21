@@ -33,6 +33,7 @@ export default function Configurations() {
   const updateConfig = useUpdateUsbConfig();
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editingConfig, setEditingConfig] = useState<any | null>(null);
 
   const filteredConfigs = configs?.filter(c => 
     c.friendlyName.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -41,6 +42,18 @@ export default function Configurations() {
 
   const toggleStatus = (id: number, currentStatus: boolean) => {
     updateConfig.mutate({ id, isEnabled: !currentStatus });
+  };
+
+  const handleEdit = (config: any) => {
+    setEditingConfig(config);
+    setIsCreateOpen(true);
+  };
+
+  const handleDialogClose = (open: boolean) => {
+    setIsCreateOpen(open);
+    if (!open) {
+      setEditingConfig(null);
+    }
   };
 
   if (isLoading) return <div className="p-10 text-center text-muted-foreground animate-pulse">Loading configurations...</div>;
@@ -119,6 +132,16 @@ export default function Configurations() {
                     <Button 
                       size="icon" 
                       variant="ghost" 
+                      className="text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => handleEdit(config)}
+                      title="Edit"
+                      data-testid={`button-edit-config-${config.id}`}
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
                       className={config.isEnabled ? "text-amber-600 hover:text-amber-700 hover:bg-amber-50" : "text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"}
                       onClick={() => toggleStatus(config.id, config.isEnabled)}
                       title={config.isEnabled ? "Disable" : "Enable"}
@@ -134,6 +157,7 @@ export default function Configurations() {
                           deleteConfig.mutate(config.id);
                         }
                       }}
+                      data-testid={`button-delete-config-${config.id}`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -157,16 +181,36 @@ export default function Configurations() {
         </AnimatePresence>
       </div>
 
-      <CreateConfigDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      <CreateConfigDialog open={isCreateOpen} onOpenChange={handleDialogClose} editingConfig={editingConfig} />
     </div>
   );
 }
 
-function CreateConfigDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+function CreateConfigDialog({ 
+  open, 
+  onOpenChange,
+  editingConfig
+}: { 
+  open: boolean; 
+  onOpenChange: (open: boolean) => void;
+  editingConfig?: any;
+}) {
   const createMutation = useCreateUsbConfig();
+  const updateMutation = useUpdateUsbConfig();
+  const isEditing = !!editingConfig;
+
   const form = useForm<InsertUsbConfig>({
     resolver: zodResolver(insertUsbConfigSchema),
-    defaultValues: {
+    defaultValues: isEditing ? {
+      friendlyName: editingConfig.friendlyName,
+      deviceId: editingConfig.deviceId,
+      triggerPath: editingConfig.triggerPath,
+      triggerParams: editingConfig.triggerParams || "",
+      isEnabled: editingConfig.isEnabled,
+      runSilently: editingConfig.runSilently,
+      forceMinimize: editingConfig.forceMinimize,
+      port: editingConfig.port || ""
+    } : {
       friendlyName: "",
       deviceId: "",
       triggerPath: "",
@@ -179,20 +223,39 @@ function CreateConfigDialog({ open, onOpenChange }: { open: boolean; onOpenChang
   });
 
   const onSubmit = (data: InsertUsbConfig) => {
-    createMutation.mutate(data, {
-      onSuccess: () => {
-        onOpenChange(false);
-        form.reset();
-      }
-    });
+    if (isEditing) {
+      updateMutation.mutate(
+        { id: editingConfig.id, ...data },
+        {
+          onSuccess: () => {
+            onOpenChange(false);
+            form.reset();
+          }
+        }
+      );
+    } else {
+      createMutation.mutate(data, {
+        onSuccess: () => {
+          onOpenChange(false);
+          form.reset();
+        }
+      });
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl">Add Configuration</DialogTitle>
-          <DialogDescription>Define what happens when a specific USB device is connected.</DialogDescription>
+          <DialogTitle className="font-display text-2xl">
+            {isEditing ? "Edit Configuration" : "Add Configuration"}
+          </DialogTitle>
+          <DialogDescription>
+            {isEditing 
+              ? "Update the USB device configuration and trigger settings."
+              : "Define what happens when a specific USB device is connected."
+            }
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-4">
@@ -239,8 +302,16 @@ function CreateConfigDialog({ open, onOpenChange }: { open: boolean; onOpenChang
 
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" disabled={createMutation.isPending} className="bg-primary hover:bg-primary/90">
-              {createMutation.isPending ? "Creating..." : "Create Configuration"}
+            <Button 
+              type="submit" 
+              disabled={createMutation.isPending || updateMutation.isPending} 
+              className="bg-primary hover:bg-primary/90"
+              data-testid={isEditing ? "button-save-config" : "button-create-config"}
+            >
+              {isEditing 
+                ? (updateMutation.isPending ? "Updating..." : "Update Configuration")
+                : (createMutation.isPending ? "Creating..." : "Create Configuration")
+              }
             </Button>
           </DialogFooter>
         </form>
