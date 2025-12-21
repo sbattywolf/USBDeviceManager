@@ -1,8 +1,9 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Settings2, Activity, HardDriveDownload, Usb } from "lucide-react";
+import { LayoutDashboard, Settings2, Activity, HardDriveDownload, Usb, Cpu } from "lucide-react";
 
 const items = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/devices", label: "USB Devices", icon: Cpu },
   { href: "/configs", label: "Configurations", icon: Settings2 },
   { href: "/logs", label: "Event Logs", icon: Activity },
   { href: "/agent", label: "Windows Agent", icon: HardDriveDownload },

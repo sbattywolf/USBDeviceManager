@@ -9,6 +9,7 @@ import { HealthCheckModal } from "@/components/HealthCheckModal";
 
 // Pages
 import Dashboard from "@/pages/Dashboard";
+import Devices from "@/pages/Devices";
 import Configurations from "@/pages/Configurations";
 import Logs from "@/pages/Logs";
 import Agent from "@/pages/Agent";
@@ -21,6 +22,7 @@ function Router() {
         <div className="max-w-7xl mx-auto pb-20">
           <Switch>
             <Route path="/" component={Dashboard} />
+            <Route path="/devices" component={Devices} />
             <Route path="/configs" component={Configurations} />
             <Route path="/logs" component={Logs} />
             <Route path="/agent" component={Agent} />
