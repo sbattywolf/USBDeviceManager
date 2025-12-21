@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import { Sidebar } from "@/components/Sidebar";
+import { HealthCheckModal } from "@/components/HealthCheckModal";
 
 // Pages
 import Dashboard from "@/pages/Dashboard";
@@ -35,6 +36,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <HealthCheckModal />
         <Toaster />
         <Router />
       </TooltipProvider>

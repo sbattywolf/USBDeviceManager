@@ -63,3 +63,21 @@ export type SimulationRequest = {
   deviceId: string;
   eventType: 'CONNECTED' | 'DISCONNECTED';
 };
+
+// Health Check Types
+export type HealthCheckStatus = 'pass' | 'fail' | 'warning';
+
+export interface HealthCheckItem {
+  id: string;
+  name: string;
+  description: string;
+  status: HealthCheckStatus;
+  details?: string;
+  remediation?: string;
+}
+
+export interface HealthCheckResponse {
+  status: 'healthy' | 'degraded' | 'failed';
+  timestamp: string;
+  checks: HealthCheckItem[];
+}

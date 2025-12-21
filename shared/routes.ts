@@ -83,6 +83,26 @@ export const api = {
         200: z.any(), // File download
       },
     }
+  },
+  health: {
+    check: {
+      method: 'GET' as const,
+      path: '/api/health',
+      responses: {
+        200: z.object({
+          status: z.enum(['healthy', 'degraded', 'failed']),
+          timestamp: z.string(),
+          checks: z.array(z.object({
+            id: z.string(),
+            name: z.string(),
+            description: z.string(),
+            status: z.enum(['pass', 'fail', 'warning']),
+            details: z.string().optional(),
+            remediation: z.string().optional(),
+          })),
+        }),
+      },
+    }
   }
 };
 
