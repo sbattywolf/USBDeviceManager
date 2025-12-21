@@ -1,0 +1,33 @@
+
+Create a new application by using any free open or without licence software availble for windows 11 including powershell, java, .net and or python.
+
+The applications need to run on widows platform and should provide a gui to handle the configuration files, scheduling and trigger of tasks as well as be capable of open windows software administration tool.
+
+Functionality of application
+ 1 scan list of usb device connected
+ 2 the main dashboard should two table 
+    first table with list of already configured devices showing; device name, port, software if any,  a flg incase of properties
+	second table with list of all conected usd device not included on the first table
+ 3 if I click to any of usb device of both table the application should go to an edit table inorder to add or update an new device or an existing one. in case of existing one, all fields should be prefiled accordingly. 
+ 4 configure a jason file with list of usb device that required a monitoring whenever they get connected to pc
+   this file should have folling attribute for each entity: 
+     - usb device identity
+	 - usb port
+	 - usb friendly name
+	 - usb status detected true false
+	 - full software to be triggered
+	 - optional software paramters
+	 - software is up and runing true false
+	 - button to trigger manual start of sowtare with paramaeters if any
+	 
+ 5 whenever a device is connected it should be add into a historical log files and in case it exists on the configuration file as per point 2 it shuld trigger the associated software
+ 6 before trigger a sofwtare it is required if one instance of it is already running, if so the start up will be skipped.
+ 7 all files need to be stored in a rational way depending on functionality and standard architectural best practice
+ 8 t is required to start all software in silence mode and eventually run a command to enforce the minimize action
+
+please review the full application and extend with a pop at start up to show all check required in order to run correctly the applciation for example list of software to be installed, grant to be insured. tryto guide the user as much as possible in order to fix any detecte issues at startup. in cse of error create a new pop with erro details with an esay way to copy the information for debugging 
+
+at end provide a simple guide how to install and run it on my desktop
+
+all code should be commented and structure as much professional as possible. provide a full documentation human readble to understand all functionality implemented
+Take your time
