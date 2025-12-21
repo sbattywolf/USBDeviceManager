@@ -235,6 +235,74 @@ export async function registerRoutes(
     }
   });
 
+  // Start software for a specific config
+  app.post(api.configs.start.path, async (req, res) => {
+    try {
+      const config = await storage.getConfig(Number(req.params.id));
+      if (!config) {
+        return res.status(404).json({ message: "Config not found" });
+      }
+
+      const processName = path.basename(config.triggerPath);
+      let success = false;
+      let message = "Failed to start software";
+
+      try {
+        if (process.platform === "win32") {
+          // Windows specific startup
+          const { spawn } = await import("child_process");
+          const spawnOptions = {
+            detached: true,
+            stdio: "ignore",
+            shell: config.runSilently,
+          };
+
+          if (config.triggerPath) {
+            const args = config.triggerParams 
+              ? config.triggerParams.split(" ").filter(a => a.trim()) 
+              : [];
+            
+            const child = spawn(config.triggerPath, args, spawnOptions);
+            
+            // If minimize is requested, send minimize command (simplified approach)
+            if (config.forceMinimize) {
+              // This would require additional setup with Windows API
+            }
+
+            child.unref();
+            success = true;
+            message = `Started successfully: ${processName}`;
+          }
+        } else {
+          // Mac/Linux startup
+          const { spawn } = await import("child_process");
+          const args = config.triggerParams 
+            ? config.triggerParams.split(" ").filter(a => a.trim()) 
+            : [];
+          
+          const child = spawn(config.triggerPath, args, {
+            detached: true,
+            stdio: "ignore"
+          });
+          
+          child.unref();
+          success = true;
+          message = `Started successfully: ${processName}`;
+        }
+      } catch (err) {
+        message = `Error starting software: ${String(err)}`;
+      }
+
+      res.json({
+        success,
+        message,
+        processName,
+      });
+    } catch (err) {
+      res.status(500).json({ success: false, message: "Error starting config software", details: String(err) });
+    }
+  });
+
   // Log Routes
   app.get(api.logs.list.path, async (req, res) => {
     const logs = await storage.getLogs();

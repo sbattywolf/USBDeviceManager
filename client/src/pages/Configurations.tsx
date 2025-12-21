@@ -1,6 +1,7 @@
 import { useUsbConfigs, useCreateUsbConfig, useDeleteUsbConfig, useUpdateUsbConfig } from "@/hooks/use-usb-configs";
 import { useConfigStatus } from "@/hooks/use-config-status";
-import { Plus, Trash2, Edit2, Play, Search, Power, Circle } from "lucide-react";
+import { useStartSoftware } from "@/hooks/use-start-software";
+import { Plus, Trash2, Edit2, Play, Search, Power, Circle, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -25,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 // Configuration card with live status checking
 function ConfigurationCard({ config, i, onEdit, onDelete, onToggle }: any) {
   const { data: status, isLoading: statusLoading } = useConfigStatus(config.id);
+  const startSoftware = useStartSoftware();
 
   return (
     <motion.div
@@ -70,6 +72,17 @@ function ConfigurationCard({ config, i, onEdit, onDelete, onToggle }: any) {
         </div>
 
         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button 
+            size="icon" 
+            variant="ghost" 
+            className="text-green-600 hover:text-green-700 hover:bg-green-50"
+            onClick={() => startSoftware.mutate(config.id)}
+            title="Start Software"
+            disabled={startSoftware.isPending || status?.isRunning}
+            data-testid={`button-start-software-${config.id}`}
+          >
+            <Zap className="w-4 h-4" />
+          </Button>
           <Button 
             size="icon" 
             variant="ghost" 

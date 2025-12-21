@@ -62,6 +62,19 @@ export const api = {
         }),
       },
     },
+    start: {
+      method: 'POST' as const,
+      path: '/api/configs/start/:id',
+      responses: {
+        200: z.object({
+          success: z.boolean(),
+          message: z.string(),
+          processName: z.string(),
+        }),
+        404: errorSchemas.notFound,
+        500: errorSchemas.internal,
+      },
+    },
   },
   logs: {
     list: {

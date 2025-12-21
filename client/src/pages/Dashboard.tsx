@@ -1,11 +1,13 @@
 import { useUsbConfigs } from "@/hooks/use-usb-configs";
 import { useUsbLogs, useSimulateLog } from "@/hooks/use-usb-logs";
+import { useConfigStatus } from "@/hooks/use-config-status";
+import { useStartSoftware } from "@/hooks/use-start-software";
 import { MetricCard } from "@/components/MetricCard";
-import { ShieldAlert, Usb, Activity, Server, ArrowRight } from "lucide-react";
+import { AlertCircle, Usb, Activity, Server, ArrowRight, Play, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -22,6 +24,7 @@ export default function Dashboard() {
   const { data: configs } = useUsbConfigs();
   const { data: logs } = useUsbLogs();
   const simulate = useSimulateLog();
+  const startSoftware = useStartSoftware();
   const { toast } = useToast();
   
   const [simDeviceId, setSimDeviceId] = useState("USB\\VID_1234&PID_5678");
@@ -30,6 +33,28 @@ export default function Dashboard() {
   const recentEvents = logs?.length || 0;
   const activeConfigs = configs?.filter(c => c.isEnabled).length || 0;
 
+  // Count devices that are connected from logs
+  const connectedDevices = logs
+    ? new Set(logs.filter(l => l.eventType === 'CONNECTED').map(l => l.deviceId)).size
+    : 0;
+
+  // Calculate software status: how many should be running based on detected USB + enabled config
+  const softwareShouldRun = useMemo(() => {
+    if (!configs || !logs) return 0;
+    
+    const connectedDeviceIds = new Set(
+      logs.filter(l => l.eventType === 'CONNECTED').map(l => l.deviceId)
+    );
+
+    return configs.filter(config => {
+      const isEnabled = config.isEnabled;
+      const isConnected = Array.from(connectedDeviceIds).some(deviceId =>
+        config.deviceId.includes(deviceId) || deviceId.includes(config.deviceId)
+      );
+      return isEnabled && isConnected;
+    }).length;
+  }, [configs, logs]);
+
   const handleSimulate = (eventType: "CONNECTED" | "DISCONNECTED") => {
     simulate.mutate({
       deviceId: simDeviceId,
@@ -37,6 +62,47 @@ export default function Dashboard() {
       actionTaken: "SIMULATION_PENDING",
       details: "Manual simulation triggered from dashboard",
       friendlyName: "Simulated Device"
+    });
+  };
+
+  const handleStartAll = async () => {
+    if (!configs || !logs) return;
+
+    const connectedDeviceIds = new Set(
+      logs.filter(l => l.eventType === 'CONNECTED').map(l => l.deviceId)
+    );
+
+    const configsToStart = configs.filter(config => {
+      const isEnabled = config.isEnabled;
+      const isConnected = Array.from(connectedDeviceIds).some(deviceId =>
+        config.deviceId.includes(deviceId) || deviceId.includes(config.deviceId)
+      );
+      return isEnabled && isConnected;
+    });
+
+    if (configsToStart.length === 0) {
+      toast({
+        title: "No software to start",
+        description: "No enabled configurations found for connected USB devices.",
+      });
+      return;
+    }
+
+    // Start all applicable software
+    let successCount = 0;
+    for (const config of configsToStart) {
+      const result = await new Promise((resolve) => {
+        startSoftware.mutate(config.id, {
+          onSuccess: () => resolve(true),
+          onError: () => resolve(false),
+        });
+      });
+      if (result) successCount++;
+    }
+
+    toast({
+      title: "Operation complete",
+      description: `Started ${successCount}/${configsToStart.length} software instances.`,
     });
   };
 
@@ -49,7 +115,7 @@ export default function Dashboard() {
         <p className="text-muted-foreground mt-2">System status and recent activity summary.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <MetricCard 
           title="Total Configured Devices" 
           value={totalConfigs} 
@@ -63,20 +129,50 @@ export default function Dashboard() {
           icon={Server} 
         />
         <MetricCard 
+          title="Connected USB Devices" 
+          value={connectedDevices} 
+          icon={Zap}
+          trend="Currently detected"
+        />
+        <MetricCard 
+          title="Software Should Run" 
+          value={softwareShouldRun} 
+          icon={AlertCircle}
+          trend="USB detected & enabled"
+        />
+        <MetricCard 
           title="Recent Events" 
           value={recentEvents} 
           icon={Activity} 
           trend="Last 24h"
           trendUp={true}
         />
-        <MetricCard 
-          title="Security Alerts" 
-          value={0} 
-          icon={ShieldAlert} 
-          trend="Safe"
-          trendUp={true}
-        />
       </div>
+
+      {/* Start All Software Button */}
+      {softwareShouldRun > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border border-blue-200 dark:border-blue-800 rounded-2xl p-6 flex items-center justify-between"
+        >
+          <div>
+            <h3 className="font-bold text-lg text-foreground mb-1">Software Ready to Launch</h3>
+            <p className="text-sm text-muted-foreground">
+              {softwareShouldRun} software instance{softwareShouldRun !== 1 ? 's' : ''} are configured for detected USB device{connectedDevices !== 1 ? 's' : ''}. Start them now?
+            </p>
+          </div>
+          <Button 
+            onClick={handleStartAll} 
+            disabled={startSoftware.isPending}
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 whitespace-nowrap gap-2"
+          >
+            <Play className="w-4 h-4" />
+            {startSoftware.isPending ? "Starting..." : "Start All"}
+          </Button>
+        </motion.div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content: Recent Activity */}

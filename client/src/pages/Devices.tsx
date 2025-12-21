@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { AlertCircle, CheckCircle2, Plus } from "lucide-react";
+import { StartButton } from "@/components/StartButton";
 import { motion } from "framer-motion";
 import {
   Table,
@@ -195,7 +196,8 @@ export default function Devices() {
                         {config.isEnabled ? "Enabled" : "Disabled"}
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="flex gap-2">
+                      <StartButton configId={config.id} />
                       <Link href={`/configs?edit=${config.id}`}>
                         <Button
                           variant="outline"
@@ -304,7 +306,12 @@ export default function Devices() {
                           ? format(new Date(lastSeen.timestamp), "MMM dd HH:mm:ss")
                           : "-"}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="flex gap-2">
+                        {configs?.filter(c => 
+                          c.deviceId.includes(device.deviceId) || device.deviceId.includes(c.deviceId)
+                        ).map(config => (
+                          <StartButton key={config.id} configId={config.id} />
+                        ))}
                         <Link href="/configs">
                           <Button
                             variant="default"
