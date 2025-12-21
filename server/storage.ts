@@ -1,38 +1,74 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
 
-// modify the interface with any CRUD methods
-// you might need
+import { 
+  usbConfigs, usbLogs, 
+  type UsbConfig, type InsertUsbConfig, 
+  type UsbLog, type InsertUsbLog 
+} from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Configs
+  getConfigs(): Promise<UsbConfig[]>;
+  getConfig(id: number): Promise<UsbConfig | undefined>;
+  getConfigByDeviceId(deviceId: string): Promise<UsbConfig | undefined>;
+  createConfig(config: InsertUsbConfig): Promise<UsbConfig>;
+  updateConfig(id: number, config: Partial<InsertUsbConfig>): Promise<UsbConfig>;
+  deleteConfig(id: number): Promise<void>;
+
+  // Logs
+  getLogs(): Promise<UsbLog[]>;
+  createLog(log: InsertUsbLog): Promise<UsbLog>;
+  clearLogs(): Promise<void>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  // Configs
+  async getConfigs(): Promise<UsbConfig[]> {
+    return await db.select().from(usbConfigs).orderBy(desc(usbConfigs.createdAt));
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getConfig(id: number): Promise<UsbConfig | undefined> {
+    const [config] = await db.select().from(usbConfigs).where(eq(usbConfigs.id, id));
+    return config;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async getConfigByDeviceId(deviceId: string): Promise<UsbConfig | undefined> {
+    const [config] = await db.select().from(usbConfigs).where(eq(usbConfigs.deviceId, deviceId));
+    return config;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async createConfig(insertConfig: InsertUsbConfig): Promise<UsbConfig> {
+    const [config] = await db.insert(usbConfigs).values(insertConfig).returning();
+    return config;
+  }
+
+  async updateConfig(id: number, updates: Partial<InsertUsbConfig>): Promise<UsbConfig> {
+    const [config] = await db
+      .update(usbConfigs)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(usbConfigs.id, id))
+      .returning();
+    return config;
+  }
+
+  async deleteConfig(id: number): Promise<void> {
+    await db.delete(usbConfigs).where(eq(usbConfigs.id, id));
+  }
+
+  // Logs
+  async getLogs(): Promise<UsbLog[]> {
+    return await db.select().from(usbLogs).orderBy(desc(usbLogs.timestamp));
+  }
+
+  async createLog(insertLog: InsertUsbLog): Promise<UsbLog> {
+    const [log] = await db.insert(usbLogs).values(insertLog).returning();
+    return log;
+  }
+
+  async clearLogs(): Promise<void> {
+    await db.delete(usbLogs);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
