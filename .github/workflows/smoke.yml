@@ -1,0 +1,92 @@
+name: Smoke Tests
+
+on:
+  push:
+    paths:
+      - 'USBMonitor/**'
+  pull_request:
+    paths:
+      - 'USBMonitor/**'
+
+jobs:
+  smoke:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish backend
+        working-directory: USBMonitor/server/SimRacingDashboard
+        run: dotnet publish -c Release -o publish
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Build client (if present)
+        shell: pwsh
+        run: |
+          if (Test-Path 'USBMonitor/client/package.json') {
+            Push-Location USBMonitor/client
+            npm ci
+            npm run build --if-present
+            Pop-Location
+          } else { Write-Output 'No client found; skipping client build.' }
+
+      - name: Start backend (background) and wait for readiness
+        shell: pwsh
+        run: |
+          Push-Location USBMonitor/server/SimRacingDashboard/publish
+          $proc = Start-Process -FilePath dotnet -ArgumentList 'SimRacingDashboard.dll' -PassThru
+          Pop-Location
+
+          # Probe multiple health endpoints with retries. If the process exits early, fail fast.
+          $candidates = @(
+            'http://localhost:5006/health',
+            'http://localhost:5006/healthz',
+            'http://localhost:5006/api/health',
+            'http://localhost:5006/api/configs'
+          )
+          $ready = $false
+          $maxRetries = 60
+          $delaySeconds = 2
+          for ($i = 0; $i -lt $maxRetries; $i++) {
+            foreach ($url in $candidates) {
+              try {
+                $r = Invoke-WebRequest -UseBasicParsing -Uri $url -TimeoutSec 3 -ErrorAction Stop
+                if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 400) {
+                  Write-Output "Backend ready at $url"
+                  $ready = $true
+                  break
+                }
+              } catch {
+                # ignore and try next URL
+              }
+            }
+            if ($ready) { break }
+
+            if ($proc.HasExited) {
+              Write-Error "Backend process exited unexpectedly (ExitCode=$($proc.ExitCode))."
+              exit 1
+            }
+            Start-Sleep -Seconds $delaySeconds
+          }
+
+          if (-not $ready) {
+            Write-Error "Backend did not become ready after $($maxRetries * $delaySeconds) seconds"
+            exit 1
+          }
+
+      - name: Run smoke checks
+        shell: pwsh
+        run: |
+          Set-Location $GITHUB_WORKSPACE
+          # run the project's smoke script; ensure it accepts a non-interactive flag
+          ./USBMonitor/server/scripts/post-and-check-spa.ps1 -NonInteractive
