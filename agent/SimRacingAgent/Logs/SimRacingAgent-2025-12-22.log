@@ -1,0 +1,891 @@
+﻿[2025-12-22 15:50:00.042] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 15:50:00.098] [Info] [Logger] Log level set to: Debug
+[2025-12-22 15:50:00.110] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 15:50:00.115] [Info] [Startup] Agent ID: 0d0d83c8-559e-4e3e-b773-6ee5af0b88b1
+[2025-12-22 15:50:00.122] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 15:50:00.148] [Warning] [ConfigManager] Configuration file not found: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 15:50:00.193] [Info] [ConfigManager] Created default configuration at: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 15:50:00.201] [Info] [Init] Loading core modules...
+[2025-12-22 15:50:00.246] [Error] [Init] Failed to initialize agent: The specified module 'C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Core\Utils\Config.psm1' was not loaded because no valid module file was found in any module directory.
+[2025-12-22 15:50:00.266] [Error] [Exception] Agent Initialization : The specified module 'C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Core\Utils\Config.psm1' was not loaded because no valid module file was found in any module directory. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.IO.FileNotFoundException","InnerException":null,"StackTrace":null,"Type":"Exception"}
+[2025-12-22 15:50:00.272] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 15:50:00.280] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 15:50:00.336] [Error] [Shutdown] Error stopping services: The term 'Stop-DeviceMonitoring' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-12-22 15:50:00.341] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 15:52:08.111] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 15:52:08.176] [Info] [Logger] Log level set to: Debug
+[2025-12-22 15:52:08.192] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 15:52:08.201] [Info] [Startup] Agent ID: e9be652f-a9b7-4639-b52b-d61a71287262
+[2025-12-22 15:52:08.210] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 15:52:08.297] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 15:52:08.297] [Info] [Init] Loading core modules...
+[2025-12-22 15:52:08.318] [Info] [Init] Loading feature modules...
+[2025-12-22 15:52:08.408] [Error] [Init] Failed to initialize agent: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:200 char:54
++ ...       Write-AgentLog "Failed to start software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:226 char:53
++ ...        Write-AgentLog "Failed to stop software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+[2025-12-22 15:52:08.428] [Error] [Exception] Agent Initialization : The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:200 char:54
++ ...       Write-AgentLog "Failed to start software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:226 char:53
++ ...        Write-AgentLog "Failed to stop software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.Management.Automation.ActionPreferenceStopException","InnerException":null,"StackTrace":"   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)","Type":"Exception"}
+[2025-12-22 15:52:08.445] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 15:52:08.455] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 15:52:08.593] [Info] [Shutdown] Agent services stopped
+[2025-12-22 15:52:08.593] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 15:55:15.336] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 15:55:15.505] [Info] [Logger] Log level set to: Debug
+[2025-12-22 15:55:15.537] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 15:55:15.568] [Info] [Startup] Agent ID: 5dc7bf08-2053-476b-bb80-78aeba2bc941
+[2025-12-22 15:55:15.584] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 15:55:15.807] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 15:55:15.816] [Info] [Init] Loading core modules...
+[2025-12-22 15:55:15.903] [Info] [Init] Loading feature modules...
+[2025-12-22 15:55:16.302] [Info] [Init] Loading service modules...
+[2025-12-22 15:55:16.460] [Info] [Init] All modules loaded successfully
+[2025-12-22 15:55:16.483] [Info] [Services] Starting agent services...
+[2025-12-22 15:55:20.765] [Warning] [] Failed to connect to dashboard: Unable to connect to the remote server
+[2025-12-22 15:55:20.858] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 15:55:20.957] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 15:55:22.332] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 15:55:22.497] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 15:55:22.506] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 15:55:22.631] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 15:55:22.638] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 15:55:22.793] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 15:55:22.799] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 15:55:22.940] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 15:55:22.949] [Info] [] New device detected: USB Composite Device
+[2025-12-22 15:55:23.107] [Info] [] Device connected: USB Composite Device
+[2025-12-22 15:55:23.115] [Info] [] New device detected: USB Composite Device
+[2025-12-22 15:55:23.275] [Info] [] Device connected: USB Composite Device
+[2025-12-22 15:55:23.282] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 15:55:23.461] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 15:55:23.514] [Info] [] Device monitoring started successfully
+[2025-12-22 15:55:23.549] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 15:55:23.725] [Error] [Services] Failed to start services: The term 'Start-SoftwareMonitoring' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-12-22 15:55:23.777] [Error] [Exception] Service Startup : The term 'Start-SoftwareMonitoring' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. | Properties: {"Context":"Service Startup","ExceptionType":"System.Management.Automation.CommandNotFoundException","InnerException":null,"StackTrace":"   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)","Type":"Exception"}
+[2025-12-22 15:55:23.814] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 15:55:23.825] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 15:55:23.859] [Info] [] Device monitoring stopped
+[2025-12-22 15:55:24.222] [Info] [Shutdown] Agent services stopped
+[2025-12-22 15:55:24.228] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 15:59:06.368] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 15:59:06.417] [Info] [Logger] Log level set to: Info
+[2025-12-22 15:59:06.429] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 15:59:06.432] [Info] [Startup] Agent ID: 344b05f8-38be-4e1f-bc32-c3761f3c58fe
+[2025-12-22 15:59:06.440] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 15:59:06.512] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 15:59:06.518] [Info] [Init] Loading core modules...
+[2025-12-22 15:59:06.541] [Info] [Init] Loading feature modules...
+[2025-12-22 15:59:06.627] [Info] [Init] Loading service modules...
+[2025-12-22 15:59:06.676] [Info] [Init] All modules loaded successfully
+[2025-12-22 15:59:06.683] [Info] [Services] Starting agent services...
+[2025-12-22 15:59:10.857] [Warning] [] Failed to connect to dashboard: Unable to connect to the remote server
+[2025-12-22 15:59:10.879] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 15:59:10.912] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 15:59:11.176] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 15:59:11.192] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 15:59:11.208] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 15:59:11.212] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 15:59:11.214] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 15:59:11.214] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 15:59:11.214] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 15:59:11.223] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 15:59:11.228] [Info] [] New device detected: USB Composite Device
+[2025-12-22 15:59:11.231] [Info] [] Device connected: USB Composite Device
+[2025-12-22 15:59:11.231] [Info] [] New device detected: USB Composite Device
+[2025-12-22 15:59:11.237] [Info] [] Device connected: USB Composite Device
+[2025-12-22 15:59:11.244] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 15:59:11.247] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 15:59:11.265] [Info] [] Device monitoring started successfully
+[2025-12-22 15:59:11.271] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 15:59:11.308] [Info] [] Loaded 4 software configurations
+[2025-12-22 15:59:11.311] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 15:59:11.452] [Error] [] Failed to start software SimHub: Exception calling "Start" with "1" argument(s): "The system cannot find the file specified"
+[2025-12-22 15:59:11.495] [Info] [] Software monitoring started successfully
+[2025-12-22 15:59:11.509] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 15:59:11.528] [Error] [] Failed to load automation rules: Cannot convert argument "config", with value: "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}", for ".ctor" to type "System.Collections.Hashtable": "Cannot convert value "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}" to type "System.Collections.Hashtable". Error: "Cannot convert the "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}" value of type "System.Management.Automation.PSCustomObject" to type "System.Collections.Hashtable".""
+[2025-12-22 15:59:11.545] [Info] [] Starting automation engine
+[2025-12-22 15:59:11.549] [Info] [] Automation engine started successfully
+[2025-12-22 15:59:11.559] [Info] [Services] Automation engine started
+[2025-12-22 15:59:11.606] [Info] [] Loaded health monitoring configuration
+[2025-12-22 15:59:11.620] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 15:59:24.129] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 80.55%; Memory usage is critically high: 84.03%; Disk usage is critically high: 66.24%
+[2025-12-22 15:59:24.154] [Info] [] Health monitoring started successfully
+[2025-12-22 15:59:24.159] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 15:59:24.164] [Info] [Services] All services started successfully
+[2025-12-22 15:59:24.168] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 15:59:24.178] [Info] [Main] Agent ID: 344b05f8-38be-4e1f-bc32-c3761f3c58fe
+[2025-12-22 15:59:28.364] [Error] [] Dashboard API error (POST /api/agents/344b05f8-38be-4e1f-bc32-c3761f3c58fe/heartbeat): Unable to connect to the remote server
+[2025-12-22 16:00:15.295] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 80.15%; Memory usage is critically high: 83.29%; Disk usage is critically high: 66.24%
+[2025-12-22 16:02:27.900] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:02:28.023] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:02:28.041] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:02:28.052] [Info] [Startup] Agent ID: 890b21d4-3332-4621-8d8f-488bfb3317ad
+[2025-12-22 16:02:28.058] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:02:28.171] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:02:28.182] [Info] [Init] Loading core modules...
+[2025-12-22 16:02:28.210] [Info] [Init] Loading feature modules...
+[2025-12-22 16:02:28.315] [Info] [Init] Loading service modules...
+[2025-12-22 16:02:28.355] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:02:28.368] [Info] [Services] Starting agent services...
+[2025-12-22 16:02:33.477] [Warning] [] Failed to connect to dashboard: The operation has timed out.
+[2025-12-22 16:02:33.498] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:02:33.521] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:02:33.767] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:02:33.786] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:02:33.789] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:02:33.796] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:02:33.800] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:02:33.805] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:02:33.809] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:02:33.815] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:02:33.817] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:02:33.822] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:02:33.825] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:02:33.830] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:02:33.834] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:02:33.840] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:02:33.858] [Info] [] Device monitoring started successfully
+[2025-12-22 16:02:33.867] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:02:33.908] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:02:33.915] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:02:33.999] [Error] [] Failed to start software SimHub: Exception calling "Start" with "1" argument(s): "The system cannot find the file specified"
+[2025-12-22 16:02:33.999] [Info] [] Software monitoring started successfully
+[2025-12-22 16:02:34.019] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:02:34.045] [Error] [] Failed to load automation rules: Cannot convert argument "config", with value: "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}", for ".ctor" to type "System.Collections.Hashtable": "Cannot convert value "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}" to type "System.Collections.Hashtable". Error: "Cannot convert the "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}" value of type "System.Management.Automation.PSCustomObject" to type "System.Collections.Hashtable".""
+[2025-12-22 16:02:34.056] [Info] [] Starting automation engine
+[2025-12-22 16:02:34.065] [Info] [] Automation engine started successfully
+[2025-12-22 16:02:34.100] [Info] [Services] Automation engine started
+[2025-12-22 16:02:34.137] [Info] [] Loaded health monitoring configuration
+[2025-12-22 16:02:34.150] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 16:02:39.584] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 66.84%; Memory usage is critically high: 85.84%; Disk usage is critically high: 66.27%
+[2025-12-22 16:02:39.612] [Info] [] Health monitoring started successfully
+[2025-12-22 16:02:39.620] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 16:02:39.622] [Info] [Services] All services started successfully
+[2025-12-22 16:02:39.622] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:02:39.632] [Info] [Main] Agent ID: 890b21d4-3332-4621-8d8f-488bfb3317ad
+[2025-12-22 16:02:43.697] [Error] [] Dashboard API error (POST /api/agents/890b21d4-3332-4621-8d8f-488bfb3317ad/heartbeat): Unable to connect to the remote server
+[2025-12-22 16:09:32.657] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:09:32.870] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:09:32.918] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:09:32.954] [Info] [Startup] Agent ID: 75b569d0-67f4-4568-919f-c0f29ab1db2d
+[2025-12-22 16:09:32.987] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:09:33.150] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:09:33.167] [Info] [Init] Loading core modules...
+[2025-12-22 16:09:33.237] [Info] [Init] Loading feature modules...
+[2025-12-22 16:09:33.370] [Error] [Init] Failed to initialize agent: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:203 char:54
++ ...       Write-AgentLog "Failed to start software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:229 char:53
++ ...        Write-AgentLog "Failed to stop software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+[2025-12-22 16:09:33.424] [Error] [Exception] Agent Initialization : The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:203 char:54
++ ...       Write-AgentLog "Failed to start software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\SoftwareManager.psm1:229 char:53
++ ...        Write-AgentLog "Failed to stop software $SoftwareName: $($_.Ex ...
++                                                    ~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.Management.Automation.ActionPreferenceStopException","InnerException":null,"StackTrace":"   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)","Type":"Exception"}
+[2025-12-22 16:09:33.460] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:09:33.470] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:09:33.845] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:09:33.853] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:10:30.842] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:10:30.898] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:10:30.911] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:10:30.920] [Info] [Startup] Agent ID: 46a5e969-9b42-45c1-80bb-6e737fc0af3b
+[2025-12-22 16:10:30.927] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:10:31.008] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:10:31.015] [Info] [Init] Loading core modules...
+[2025-12-22 16:10:31.037] [Info] [Init] Loading feature modules...
+[2025-12-22 16:10:31.118] [Error] [Init] Failed to initialize agent: The specified module 'C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\Utils\Logging.psm1' was not loaded because no valid module file was found in any module directory.
+[2025-12-22 16:10:31.133] [Error] [Exception] Agent Initialization : The specified module 'C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\Utils\Logging.psm1' was not loaded because no valid module file was found in any module directory. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.IO.FileNotFoundException","InnerException":null,"StackTrace":null,"Type":"Exception"}
+[2025-12-22 16:10:31.146] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:10:31.151] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:10:31.277] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:10:31.282] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:10:59.160] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:10:59.214] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:10:59.223] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:10:59.228] [Info] [Startup] Agent ID: 34690a57-5f98-494e-8e0c-d67bd6295ff4
+[2025-12-22 16:10:59.234] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:10:59.309] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:10:59.319] [Info] [Init] Loading core modules...
+[2025-12-22 16:10:59.340] [Info] [Init] Loading feature modules...
+[2025-12-22 16:10:59.440] [Error] [Init] Failed to initialize agent: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:5
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Missing closing '}' in statement block or type definition.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:70 char:27
++             "NotContains" { return $actualValue -notlike "*$expectedV ...
++                           ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:71 char:27
++             "GreaterThan" { return [double]$actualValue -gt [double]$ ...
++                           ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:72 char:24
++             "LessThan" { return [double]$actualValue -lt [double]$exp ...
++                        ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:73 char:22
++             "Exists" { return $null -ne $actualValue }
++                      ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:74 char:25
++             "NotExists" { return $null -eq $actualValue }
++                         ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:76 char:9
++         }
++         ~
+Unexpected token '}' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:78 char:5
++     }
++     ~
+Unexpected token '}' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:80 char:13
++     [object]GetContextValue([string]$property, [hashtable]$context) {
++             ~~~~~~~~~~~~~~~
+Unexpected token 'GetContextValue' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:95 char:12
++     [array]ExecuteActions([hashtable]$context) {
++            ~~~~~~~~~~~~~~
+Unexpected token 'ExecuteActions' in expression or statement.
+
+Not all parse errors were reported.  Correct the reported errors and try again.
+[2025-12-22 16:10:59.460] [Error] [Exception] Agent Initialization : The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:5
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Missing closing '}' in statement block or type definition.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:70 char:27
++             "NotContains" { return $actualValue -notlike "*$expectedV ...
++                           ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:71 char:27
++             "GreaterThan" { return [double]$actualValue -gt [double]$ ...
++                           ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:72 char:24
++             "LessThan" { return [double]$actualValue -lt [double]$exp ...
++                        ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:73 char:22
++             "Exists" { return $null -ne $actualValue }
++                      ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:74 char:25
++             "NotExists" { return $null -eq $actualValue }
++                         ~
+Unexpected token '{' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:76 char:9
++         }
++         ~
+Unexpected token '}' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:78 char:5
++     }
++     ~
+Unexpected token '}' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:80 char:13
++     [object]GetContextValue([string]$property, [hashtable]$context) {
++             ~~~~~~~~~~~~~~~
+Unexpected token 'GetContextValue' in expression or statement.
+
+At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:95 char:12
++     [array]ExecuteActions([hashtable]$context) {
++            ~~~~~~~~~~~~~~
+Unexpected token 'ExecuteActions' in expression or statement.
+
+Not all parse errors were reported.  Correct the reported errors and try again. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.Management.Automation.ActionPreferenceStopException","InnerException":null,"StackTrace":"   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)","Type":"Exception"}
+[2025-12-22 16:10:59.472] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:10:59.479] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:10:59.652] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:10:59.659] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:11:36.192] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:11:36.407] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:11:36.453] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:11:36.471] [Info] [Startup] Agent ID: 01396a0c-5117-4468-96d1-b8ea3231a43a
+[2025-12-22 16:11:36.500] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:11:36.689] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:11:36.708] [Info] [Init] Loading core modules...
+[2025-12-22 16:11:36.841] [Info] [Init] Loading feature modules...
+[2025-12-22 16:11:37.040] [Error] [Init] Failed to initialize agent: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:11
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++           ~~~~~~~~~~~~~~~~~
+Not all code path returns value within method.
+[2025-12-22 16:11:37.097] [Error] [Exception] Agent Initialization : The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:11
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++           ~~~~~~~~~~~~~~~~~
+Not all code path returns value within method. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.Management.Automation.ActionPreferenceStopException","InnerException":null,"StackTrace":"   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)","Type":"Exception"}
+[2025-12-22 16:11:37.120] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:11:37.136] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:11:37.489] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:11:37.498] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:12:02.210] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:12:02.275] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:12:02.286] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:12:02.293] [Info] [Startup] Agent ID: 0ccc2955-4781-4fb5-8f7b-eef86803a444
+[2025-12-22 16:12:02.300] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:12:02.368] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:12:02.377] [Info] [Init] Loading core modules...
+[2025-12-22 16:12:02.402] [Info] [Init] Loading feature modules...
+[2025-12-22 16:12:02.500] [Error] [Init] Failed to initialize agent: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:11
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++           ~~~~~~~~~~~~~~~~~
+Not all code path returns value within method.
+[2025-12-22 16:12:02.514] [Error] [Exception] Agent Initialization : The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:11
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++           ~~~~~~~~~~~~~~~~~
+Not all code path returns value within method. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.Management.Automation.ActionPreferenceStopException","InnerException":null,"StackTrace":"   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)","Type":"Exception"}
+[2025-12-22 16:12:02.522] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:12:02.526] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:12:02.625] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:12:02.630] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:15:06.738] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:15:06.785] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:15:06.811] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:15:06.816] [Info] [Startup] Agent ID: b7c446d7-c761-461b-9b2d-6b2480ecdd4c
+[2025-12-22 16:15:06.822] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:15:06.887] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:15:06.908] [Info] [Init] Loading core modules...
+[2025-12-22 16:15:06.928] [Info] [Init] Loading feature modules...
+[2025-12-22 16:15:07.018] [Error] [Init] Failed to initialize agent: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:11
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++           ~~~~~~~~~~~~~~~~~
+Not all code path returns value within method.
+[2025-12-22 16:15:07.037] [Error] [Exception] Agent Initialization : The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: At C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Modules\AutomationEngine.psm1:53 char:11
++     [bool]EvaluateCondition([string]$property, [hashtable]$condition, ...
++           ~~~~~~~~~~~~~~~~~
+Not all code path returns value within method. | Properties: {"Context":"Agent Initialization","ExceptionType":"System.Management.Automation.ActionPreferenceStopException","InnerException":null,"StackTrace":"   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)","Type":"Exception"}
+[2025-12-22 16:15:07.044] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:15:07.047] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:15:07.123] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:15:07.143] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:15:36.051] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:15:36.104] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:15:36.107] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:15:36.123] [Info] [Startup] Agent ID: ac383737-9b89-4dfd-b45f-55aa55f9b726
+[2025-12-22 16:15:36.129] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:15:36.200] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:15:36.200] [Info] [Init] Loading core modules...
+[2025-12-22 16:15:36.223] [Info] [Init] Loading feature modules...
+[2025-12-22 16:15:36.302] [Info] [Init] Loading service modules...
+[2025-12-22 16:15:36.360] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:15:36.361] [Info] [Services] Starting agent services...
+[2025-12-22 16:15:40.509] [Warning] [] Failed to connect to dashboard: Unable to connect to the remote server
+[2025-12-22 16:15:40.531] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:15:40.559] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:15:40.828] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:15:40.846] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:15:40.850] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:15:40.855] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:15:40.858] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:15:40.862] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:15:40.864] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:15:40.874] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:15:40.880] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:15:40.883] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:15:40.890] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:15:40.894] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:15:40.897] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:15:40.899] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:15:40.921] [Info] [] Device monitoring started successfully
+[2025-12-22 16:15:40.927] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:15:40.959] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:15:40.975] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:15:41.052] [Error] [] Failed to start software SimHub: Exception calling "Start" with "1" argument(s): "The system cannot find the file specified"
+[2025-12-22 16:15:41.098] [Info] [] Software monitoring started successfully
+[2025-12-22 16:15:41.104] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:15:41.132] [Error] [] Failed to load automation rules: Cannot convert argument "config", with value: "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}", for ".ctor" to type "System.Collections.Hashtable": "Cannot convert value "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}" to type "System.Collections.Hashtable". Error: "Cannot convert the "@{Id=start-simhub-on-wheel-connect; Name=Start SimHub on Wheel Connect; Description=Automatically start SimHub when a racing wheel is connected; TriggerType=Device; TriggerConfig=; Conditions=; Actions=System.Object[]; IsEnabled=True}" value of type "System.Management.Automation.PSCustomObject" to type "System.Collections.Hashtable".""
+[2025-12-22 16:15:41.145] [Info] [] Starting automation engine
+[2025-12-22 16:15:41.154] [Info] [] Automation engine started successfully
+[2025-12-22 16:15:41.160] [Info] [Services] Automation engine started
+[2025-12-22 16:15:41.194] [Info] [] Loaded health monitoring configuration
+[2025-12-22 16:15:41.202] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 16:15:49.169] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 89.32%; Memory usage is critically high: 87.79%; Disk usage is critically high: 66.3%
+[2025-12-22 16:15:49.185] [Info] [] Health monitoring started successfully
+[2025-12-22 16:15:49.189] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 16:15:49.193] [Info] [Services] All services started successfully
+[2025-12-22 16:15:49.197] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:15:49.204] [Info] [Main] Agent ID: ac383737-9b89-4dfd-b45f-55aa55f9b726
+[2025-12-22 16:15:53.368] [Error] [] Dashboard API error (POST /api/agents/ac383737-9b89-4dfd-b45f-55aa55f9b726/heartbeat): Unable to connect to the remote server
+[2025-12-22 16:16:24.457] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 86.72%; Memory usage is critically high: 86.73%; Disk usage is critically high: 66.3%
+[2025-12-22 16:16:28.553] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:16:28.756] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:16:28.767] [Info] [] Device monitoring stopped
+[2025-12-22 16:16:28.779] [Info] [] Software monitoring stopped
+[2025-12-22 16:16:28.788] [Info] [] Automation engine stopped
+[2025-12-22 16:16:28.809] [Info] [] Health monitoring stopped
+[2025-12-22 16:16:28.817] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:16:28.822] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:18:13.168] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:18:13.214] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:18:13.225] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:18:13.231] [Info] [Startup] Agent ID: f18b8a2b-a7f2-47be-adca-8f75b32e1951
+[2025-12-22 16:18:13.236] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:18:13.312] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:18:13.319] [Info] [Init] Loading core modules...
+[2025-12-22 16:18:13.338] [Info] [Init] Loading feature modules...
+[2025-12-22 16:18:13.424] [Info] [Init] Loading service modules...
+[2025-12-22 16:18:13.466] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:18:13.472] [Info] [Services] Starting agent services...
+[2025-12-22 16:18:17.623] [Warning] [] Failed to connect to dashboard: Unable to connect to the remote server
+[2025-12-22 16:18:17.631] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:18:17.668] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:18:17.936] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:18:17.956] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:18:17.962] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:18:17.966] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:18:17.968] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:18:17.969] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:18:17.975] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:18:17.981] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:18:17.984] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:18:17.986] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:18:17.986] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:18:17.996] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:18:18.000] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:18:18.003] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:18:18.021] [Info] [] Device monitoring started successfully
+[2025-12-22 16:18:18.028] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:18:18.062] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:18:18.064] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:18:18.125] [Error] [] Failed to start software SimHub: Exception calling "Start" with "1" argument(s): "The system cannot find the file specified"
+[2025-12-22 16:18:18.144] [Info] [] Software monitoring started successfully
+[2025-12-22 16:18:18.144] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:18:18.240] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:18:18.256] [Info] [] Starting automation engine
+[2025-12-22 16:18:18.256] [Info] [] Automation engine started successfully
+[2025-12-22 16:18:18.256] [Info] [Services] Automation engine started
+[2025-12-22 16:18:18.296] [Info] [] Loaded health monitoring configuration
+[2025-12-22 16:18:18.303] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 16:18:23.548] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 84.39%; Memory usage is critically high: 79.91%; Disk usage is critically high: 66.3%
+[2025-12-22 16:18:23.619] [Info] [] Health monitoring started successfully
+[2025-12-22 16:18:23.619] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 16:18:23.630] [Info] [Services] All services started successfully
+[2025-12-22 16:18:23.635] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:18:23.640] [Info] [Main] Agent ID: f18b8a2b-a7f2-47be-adca-8f75b32e1951
+[2025-12-22 16:18:27.727] [Error] [] Dashboard API error (POST /api/agents/f18b8a2b-a7f2-47be-adca-8f75b32e1951/heartbeat): Unable to connect to the remote server
+[2025-12-22 16:18:51.096] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:18:51.126] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:18:51.144] [Info] [] Device monitoring stopped
+[2025-12-22 16:18:51.145] [Info] [] Software monitoring stopped
+[2025-12-22 16:18:51.160] [Info] [] Automation engine stopped
+[2025-12-22 16:18:51.172] [Info] [] Health monitoring stopped
+[2025-12-22 16:18:51.178] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:18:51.180] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:21:25.403] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:21:25.455] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:21:25.464] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:21:25.469] [Info] [Startup] Agent ID: b78e4b73-6da2-4454-8b13-457c3ba2507c
+[2025-12-22 16:21:25.475] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:21:25.553] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:21:25.561] [Info] [Init] Loading core modules...
+[2025-12-22 16:21:25.582] [Info] [Init] Loading feature modules...
+[2025-12-22 16:21:25.678] [Info] [Init] Loading service modules...
+[2025-12-22 16:21:25.718] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:21:25.723] [Info] [Services] Starting agent services...
+[2025-12-22 16:21:25.834] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:21:25.863] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:21:26.117] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:21:26.137] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:21:26.139] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:21:26.142] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:21:26.148] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:21:26.152] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:21:26.153] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:21:26.164] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:21:26.171] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:21:26.175] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:21:26.181] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:21:26.187] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:21:26.189] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:21:26.194] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:21:26.216] [Info] [] Device monitoring started successfully
+[2025-12-22 16:21:26.220] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:21:26.250] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:21:26.260] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:21:26.341] [Error] [] Failed to start software SimHub: Exception calling "Start" with "1" argument(s): "The system cannot find the file specified"
+[2025-12-22 16:21:26.357] [Info] [] Software monitoring started successfully
+[2025-12-22 16:21:26.363] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:21:26.431] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:21:26.439] [Info] [] Starting automation engine
+[2025-12-22 16:21:26.447] [Info] [] Automation engine started successfully
+[2025-12-22 16:21:26.449] [Info] [Services] Automation engine started
+[2025-12-22 16:21:26.469] [Info] [] Loaded health monitoring configuration
+[2025-12-22 16:21:26.478] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 16:21:31.679] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 66.51%; Memory usage is critically high: 82.76%; Disk usage is critically high: 66.33%
+[2025-12-22 16:21:31.737] [Info] [] Health monitoring started successfully
+[2025-12-22 16:21:31.745] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 16:21:31.751] [Info] [Services] All services started successfully
+[2025-12-22 16:21:31.754] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:21:31.756] [Info] [Main] Agent ID: b78e4b73-6da2-4454-8b13-457c3ba2507c
+[2025-12-22 16:23:11.881] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:23:12.069] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:23:12.103] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:23:12.125] [Info] [Startup] Agent ID: 54f073d4-7316-416d-8f87-1ec15b4a94ae
+[2025-12-22 16:23:12.154] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:23:12.362] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:23:12.374] [Info] [Init] Loading core modules...
+[2025-12-22 16:23:12.447] [Info] [Init] Loading feature modules...
+[2025-12-22 16:23:12.591] [Info] [Init] Loading service modules...
+[2025-12-22 16:23:12.686] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:23:12.699] [Info] [Services] Starting agent services...
+[2025-12-22 16:23:12.864] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:23:12.978] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:23:13.529] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:23:13.615] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:23:13.631] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:23:13.631] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:23:13.631] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:23:13.657] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:23:13.668] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:23:13.684] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:23:13.703] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:23:13.719] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:23:13.726] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:23:13.733] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:23:13.753] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:23:13.775] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:23:13.831] [Info] [] Device monitoring started successfully
+[2025-12-22 16:23:13.841] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:23:13.903] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:23:13.927] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:23:14.003] [Info] [] Software monitoring started successfully
+[2025-12-22 16:23:14.012] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:23:14.201] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:23:14.216] [Info] [] Starting automation engine
+[2025-12-22 16:23:14.231] [Info] [] Automation engine started successfully
+[2025-12-22 16:23:14.237] [Info] [Services] Automation engine started
+[2025-12-22 16:23:14.332] [Info] [] Loaded health monitoring configuration
+[2025-12-22 16:23:14.346] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 16:23:20.640] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 35.3%; Memory usage is critically high: 83.69%; Disk usage is critically high: 66.31%
+[2025-12-22 16:23:20.719] [Info] [] Health monitoring started successfully
+[2025-12-22 16:23:20.725] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 16:23:20.732] [Info] [Services] All services started successfully
+[2025-12-22 16:23:20.737] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:23:20.742] [Info] [Main] Agent ID: 54f073d4-7316-416d-8f87-1ec15b4a94ae
+[2025-12-22 16:31:12.803] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:31:12.839] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:31:12.861] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:31:12.861] [Info] [Startup] Agent ID: f8a68da0-697f-41d1-99ed-146e576ba91a
+[2025-12-22 16:31:12.861] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:31:12.939] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:31:12.939] [Info] [Init] Loading core modules...
+[2025-12-22 16:31:12.975] [Info] [Init] Loading feature modules...
+[2025-12-22 16:31:13.062] [Info] [Init] Loading service modules...
+[2025-12-22 16:31:13.100] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:31:13.116] [Info] [Services] Starting agent services...
+[2025-12-22 16:31:17.291] [Warning] [] Failed to connect to dashboard: Unable to connect to the remote server
+[2025-12-22 16:31:17.292] [Warning] [Services] Could not connect to dashboard at: http://localhost:5001
+[2025-12-22 16:31:17.331] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:31:17.609] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:31:17.630] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:31:17.630] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:31:17.645] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:31:17.645] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:31:17.653] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:31:17.656] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:31:17.663] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:31:17.667] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:31:17.670] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:31:17.671] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:31:17.681] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:31:17.684] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:31:17.687] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:31:17.703] [Info] [] Device monitoring started successfully
+[2025-12-22 16:31:17.710] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:31:17.746] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:31:17.754] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:31:17.795] [Info] [] Software monitoring started successfully
+[2025-12-22 16:31:17.797] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:31:17.859] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:31:17.875] [Info] [] Starting automation engine
+[2025-12-22 16:31:17.875] [Info] [] Automation engine started successfully
+[2025-12-22 16:31:17.875] [Info] [Services] Automation engine started
+[2025-12-22 16:31:17.912] [Info] [] Loaded health monitoring configuration
+[2025-12-22 16:31:17.919] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 16:31:23.414] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 78.3%; Memory usage is critically high: 78.45%; Disk usage is critically high: 66.28%
+[2025-12-22 16:31:23.461] [Info] [] Health monitoring started successfully
+[2025-12-22 16:31:23.467] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 16:31:23.470] [Info] [Services] All services started successfully
+[2025-12-22 16:31:23.475] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:31:23.485] [Info] [Main] Agent ID: f8a68da0-697f-41d1-99ed-146e576ba91a
+[2025-12-22 16:31:27.554] [Error] [] Dashboard API error (POST /api/agents/f8a68da0-697f-41d1-99ed-146e576ba91a/heartbeat): Unable to connect to the remote server
+[2025-12-22 16:31:59.543] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 87.1%; Memory usage is critically high: 78.39%; Disk usage is critically high: 66.28%
+[2025-12-22 16:34:53.298] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:34:53.350] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:34:53.366] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:34:53.373] [Info] [Startup] Agent ID: f28537c2-99b5-469b-b236-9611f4e05bdc
+[2025-12-22 16:34:53.381] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:34:53.457] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:34:53.464] [Info] [Init] Loading core modules...
+[2025-12-22 16:34:53.482] [Info] [Init] Loading feature modules...
+[2025-12-22 16:34:53.570] [Info] [Init] Loading service modules...
+[2025-12-22 16:34:53.612] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:34:53.617] [Info] [Services] Starting agent services...
+[2025-12-22 16:34:53.738] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:34:53.766] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:34:53.987] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:34:54.004] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:34:54.021] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:34:54.026] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:34:54.026] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:34:54.035] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:34:54.040] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:34:54.047] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:34:54.051] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:34:54.057] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:34:54.063] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:34:54.067] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:34:54.072] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:34:54.080] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:34:54.101] [Info] [] Device monitoring started successfully
+[2025-12-22 16:34:54.108] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:34:54.142] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:34:54.157] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:34:54.205] [Info] [] Software monitoring started successfully
+[2025-12-22 16:34:54.205] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:34:54.272] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:34:54.291] [Info] [] Starting automation engine
+[2025-12-22 16:34:54.302] [Info] [] Automation engine started successfully
+[2025-12-22 16:34:54.307] [Info] [Services] Automation engine started
+[2025-12-22 16:34:54.330] [Info] [] Loaded health monitoring configuration
+[2025-12-22 16:34:54.339] [Info] [] Starting health monitoring (interval: 30s)
+[2025-12-22 16:34:59.772] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 78.21%; Memory usage is critically high: 81.38%; Disk usage is critically high: 66.3%
+[2025-12-22 16:34:59.838] [Info] [] Health monitoring started successfully
+[2025-12-22 16:34:59.841] [Info] [Services] Health monitoring started (interval: 30s)
+[2025-12-22 16:34:59.848] [Info] [Services] All services started successfully
+[2025-12-22 16:34:59.851] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:34:59.857] [Info] [Main] Agent ID: f28537c2-99b5-469b-b236-9611f4e05bdc
+[2025-12-22 16:36:32.916] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 66.72%; Memory usage is critically high: 80.91%; Disk usage is critically high: 66.3%
+[2025-12-22 16:36:33.295] [Info] [] Schedule triggered rule: Daily Health Check
+[2025-12-22 16:36:33.315] [Info] [] Performing daily health check
+[2025-12-22 16:36:33.338] [Info] [] Executed rule: Daily Health Check (2 actions)
+[2025-12-22 16:36:36.148] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 82.15%; Memory usage is critically high: 80.93%; Disk usage is critically high: 66.3%
+[2025-12-22 16:36:39.381] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 79.65%; Memory usage is critically high: 80.91%; Disk usage is critically high: 66.3%
+[2025-12-22 16:36:36.365] [Error] [Interactive] Interactive mode error: The property 'TotalDevices' cannot be found on this object. Verify that the property exists.
+[2025-12-22 16:36:56.611] [Error] [Interactive] Interactive mode error: The property 'TotalDevices' cannot be found on this object. Verify that the property exists.
+[2025-12-22 16:37:08.287] [Error] [] CRITICAL HEALTH ALERT: CPU usage is critically high: 82.3%; Memory usage is critically high: 80.14%; Disk usage is critically high: 66.3%
+[2025-12-22 16:38:12.986] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:38:13.035] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:38:13.045] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:38:13.054] [Info] [Startup] Agent ID: bbcfd3f5-1b55-4a4b-9dbd-b5b1b45a9408
+[2025-12-22 16:38:13.059] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:38:13.131] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:38:13.138] [Info] [Init] Loading core modules...
+[2025-12-22 16:38:13.159] [Info] [Init] Loading feature modules...
+[2025-12-22 16:38:13.254] [Info] [Init] Loading service modules...
+[2025-12-22 16:38:13.301] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:38:13.306] [Info] [Services] Starting agent services...
+[2025-12-22 16:38:13.421] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:38:13.451] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:38:13.711] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:38:13.735] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:38:13.735] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:38:13.749] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:38:13.749] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:38:13.749] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:38:13.761] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:38:13.765] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:38:13.766] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:38:13.766] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:38:13.777] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:38:13.784] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:38:13.786] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:38:13.794] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:38:13.815] [Info] [] Device monitoring started successfully
+[2025-12-22 16:38:13.820] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:38:13.862] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:38:13.869] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:38:13.914] [Info] [] Software monitoring started successfully
+[2025-12-22 16:38:13.927] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:38:14.009] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:38:14.021] [Info] [] Starting automation engine
+[2025-12-22 16:38:14.035] [Info] [] Automation engine started successfully
+[2025-12-22 16:38:14.036] [Info] [Services] Automation engine started
+[2025-12-22 16:38:14.046] [Info] [Services] All services started successfully
+[2025-12-22 16:38:14.047] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:38:14.056] [Info] [Main] Agent ID: bbcfd3f5-1b55-4a4b-9dbd-b5b1b45a9408
+[2025-12-22 16:38:38.394] [Error] [Interactive] Interactive mode error: The property 'TotalDevices' cannot be found on this object. Verify that the property exists.
+[2025-12-22 16:38:47.643] [Error] [Interactive] Interactive mode error: The property 'OverallHealth' cannot be found on this object. Verify that the property exists.
+[2025-12-22 16:38:50.904] [Error] [Interactive] Interactive mode error: The property 'Count' cannot be found on this object. Verify that the property exists.
+[2025-12-22 16:39:05.947] [Info] [ConfigManager] Reloading configuration from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:39:05.970] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:39:22.531] [Info] [] Schedule triggered rule: Daily Health Check
+[2025-12-22 16:39:22.540] [Info] [] Performing daily health check
+[2025-12-22 16:39:22.556] [Info] [] Executed rule: Daily Health Check (2 actions)
+[2025-12-22 16:39:22.626] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:39:22.639] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:39:22.649] [Info] [] Device monitoring stopped
+[2025-12-22 16:39:22.666] [Info] [] Software monitoring stopped
+[2025-12-22 16:39:22.679] [Info] [] Automation engine stopped
+[2025-12-22 16:39:22.686] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:39:22.689] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:42:30.425] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:42:30.475] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:42:30.475] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:42:30.475] [Info] [Startup] Agent ID: 68ced31d-3ffe-4f32-b486-05139353119a
+[2025-12-22 16:42:30.492] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:42:30.542] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:42:30.563] [Info] [Init] Loading core modules...
+[2025-12-22 16:42:30.575] [Info] [Init] Loading feature modules...
+[2025-12-22 16:42:30.659] [Info] [Init] Loading service modules...
+[2025-12-22 16:42:30.691] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:42:30.691] [Info] [Services] Starting agent services...
+[2025-12-22 16:42:30.759] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:42:30.781] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:42:31.560] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:42:31.585] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:42:31.585] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:42:31.592] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:42:31.595] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:42:31.595] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:42:31.595] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:42:31.595] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:42:31.609] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:42:31.609] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:42:31.609] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:42:31.609] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:42:31.609] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:42:31.625] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:42:31.641] [Info] [] Device monitoring started successfully
+[2025-12-22 16:42:31.646] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:42:31.675] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:42:31.675] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:42:31.734] [Info] [] Software monitoring started successfully
+[2025-12-22 16:42:31.742] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:42:31.796] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:42:31.814] [Info] [] Starting automation engine
+[2025-12-22 16:42:31.819] [Info] [] Automation engine started successfully
+[2025-12-22 16:42:31.824] [Info] [Services] Automation engine started
+[2025-12-22 16:42:31.826] [Info] [Services] All services started successfully
+[2025-12-22 16:42:31.826] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:42:31.826] [Info] [Main] Agent ID: 68ced31d-3ffe-4f32-b486-05139353119a
+[2025-12-22 16:45:28.504] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:45:28.553] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:45:28.565] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:45:28.569] [Info] [Startup] Agent ID: 868a6578-aeba-427b-8466-abb223c6b00a
+[2025-12-22 16:45:28.577] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:45:28.658] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:45:28.664] [Info] [Init] Loading core modules...
+[2025-12-22 16:45:28.686] [Info] [Init] Loading feature modules...
+[2025-12-22 16:45:28.779] [Info] [Init] Loading service modules...
+[2025-12-22 16:45:28.819] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:45:28.828] [Info] [Services] Starting agent services...
+[2025-12-22 16:45:28.917] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:45:28.945] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:45:29.220] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:45:29.242] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:45:29.246] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:45:29.250] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:45:29.251] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:45:29.251] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:45:29.262] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:45:29.266] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:45:29.268] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:45:29.274] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:45:29.280] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:45:29.284] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:45:29.286] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:45:29.295] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:45:29.316] [Info] [] Device monitoring started successfully
+[2025-12-22 16:45:29.316] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:45:29.346] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:45:29.357] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:45:29.411] [Info] [] Software monitoring started successfully
+[2025-12-22 16:45:29.412] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:45:29.490] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:45:29.490] [Info] [] Starting automation engine
+[2025-12-22 16:45:29.508] [Info] [] Automation engine started successfully
+[2025-12-22 16:45:29.512] [Info] [Services] Automation engine started
+[2025-12-22 16:45:29.513] [Info] [Services] All services started successfully
+[2025-12-22 16:45:29.516] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:45:29.523] [Info] [Main] Agent ID: 868a6578-aeba-427b-8466-abb223c6b00a
+[2025-12-22 16:46:19.680] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:46:19.696] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:46:19.705] [Info] [] Device monitoring stopped
+[2025-12-22 16:46:19.713] [Info] [] Software monitoring stopped
+[2025-12-22 16:46:19.722] [Info] [] Automation engine stopped
+[2025-12-22 16:46:19.732] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:46:19.737] [Info] [Shutdown] SimRacing Agent stopped
+[2025-12-22 16:47:25.015] [Info] [Logger] Log outputs configured: Console, File
+[2025-12-22 16:47:25.058] [Info] [Logger] Log level set to: Info
+[2025-12-22 16:47:25.058] [Info] [Startup] Starting SimRacing Agent v1.0.0
+[2025-12-22 16:47:25.078] [Info] [Startup] Agent ID: 2b33f72a-646e-4407-920f-be3fa8225b82
+[2025-12-22 16:47:25.086] [Info] [Init] Initializing SimRacing Agent...
+[2025-12-22 16:47:25.143] [Info] [ConfigManager] Configuration loaded from: C:\workspace\Repository\Personal\SimRacing\USBMonitor\agent\SimRacingAgent\Utils\agent-config.json
+[2025-12-22 16:47:25.158] [Info] [Init] Loading core modules...
+[2025-12-22 16:47:25.180] [Info] [Init] Loading feature modules...
+[2025-12-22 16:47:25.241] [Info] [Init] Loading service modules...
+[2025-12-22 16:47:25.295] [Info] [Init] All modules loaded successfully
+[2025-12-22 16:47:25.295] [Info] [Services] Starting agent services...
+[2025-12-22 16:47:25.378] [Warning] [Services] Could not connect to dashboard at: http://localhost:5000
+[2025-12-22 16:47:25.400] [Info] [] Starting device monitoring (interval: 5s)
+[2025-12-22 16:47:25.658] [Info] [] New device detected: Generic USB Hub
+[2025-12-22 16:47:25.674] [Info] [] Device connected: Generic USB Hub
+[2025-12-22 16:47:25.679] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:47:25.680] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:47:25.680] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:47:25.689] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:47:25.692] [Info] [] New device detected: USB4 Root Router (1.0)
+[2025-12-22 16:47:25.698] [Info] [] Device connected: USB4 Root Router (1.0)
+[2025-12-22 16:47:25.701] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:47:25.709] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:47:25.713] [Info] [] New device detected: USB Composite Device
+[2025-12-22 16:47:25.720] [Info] [] Device connected: USB Composite Device
+[2025-12-22 16:47:25.720] [Info] [] New device detected: USB Root Hub (USB 3.0)
+[2025-12-22 16:47:25.726] [Info] [] Device connected: USB Root Hub (USB 3.0)
+[2025-12-22 16:47:25.745] [Info] [] Device monitoring started successfully
+[2025-12-22 16:47:25.751] [Info] [Services] Device monitoring started (interval: 5s)
+[2025-12-22 16:47:25.780] [Info] [] Loaded 4 software configurations
+[2025-12-22 16:47:25.793] [Info] [] Starting software monitoring (interval: 10s)
+[2025-12-22 16:47:25.835] [Info] [] Software monitoring started successfully
+[2025-12-22 16:47:25.845] [Info] [Services] Software monitoring started (interval: 10s)
+[2025-12-22 16:47:25.942] [Info] [] Loaded 3 automation rules
+[2025-12-22 16:47:25.942] [Info] [] Starting automation engine
+[2025-12-22 16:47:25.960] [Info] [] Automation engine started successfully
+[2025-12-22 16:47:25.966] [Info] [Services] Automation engine started
+[2025-12-22 16:47:25.969] [Info] [Services] All services started successfully
+[2025-12-22 16:47:25.969] [Info] [Main] SimRacing Agent started successfully
+[2025-12-22 16:47:25.977] [Info] [Main] Agent ID: 2b33f72a-646e-4407-920f-be3fa8225b82
+[2025-12-22 16:47:45.934] [Info] [Shutdown] Shutting down SimRacing Agent...
+[2025-12-22 16:47:45.941] [Info] [Shutdown] Stopping agent services...
+[2025-12-22 16:47:45.954] [Info] [] Device monitoring stopped
+[2025-12-22 16:47:45.963] [Info] [] Software monitoring stopped
+[2025-12-22 16:47:45.971] [Info] [] Automation engine stopped
+[2025-12-22 16:47:45.981] [Info] [Shutdown] Agent services stopped
+[2025-12-22 16:47:45.990] [Info] [Shutdown] SimRacing Agent stopped

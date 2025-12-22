@@ -1,0 +1,32 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet: [ '8.0' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+
+      - name: Restore
+        run: dotnet restore Device-Sentinel.sln
+
+      - name: Build
+        run: dotnet build Device-Sentinel.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test server/SimRacingDashboard.Tests/SimRacingDashboard.Tests.csproj --no-build --verbosity normal

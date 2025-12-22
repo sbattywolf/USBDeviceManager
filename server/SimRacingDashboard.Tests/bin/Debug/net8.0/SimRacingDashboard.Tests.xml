@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SimRacingDashboard.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:SimRacingDashboard.Tests.Fixtures.SimRacingTestFactory">
+            <summary>
+            Test application factory for integration and functional tests
+            Provides isolated test environment with in-memory database
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Fixtures.SimRacingTestFactory.ConfigureWebHost(Microsoft.AspNetCore.Hosting.IWebHostBuilder)">
+            <summary>
+            Configure test services and database
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Fixtures.SimRacingTestFactory.GetDbContext">
+            <summary>
+            Get database context for test data setup
+            </summary>
+            <summary>
+            Create a standalone <see cref="T:SimRacingDashboard.Data.SimRacingContext"/> instance backed by the
+            shared in-memory SQLite connection. Callers must dispose the returned context.
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Fixtures.SimRacingTestFactory.SeedTestDataAsync">
+            <summary>
+            Seed test data for functional tests
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Fixtures.SimRacingTestFactory.ResetDatabaseAsync">
+            <summary>
+            Reset database for clean test state
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Fixtures.SimRacingTestFactory.CreateAuthenticatedClient">
+            <summary>
+            Create authenticated HTTP client for API testing
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.Functional.DashboardFunctionalTests">
+            <summary>
+            Functional tests for complete SimRacing Dashboard workflows
+            Tests end-to-end user scenarios and system integration
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.GlobalTestSetup">
+            <summary>
+            Global test setup and configuration
+            Provides common test utilities and logging configuration
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.TestCategories">
+            <summary>
+            Test categories for organizing test execution
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.SimRacingTestCollection">
+            <summary>
+            Custom test collection for shared test factory
+            Ensures proper test isolation and resource management
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.Helpers.TestDataGenerator">
+            <summary>
+            Test data generator using Bogus for realistic test data
+            Follows same patterns as PowerShell agent test data generation
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.GenerateTestDevices(System.Int32)">
+            <summary>
+            Generate realistic USB devices for testing
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.GenerateTestSoftware(System.Int32)">
+            <summary>
+            Generate realistic software entries for testing
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.GenerateTestAutomationRules(System.Int32,System.Collections.Generic.List{SimRacingDashboard.Models.UsbDevice},System.Collections.Generic.List{SimRacingDashboard.Models.ManagedSoftware})">
+            <summary>
+            Generate automation rules with proper relationships
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.GenerateDeviceStatuses(System.Collections.Generic.IEnumerable{SimRacingDashboard.Models.UsbDevice},System.Int32)">
+            <summary>
+            Generate device status entries
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.GenerateSoftwareStatuses(System.Collections.Generic.List{SimRacingDashboard.Models.ManagedSoftware},System.Int32)">
+            <summary>
+            Generate software status entries
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.GenerateSystemStatuses(System.Int32)">
+            <summary>
+            Generate system status entries
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.GenerateHealthMetrics(System.Int32)">
+            <summary>
+            Generate health metrics
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.CreateSimpleTestDevice(System.String)">
+            <summary>
+            Create a simple test device for unit tests
+            </summary>
+        </member>
+        <member name="M:SimRacingDashboard.Tests.Helpers.TestDataGenerator.CreateSimpleTestSoftware(System.String)">
+            <summary>
+            Create a simple test software for unit tests
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.Integration.DevicesApiIntegrationTests">
+            <summary>
+            Integration tests for Devices API endpoints
+            Tests full HTTP request/response cycle with database integration
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.Unit.DevicesControllerTests">
+            <summary>
+            Unit tests for DevicesController API endpoints
+            Tests CRUD operations, validation, and error handling
+            </summary>
+        </member>
+        <member name="T:SimRacingDashboard.Tests.Unit.SimRacingContextTests">
+            <summary>
+            Unit tests for SimRacingContext database operations
+            Tests entity relationships, constraints, and data integrity
+            </summary>
+        </member>
+    </members>
+</doc>
