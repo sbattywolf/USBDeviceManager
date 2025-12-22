@@ -1,9 +1,9 @@
+using System.Net;
+using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using SimRacingDashboard.Models;
 using SimRacingDashboard.Tests.Fixtures;
-using System.Net;
-using System.Net.Http.Json;
 
 namespace SimRacingDashboard.Tests.Functional;
 
@@ -20,6 +20,56 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
     {
         _factory = factory;
         _client = _factory.CreateClient();
+    }
+
+    [Fact]
+    public async Task CreateSoftware_MissingRequiredField_ReturnsBadRequest()
+    {
+        // Arrange
+        await _factory.ResetDatabaseAsync();
+
+        // Missing ExecutablePath which is required by SoftwareCreateDto
+        var invalidSoftware = new
+        {
+            Name = "IncompleteApp"
+            // ExecutablePath omitted
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/software", invalidSoftware);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var content = await response.Content.ReadAsStringAsync();
+        // response should include structured validation errors produced by ValidationFilter
+        content.Should().Contain("errors");
+    }
+
+    [Fact]
+    public async Task StartSoftware_WhenDisabled_ReturnsBadRequest()
+    {
+        // Arrange
+        await _factory.ResetDatabaseAsync();
+
+        var swDto = new
+        {
+            Name = "DisabledApp",
+            ExecutablePath = "C:\\fake\\app.exe",
+            IsEnabled = false
+        };
+
+        var createResp = await _client.PostAsJsonAsync("/api/software", swDto);
+        createResp.StatusCode.Should().Be(HttpStatusCode.Created);
+        var created = await createResp.Content.ReadFromJsonAsync<ManagedSoftware>();
+        created.Should().NotBeNull();
+
+        // Act - attempt to start the disabled software
+        var startResp = await _client.PostAsync($"/api/software/{created.Id}/start", null);
+
+        // Assert
+        startResp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var body = await startResp.Content.ReadAsStringAsync();
+        body.ToLowerInvariant().Should().Contain("disabled");
     }
 
     [Fact]
@@ -41,7 +91,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 
         var deviceResponse = await _client.PostAsJsonAsync("/api/devices", racingWheel);
         deviceResponse.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var createdDevice = await deviceResponse.Content.ReadFromJsonAsync<UsbDevice>();
         createdDevice.Should().NotBeNull();
 
@@ -58,7 +108,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 
         var softwareResponse = await _client.PostAsJsonAsync("/api/software", racingSoftware);
         softwareResponse.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var createdSoftware = await softwareResponse.Content.ReadFromJsonAsync<ManagedSoftware>();
         createdSoftware.Should().NotBeNull();
 
@@ -76,14 +126,14 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 
         var ruleResponse = await _client.PostAsJsonAsync("/api/automation", automationRule);
         ruleResponse.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var createdRule = await ruleResponse.Content.ReadFromJsonAsync<AutomationRule>();
         createdRule.Should().NotBeNull();
 
         // Step 4: Verify dashboard shows all components
         var dashboardResponse = await _client.GetAsync("/api/monitoring/dashboard");
         dashboardResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var dashboardJson = System.Text.Json.JsonDocument.Parse(await dashboardResponse.Content.ReadAsStringAsync()).RootElement;
         dashboardJson.TryGetProperty("systemStatus", out _).Should().BeTrue();
 
@@ -95,7 +145,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         // Step 6: Verify rule execution was logged
         var executionsResponse = await _client.GetAsync($"/api/automation/{createdRule!.Id}/executions");
         executionsResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var executions = await executionsResponse.Content.ReadFromJsonAsync<RuleExecution[]>();
         executions.Should().NotBeNull();
         executions!.Should().HaveCountGreaterOrEqualTo(1);
@@ -200,7 +250,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 
         // Act - Test system monitoring with multiple components
         var dashboardResponse = await _client.GetAsync("/api/monitoring/dashboard");
-        
+
         // Assert
         dashboardResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var dashboardJson = System.Text.Json.JsonDocument.Parse(await dashboardResponse.Content.ReadAsStringAsync()).RootElement;
@@ -228,7 +278,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 
         // Act - Test health monitoring endpoints
         var healthResponse = await _client.GetAsync("/api/monitoring/health");
-        
+
         // Assert
         healthResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var healthJson = System.Text.Json.JsonDocument.Parse(await healthResponse.Content.ReadAsStringAsync()).RootElement;
@@ -237,7 +287,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         // Test system status retrieval
         var statusResponse = await _client.GetAsync("/api/monitoring/status");
         statusResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var statusData = await statusResponse.Content.ReadFromJsonAsync<SystemStatus>();
         statusData.Should().NotBeNull();
         statusData!.Timestamp.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
@@ -261,7 +311,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         // Verify metric retrieval
         var getMetricsResponse = await _client.GetAsync("/api/monitoring/metrics/Test_CPU_Temperature");
         getMetricsResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var retrievedMetrics = await getMetricsResponse.Content.ReadFromJsonAsync<HealthMetric[]>();
         retrievedMetrics.Should().NotBeNull();
         retrievedMetrics!.Should().HaveCountGreaterOrEqualTo(1);
@@ -332,7 +382,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         // Assert
         responses.Should().OnlyContain(r => r.IsSuccessStatusCode);
         stopwatch.ElapsedMilliseconds.Should().BeLessThan(5000); // Should complete within 5 seconds
-        
+
         // Verify system is still responsive after load test
         var finalHealthCheck = await _client.GetAsync("/api/monitoring/health");
         finalHealthCheck.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -343,7 +393,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
     {
         // Arrange
         await _factory.ResetDatabaseAsync();
-        
+
         // Create test device
         var device = new UsbDevice
         {
@@ -367,7 +417,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         // Verify final state is consistent
         var finalDeviceResponse = await _client.GetAsync($"/api/devices/{createdDevice!.Id}");
         finalDeviceResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var finalDevice = await finalDeviceResponse.Content.ReadFromJsonAsync<UsbDevice>();
         finalDevice.Should().NotBeNull();
         finalDevice!.Id.Should().Be(createdDevice.Id);
@@ -381,7 +431,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
-        
+
         using var context = _factory.GetDbContext();
         var device = context.UsbDevices.First();
         var software = context.ManagedSoftware.First();
@@ -415,18 +465,18 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         triggerResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var triggerJson = System.Text.Json.JsonDocument.Parse(await triggerResponse.Content.ReadAsStringAsync()).RootElement;
         triggerJson.GetProperty("triggeredRules").GetInt32().Should().BeGreaterOrEqualTo(1);
 
         // Verify both rules were triggered
         var executionsResponse = await _client.GetAsync("/api/automation/executions?hours=1");
         executionsResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var executions = await executionsResponse.Content.ReadFromJsonAsync<RuleExecution[]>();
         executions.Should().NotBeNull();
         executions!.Should().HaveCountGreaterOrEqualTo(2);
-        
+
         // All executions should be recent and successful
         executions.Should().OnlyContain(e => e.ExecutedAt >= DateTime.UtcNow.AddMinutes(-5));
         executions.Should().OnlyContain(e => e.Success == true);

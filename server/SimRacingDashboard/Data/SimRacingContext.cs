@@ -1,3 +1,7 @@
+// <copyright file="SimRacingContext.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using Microsoft.EntityFrameworkCore;
 using SimRacingDashboard.Models;
 
@@ -5,26 +9,32 @@ namespace SimRacingDashboard.Data;
 
 public class SimRacingContext : DbContext
 {
-    public SimRacingContext(DbContextOptions<SimRacingContext> options) : base(options)
+    public SimRacingContext(DbContextOptions<SimRacingContext> options)
+        : base(options)
     {
     }
 
     // Device Management
     public DbSet<UsbDevice> UsbDevices { get; set; } = null!;
+
     public DbSet<DeviceStatus> DeviceStatuses { get; set; } = null!;
 
-    // Software Management  
+    // Software Management
     public DbSet<ManagedSoftware> ManagedSoftware { get; set; } = null!;
+
     public DbSet<SoftwareStatus> SoftwareStatuses { get; set; } = null!;
 
     // Automation
     public DbSet<AutomationRule> AutomationRules { get; set; } = null!;
+
     public DbSet<RuleExecution> RuleExecutions { get; set; } = null!;
 
     // Monitoring
     public DbSet<SystemStatus> SystemStatuses { get; set; } = null!;
+
     public DbSet<HealthMetric> HealthMetrics { get; set; } = null!;
 
+    /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // USB Device Configuration

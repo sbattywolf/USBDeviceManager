@@ -11,7 +11,7 @@ namespace SimRacingDashboard.Tests.Helpers;
 public static class TestDataGenerator
 {
     private static readonly Fixture _fixture = new();
-    
+
     /// <summary>
     /// Generate realistic USB devices for testing
     /// </summary>
@@ -110,13 +110,13 @@ public static class TestDataGenerator
 
         var statuses = new List<DeviceStatus>();
         var deviceList = devices.ToList();
-        
+
         foreach (var device in deviceList)
         {
             var deviceStatuses = statusFaker
                 .RuleFor(s => s.DeviceId, device.Id)
                 .Generate(entriesPerDevice);
-            
+
             statuses.AddRange(deviceStatuses);
         }
 
@@ -129,7 +129,7 @@ public static class TestDataGenerator
     public static List<SoftwareStatus> GenerateSoftwareStatuses(List<ManagedSoftware> software, int entriesPerSoftware = 3)
     {
         var statusFaker = new Faker<SoftwareStatus>()
-            .RuleFor(s => s.Id, f => f.Random.Int(1, 10000))
+            // Let EF assign identity Id when persisted
             .RuleFor(s => s.IsRunning, f => f.Random.Bool(0.4f))
             .RuleFor(s => s.ProcessId, (f, s) => s.IsRunning ? f.Random.Int(1000, 9999) : null)
             .RuleFor(s => s.Status, (f, s) => s.IsRunning ? "Running" : f.PickRandom("Stopped", "Failed", "Starting"))
@@ -139,13 +139,13 @@ public static class TestDataGenerator
             .RuleFor(s => s.Timestamp, f => f.Date.Recent(1));
 
         var statuses = new List<SoftwareStatus>();
-        
+
         foreach (var sw in software)
         {
             var swStatuses = statusFaker
                 .RuleFor(s => s.SoftwareId, sw.Id)
                 .Generate(entriesPerSoftware);
-            
+
             statuses.AddRange(swStatuses);
         }
 
@@ -158,7 +158,7 @@ public static class TestDataGenerator
     public static List<SystemStatus> GenerateSystemStatuses(int count = 10)
     {
         var statusFaker = new Faker<SystemStatus>()
-            .RuleFor(s => s.Id, f => f.Random.Int(1, 10000))
+            // Let EF assign identity Id when persisted
             .RuleFor(s => s.CpuUsage, f => f.Random.Double(5.0, 95.0))
             .RuleFor(s => s.MemoryUsage, f => f.Random.Double(20.0, 85.0))
             .RuleFor(s => s.DiskUsage, f => f.Random.Double(15.0, 75.0))
@@ -176,10 +176,10 @@ public static class TestDataGenerator
     public static List<HealthMetric> GenerateHealthMetrics(int count = 20)
     {
         var metricFaker = new Faker<HealthMetric>()
-            .RuleFor(m => m.Id, f => f.Random.Int(1, 10000))
+            // Let EF assign identity Id when persisted
             .RuleFor(m => m.MetricName, f => f.PickRandom(new[]
             {
-                "CPU_Temperature", "Memory_Available", "Disk_Free_Space", 
+                "CPU_Temperature", "Memory_Available", "Disk_Free_Space",
                 "Network_Latency", "Process_Count", "Thread_Count",
                 "USB_Device_Count", "Active_Connections", "Error_Rate"
             }))
@@ -215,7 +215,7 @@ public static class TestDataGenerator
     public static ManagedSoftware CreateSimpleTestSoftware(string? name = null)
     {
         var softwareName = name ?? "Test Racing Game";
-        
+
         return new ManagedSoftware
         {
             Name = softwareName,
@@ -238,7 +238,7 @@ public static class TestDataGenerator
             $@"C:\Games\{softwareName}\{cleanName}.exe",
             $@"D:\SteamLibrary\steamapps\common\{softwareName}\{cleanName}.exe"
         };
-        
+
         return possiblePaths[new Random().Next(possiblePaths.Length)];
     }
 }

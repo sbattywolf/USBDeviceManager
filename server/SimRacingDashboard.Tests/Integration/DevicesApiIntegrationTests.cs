@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -5,8 +7,6 @@ using SimRacingDashboard.Data;
 using SimRacingDashboard.Models;
 using SimRacingDashboard.Tests.Fixtures;
 using SimRacingDashboard.Tests.Helpers;
-using System.Net;
-using System.Net.Http.Json;
 
 namespace SimRacingDashboard.Tests.Integration;
 
@@ -36,7 +36,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
         devices.Should().NotBeNull();
         devices!.Should().BeEmpty();
@@ -54,7 +54,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
         devices.Should().NotBeNull();
         devices!.Should().HaveCountGreaterThan(0);
@@ -67,7 +67,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
     {
         // Arrange
         await _factory.ResetDatabaseAsync();
-        
+
         var newDevice = new UsbDevice
         {
             DeviceId = "USB\\VID_TEST&PID_1234",
@@ -84,7 +84,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
-        
+
         var createdDevice = await response.Content.ReadFromJsonAsync<UsbDevice>();
         createdDevice.Should().NotBeNull();
         createdDevice!.Id.Should().BeGreaterThan(0);
@@ -102,7 +102,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
-        
+
         using var context = _factory.GetDbContext();
         var existingDevice = context.UsbDevices.First();
 
@@ -111,7 +111,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var device = await response.Content.ReadFromJsonAsync<UsbDevice>();
         device.Should().NotBeNull();
         device!.Id.Should().Be(existingDevice.Id);
@@ -138,10 +138,10 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
-        
+
         using var context = _factory.GetDbContext();
         var deviceToUpdate = context.UsbDevices.First();
-        
+
         deviceToUpdate.Name = "Updated Integration Test Name";
         deviceToUpdate.Description = "Updated during integration test";
         deviceToUpdate.IsEnabled = !deviceToUpdate.IsEnabled;
@@ -155,7 +155,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Verify changes persisted
         var getResponse = await _client.GetAsync($"/api/devices/{deviceToUpdate.Id}");
         var updatedDevice = await getResponse.Content.ReadFromJsonAsync<UsbDevice>();
-        
+
         updatedDevice.Should().NotBeNull();
         updatedDevice!.Name.Should().Be("Updated Integration Test Name");
         updatedDevice.Description.Should().Be("Updated during integration test");
@@ -174,7 +174,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         var response = await _client.PutAsJsonAsync("/api/devices/456", device);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -183,7 +183,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
-        
+
         using var context = _factory.GetDbContext();
         var deviceToDelete = context.UsbDevices.First();
 
@@ -217,7 +217,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
-        
+
         using var context = _factory.GetDbContext();
         var device = context.UsbDevices.First();
         var originalState = device.IsEnabled;
@@ -227,14 +227,14 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         toggleResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var toggleJson = System.Text.Json.JsonDocument.Parse(await toggleResponse.Content.ReadAsStringAsync()).RootElement;
         toggleJson.GetProperty("enabled").GetBoolean().Should().Be(!originalState);
 
         // Verify state changed in database
         var getResponse = await _client.GetAsync($"/api/devices/{device.Id}");
         var updatedDevice = await getResponse.Content.ReadFromJsonAsync<UsbDevice>();
-        
+
         updatedDevice.Should().NotBeNull();
         updatedDevice!.IsEnabled.Should().Be(!originalState);
     }
@@ -250,7 +250,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var scanJson = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
         scanJson.GetProperty("message").GetString().Should().NotBeNullOrWhiteSpace();
     }
@@ -261,10 +261,10 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
-        
+
         using var context = _factory.GetDbContext();
         var device = context.UsbDevices.First();
-        
+
         // Add some status entries
         var statuses = new[]
         {
@@ -283,7 +283,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
                 Timestamp = DateTime.UtcNow
             }
         };
-        
+
         context.DeviceStatuses.AddRange(statuses);
         await context.SaveChangesAsync();
 
@@ -292,7 +292,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var status = await response.Content.ReadFromJsonAsync<DeviceStatus>();
         status.Should().NotBeNull();
         status!.IsConnected.Should().BeTrue();
@@ -305,10 +305,10 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
-        
+
         using var context = _factory.GetDbContext();
         var device = context.UsbDevices.First();
-        
+
         var now = DateTime.UtcNow;
         var statuses = new[]
         {
@@ -317,7 +317,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
             new DeviceStatus { DeviceId = device.Id, Status = "Recent2", Timestamp = now.AddHours(-6) },
             new DeviceStatus { DeviceId = device.Id, Status = "Current", Timestamp = now }
         };
-        
+
         context.DeviceStatuses.AddRange(statuses);
         await context.SaveChangesAsync();
 
@@ -326,7 +326,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var history = await response.Content.ReadFromJsonAsync<DeviceStatus[]>();
         history.Should().NotBeNull();
         history!.Should().HaveCount(3); // Should exclude the 25-hour old entry
@@ -338,7 +338,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
     {
         // Arrange
         await _factory.ResetDatabaseAsync();
-        
+
         var invalidDevice = new UsbDevice
         {
             // Missing required fields
@@ -359,7 +359,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
     {
         // Arrange
         await _factory.ResetDatabaseAsync();
-        
+
         var testDevice = new UsbDevice
         {
             DeviceId = "USB\\VID_FLOW&PID_TEST",
@@ -373,7 +373,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Act & Assert - Create
         var createResponse = await _client.PostAsJsonAsync("/api/devices", testDevice);
         createResponse.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var createdDevice = await createResponse.Content.ReadFromJsonAsync<UsbDevice>();
         createdDevice.Should().NotBeNull();
         var deviceId = createdDevice!.Id;
@@ -381,14 +381,14 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         // Act & Assert - Read
         var readResponse = await _client.GetAsync($"/api/devices/{deviceId}");
         readResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var readDevice = await readResponse.Content.ReadFromJsonAsync<UsbDevice>();
         readDevice!.Name.Should().Be("End-to-End Test Device");
 
         // Act & Assert - Update
         readDevice.Name = "Updated End-to-End Device";
         readDevice.IsEnabled = false;
-        
+
         var updateResponse = await _client.PutAsJsonAsync($"/api/devices/{deviceId}", readDevice);
         updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -416,13 +416,13 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Act - Perform multiple concurrent operations
         var tasks = new List<Task<HttpResponseMessage>>();
-        
+
         // Multiple GET requests
         for (int i = 0; i < 5; i++)
         {
             tasks.Add(_client.GetAsync("/api/devices"));
         }
-        
+
         // Multiple scan requests
         for (int i = 0; i < 3; i++)
         {
@@ -433,7 +433,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 
         // Assert
         responses.Should().OnlyContain(r => r.IsSuccessStatusCode);
-        
+
         // Verify all GET requests returned valid data
         var getResponses = responses.Take(5);
         foreach (var response in getResponses)

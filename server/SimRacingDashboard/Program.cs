@@ -1,8 +1,13 @@
+// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using SimRacingDashboard.Components;
 using SimRacingDashboard.Data;
 using SimRacingDashboard.Hubs;
-using SimRacingDashboard.Components;
+using SimRacingDashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +30,14 @@ builder.Services.AddScoped<HttpClient>(sp =>
 // Add SignalR
 builder.Services.AddSignalR();
 
-// Add API controllers
-builder.Services.AddControllers();
+// Add API controllers with a simple validation filter for consistent errors
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<SimRacingDashboard.Filters.ValidationFilter>();
+});
+
+// Add clock service for testable current time
+builder.Services.AddSingleton<IDateTime, SystemDateTime>();
 
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -36,9 +47,9 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "SimRacing Dashboard API",
         Version = "v1",
-        Description = "API for SimRacing Dashboard - USB Device Monitoring, Software Management, and Automation"
+        Description = "API for SimRacing Dashboard - USB Device Monitoring, Software Management, and Automation",
     });
-    
+
     // Include XML comments if available
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -111,4 +122,6 @@ Console.WriteLine("Press Ctrl+C to shut down.");
 app.Run();
 
 // Expose Program class to WebApplicationFactory in tests
-public partial class Program { }
+public partial class Program
+{
+}

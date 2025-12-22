@@ -1,7 +1,13 @@
+// <copyright file="AutomationController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimRacingDashboard.Data;
+using SimRacingDashboard.DTOs;
 using SimRacingDashboard.Models;
+using SimRacingDashboard.Services;
 
 namespace SimRacingDashboard.Controllers;
 
@@ -9,169 +15,182 @@ namespace SimRacingDashboard.Controllers;
 [Route("api/[controller]")]
 public class AutomationController : ControllerBase
 {
-    private readonly SimRacingContext _context;
-    private readonly ILogger<AutomationController> _logger;
+    private readonly SimRacingContext context;
+    private readonly ILogger<AutomationController> logger;
+    private readonly IDateTime clock;
 
-    public AutomationController(SimRacingContext context, ILogger<AutomationController> logger)
+    public AutomationController(SimRacingContext context, ILogger<AutomationController> logger, IDateTime clock)
     {
-        _context = context;
-        _logger = logger;
+        this.context = context;
+        this.logger = logger;
+        this.clock = clock;
     }
 
     /// <summary>
-    /// Get all automation rules
+    /// Get all automation rules.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AutomationRule>>> GetRules()
     {
-        return await _context.AutomationRules
+        return await this.context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
             .ToListAsync();
     }
 
     /// <summary>
-    /// Get specific automation rule by ID
+    /// Get specific automation rule by ID.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<AutomationRule>> GetRule(int id)
     {
-        var rule = await _context.AutomationRules
+        var rule = await this.context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
             .FirstOrDefaultAsync(r => r.Id == id);
-        
+
         if (rule == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         return rule;
     }
 
     /// <summary>
-    /// Create new automation rule
+    /// Create new automation rule.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost]
-    public async Task<ActionResult<AutomationRule>> CreateRule(AutomationRule rule)
+    public async Task<ActionResult<AutomationRule>> CreateRule([FromBody] AutomationRuleCreateDto dto)
     {
-        // Validate referenced entities to avoid foreign-key errors and ensure
-        // EF does not try to insert detached or missing navigation objects.
+        var rule = dto.ToModel();
+
         if (rule.TriggerDeviceId.HasValue)
         {
-            var device = await _context.UsbDevices.FindAsync(rule.TriggerDeviceId.Value);
+            var device = await this.context.UsbDevices.FindAsync(rule.TriggerDeviceId.Value);
             if (device == null)
             {
-                return BadRequest(new { error = "Trigger device not found" });
+                return this.BadRequest(new { error = "Trigger device not found" });
             }
-            // attach existing device instance to the rule so EF tracks correctly
+
             rule.TriggerDevice = device;
         }
 
         if (rule.TargetSoftwareId.HasValue)
         {
-            var sw = await _context.ManagedSoftware.FindAsync(rule.TargetSoftwareId.Value);
+            var sw = await this.context.ManagedSoftware.FindAsync(rule.TargetSoftwareId.Value);
             if (sw == null)
             {
-                return BadRequest(new { error = "Target software not found" });
+                return this.BadRequest(new { error = "Target software not found" });
             }
+
             rule.TargetSoftware = sw;
         }
 
-        _context.AutomationRules.Add(rule);
-        await _context.SaveChangesAsync();
+        rule.CreatedAt = this.clock.UtcNow;
 
-        return CreatedAtAction(nameof(GetRule), new { id = rule.Id }, rule);
+        this.context.AutomationRules.Add(rule);
+        await this.context.SaveChangesAsync();
+
+        return this.CreatedAtAction(nameof(this.GetRule), new { id = rule.Id }, rule);
     }
 
     /// <summary>
-    /// Update automation rule
+    /// Update automation rule.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRule(int id, AutomationRule rule)
     {
         if (id != rule.Id)
         {
-            return BadRequest();
+            return this.BadRequest();
         }
 
-        _context.Entry(rule).State = EntityState.Modified;
+        this.context.Entry(rule).State = EntityState.Modified;
 
         try
         {
-            await _context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!RuleExists(id))
+            if (!this.RuleExists(id))
             {
-                return NotFound();
+                return this.NotFound();
             }
+
             throw;
         }
 
-        return NoContent();
+        return this.NoContent();
     }
 
     /// <summary>
-    /// Delete automation rule
+    /// Delete automation rule.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRule(int id)
     {
-        var rule = await _context.AutomationRules.FindAsync(id);
+        var rule = await this.context.AutomationRules.FindAsync(id);
         if (rule == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
-        _context.AutomationRules.Remove(rule);
-        await _context.SaveChangesAsync();
+        this.context.AutomationRules.Remove(rule);
+        await this.context.SaveChangesAsync();
 
-        return NoContent();
+        return this.NoContent();
     }
 
     /// <summary>
-    /// Execute automation rule manually
+    /// Execute automation rule manually.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("{id}/execute")]
     public async Task<IActionResult> ExecuteRule(int id)
     {
-        var rule = await _context.AutomationRules
+        var rule = await this.context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
             .FirstOrDefaultAsync(r => r.Id == id);
 
         if (rule == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         if (!rule.IsEnabled)
         {
-            return BadRequest("Rule is disabled");
+            return this.BadRequest("Rule is disabled");
         }
 
         try
         {
-            var success = await ExecuteRuleAction(rule);
+            var success = await this.ExecuteRuleAction(rule);
 
             var execution = new RuleExecution
             {
                 RuleId = id,
                 Success = success,
-                ExecutedAt = DateTime.UtcNow
+                ExecutedAt = this.clock.UtcNow,
             };
 
-            _context.RuleExecutions.Add(execution);
-            await _context.SaveChangesAsync();
+            this.context.RuleExecutions.Add(execution);
+            await this.context.SaveChangesAsync();
 
-            _logger.LogInformation("Executed rule {RuleName} manually with result: {Success}", rule.Name, success);
+            this.logger.LogInformation("Executed rule {RuleName} manually with result: {Success}", rule.Name, success);
 
-            return Ok(new { 
-                ruleId = id, 
-                success = success, 
-                timestamp = DateTime.UtcNow 
+            return this.Ok(new
+            {
+                ruleId = id,
+                success = success,
+                timestamp = this.clock.UtcNow,
             });
         }
         catch (Exception ex)
@@ -181,44 +200,46 @@ public class AutomationController : ControllerBase
                 RuleId = id,
                 Success = false,
                 ErrorMessage = ex.Message,
-                ExecutedAt = DateTime.UtcNow
+                ExecutedAt = DateTime.UtcNow,
             };
 
-            _context.RuleExecutions.Add(execution);
-            await _context.SaveChangesAsync();
+            this.context.RuleExecutions.Add(execution);
+            await this.context.SaveChangesAsync();
 
-            _logger.LogError(ex, "Failed to execute rule {RuleName}", rule.Name);
-            return StatusCode(500, new { error = ex.Message });
+            this.logger.LogError(ex, "Failed to execute rule {RuleName}", rule.Name);
+            return this.StatusCode(500, new { error = ex.Message });
         }
     }
 
     /// <summary>
-    /// Enable/disable automation rule
+    /// Enable/disable automation rule.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("{id}/toggle")]
     public async Task<IActionResult> ToggleRule(int id, [FromBody] bool enabled)
     {
-        var rule = await _context.AutomationRules.FindAsync(id);
+        var rule = await this.context.AutomationRules.FindAsync(id);
         if (rule == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         rule.IsEnabled = enabled;
-        await _context.SaveChangesAsync();
+        await this.context.SaveChangesAsync();
 
-        _logger.LogInformation("Automation rule {RuleName} {Action}", rule.Name, enabled ? "enabled" : "disabled");
+        this.logger.LogInformation("Automation rule {RuleName} {Action}", rule.Name, enabled ? "enabled" : "disabled");
 
-        return Ok(new { ruleId = id, enabled = enabled, timestamp = DateTime.UtcNow });
+        return this.Ok(new { ruleId = id, enabled = enabled, timestamp = this.clock.UtcNow });
     }
 
     /// <summary>
-    /// Get execution history for a rule
+    /// Get execution history for a rule.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}/executions")]
     public async Task<ActionResult<IEnumerable<RuleExecution>>> GetRuleExecutions(int id, [FromQuery] int limit = 100)
     {
-        var executions = await _context.RuleExecutions
+        var executions = await this.context.RuleExecutions
             .Where(e => e.RuleId == id)
             .OrderByDescending(e => e.ExecutedAt)
             .Take(limit)
@@ -228,14 +249,15 @@ public class AutomationController : ControllerBase
     }
 
     /// <summary>
-    /// Get all rule executions across all rules
+    /// Get all rule executions across all rules.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("executions")]
     public async Task<ActionResult<IEnumerable<RuleExecution>>> GetAllExecutions([FromQuery] int hours = 24, [FromQuery] int limit = 1000)
     {
-        var cutoff = DateTime.UtcNow.AddHours(-hours);
-        
-        var executions = await _context.RuleExecutions
+        var cutoff = this.clock.UtcNow.AddHours(-hours);
+
+        var executions = await this.context.RuleExecutions
             .Include(e => e.Rule)
             .Where(e => e.ExecutedAt >= cutoff)
             .OrderByDescending(e => e.ExecutedAt)
@@ -246,8 +268,9 @@ public class AutomationController : ControllerBase
     }
 
     /// <summary>
-    /// Trigger rules based on device events
+    /// Trigger rules based on device events.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("trigger/device")]
     public async Task<IActionResult> TriggerDeviceRules([FromBody] DeviceEventRequest request)
     {
@@ -260,14 +283,14 @@ public class AutomationController : ControllerBase
 
         if (trigger == null)
         {
-            return BadRequest("Invalid event type");
+            return this.BadRequest("Invalid event type");
         }
 
-        var rules = await _context.AutomationRules
+        var rules = await this.context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
-            .Where(r => r.IsEnabled && 
-                       r.Trigger == trigger && 
+            .Where(r => r.IsEnabled &&
+                       r.Trigger == trigger &&
                        r.TriggerDeviceId == request.DeviceId)
             .ToListAsync();
 
@@ -277,20 +300,21 @@ public class AutomationController : ControllerBase
         {
             try
             {
-                var success = await ExecuteRuleAction(rule);
+                var success = await this.ExecuteRuleAction(rule);
 
                 var execution = new RuleExecution
                 {
                     RuleId = rule.Id,
                     Success = success,
-                    ExecutedAt = DateTime.UtcNow
+                    ExecutedAt = this.clock.UtcNow,
                 };
 
-                _context.RuleExecutions.Add(execution);
+                this.context.RuleExecutions.Add(execution);
 
                 results.Add(new { ruleId = rule.Id, ruleName = rule.Name, success = success });
 
-                _logger.LogInformation("Triggered rule {RuleName} for device event {EventType} with result: {Success}", 
+                this.logger.LogInformation(
+                    "Triggered rule {RuleName} for device event {EventType} with result: {Success}",
                     rule.Name, request.EventType, success);
             }
             catch (Exception ex)
@@ -300,23 +324,24 @@ public class AutomationController : ControllerBase
                     RuleId = rule.Id,
                     Success = false,
                     ErrorMessage = ex.Message,
-                    ExecutedAt = DateTime.UtcNow
+                    ExecutedAt = this.clock.UtcNow,
                 };
 
-                _context.RuleExecutions.Add(execution);
+                this.context.RuleExecutions.Add(execution);
 
                 results.Add(new { ruleId = rule.Id, ruleName = rule.Name, success = false, error = ex.Message });
 
-                _logger.LogError(ex, "Failed to execute triggered rule {RuleName}", rule.Name);
+                this.logger.LogError(ex, "Failed to execute triggered rule {RuleName}", rule.Name);
             }
         }
 
-        await _context.SaveChangesAsync();
+        await this.context.SaveChangesAsync();
 
-        return Ok(new { 
-            triggeredRules = results.Count, 
-            results = results, 
-            timestamp = DateTime.UtcNow 
+        return this.Ok(new
+        {
+            triggeredRules = results.Count,
+            results = results,
+            timestamp = this.clock.UtcNow,
         });
     }
 
@@ -328,39 +353,42 @@ public class AutomationController : ControllerBase
                 if (rule.TargetSoftware != null)
                 {
                     // This would typically call the SoftwareController or a service
-                    _logger.LogInformation("Would start software: {SoftwareName}", rule.TargetSoftware.Name);
+                    this.logger.LogInformation("Would start software: {SoftwareName}", rule.TargetSoftware.Name);
                     return true;
                 }
+
                 break;
 
             case AutomationAction.StopSoftware:
                 if (rule.TargetSoftware != null)
                 {
                     // This would typically call the SoftwareController or a service
-                    _logger.LogInformation("Would stop software: {SoftwareName}", rule.TargetSoftware.Name);
+                    this.logger.LogInformation("Would stop software: {SoftwareName}", rule.TargetSoftware.Name);
                     return true;
                 }
+
                 break;
 
             case AutomationAction.RestartSoftware:
                 if (rule.TargetSoftware != null)
                 {
                     // This would typically call the SoftwareController or a service
-                    _logger.LogInformation("Would restart software: {SoftwareName}", rule.TargetSoftware.Name);
+                    this.logger.LogInformation("Would restart software: {SoftwareName}", rule.TargetSoftware.Name);
                     return true;
                 }
+
                 break;
 
             case AutomationAction.SendNotification:
-                _logger.LogInformation("Would send notification for rule: {RuleName}", rule.Name);
+                this.logger.LogInformation("Would send notification for rule: {RuleName}", rule.Name);
                 return true;
 
             case AutomationAction.RunScript:
-                _logger.LogInformation("Would run script for rule: {RuleName}", rule.Name);
+                this.logger.LogInformation("Would run script for rule: {RuleName}", rule.Name);
                 return true;
 
             default:
-                _logger.LogWarning("Unknown automation action: {Action}", rule.Action);
+                this.logger.LogWarning("Unknown automation action: {Action}", rule.Action);
                 return false;
         }
 
@@ -369,12 +397,16 @@ public class AutomationController : ControllerBase
 
     private bool RuleExists(int id)
     {
-        return _context.AutomationRules.Any(e => e.Id == id);
+        return this.context.AutomationRules.Any(e => e.Id == id);
     }
 }
 
 public class DeviceEventRequest
 {
-    public int DeviceId { get; set; }
+    public int DeviceId
+    {
+        get; set;
+    }
+
     public string EventType { get; set; } = string.Empty; // "connected" or "disconnected"
 }

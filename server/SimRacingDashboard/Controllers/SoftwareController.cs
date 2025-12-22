@@ -1,8 +1,14 @@
+// <copyright file="SoftwareController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimRacingDashboard.Data;
+using SimRacingDashboard.DTOs;
 using SimRacingDashboard.Models;
-using System.Diagnostics;
+using SimRacingDashboard.Services;
 
 namespace SimRacingDashboard.Controllers;
 
@@ -10,114 +16,138 @@ namespace SimRacingDashboard.Controllers;
 [Route("api/[controller]")]
 public class SoftwareController : ControllerBase
 {
-    private readonly SimRacingContext _context;
-    private readonly ILogger<SoftwareController> _logger;
+    private readonly SimRacingContext context;
+    private readonly ILogger<SoftwareController> logger;
+    private readonly IDateTime clock;
 
-    public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger)
+    public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock)
     {
-        _context = context;
-        _logger = logger;
+        this.context = context;
+        this.logger = logger;
+        this.clock = clock;
     }
 
     /// <summary>
-    /// Get all managed software
+    /// Get all managed software.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ManagedSoftware>>> GetSoftware()
     {
-        return await _context.ManagedSoftware.ToListAsync();
+        return await this.context.ManagedSoftware.ToListAsync();
     }
 
     /// <summary>
-    /// Get specific software by ID
+    /// Get specific software by ID.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<ManagedSoftware>> GetSoftware(int id)
     {
-        var software = await _context.ManagedSoftware.FindAsync(id);
-        
+        var software = await this.context.ManagedSoftware.FindAsync(id);
+
         if (software == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         return software;
     }
 
     /// <summary>
-    /// Add new software to management
+    /// Add new software to management.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost]
-    public async Task<ActionResult<ManagedSoftware>> CreateSoftware(ManagedSoftware software)
+    public async Task<ActionResult<ManagedSoftware>> CreateSoftware([FromBody] SoftwareCreateDto dto)
     {
-        _context.ManagedSoftware.Add(software);
-        await _context.SaveChangesAsync();
+        if (!this.ModelState.IsValid)
+        {
+            return this.BadRequest(this.ModelState);
+        }
 
-        return CreatedAtAction(nameof(GetSoftware), new { id = software.Id }, software);
+        var software = dto.ToModel();
+        software.CreatedAt = this.clock.UtcNow;
+
+        this.context.ManagedSoftware.Add(software);
+        await this.context.SaveChangesAsync();
+
+        return this.CreatedAtAction(nameof(this.GetSoftware), new { id = software.Id }, software);
     }
 
     /// <summary>
-    /// Update software configuration
+    /// Update software configuration.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSoftware(int id, ManagedSoftware software)
+    public async Task<IActionResult> UpdateSoftware(int id, [FromBody] SoftwareCreateDto dto)
     {
-        if (id != software.Id)
+        var software = await this.context.ManagedSoftware.FindAsync(id);
+        if (software == null)
         {
-            return BadRequest();
+            return this.NotFound();
         }
 
-        _context.Entry(software).State = EntityState.Modified;
+        // patch fields from DTO
+        software.Name = dto.Name;
+        software.ExecutablePath = dto.ExecutablePath;
+        software.StartupArguments = dto.StartupArguments;
+        software.WorkingDirectory = dto.WorkingDirectory;
+        software.AutoStart = dto.AutoStart;
+        software.IsEnabled = dto.IsEnabled;
 
         try
         {
-            await _context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!SoftwareExists(id))
+            if (!this.SoftwareExists(id))
             {
-                return NotFound();
+                return this.NotFound();
             }
+
             throw;
         }
 
-        return NoContent();
+        return this.NoContent();
     }
 
     /// <summary>
-    /// Remove software from management
+    /// Remove software from management.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSoftware(int id)
     {
-        var software = await _context.ManagedSoftware.FindAsync(id);
+        var software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
-        _context.ManagedSoftware.Remove(software);
-        await _context.SaveChangesAsync();
+        this.context.ManagedSoftware.Remove(software);
+        await this.context.SaveChangesAsync();
 
-        return NoContent();
+        return this.NoContent();
     }
 
     /// <summary>
-    /// Start software
+    /// Start software.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("{id}/start")]
     public async Task<IActionResult> StartSoftware(int id)
     {
-        var software = await _context.ManagedSoftware.FindAsync(id);
+        var software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         if (!software.IsEnabled)
         {
-            return BadRequest("Software is disabled");
+            return this.BadRequest("Software is disabled");
         }
 
         try
@@ -125,9 +155,9 @@ public class SoftwareController : ControllerBase
             var startInfo = new ProcessStartInfo
             {
                 FileName = software.ExecutablePath,
-                Arguments = software.StartupArguments ?? "",
-                WorkingDirectory = software.WorkingDirectory ?? Path.GetDirectoryName(software.ExecutablePath) ?? "",
-                UseShellExecute = false
+                Arguments = software.StartupArguments ?? string.Empty,
+                WorkingDirectory = software.WorkingDirectory ?? Path.GetDirectoryName(software.ExecutablePath) ?? string.Empty,
+                UseShellExecute = false,
             };
 
             var process = Process.Start(startInfo);
@@ -143,58 +173,60 @@ public class SoftwareController : ControllerBase
                 IsRunning = true,
                 ProcessId = process.Id,
                 Status = "Running",
-                LastStarted = DateTime.UtcNow,
-                Timestamp = DateTime.UtcNow
+                LastStarted = this.clock.UtcNow,
+                Timestamp = this.clock.UtcNow,
             };
 
-            _context.SoftwareStatuses.Add(status);
-            await _context.SaveChangesAsync();
+            this.context.SoftwareStatuses.Add(status);
+            await this.context.SaveChangesAsync();
 
-            _logger.LogInformation("Started software {SoftwareName} with PID {ProcessId}", software.Name, process.Id);
+            this.logger.LogInformation("Started software {SoftwareName} with PID {ProcessId}", software.Name, process.Id);
 
-            return Ok(new { 
-                softwareId = id, 
-                processId = process.Id, 
-                status = "started", 
-                timestamp = DateTime.UtcNow 
+            return this.Ok(new
+            {
+                softwareId = id,
+                processId = process.Id,
+                status = "started",
+                timestamp = this.clock.UtcNow,
             });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to start software {SoftwareName}", software.Name);
-            
+            this.logger.LogError(ex, "Failed to start software {SoftwareName}", software.Name);
+
             var status = new SoftwareStatus
             {
                 SoftwareId = id,
                 IsRunning = false,
                 Status = "Failed",
                 ErrorMessage = ex.Message,
-                Timestamp = DateTime.UtcNow
+                Timestamp = this.clock.UtcNow,
             };
 
-            _context.SoftwareStatuses.Add(status);
-            await _context.SaveChangesAsync();
+            this.context.SoftwareStatuses.Add(status);
+            await this.context.SaveChangesAsync();
 
-            return StatusCode(500, new { error = ex.Message });
+            return this.StatusCode(500, new { error = ex.Message });
         }
     }
 
     /// <summary>
-    /// Stop software
+    /// Stop software.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("{id}/stop")]
     public async Task<IActionResult> StopSoftware(int id)
     {
-        var software = await _context.ManagedSoftware.FindAsync(id);
+        var software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         try
         {
             // Find running process
-            var currentStatus = await _context.SoftwareStatuses
+            var currentStatus = await this.context.SoftwareStatuses
                 .Where(s => s.SoftwareId == id && s.IsRunning)
                 .OrderByDescending(s => s.Timestamp)
                 .FirstOrDefaultAsync();
@@ -223,72 +255,76 @@ public class SoftwareController : ControllerBase
                 SoftwareId = id,
                 IsRunning = false,
                 Status = "Stopped",
-                LastStopped = DateTime.UtcNow,
-                Timestamp = DateTime.UtcNow
+                LastStopped = this.clock.UtcNow,
+                Timestamp = this.clock.UtcNow,
             };
 
-            _context.SoftwareStatuses.Add(status);
-            await _context.SaveChangesAsync();
+            this.context.SoftwareStatuses.Add(status);
+            await this.context.SaveChangesAsync();
 
-            _logger.LogInformation("Stopped software {SoftwareName}", software.Name);
+            this.logger.LogInformation("Stopped software {SoftwareName}", software.Name);
 
-            return Ok(new { 
-                softwareId = id, 
-                status = "stopped", 
-                timestamp = DateTime.UtcNow 
+            return this.Ok(new
+            {
+                softwareId = id,
+                status = "stopped",
+                timestamp = this.clock.UtcNow,
             });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to stop software {SoftwareName}", software.Name);
-            return StatusCode(500, new { error = ex.Message });
+            this.logger.LogError(ex, "Failed to stop software {SoftwareName}", software.Name);
+            return this.StatusCode(500, new { error = ex.Message });
         }
     }
 
     /// <summary>
-    /// Restart software
+    /// Restart software.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("{id}/restart")]
     public async Task<IActionResult> RestartSoftware(int id)
     {
         // Stop first
-        await StopSoftware(id);
-        
+        await this.StopSoftware(id);
+
         // Wait a moment
         await Task.Delay(1000);
-        
+
         // Start again
-        return await StartSoftware(id);
+        return await this.StartSoftware(id);
     }
 
     /// <summary>
-    /// Get software status
+    /// Get software status.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}/status")]
     public async Task<ActionResult<SoftwareStatus>> GetSoftwareStatus(int id)
     {
-        var status = await _context.SoftwareStatuses
+        var status = await this.context.SoftwareStatuses
             .Where(s => s.SoftwareId == id)
             .OrderByDescending(s => s.Timestamp)
             .FirstOrDefaultAsync();
 
         if (status == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         return status;
     }
 
     /// <summary>
-    /// Get software status history
+    /// Get software status history.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}/status/history")]
     public async Task<ActionResult<IEnumerable<SoftwareStatus>>> GetSoftwareStatusHistory(int id, [FromQuery] int hours = 24)
     {
-        var cutoff = DateTime.UtcNow.AddHours(-hours);
-        
-        var history = await _context.SoftwareStatuses
+        var cutoff = this.clock.UtcNow.AddHours(-hours);
+
+        var history = await this.context.SoftwareStatuses
             .Where(s => s.SoftwareId == id && s.Timestamp >= cutoff)
             .OrderByDescending(s => s.Timestamp)
             .ToListAsync();
@@ -297,27 +333,28 @@ public class SoftwareController : ControllerBase
     }
 
     /// <summary>
-    /// Enable/disable software
+    /// Enable/disable software.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("{id}/toggle")]
     public async Task<IActionResult> ToggleSoftware(int id, [FromBody] bool enabled)
     {
-        var software = await _context.ManagedSoftware.FindAsync(id);
+        var software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         software.IsEnabled = enabled;
-        await _context.SaveChangesAsync();
+        await this.context.SaveChangesAsync();
 
-        _logger.LogInformation("Software {SoftwareName} {Action}", software.Name, enabled ? "enabled" : "disabled");
+        this.logger.LogInformation("Software {SoftwareName} {Action}", software.Name, enabled ? "enabled" : "disabled");
 
-        return Ok(new { softwareId = id, enabled = enabled, timestamp = DateTime.UtcNow });
+        return this.Ok(new { softwareId = id, enabled = enabled, timestamp = this.clock.UtcNow });
     }
 
     private bool SoftwareExists(int id)
     {
-        return _context.ManagedSoftware.Any(e => e.Id == id);
+        return this.context.ManagedSoftware.Any(e => e.Id == id);
     }
 }
