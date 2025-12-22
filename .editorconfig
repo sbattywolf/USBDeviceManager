@@ -1,0 +1,37 @@
+root = true
+
+# Top-most EditorConfig file
+[*.{cs,csproj}]
+charset = utf-8
+end_of_line = crlf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+# C# specific formatting rules (basic)
+[*.cs]
+# Use built-in dotnet_style rules where possible
+dotnet_sort_system_directives_first = true:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = false:suggestion
+
+# Require this.0 style on event accessors
+csharp_style_event_field_declaration = true:suggestion
+
+# Newlines and spacing
+csharp_preserve_single_line_blocks = false
+
+# File header (none)
+file_header_template = none
+
+[*.{cs,csproj,props,targets}]
+trim_trailing_whitespace = true
+
+[*.md]
+trim_trailing_whitespace = false
+end_of_line = lf
+
+# Visual Studio specific
+[*.sln]
+end_of_line = crlf

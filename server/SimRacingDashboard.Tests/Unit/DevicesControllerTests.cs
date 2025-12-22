@@ -25,12 +25,12 @@ public class DevicesControllerTests : IDisposable
         var options = new DbContextOptionsBuilder<SimRacingContext>()
             .UseInMemoryDatabase($"DevicesTest_{Guid.NewGuid()}")
             .Options;
-            
+
         _context = new SimRacingContext(options);
         _context.Database.EnsureCreated();
-        
+
         _mockLogger = new Mock<ILogger<DevicesController>>();
-        _controller = new DevicesController(_context, _mockLogger.Object);
+        _controller = new DevicesController(_context, _mockLogger.Object, new SimRacingDashboard.Services.SystemDateTime());
     }
 
     [Fact]
@@ -95,15 +95,25 @@ public class DevicesControllerTests : IDisposable
         var device = TestDataGenerator.CreateSimpleTestDevice("New Device");
         device.Id = 0; // Reset ID for creation
 
+        var dto = new SimRacingDashboard.DTOs.DeviceCreateDto
+        {
+            DeviceId = device.DeviceId,
+            Name = device.Name,
+            VendorId = device.VendorId,
+            ProductId = device.ProductId,
+            Description = device.Description,
+            IsEnabled = device.IsEnabled
+        };
+
         // Act
-        var result = await _controller.CreateDevice(device);
+        var result = await _controller.CreateDevice(dto);
 
         // Assert
         result.Result.Should().BeOfType<CreatedAtActionResult>();
-        
+
         var createdResult = (CreatedAtActionResult)result.Result!;
         var createdDevice = (UsbDevice)createdResult.Value!;
-        
+
         createdDevice.Name.Should().Be("New Device");
         createdDevice.Id.Should().BeGreaterThan(0);
 
@@ -124,8 +134,18 @@ public class DevicesControllerTests : IDisposable
         device.Name = "Updated Name";
         device.IsEnabled = false;
 
+        var dto = new SimRacingDashboard.DTOs.DeviceCreateDto
+        {
+            DeviceId = device.DeviceId,
+            Name = device.Name,
+            VendorId = device.VendorId,
+            ProductId = device.ProductId,
+            Description = device.Description,
+            IsEnabled = device.IsEnabled
+        };
+
         // Act
-        var result = await _controller.UpdateDevice(device.Id, device);
+        var result = await _controller.UpdateDevice(device.Id, dto);
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
@@ -142,12 +162,21 @@ public class DevicesControllerTests : IDisposable
     {
         // Arrange
         var device = TestDataGenerator.CreateSimpleTestDevice();
+        var dto = new SimRacingDashboard.DTOs.DeviceCreateDto
+        {
+            DeviceId = device.DeviceId,
+            Name = device.Name,
+            VendorId = device.VendorId,
+            ProductId = device.ProductId,
+            Description = device.Description,
+            IsEnabled = device.IsEnabled
+        };
 
         // Act
-        var result = await _controller.UpdateDevice(999, device);
+        var result = await _controller.UpdateDevice(999, dto);
 
         // Assert
-        result.Should().BeOfType<BadRequestResult>();
+        result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
@@ -155,10 +184,18 @@ public class DevicesControllerTests : IDisposable
     {
         // Arrange
         var device = TestDataGenerator.CreateSimpleTestDevice();
-        device.Id = 999; // Non-existent ID
+        var dto = new SimRacingDashboard.DTOs.DeviceCreateDto
+        {
+            DeviceId = device.DeviceId,
+            Name = device.Name,
+            VendorId = device.VendorId,
+            ProductId = device.ProductId,
+            Description = device.Description,
+            IsEnabled = device.IsEnabled
+        };
 
         // Act
-        var result = await _controller.UpdateDevice(999, device);
+        var result = await _controller.UpdateDevice(999, dto);
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
@@ -282,7 +319,7 @@ public class DevicesControllerTests : IDisposable
 
         // Assert
         result.Result.Should().BeOfType<OkObjectResult>();
-        
+
         var okResult = (OkObjectResult)result.Result!;
         okResult.Value.Should().NotBeNull();
 
@@ -303,7 +340,7 @@ public class DevicesControllerTests : IDisposable
         // Arrange
         var device = TestDataGenerator.CreateSimpleTestDevice();
         device.IsEnabled = true;
-        
+
         _context.UsbDevices.Add(device);
         await _context.SaveChangesAsync();
 
@@ -349,15 +386,27 @@ public class DevicesControllerTests : IDisposable
         device.Name = invalidName!;
         device.Id = 0;
 
+        var dto = new SimRacingDashboard.DTOs.DeviceCreateDto
+        {
+            DeviceId = device.DeviceId,
+            Name = device.Name,
+            VendorId = device.VendorId,
+            ProductId = device.ProductId,
+            Description = device.Description,
+            IsEnabled = device.IsEnabled
+        };
+
         if (invalidName == null)
         {
-            // InMemory provider enforces non-nullability and will throw on Save
-            await Assert.ThrowsAsync<DbUpdateException>(() => _controller.CreateDevice(device));
+            // Simulate model validation failure
+            _controller.ModelState.AddModelError("Name", "The Name field is required.");
+
+            var result = await _controller.CreateDevice(dto);
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
         }
         else
         {
-            // Empty string is allowed by EF/DB; controller will create the entity when invoked directly
-            var result = await _controller.CreateDevice(device);
+            var result = await _controller.CreateDevice(dto);
             result.Result.Should().BeOfType<CreatedAtActionResult>();
         }
     }

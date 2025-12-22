@@ -575,3 +575,4 @@ C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard.Te
 C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard.Tests\obj\Debug\net8.0\SimRacingDashboard.Tests.pdb
 C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard.Tests\obj\Debug\net8.0\SimRacingDashboard.Tests.genruntimeconfig.cache
 C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard.Tests\obj\Debug\net8.0\ref\SimRacingDashboard.Tests.dll
+C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard.Tests\obj\Debug\net8.0\SimRacingDashboard.Tests.sourcelink.json

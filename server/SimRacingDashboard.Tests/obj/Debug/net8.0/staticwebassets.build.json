@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "b28IyL/0OCWlnZg5H5gl3ojopP9/b5UkM1QpxJ8aAoc=",
+  "Hash": "JW7E777WH/4qODFLveeguqn5cytUnQOlXIciOBaaZdE=",
   "Source": "SimRacingDashboard.Tests",
   "BasePath": "_content/SimRacingDashboard.Tests",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "SimRacingDashboard",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     }
   ],

@@ -1,7 +1,13 @@
+// <copyright file="DevicesController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimRacingDashboard.Data;
+using SimRacingDashboard.DTOs;
 using SimRacingDashboard.Models;
+using SimRacingDashboard.Services;
 
 namespace SimRacingDashboard.Controllers;
 
@@ -9,127 +15,153 @@ namespace SimRacingDashboard.Controllers;
 [Route("api/[controller]")]
 public class DevicesController : ControllerBase
 {
-    private readonly SimRacingContext _context;
-    private readonly ILogger<DevicesController> _logger;
+    private readonly SimRacingContext context;
+    private readonly ILogger<DevicesController> logger;
+    private readonly IDateTime clock;
 
-    public DevicesController(SimRacingContext context, ILogger<DevicesController> logger)
+    public DevicesController(SimRacingContext context, ILogger<DevicesController> logger, IDateTime clock)
     {
-        _context = context;
-        _logger = logger;
+        this.context = context;
+        this.logger = logger;
+        this.clock = clock;
     }
 
     /// <summary>
-    /// Get all USB devices
+    /// Get all USB devices.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UsbDevice>>> GetDevices()
     {
-        return await _context.UsbDevices.ToListAsync();
+        return await this.context.UsbDevices.ToListAsync();
     }
 
     /// <summary>
-    /// Get specific USB device by ID
+    /// Get specific USB device by ID.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<UsbDevice>> GetDevice(int id)
     {
-        var device = await _context.UsbDevices.FindAsync(id);
-        
+        var device = await this.context.UsbDevices.FindAsync(id);
+
         if (device == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         return device;
     }
 
     /// <summary>
-    /// Add a new USB device to monitoring
+    /// Add a new USB device to monitoring.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost]
-    public async Task<ActionResult<UsbDevice>> CreateDevice(UsbDevice device)
+    public async Task<ActionResult<UsbDevice>> CreateDevice([FromBody] DeviceCreateDto dto)
     {
-        _context.UsbDevices.Add(device);
-        await _context.SaveChangesAsync();
+        if (!this.ModelState.IsValid)
+        {
+            return this.BadRequest(this.ModelState);
+        }
 
-        return CreatedAtAction(nameof(GetDevice), new { id = device.Id }, device);
+        var device = dto.ToModel();
+        device.CreatedAt = this.clock.UtcNow;
+        device.LastSeen = this.clock.UtcNow;
+
+        this.context.UsbDevices.Add(device);
+        await this.context.SaveChangesAsync();
+
+        return this.CreatedAtAction(nameof(this.GetDevice), new { id = device.Id }, device);
     }
 
     /// <summary>
-    /// Update USB device configuration
+    /// Update USB device configuration.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDevice(int id, UsbDevice device)
+    public async Task<IActionResult> UpdateDevice(int id, [FromBody] DeviceCreateDto dto)
     {
-        if (id != device.Id)
+        var device = await this.context.UsbDevices.FindAsync(id);
+        if (device == null)
         {
-            return BadRequest();
+            return this.NotFound();
         }
 
-        _context.Entry(device).State = EntityState.Modified;
+        // patch fields from DTO
+        device.DeviceId = dto.DeviceId;
+        device.Name = dto.Name;
+        device.VendorId = dto.VendorId;
+        device.ProductId = dto.ProductId;
+        device.Description = dto.Description;
+        device.IsEnabled = dto.IsEnabled;
 
         try
         {
-            await _context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!DeviceExists(id))
+            if (!this.DeviceExists(id))
             {
-                return NotFound();
+                return this.NotFound();
             }
+
             throw;
         }
 
-        return NoContent();
+        return this.NoContent();
     }
 
     /// <summary>
-    /// Remove USB device from monitoring
+    /// Remove USB device from monitoring.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDevice(int id)
     {
-        var device = await _context.UsbDevices.FindAsync(id);
+        var device = await this.context.UsbDevices.FindAsync(id);
         if (device == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
-        _context.UsbDevices.Remove(device);
-        await _context.SaveChangesAsync();
+        this.context.UsbDevices.Remove(device);
+        await this.context.SaveChangesAsync();
 
-        return NoContent();
+        return this.NoContent();
     }
 
     /// <summary>
-    /// Get current status of a USB device
+    /// Get current status of a USB device.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}/status")]
     public async Task<ActionResult<DeviceStatus>> GetDeviceStatus(int id)
     {
-        var status = await _context.DeviceStatuses
+        var status = await this.context.DeviceStatuses
             .Where(s => s.DeviceId == id)
             .OrderByDescending(s => s.Timestamp)
             .FirstOrDefaultAsync();
 
         if (status == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         return status;
     }
 
     /// <summary>
-    /// Get status history for a USB device
+    /// Get status history for a USB device.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("{id}/status/history")]
     public async Task<ActionResult<IEnumerable<DeviceStatus>>> GetDeviceStatusHistory(int id, [FromQuery] int hours = 24)
     {
-        var cutoff = DateTime.UtcNow.AddHours(-hours);
-        
-        var history = await _context.DeviceStatuses
+        var cutoff = this.clock.UtcNow.AddHours(-hours);
+
+        var history = await this.context.DeviceStatuses
             .Where(s => s.DeviceId == id && s.Timestamp >= cutoff)
             .OrderByDescending(s => s.Timestamp)
             .ToListAsync();
@@ -138,41 +170,43 @@ public class DevicesController : ControllerBase
     }
 
     /// <summary>
-    /// Scan for new USB devices
+    /// Scan for new USB devices.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("scan")]
     public async Task<ActionResult<IEnumerable<UsbDevice>>> ScanForDevices()
     {
         // This would typically call a service to scan for USB devices
         // For now, return a placeholder response
-        _logger.LogInformation("USB device scan requested");
-        
+        this.logger.LogInformation("USB device scan requested");
+
         // TODO: Implement actual USB device scanning
-        return Ok(new { message = "Device scan initiated", timestamp = DateTime.UtcNow });
+        return this.Ok(new { message = "Device scan initiated", timestamp = this.clock.UtcNow });
     }
 
     /// <summary>
-    /// Enable/disable a USB device
+    /// Enable/disable a USB device.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("{id}/toggle")]
     public async Task<IActionResult> ToggleDevice(int id, [FromBody] bool enabled)
     {
-        var device = await _context.UsbDevices.FindAsync(id);
+        var device = await this.context.UsbDevices.FindAsync(id);
         if (device == null)
         {
-            return NotFound();
+            return this.NotFound();
         }
 
         device.IsEnabled = enabled;
-        await _context.SaveChangesAsync();
+        await this.context.SaveChangesAsync();
 
-        _logger.LogInformation("Device {DeviceId} {Action}", id, enabled ? "enabled" : "disabled");
+        this.logger.LogInformation("Device {DeviceId} {Action}", id, enabled ? "enabled" : "disabled");
 
-        return Ok(new { deviceId = id, enabled = enabled, timestamp = DateTime.UtcNow });
+        return this.Ok(new { deviceId = id, enabled = enabled, timestamp = this.clock.UtcNow });
     }
 
     private bool DeviceExists(int id)
     {
-        return _context.UsbDevices.Any(e => e.Id == id);
+        return this.context.UsbDevices.Any(e => e.Id == id);
     }
 }

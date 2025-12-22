@@ -131,3 +131,4 @@ C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard\ob
 C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard\obj\Debug\net8.0\SimRacingDashboard.pdb
 C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard\obj\Debug\net8.0\SimRacingDashboard.genruntimeconfig.cache
 C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard\obj\Debug\net8.0\ref\SimRacingDashboard.dll
+C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor\server\SimRacingDashboard\obj\Debug\net8.0\SimRacingDashboard.sourcelink.json

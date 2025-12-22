@@ -1,6 +1,6 @@
+using System.Data.Common;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
-using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using SimRacingDashboard.Data;
 using SimRacingDashboard.Tests.Helpers;
@@ -55,7 +55,7 @@ public class SimRacingContextTests : IDisposable
         var deviceId = "USB\\VID_046D&PID_C29A";
         var device1 = TestDataGenerator.CreateSimpleTestDevice("Device 1");
         var device2 = TestDataGenerator.CreateSimpleTestDevice("Device 2");
-        
+
         device1.DeviceId = deviceId;
         device2.DeviceId = deviceId; // Same device ID
 
@@ -64,7 +64,7 @@ public class SimRacingContextTests : IDisposable
         await _context.SaveChangesAsync();
 
         _context.UsbDevices.Add(device2);
-        
+
         // Assert - SQLite will enforce UNIQUE and throw a DbUpdateException
         await Assert.ThrowsAsync<DbUpdateException>(
             () => _context.SaveChangesAsync()
@@ -97,7 +97,7 @@ public class SimRacingContextTests : IDisposable
         var remainingStatuses = await _context.DeviceStatuses
             .Where(s => s.DeviceId == device.Id)
             .ToListAsync();
-            
+
         remainingStatuses.Should().BeEmpty();
     }
 
@@ -130,7 +130,7 @@ public class SimRacingContextTests : IDisposable
         // Arrange
         var device = TestDataGenerator.CreateSimpleTestDevice();
         var software = TestDataGenerator.CreateSimpleTestSoftware();
-        
+
         _context.UsbDevices.Add(device);
         _context.ManagedSoftware.Add(software);
         await _context.SaveChangesAsync();
@@ -173,7 +173,7 @@ public class SimRacingContextTests : IDisposable
             Action = AutomationAction.SendNotification,
             IsEnabled = true
         };
-        
+
         _context.AutomationRules.Add(rule);
         await _context.SaveChangesAsync();
 
@@ -183,7 +183,7 @@ public class SimRacingContextTests : IDisposable
             Success = true,
             ExecutedAt = DateTime.UtcNow
         };
-        
+
         _context.RuleExecutions.Add(execution);
         await _context.SaveChangesAsync();
 
@@ -195,7 +195,7 @@ public class SimRacingContextTests : IDisposable
         var remainingExecutions = await _context.RuleExecutions
             .Where(e => e.RuleId == rule.Id)
             .ToListAsync();
-            
+
         remainingExecutions.Should().BeEmpty();
     }
 
@@ -204,7 +204,7 @@ public class SimRacingContextTests : IDisposable
     {
         // Arrange
         var statuses = TestDataGenerator.GenerateSystemStatuses(5);
-        
+
         // Ensure different timestamps
         for (int i = 0; i < statuses.Count; i++)
         {
@@ -225,7 +225,7 @@ public class SimRacingContextTests : IDisposable
         savedStatuses[1].Timestamp.Should().BeAfter(savedStatuses[2].Timestamp);
     }
 
-    
+
 
     [Fact]
     public async Task HealthMetric_DifferentSources_ShouldGroupByMetricName()
@@ -246,14 +246,14 @@ public class SimRacingContextTests : IDisposable
         var cpuMetrics = await _context.HealthMetrics
             .Where(m => m.MetricName == "CPU_Usage")
             .ToListAsync();
-            
+
         var memoryMetrics = await _context.HealthMetrics
             .Where(m => m.MetricName == "Memory_Usage")
             .ToListAsync();
 
         cpuMetrics.Should().HaveCount(2);
         memoryMetrics.Should().HaveCount(1);
-        
+
         cpuMetrics.Should().OnlyContain(m => m.MetricName == "CPU_Usage");
         memoryMetrics.Should().OnlyContain(m => m.MetricName == "Memory_Usage");
     }
@@ -301,7 +301,7 @@ public class SimRacingContextTests : IDisposable
             new DeviceStatus { DeviceId = device.Id, IsConnected = false, Status = "Disconnected", Timestamp = now.AddHours(-1) },
             new DeviceStatus { DeviceId = device.Id, IsConnected = true, Status = "Connected", Timestamp = now }
         };
-        
+
         _context.DeviceStatuses.AddRange(statuses);
         await _context.SaveChangesAsync();
 
