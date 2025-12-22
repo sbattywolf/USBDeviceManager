@@ -1,3 +1,6 @@
+using System.Data.Common;
+using System.Diagnostics;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -5,9 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SimRacingDashboard.Data;
-using System.Data.Common;
-using System.IO;
-using System.Diagnostics;
 
 namespace SimRacingDashboard.Tests.Fixtures;
 
@@ -20,6 +20,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     private readonly string _testDatabaseName;
     private readonly string _dbFilePath;
     private readonly string _connectionString;
+    // no shared connection by default; use connection string to allow EF to manage connections
 
     public SimRacingTestFactory()
     {
@@ -57,15 +58,15 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                         File.Delete(f);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignore per-file errors
+                    Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB '{f}': {ex}");
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // ignore any file-system errors during startup cleanup
+            Console.Error.WriteLine($"SimRacingTestFactory: startup cleanup failed: {ex}");
         }
 
         // Create the database file and apply PRAGMAs to improve concurrency
@@ -85,9 +86,9 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             }
             tmpConn.Close();
         }
-        catch
+        catch (Exception ex)
         {
-            // ignore
+            Console.Error.WriteLine($"SimRacingTestFactory: failed to set PRAGMAs on '{_dbFilePath}': {ex}");
         }
         // Eagerly initialize EF/SQLite model and database while single-threaded so
         // that any SQLite user-function registration happens before concurrent tests.
@@ -98,9 +99,9 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             // force model creation
             _ = initContext.Model;
         }
-        catch
+        catch (Exception ex)
         {
-            // Ignore initialization errors here; tests will surface them.
+            Console.Error.WriteLine($"SimRacingTestFactory: EF model initialization failed: {ex}");
         }
     }
 
@@ -114,7 +115,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             // Remove existing database context registration
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<SimRacingContext>));
-            
+
             if (descriptor != null)
             {
                 services.Remove(descriptor);
@@ -184,13 +185,13 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
 
         // Ensure database is created
         await context.Database.EnsureCreatedAsync();
-        
+
         // Clear existing data
         context.UsbDevices.RemoveRange(context.UsbDevices);
         context.ManagedSoftware.RemoveRange(context.ManagedSoftware);
         context.AutomationRules.RemoveRange(context.AutomationRules);
         await context.SaveChangesAsync();
-        
+
         // Add test devices and software, save them first so EF assigns IDs
         var testDevices = TestDataGenerator.GenerateTestDevices(3);
         context.UsbDevices.AddRange(testDevices);
@@ -255,7 +256,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         context.UsbDevices.RemoveRange(context.UsbDevices);
         context.HealthMetrics.RemoveRange(context.HealthMetrics);
         context.SystemStatuses.RemoveRange(context.SystemStatuses);
-        
+
         await context.SaveChangesAsync();
     }
 
@@ -265,10 +266,10 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     public HttpClient CreateAuthenticatedClient()
     {
         var client = CreateClient();
-        
+
         // Add any authentication headers if needed
         // client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        
+
         return client;
     }
 
@@ -285,12 +286,13 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                     File.Delete(_dbFilePath);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore disposal errors during test teardown
+                Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB on dispose '{_dbFilePath}': {ex}");
             }
+            // nothing extra to dispose here beyond file cleanup
         }
-        
+
         base.Dispose(disposing);
     }
 }

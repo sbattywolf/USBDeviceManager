@@ -1,5 +1,18 @@
 <Project>
   <PropertyGroup>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <!-- Enable analyzers during build by default -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
+
+  <!-- Disable analyzers for test projects (project names containing 'Tests') to reduce noise -->
+  <PropertyGroup Condition=" '$([System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' == 'True' ">
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <!-- Analyzer packages for non-test projects only -->
+  <ItemGroup Condition=" '$([System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' != 'True' ">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
+  </ItemGroup>
 </Project>

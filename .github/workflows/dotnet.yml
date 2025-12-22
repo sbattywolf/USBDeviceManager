@@ -25,6 +25,20 @@ jobs:
       - name: Restore
         run: dotnet restore Device-Sentinel.sln
 
+      - name: Install dotnet-format tool
+        run: |
+          dotnet tool install -g dotnet-format --version 6.*
+          echo "## Add dotnet tools to PATH"
+          echo "##[add-path]$HOME/.dotnet/tools"
+        shell: bash
+
+      - name: Run dotnet-format (check)
+        env:
+          PATH: ${{ env.PATH }}:$HOME/.dotnet/tools
+        run: |
+          dotnet-format --verify-no-changes
+        continue-on-error: false
+
       - name: Build
         run: dotnet build Device-Sentinel.sln --configuration Release --no-restore
 

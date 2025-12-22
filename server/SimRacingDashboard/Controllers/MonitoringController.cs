@@ -1,8 +1,12 @@
+// <copyright file="MonitoringController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimRacingDashboard.Data;
 using SimRacingDashboard.Models;
-using System.Diagnostics;
 
 namespace SimRacingDashboard.Controllers;
 
@@ -10,45 +14,47 @@ namespace SimRacingDashboard.Controllers;
 [Route("api/[controller]")]
 public class MonitoringController : ControllerBase
 {
-    private readonly SimRacingContext _context;
-    private readonly ILogger<MonitoringController> _logger;
+    private readonly SimRacingContext context;
+    private readonly ILogger<MonitoringController> logger;
 
     public MonitoringController(SimRacingContext context, ILogger<MonitoringController> logger)
     {
-        _context = context;
-        _logger = logger;
+        this.context = context;
+        this.logger = logger;
     }
 
     /// <summary>
-    /// Get current system status
+    /// Get current system status.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("status")]
     public async Task<ActionResult<SystemStatus>> GetSystemStatus()
     {
-        var status = await _context.SystemStatuses
+        var status = await this.context.SystemStatuses
             .OrderByDescending(s => s.Timestamp)
             .FirstOrDefaultAsync();
 
         if (status == null)
         {
             // Generate current status if none exists
-            status = await GenerateCurrentSystemStatus();
-            _context.SystemStatuses.Add(status);
-            await _context.SaveChangesAsync();
+            status = await this.GenerateCurrentSystemStatus();
+            this.context.SystemStatuses.Add(status);
+            await this.context.SaveChangesAsync();
         }
 
         return status;
     }
 
     /// <summary>
-    /// Get system status history
+    /// Get system status history.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("status/history")]
     public async Task<ActionResult<IEnumerable<SystemStatus>>> GetSystemStatusHistory([FromQuery] int hours = 24)
     {
         var cutoff = DateTime.UtcNow.AddHours(-hours);
-        
-        var history = await _context.SystemStatuses
+
+        var history = await this.context.SystemStatuses
             .Where(s => s.Timestamp >= cutoff)
             .OrderByDescending(s => s.Timestamp)
             .ToListAsync();
@@ -57,14 +63,15 @@ public class MonitoringController : ControllerBase
     }
 
     /// <summary>
-    /// Get all health metrics
+    /// Get all health metrics.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("metrics")]
     public async Task<ActionResult<IEnumerable<HealthMetric>>> GetHealthMetrics([FromQuery] int hours = 24)
     {
         var cutoff = DateTime.UtcNow.AddHours(-hours);
-        
-        var metrics = await _context.HealthMetrics
+
+        var metrics = await this.context.HealthMetrics
             .Where(m => m.Timestamp >= cutoff)
             .OrderByDescending(m => m.Timestamp)
             .ToListAsync();
@@ -73,14 +80,15 @@ public class MonitoringController : ControllerBase
     }
 
     /// <summary>
-    /// Get specific health metric by name
+    /// Get specific health metric by name.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("metrics/{metricName}")]
     public async Task<ActionResult<IEnumerable<HealthMetric>>> GetHealthMetric(string metricName, [FromQuery] int hours = 24)
     {
         var cutoff = DateTime.UtcNow.AddHours(-hours);
-        
-        var metrics = await _context.HealthMetrics
+
+        var metrics = await this.context.HealthMetrics
             .Where(m => m.MetricName == metricName && m.Timestamp >= cutoff)
             .OrderByDescending(m => m.Timestamp)
             .ToListAsync();
@@ -89,21 +97,23 @@ public class MonitoringController : ControllerBase
     }
 
     /// <summary>
-    /// Record a new health metric
+    /// Record a new health metric.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("metrics")]
     public async Task<ActionResult<HealthMetric>> RecordMetric(HealthMetric metric)
     {
         metric.Timestamp = DateTime.UtcNow;
-        _context.HealthMetrics.Add(metric);
-        await _context.SaveChangesAsync();
+        this.context.HealthMetrics.Add(metric);
+        await this.context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetHealthMetric), new { metricName = metric.MetricName }, metric);
+        return this.CreatedAtAction(nameof(this.GetHealthMetric), new { metricName = metric.MetricName }, metric);
     }
 
     /// <summary>
-    /// Get dashboard summary data
+    /// Get dashboard summary data.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("dashboard")]
     public async Task<ActionResult<object>> GetDashboardSummary()
     {
@@ -111,84 +121,85 @@ public class MonitoringController : ControllerBase
         var last24Hours = currentTime.AddHours(-24);
 
         // Get current system status
-        var systemStatus = await GenerateCurrentSystemStatus();
+        var systemStatus = await this.GenerateCurrentSystemStatus();
 
         // Get recent device activity
-        var recentDeviceActivity = await _context.DeviceStatuses
+        var recentDeviceActivity = await this.context.DeviceStatuses
             .Where(s => s.Timestamp >= last24Hours)
             .GroupBy(s => s.DeviceId)
             .Select(g => new
             {
                 DeviceId = g.Key,
                 LastActivity = g.Max(s => s.Timestamp),
-                IsConnected = g.OrderByDescending(s => s.Timestamp).First().IsConnected
+                IsConnected = g.OrderByDescending(s => s.Timestamp).First().IsConnected,
             })
             .ToListAsync();
 
         // Get recent software activity
-        var recentSoftwareActivity = await _context.SoftwareStatuses
+        var recentSoftwareActivity = await this.context.SoftwareStatuses
             .Where(s => s.Timestamp >= last24Hours)
             .GroupBy(s => s.SoftwareId)
             .Select(g => new
             {
                 SoftwareId = g.Key,
                 LastActivity = g.Max(s => s.Timestamp),
-                IsRunning = g.OrderByDescending(s => s.Timestamp).First().IsRunning
+                IsRunning = g.OrderByDescending(s => s.Timestamp).First().IsRunning,
             })
             .ToListAsync();
 
         // Get recent rule executions
-        var recentRuleExecutions = await _context.RuleExecutions
+        var recentRuleExecutions = await this.context.RuleExecutions
             .Where(e => e.ExecutedAt >= last24Hours)
             .GroupBy(e => e.Success)
             .Select(g => new
             {
                 Success = g.Key,
-                Count = g.Count()
+                Count = g.Count(),
             })
             .ToListAsync();
 
         // Get latest health metrics
-        var latestMetrics = await _context.HealthMetrics
+        var latestMetrics = await this.context.HealthMetrics
             .Where(m => m.Timestamp >= last24Hours)
             .GroupBy(m => m.MetricName)
             .Select(g => new
             {
                 MetricName = g.Key,
                 LatestValue = g.OrderByDescending(m => m.Timestamp).First().Value,
-                Timestamp = g.Max(m => m.Timestamp)
+                Timestamp = g.Max(m => m.Timestamp),
             })
             .ToListAsync();
 
-        return Ok(new
+        return this.Ok(new
         {
             systemStatus,
             deviceSummary = new
             {
                 totalDevices = recentDeviceActivity.Count,
                 connectedDevices = recentDeviceActivity.Count(d => d.IsConnected),
-                recentActivity = recentDeviceActivity.Count(d => d.LastActivity >= currentTime.AddHours(-1))
+                recentActivity = recentDeviceActivity.Count(d => d.LastActivity >= currentTime.AddHours(-1)),
             },
             softwareSummary = new
             {
                 totalSoftware = recentSoftwareActivity.Count,
                 runningSoftware = recentSoftwareActivity.Count(s => s.IsRunning),
-                recentActivity = recentSoftwareActivity.Count(s => s.LastActivity >= currentTime.AddHours(-1))
+                recentActivity = recentSoftwareActivity.Count(s => s.LastActivity >= currentTime.AddHours(-1)),
             },
             automationSummary = new
             {
                 totalExecutions = recentRuleExecutions.Sum(r => r.Count),
                 successfulExecutions = recentRuleExecutions.Where(r => r.Success).Sum(r => r.Count),
-                failedExecutions = recentRuleExecutions.Where(r => !r.Success).Sum(r => r.Count)
+                failedExecutions = recentRuleExecutions.Where(r => !r.Success).Sum(r => r.Count),
             },
             healthMetrics = latestMetrics,
-            timestamp = currentTime
+            timestamp = currentTime,
         });
     }
 
     /// <summary>
-    /// Get system health check
+    /// Get system health check.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpGet("health")]
     public async Task<ActionResult<object>> GetHealthCheck()
     {
@@ -197,19 +208,19 @@ public class MonitoringController : ControllerBase
         try
         {
             // Database connectivity check
-            var dbCheck = await _context.Database.CanConnectAsync();
+            var dbCheck = await this.context.Database.CanConnectAsync();
             checks.Add(new { name = "Database", status = dbCheck ? "healthy" : "unhealthy" });
 
             // Device monitoring check
-            var deviceCount = await _context.UsbDevices.CountAsync();
+            var deviceCount = await this.context.UsbDevices.CountAsync();
             checks.Add(new { name = "Device Monitoring", status = "healthy", deviceCount });
 
             // Software management check
-            var softwareCount = await _context.ManagedSoftware.CountAsync();
+            var softwareCount = await this.context.ManagedSoftware.CountAsync();
             checks.Add(new { name = "Software Management", status = "healthy", softwareCount });
 
             // Automation check
-            var activeRulesCount = await _context.AutomationRules.CountAsync(r => r.IsEnabled);
+            var activeRulesCount = await this.context.AutomationRules.CountAsync(r => r.IsEnabled);
             checks.Add(new { name = "Automation", status = "healthy", activeRulesCount });
 
             // System resources check
@@ -217,36 +228,37 @@ public class MonitoringController : ControllerBase
             var memoryUsage = process.WorkingSet64 / (1024 * 1024); // MB
             checks.Add(new { name = "Memory Usage", status = "healthy", memoryMB = memoryUsage });
 
-            return Ok(new
+            return this.Ok(new
             {
                 status = "healthy",
                 checks,
-                timestamp = DateTime.UtcNow
+                timestamp = DateTime.UtcNow,
             });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Health check failed");
-            return StatusCode(500, new
+            this.logger.LogError(ex, "Health check failed");
+            return this.StatusCode(500, new
             {
                 status = "unhealthy",
                 error = ex.Message,
-                timestamp = DateTime.UtcNow
+                timestamp = DateTime.UtcNow,
             });
         }
     }
 
     /// <summary>
-    /// Refresh system status
+    /// Refresh system status.
     /// </summary>
+    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
     [HttpPost("status/refresh")]
     public async Task<ActionResult<SystemStatus>> RefreshSystemStatus()
     {
-        var status = await GenerateCurrentSystemStatus();
-        _context.SystemStatuses.Add(status);
-        await _context.SaveChangesAsync();
+        var status = await this.GenerateCurrentSystemStatus();
+        this.context.SystemStatuses.Add(status);
+        await this.context.SaveChangesAsync();
 
-        _logger.LogInformation("System status refreshed");
+        this.logger.LogInformation("System status refreshed");
 
         return status;
     }
@@ -255,33 +267,33 @@ public class MonitoringController : ControllerBase
     {
         // Get current system metrics
         var process = Process.GetCurrentProcess();
-        
+
         // Calculate CPU usage (simplified)
         var cpuUsage = 0.0; // This would need a proper CPU counter implementation
-        
+
         // Calculate memory usage
         var memoryUsage = (process.WorkingSet64 / (1024.0 * 1024.0 * 1024.0)) * 100; // Convert to percentage
-        
+
         // Calculate disk usage (simplified for C: drive)
         var driveInfo = new DriveInfo("C");
         var diskUsage = ((double)(driveInfo.TotalSize - driveInfo.AvailableFreeSpace) / driveInfo.TotalSize) * 100;
 
         // Count connected devices
-        var connectedDevices = await _context.DeviceStatuses
+        var connectedDevices = await this.context.DeviceStatuses
             .Where(s => s.IsConnected)
             .Select(s => s.DeviceId)
             .Distinct()
             .CountAsync();
 
         // Count running software
-        var runningSoftware = await _context.SoftwareStatuses
+        var runningSoftware = await this.context.SoftwareStatuses
             .Where(s => s.IsRunning)
             .Select(s => s.SoftwareId)
             .Distinct()
             .CountAsync();
 
         // Count active rules
-        var activeRules = await _context.AutomationRules.CountAsync(r => r.IsEnabled);
+        var activeRules = await this.context.AutomationRules.CountAsync(r => r.IsEnabled);
 
         return new SystemStatus
         {
@@ -291,7 +303,7 @@ public class MonitoringController : ControllerBase
             ConnectedDevices = connectedDevices,
             RunningSoftware = runningSoftware,
             ActiveRules = activeRules,
-            Timestamp = DateTime.UtcNow
+            Timestamp = DateTime.UtcNow,
         };
     }
 }

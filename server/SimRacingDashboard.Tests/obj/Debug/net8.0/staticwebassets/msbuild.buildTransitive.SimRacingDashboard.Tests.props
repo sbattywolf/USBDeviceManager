@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\SimRacingDashboard.Tests.props" />
-</Project>
