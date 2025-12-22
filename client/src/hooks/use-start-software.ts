@@ -15,7 +15,10 @@ export function useStartSoftware() {
       const response = await fetch(`/api/configs/start/${configId}`, {
         method: "POST",
       });
-      if (!response.ok) throw new Error("Failed to start software");
+      if (!response.ok) {
+        const text = await response.text().catch(() => '');
+        throw new Error(text || "Failed to start software");
+      }
       return response.json();
     },
     onSuccess: (data) => {

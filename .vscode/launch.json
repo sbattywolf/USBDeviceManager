@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Server (dev:local)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["tsx", "server/index.ts"],
+      "env": {
+        "PORT": "31288",
+        "HOST": "127.0.0.1",
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }
+    ,
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Client (vite)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:client"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "BROWSER": "none"
+      }
+    }
+  ]
+  "compounds": [
+    {
+      "name": "Server + Client",
+      "configurations": ["Launch Server (dev:local)", "Launch Client (vite)"]
+    }
+  ]
+}

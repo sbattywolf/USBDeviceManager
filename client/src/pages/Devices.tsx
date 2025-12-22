@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { AlertCircle, CheckCircle2, Plus } from "lucide-react";
+import useUsbStream from "@/hooks/use-usb-stream";
 import { StartButton } from "@/components/StartButton";
 import { motion } from "framer-motion";
 import {
@@ -22,16 +23,21 @@ export default function Devices() {
   const [showUnconfiguredOnly, setShowUnconfiguredOnly] = useState(true);
 
   // Get all unique device IDs from logs
-  const detectedDevices = logs
-    ? Array.from(
-        new Map(
-          logs.map((log) => [
-            log.deviceId,
-            { deviceId: log.deviceId, friendlyName: log.friendlyName },
-          ])
-        ).values()
-      )
-    : [];
+  // Get live detected devices from USB stream (falls back to logs)
+  const { devices: usbDevices } = useUsbStream({ usbInterval: 10000 });
+
+  const detectedDevices = usbDevices && usbDevices.length
+    ? usbDevices.map((d) => ({ deviceId: d.InstanceId || '', friendlyName: d.FriendlyName || '' }))
+    : (logs
+      ? Array.from(
+          new Map(
+            logs.map((log) => [
+              log.deviceId,
+              { deviceId: log.deviceId, friendlyName: log.friendlyName },
+            ])
+          ).values()
+        )
+      : []);
 
   // Find unconfigured devices (detected but not in configs)
   const unconfiguredDevices = detectedDevices.filter(
@@ -196,8 +202,8 @@ export default function Devices() {
                         {config.isEnabled ? "Enabled" : "Disabled"}
                       </span>
                     </TableCell>
-                    <TableCell className="flex gap-2">
-                      <StartButton configId={config.id} />
+                      <TableCell className="flex gap-2">
+                      <StartButton configId={config.id} friendlyName={config.friendlyName} />
                       <Link href={`/configs?edit=${config.id}`}>
                         <Button
                           variant="outline"
@@ -310,7 +316,7 @@ export default function Devices() {
                         {configs?.filter(c => 
                           c.deviceId.includes(device.deviceId) || device.deviceId.includes(c.deviceId)
                         ).map(config => (
-                          <StartButton key={config.id} configId={config.id} />
+                          <StartButton key={config.id} configId={config.id} friendlyName={config.friendlyName} />
                         ))}
                         <Link href="/configs">
                           <Button

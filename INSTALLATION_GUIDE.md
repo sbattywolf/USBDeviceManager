@@ -39,7 +39,7 @@ The application uses PostgreSQL. Set up your database:
 CREATE DATABASE usb_manager;
 
 # Note your connection details:
-# Host: localhost
+# Host: 127.0.0.1
 # Port: 5432 (default)
 # User: postgres (default)
 # Password: <your-password>
@@ -52,12 +52,12 @@ CREATE DATABASE usb_manager;
 ### Step 4: Set Environment Variables
 Create a `.env` file in the root directory:
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/usb_manager
+DATABASE_URL=postgresql://username:password@127.0.0.1:5432/usb_manager
 PORT=5000
 NODE_ENV=development
 ```
 
-Replace `username`, `password`, `localhost`, and `usb_manager` with your actual database credentials.
+Replace `username`, `password`, `127.0.0.1`, and `usb_manager` with your actual database credentials.
 
 ### Step 5: Initialize Database
 ```bash
@@ -72,7 +72,7 @@ npm run db:push
 # Start the development server
 npm run dev
 
-# The application will be available at: http://localhost:5000
+# The application will be available at: http://127.0.0.1:5000
 ```
 
 You should see:
@@ -80,7 +80,7 @@ You should see:
 2:48:26 PM [express] serving on port 5000
 ```
 
-Open your browser and navigate to `http://localhost:5000`
+Open your browser and navigate to `http://127.0.0.1:5000`
 
 ---
 
@@ -123,11 +123,11 @@ python --version
 Edit `windows_agent.py` with a text editor and update this line:
 
 ```python
-API_URL = "http://localhost:5000/api"  # Change localhost to your machine's IP if running remotely
+API_URL = "http://127.0.0.1:5000/api"  # Change this value if running remotely
 ```
 
 **Examples:**
-- **Local machine**: `http://localhost:5000/api`
+- **Local machine**: `http://127.0.0.1:5000/api`
 - **Remote/Network machine**: `http://192.168.1.100:5000/api` (replace with your IP)
 - **Cloud dashboard**: `https://your-replit-app.replit.dev/api`
 
@@ -235,11 +235,33 @@ Navigate to **Logs** page to view:
 | **Database connection error** | Database not running | Start PostgreSQL service |
 | **Port 5000 already in use** | Another app using port | Change PORT in .env file or close other apps |
 
+
 ### Viewing Detailed Logs
 Check the application logs in the browser console:
 - Press **F12** to open Developer Tools
 - Go to **Console** tab to see errors
 - All API responses are logged here
+
+#### Server Error Log (Persistent)
+In addition to browser logs, all server-side errors are written to a persistent log file:
+
+   data/error.log
+
+This file is created automatically. Each entry includes a timestamp, error message, and stack trace. If you encounter server issues (such as failed API requests, process errors, or unexplained failures), check this file for details.
+
+**Troubleshooting with error.log:**
+- Open `data/error.log` in a text editor to review recent errors.
+- Each entry will show the time, error message, and stack trace for debugging.
+- If the file grows too large, you can delete or archive it; a new one will be created automatically.
+
+**Example error entry:**
+```
+[2025-12-22T14:35:10.123Z] Error: Failed to start process
+   at startProcess (server/process.ts:42:15)
+   at ...
+```
+
+For client-side errors, look for toast notifications in the UI and cross-reference with the error log for technical details.
 
 ---
 

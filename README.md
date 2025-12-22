@@ -36,7 +36,7 @@ npm install
 # Start the development server
 npm run dev
 
-# Open http://localhost:5000 in your browser
+# Open http://127.0.0.1:5000 in your browser
 ```
 
 The application will automatically perform health checks on startup and guide you through any issues.
@@ -44,6 +44,8 @@ The application will automatically perform health checks on startup and guide yo
 ### 2. **Download & Install Windows Agent** (For Production Use)
 1. Go to **Agent** page in the dashboard
 2. Click **"Download Agent Script"**
+   - npm test
+
 3. Follow the comprehensive **INSTALLATION_GUIDE.md** for step-by-step setup
 
 ## System Health Checks
@@ -187,7 +189,7 @@ When this USB device is detected by the agent, the backup software will launch a
 
 ```env
 # Required
-DATABASE_URL=postgresql://user:pass@localhost:5432/dbname
+DATABASE_URL=postgresql://user:pass@127.0.0.1:5432/dbname
 
 # Optional
 PORT=5000                    # Server port (default: 5000)
@@ -206,7 +208,7 @@ NODE_ENV=development         # development or production
 ### For Windows Desktop
 1. Follow **INSTALLATION_GUIDE.md** part 1-2
 2. Run agent as Windows Service or Task (see guide)
-3. Access dashboard at `http://localhost:5000`
+3. Access dashboard at `http://127.0.0.1:5000`
 
 ## Technologies Used
 
@@ -240,10 +242,126 @@ Common issues and their solutions are documented in the guide, along with:
 - Auto-start configuration
 - Troubleshooting checklist
 
+
+## Error Handling and Troubleshooting
+
+### Centralized Error Handling
+All server errors are handled by a global error handler. This ensures that any unhandled exceptions or API errors are consistently logged and surfaced to the user interface (for client errors) or to the server logs.
+
+### Persistent Error Log
+In addition to console output, all server-side errors are written to a persistent log file at:
+
+   data/error.log
+
+This file is automatically created if it does not exist. Each error entry includes a timestamp and the full error stack trace, making it easy to diagnose issues after the fact.
+
+#### How to Use the Error Log
+- If something is not working as expected, check `data/error.log` for recent error entries.
+- Each entry will include the time, error message, and stack trace.
+- This log is especially useful for troubleshooting issues that do not appear in the client UI.
+
+### Client Error Handling
+All errors encountered in the client application are surfaced to the user via toast notifications. If you see an error notification, you can check the server's `data/error.log` for more technical details.
+
+### Example Error Log Entry
+```
+[2025-12-22T14:35:10.123Z] Error: Failed to start process
+   at startProcess (server/process.ts:42:15)
+   at ...
+```
+
+### Troubleshooting Tips
+- Always check `data/error.log` first when debugging server issues.
+- For client-side issues, look for toast notifications and cross-reference with the error log.
+- If the log file grows too large, you can safely delete or archive it; a new one will be created automatically.
+
+For more details on installation and setup, see [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md).
+
+## Persistence: Fallback Storage, SQLite, and Backups
+
+This application supports multiple persistence backends for maximum reliability:
+
+- **Primary:** PostgreSQL (set `DATABASE_URL`)
+- **Fallback:** Embedded JSON file (`data/fallback-db.json`)
+- **Optional:** Embedded SQLite (`data/fallback.db`) if `better-sqlite3` is installed and `FALLBACK_SQLITE=1` is set
+
+### Safe Writes and Backups
+- All writes to the fallback JSON DB use a temp file and atomic rename for safety.
+- Before each write, a timestamped backup is created: `fallback-db.json.bak.<timestamp>`
+- Old backups are rotated (default: keep 10, configurable via `FALLBACK_DB_BACKUP_KEEP`)
+- On write failure, the last backup is automatically restored.
+
+### Enabling SQLite Fallback
+- Install the native dependency:
+  ```sh
+  npm install --save better-sqlite3
+  ```
+- Set the environment variable:
+  ```sh
+  set FALLBACK_SQLITE=1
+  # or in .env: FALLBACK_SQLITE=1
+  ```
+- On next server start, `data/fallback.db` will be used for persistence.
+
+### Migrating JSON → SQLite
+- Use the CLI tool:
+  ```sh
+  node server/tools/migrate_json_to_sqlite.cjs
+  ```
+- Or use the admin API/backup UI in the dashboard to trigger migration.
+
+### Restoring from Backup
+- Use the admin API/backup UI to restore any `.bak` file to `fallback-db.json`.
+- The current DB is backed up before restore.
+
+### Benchmarking
+- Compare JSON vs SQLite performance:
+  ```sh
+  npm run benchmark:storage
+  ```
+
+See `server/storage.ts` for implementation details and `server/tools/` for migration/benchmark scripts.
+
+## Windows Packaging & Native Dependencies
+
+This project supports packaging the server as a single Windows executable for easy deployment:
+
+- Uses `esbuild` to bundle the server code
+- Uses `pkg` to create a standalone `.exe` (Node.js runtime included)
+- See `BUILD_WINDOWS.md` for full instructions
+
+### Quick Build Steps
+
+1. Install dependencies:
+   ```sh
+   npm install
+   ```
+2. Build and package:
+   ```sh
+   npm run build:windows
+   ```
+   The output will be in `dist/device-sentinel.exe`.
+
+3. (Optional) Create a ZIP or NSIS installer:
+   ```sh
+   npm run package:zip
+   npm run package:nsis
+   ```
+
+### Native Modules (SQLite)
+- If you want to use the embedded SQLite fallback (`better-sqlite3`), you must install it **before** packaging:
+  ```sh
+  npm install --save better-sqlite3
+  ```
+- Note: Packaging with native modules may require additional configuration. See the `pkg` and `better-sqlite3` docs for troubleshooting.
+- By default, the packaged exe uses file-based fallback storage. For full database support, run the Node.js server with `DATABASE_URL` set.
+
+See `BUILD_WINDOWS.md` for more details and troubleshooting tips.
+
 ## License
 
 All code and scripts are provided as-is for personal and organizational use.
 
 ---
 
-**Ready to get started?** Open the browser to `http://localhost:5000` and the health check will guide you through any setup issues!
+**Ready to get started?** Open the browser to `http://127.0.0.1:5000` and the health check will guide you through any setup issues!

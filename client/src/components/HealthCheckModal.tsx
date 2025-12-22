@@ -27,18 +27,17 @@ export function HealthCheckModal() {
   const { toast } = useToast();
 
   useEffect(() => {
+    const ctrl = new AbortController();
     const runHealthCheck = async () => {
       try {
-        const response = await fetch('/api/health');
+        const response = await fetch('/api/health', { signal: ctrl.signal });
         if (!response.ok) throw new Error('Health check failed');
         const result = await response.json();
         setData(result);
-        
         // Show modal if there are issues
-        if (result.status !== 'healthy') {
-          setIsOpen(true);
-        }
-      } catch (err) {
+        if (result.status !== 'healthy') setIsOpen(true);
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
         const errorMsg = err instanceof Error ? err.message : String(err);
         setErrorDetails(errorMsg);
         setIsOpen(true);
@@ -48,6 +47,7 @@ export function HealthCheckModal() {
     };
 
     runHealthCheck();
+    return () => ctrl.abort();
   }, []);
 
   const handleCopyError = () => {
@@ -87,6 +87,7 @@ export function HealthCheckModal() {
   };
 
   if (errorDetails) {
+    const isRuntimeError = errorDetails.includes('Rendered fewer hooks than expected');
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-lg">
@@ -119,7 +120,7 @@ export function HealthCheckModal() {
               </ul>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-2">
               <Button
                 onClick={handleCopyError}
                 variant="outline"
@@ -133,6 +134,11 @@ export function HealthCheckModal() {
               <Button onClick={() => setIsOpen(false)} data-testid="button-close-error">
                 Close
               </Button>
+              {isRuntimeError && (
+                <Button variant="secondary" onClick={() => window.location.href = '/agent'}>
+                  Go to Agent Download
+                </Button>
+              )}
             </div>
           </div>
         </DialogContent>
@@ -144,8 +150,14 @@ export function HealthCheckModal() {
     return null;
   }
 
+
   const failedChecks = data.checks.filter(c => c.status === 'fail');
   const warningChecks = data.checks.filter(c => c.status === 'warning');
+  // Check for agent dependency warning or failure
+  const agentDepsCheck = [...failedChecks, ...warningChecks].find(
+    c => c.id === 'agent_deps' ||
+      (c.details && c.details.toLowerCase().includes('python 3.8+') && c.details.toLowerCase().includes('wmi'))
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -260,6 +272,11 @@ export function HealthCheckModal() {
               <Button onClick={() => setIsOpen(false)} data-testid="button-dismiss-warnings">
                 Continue Anyway
               </Button>
+              {agentDepsCheck && (
+                <Button variant="secondary" onClick={() => window.location.href = '/agent'}>
+                  Go to Agent Download
+                </Button>
+              )}
             </>
           )}
         </div>

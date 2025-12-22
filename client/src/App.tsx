@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import { Sidebar } from "@/components/Sidebar";
 import { HealthCheckModal } from "@/components/HealthCheckModal";
+import StartupChecksModal from "@/components/StartupChecksModal";
 
 // Pages
 import Dashboard from "@/pages/Dashboard";
@@ -39,6 +40,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <HealthCheckModal />
+        <StartupChecksModal />
         <Toaster />
         <Router />
       </TooltipProvider>

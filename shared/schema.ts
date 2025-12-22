@@ -47,6 +47,15 @@ export const insertUsbLogSchema = createInsertSchema(usbLogs).omit({
   timestamp: true 
 });
 
+// Runtime validators/helpers
+export function validateInsertUsbConfig(payload: unknown) {
+  return insertUsbConfigSchema.parse(payload);
+}
+
+export function validateInsertUsbLog(payload: unknown) {
+  return insertUsbLogSchema.parse(payload);
+}
+
 // === EXPLICIT TYPES ===
 
 export type UsbConfig = typeof usbConfigs.$inferSelect;

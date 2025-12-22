@@ -10,8 +10,8 @@ interface ConfigStatus {
 export function useConfigStatus(configId: number) {
   return useQuery({
     queryKey: ["/api/configs/status", configId],
-    queryFn: async () => {
-      const response = await fetch(`/api/configs/status/${configId}`);
+    queryFn: async ({ signal }) => {
+      const response = await fetch(`/api/configs/status/${configId}`, { signal });
       if (!response.ok) throw new Error("Failed to fetch config status");
       return response.json() as Promise<ConfigStatus>;
     },

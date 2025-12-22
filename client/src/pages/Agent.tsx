@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Download, Terminal, Info, CheckCircle2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import BackupsPanel from '@/components/Admin/BackupsPanel';
 
 export default function Agent() {
   const handleDownload = () => {
@@ -41,7 +42,7 @@ export default function Agent() {
             {[
               { title: "Install Python", desc: "Ensure Python 3.8+ is installed on your Windows machine." },
               { title: "Install Dependencies", desc: "Run `pip install wmi pywin32 requests` in PowerShell." },
-              { title: "Configure Endpoint", desc: "Edit the script to point to this server URL if not localhost." },
+              { title: "Configure Endpoint", desc: "Edit the script to point to this server URL if not 127.0.0.1." },
               { title: "Run the Agent", desc: "Execute `python usb_agent.py` to start monitoring." }
             ].map((step, i) => (
               <div key={i} className="relative pl-10">
@@ -66,6 +67,10 @@ export default function Agent() {
             To have the agent run automatically in the background when Windows starts, you can use NSSM (Non-Sucking Service Manager) or Windows Task Scheduler to run the python script at login.
           </p>
         </div>
+      </div>
+
+      <div className="mt-8">
+        <BackupsPanel />
       </div>
     </div>
   );
