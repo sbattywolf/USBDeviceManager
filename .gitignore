@@ -1,0 +1,34 @@
+# Ignore build outputs
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / IDE
+.idea/
+.vscode/
+.vs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
+*.db
+*.sqlite
+*.db-journal
+
+# Test/output artifacts
+coverage.opencover.xml
+
+# NuGet
+*.nupkg
+**/packages/
+
+# JetBrains Rider
+*.sln.iml
