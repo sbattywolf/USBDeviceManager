@@ -2,6 +2,50 @@
 **/bin/
 **/obj/
 
+# Dotnet temporary files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / VSCode
+.idea/
+.vscode/
+
+# NuGet
+*.nupkg
+.packages/
+
+# Logs
+*.log
+
+# Test artifacts
+**/TestResults/
+**/*.TestLogger.*
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# Local tooling
+.env
+.env.*
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Generated files
+server/SimRacingDashboard/SimRacingDashboard.db
+
+# Ignore published app outputs
+publish/
+# Ignore build outputs
+**/bin/
+**/obj/
+
 # User-specific files
 *.user
 *.suo
