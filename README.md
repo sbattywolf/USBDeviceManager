@@ -115,6 +115,7 @@ dotnet test
 
 ## Documentation
 
+- **Full docs hub**: `docs/index.md`
 - **Agent Guide**: `agent/README.md`
 - **Health Check System**: `shared/docs/Health-Check-System.md`
 - **Project Structure**: `shared/docs/Project-Structure.md`
