@@ -7,8 +7,8 @@ Short: compatibility shim, smoke scripts, and CI smoke workflow were added; bran
 - Branch pushed: `session/setup` (also `session/setup-from-base` created and pushed)
 - PR: https://github.com/<REPO_OWNER>/USBDeviceManager/pull/3
 - Files added/edited (high level):
-  - `USBMonitor/server/SimRacingDashboard/Controllers/CompatController.cs` (compat endpoints)
-  - `USBMonitor/server/SimRacingDashboard/DTOs/ConfigCreateDto.cs` (DTO)
+   - `USBMonitor/server/USBDeviceManager/Controllers/CompatController.cs` (compat endpoints)
+   - `USBMonitor/server/USBDeviceManager/DTOs/ConfigCreateDto.cs` (DTO)
   - `USBMonitor/server/scripts/post-and-check-spa.ps1`, `probe-backend.ps1`, `start-client-dev.ps1` (smoke probes)
   - `.github/workflows/smoke.yml` (CI smoke job)
   - `CI_TRIGGER.md` (tiny trigger file)
@@ -33,7 +33,7 @@ How to pick up this session in a new VS Code window:
    - `SESSION_SUMMARY.md` (this file)
    - `CI_TRIGGER.md`
    - `.github/workflows/smoke.yml`
-   - `USBMonitor/server/SimRacingDashboard/*`
+   - `USBMonitor/server/USBDeviceManager/*`
 
 5. PR & CI: see https://github.com/<REPO_OWNER>/USBDeviceManager/pull/3
 
