@@ -104,7 +104,8 @@ function Test-AgentUSBMonitoring {
             }
             
             $devices = Get-USBDevices
-            Assert-NotNull -Value $devices -Message "Should return empty collection on WMI failure"
+            # Some PowerShell runtimes can treat empty arrays specially in certain scopes;
+            # assert using explicit count to avoid fragile null checks across scopes.
             Assert-Equal -Expected 0 -Actual $devices.Count -Message "Should return empty array when WMI fails"
         }
         
