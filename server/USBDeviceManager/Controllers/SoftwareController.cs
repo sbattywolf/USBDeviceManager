@@ -49,6 +49,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Get specific software by ID.
     /// </summary>
+    /// <param name="id">The software identifier.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<ManagedSoftware>> GetSoftware(int id)
@@ -66,6 +67,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Add new software to management.
     /// </summary>
+    /// <param name="dto">The software creation DTO.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost]
     public async Task<ActionResult<ManagedSoftware>> CreateSoftware([FromBody] SoftwareCreateDto dto)
@@ -87,6 +89,8 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Update software configuration.
     /// </summary>
+    /// <param name="id">The id of the software to update.</param>
+    /// <param name="dto">The software create DTO with updated values.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSoftware(int id, [FromBody] SoftwareCreateDto dto)
@@ -125,6 +129,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Remove software from management.
     /// </summary>
+    /// <param name="id">The id of the software to remove.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSoftware(int id)
@@ -144,6 +149,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Start software.
     /// </summary>
+    /// <param name="id">The id of the software to start.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/start")]
     public async Task<IActionResult> StartSoftware(int id)
@@ -218,6 +224,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Stop software.
     /// </summary>
+    /// <param name="id">The id of the software to stop.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/stop")]
     public async Task<IActionResult> StopSoftware(int id)
@@ -286,6 +293,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Restart software.
     /// </summary>
+    /// <param name="id">The id of the software to restart.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/restart")]
     public async Task<IActionResult> RestartSoftware(int id)
@@ -323,6 +331,8 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Get software status history.
     /// </summary>
+    /// <param name="id">The id of the software.</param>
+    /// <param name="hours">Time window in hours to include in history.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/status/history")]
     public async Task<ActionResult<IEnumerable<SoftwareStatus>>> GetSoftwareStatusHistory(int id, [FromQuery] int hours = 24)
@@ -340,6 +350,8 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Enable/disable software.
     /// </summary>
+    /// <param name="id">The id of the software to toggle.</param>
+    /// <param name="enabled">True to enable, false to disable.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/toggle")]
     public async Task<IActionResult> ToggleSoftware(int id, [FromBody] bool enabled)
