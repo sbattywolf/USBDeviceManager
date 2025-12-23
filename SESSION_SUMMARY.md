@@ -5,7 +5,7 @@ Date: 2025-12-23
 Short: compatibility shim, smoke scripts, and CI smoke workflow were added; branch pushed and PR opened.
 
 - Branch pushed: `session/setup` (also `session/setup-from-base` created and pushed)
-- PR: https://github.com/sbattywolf/USBDeviceManager/pull/3
+- PR: https://github.com/<REPO_OWNER>/USBDeviceManager/pull/3
 - Files added/edited (high level):
   - `USBMonitor/server/SimRacingDashboard/Controllers/CompatController.cs` (compat endpoints)
   - `USBMonitor/server/SimRacingDashboard/DTOs/ConfigCreateDto.cs` (DTO)
@@ -20,7 +20,7 @@ What I pushed here:
 How to pick up this session in a new VS Code window:
 1. Clone the repo (if not already):
 
-   git clone https://github.com/sbattywolf/USBDeviceManager.git
+   git clone https://github.com/<REPO_OWNER>/USBDeviceManager.git
 
 2. Open the workspace folder in VS Code: open the `Device-Sentinel/Device-Sentinel` folder.
 
@@ -35,7 +35,7 @@ How to pick up this session in a new VS Code window:
    - `.github/workflows/smoke.yml`
    - `USBMonitor/server/SimRacingDashboard/*`
 
-5. PR & CI: see https://github.com/sbattywolf/USBDeviceManager/pull/3
+5. PR & CI: see https://github.com/<REPO_OWNER>/USBDeviceManager/pull/3
 
 If you want, I can also:
 - watch the PR run CI and report back with logs, or
