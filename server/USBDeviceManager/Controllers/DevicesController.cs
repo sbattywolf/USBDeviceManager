@@ -1,3 +1,5 @@
+// Note: Actionable TODOs have been centralized in docs/TODOs-collected.md.
+// When adding new actionable items, add them to that file instead of leaving TODO comments.
 // <copyright file="DevicesController.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
