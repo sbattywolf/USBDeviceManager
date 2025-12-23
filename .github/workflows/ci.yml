@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, '**/chore/**', '**/feat/**' ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet
+        run: dotnet restore USBDeviceManager.sln
+
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Run dotnet tests (produce TRX)
+        run: |
+          dotnet test USBDeviceManager.sln --configuration Debug --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
+
+      - name: Upload dotnet test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-tests-${{ matrix.os }}
+          path: '**/*.trx'
+
+      - name: Run sanitize-repo check (PowerShell script)
+        shell: pwsh
+        run: |
+          if (Test-Path .\scripts\sanitize-repo.ps1) { .\scripts\sanitize-repo.ps1 -CheckOnly } else { Write-Host 'No sanitize script present, skipping.' }
+
+      - name: Run PowerShell agent tests (Windows only)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # prefer the project's CI helper when available
+          if (Test-Path .\ci\run-tests.ps1) {
+            .\ci\run-tests.ps1 -RunAgentTests -RunServerTests:$false -NonInteractive
+          } elseif (Test-Path .\agent\SimRacingAgent.Tests) {
+            # fallback: invoke any Pester tests found under agent test folders
+            Import-Module Pester -Force -MinimumVersion 5.0
+            Invoke-Pester -Script @{ Path = '.\agent\SimRacingAgent.Tests'; OutputFormat = 'NUnitXml'; OutputFile = 'agent-pester-results.xml' }
+            Write-Host 'Pester results: agent-pester-results.xml'
+          } else {
+            Write-Host 'No agent tests found; skipping.'
+          }
+
+      - name: Upload agent test results (Windows only)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-tests-windows
+          path: |
+            agent-pester-results.xml
+            **/TestResults/*.trx
