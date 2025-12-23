@@ -2,9 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using System.ComponentModel.DataAnnotations;
-
+// </copyright>
 namespace USBDeviceManager.Models;
+
+using System.ComponentModel.DataAnnotations;
 
 public class UsbDevice
 {

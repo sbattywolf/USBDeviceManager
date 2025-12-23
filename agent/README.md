@@ -1,9 +1,9 @@
-# SimRacing Agent
+# USB Device Manager Agent
 
-# SimRacing Agent
+# USB Device Manager Agent
 
 ## Overview
-PowerShell-based monitoring agent for SimRacing hardware and software management. Provides real-time device monitoring, health checking, and automated system management for racing simulation environments.
+PowerShell-based monitoring agent for USB Device Manager hardware and software management. Provides real-time device monitoring, health checking, and automated system management for racing simulation environments.
 
 ## Project Structure
 
@@ -55,7 +55,7 @@ cd ../SimRacingAgent.Tests
 - **🎮 Software Management**: Automated game and application lifecycle
 - **🤖 Automation Engine**: Rule-based automation and workflows
 - **📊 Health Monitoring**: System performance and predictive analytics
-- **🔗 API Integration**: Seamless integration with SimRacing Dashboard Server
+- **🔗 API Integration**: Seamless integration with USB Device Manager Server
 
 ## Documentation
 

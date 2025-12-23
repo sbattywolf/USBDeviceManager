@@ -23,7 +23,7 @@ Invoke-AgentMonitoringTests
 From a developer PowerShell or terminal with dotnet available:
 
 ```powershell
-Set-Location <REPO_ROOT>/server/SimRacingDashboard
+Set-Location <REPO_ROOT>/server/USBDeviceManager
 dotnet test
 ```
 
@@ -42,7 +42,7 @@ Set-Location <REPO_ROOT>
 ## Useful file locations
 - Agent modules: `agent/src/modules/`
 - Agent tests and harness: `agent/SimRacingAgent.Tests/`
-- Server app: `server/SimRacingDashboard/`
+-- Server app: `server/USBDeviceManager/`
 - Documentation: `docs/` and `docs/shared/`
 
 If you need me to add CI pipeline YAML for GitHub Actions or Azure Pipelines, I can scaffold that next.

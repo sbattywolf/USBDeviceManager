@@ -8,6 +8,7 @@ using USBDeviceManager.Components;
 using USBDeviceManager.Data;
 using USBDeviceManager.Hubs;
 using USBDeviceManager.Services;
+using USBDeviceManager.Adapters;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,10 @@ builder.Services.AddControllers(options =>
 
 // Add clock service for testable current time
 builder.Services.AddSingleton<IDateTime, SystemDateTime>();
+
+// Register adapters (stub implementations for development & tests)
+builder.Services.AddSingleton<IDeviceAdapter, DeviceAdapterStub>();
+builder.Services.AddSingleton<ISoftwareAdapter, SoftwareAdapterStub>();
 
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

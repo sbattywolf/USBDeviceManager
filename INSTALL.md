@@ -38,7 +38,7 @@ winget install --id Microsoft.Powershell -e --source winget
 6) Build & run the server
 
 ```powershell
-cd server/SimRacingDashboard
+cd server/USBDeviceManager
 dotnet restore
 dotnet build
 dotnet run
@@ -58,7 +58,7 @@ cd agent/SimRacingAgent
 
 Server:
 ```powershell
-cd server/SimRacingDashboard.Tests
+cd server/USBDeviceManager.Tests
 dotnet test
 ```
 
