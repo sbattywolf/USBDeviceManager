@@ -1,12 +1,12 @@
-# SimRacing Dashboard Test Suite
+# USB Device Manager Test Suite
 
 ## Overview
-Comprehensive test suite for the SimRacing Dashboard Server following .NET testing best practices and patterns inspired by the PowerShell agent testing architecture.
+Comprehensive test suite for the USB Device Manager Server following .NET testing best practices and patterns inspired by the PowerShell agent testing architecture.
 
 ## Test Structure
 
 ```
-SimRacingDashboard.Tests/
+USBDeviceManager.Tests/
 ├── Unit/                           # Unit tests for individual components
 │   ├── SimRacingContextTests.cs   # Database context and entity tests
 │   ├── DevicesControllerTests.cs  # Device API controller tests
@@ -160,7 +160,7 @@ public async Task CreateDevice_ValidDevice_ShouldReturnCreatedWithLocation()
 ### Functional Test Pattern
 ```csharp
 [Fact]
-public async Task SimRacingWorkflow_SetupDeviceAndSoftwareWithAutomation_ShouldWorkEndToEnd()
+public async Task USBDeviceManagerWorkflow_SetupDeviceAndSoftwareWithAutomation_ShouldWorkEndToEnd()
 {
     // Arrange - Setup complete racing environment
     // Act - Execute full user workflow

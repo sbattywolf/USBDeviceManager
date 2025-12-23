@@ -1,7 +1,7 @@
-# USB Device Manager - SimRacingDashboard: Overview & Scope
+# USB Device Manager: Overview & Scope
 
 ## Purpose
-USB Device Manager (SimRacingDashboard) is a lightweight home-user focused service + agent to monitor USB racing hardware, manage important sim-related software, and provide simple automation rules (e.g., start game when wheel connects).
+USB Device Manager is a lightweight home-user focused service + agent to monitor USB racing hardware, manage important sim-related software, and provide simple automation rules (e.g., start game when wheel connects).
 
 Design goals:
 - Simplicity first: minimal configuration and minimal surface area for users.

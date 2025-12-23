@@ -25,10 +25,10 @@ namespace USBDeviceManager.Filters
             if (!context.ModelState.IsValid)
             {
                 var errors = context.ModelState
-                    .Where(kvp => kvp.Value != null && kvp.Value.Errors != null && kvp.Value.Errors.Count > 0)
+                    .Where(kvp => kvp.Value?.Errors?.Count > 0)
                     .ToDictionary(
                         kvp => kvp.Key,
-                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray());
+                        kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray() ?? System.Array.Empty<string>());
 
                 context.Result = new BadRequestObjectResult(new { errors });
             }

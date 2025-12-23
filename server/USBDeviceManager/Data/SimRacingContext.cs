@@ -2,13 +2,26 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+// </copyright>
+namespace USBDeviceManager.Data;
+
 using Microsoft.EntityFrameworkCore;
 using USBDeviceManager.Models;
 
-namespace USBDeviceManager.Data;
-
-public class SimRacingContext(DbContextOptions<SimRacingContext> options) : DbContext(options)
+/// <summary>
+/// EF Core <see cref="DbContext"/> used by the USB Device Manager server.
+/// </summary>
+public class SimRacingContext : DbContext
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SimRacingContext"/> class.
+    /// </summary>
+    /// <param name="options">The options to configure the context.</param>
+    public SimRacingContext(DbContextOptions<SimRacingContext> options)
+        : base(options)
+    {
+    }
+
     // Device Management
     public DbSet<UsbDevice> UsbDevices { get; set; } = null!;
 

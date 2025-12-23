@@ -12,7 +12,7 @@ Date: 2025-12-23
 - Moved server sources to `server/USBDeviceManager`
 - Created `server/USBDeviceManager.Tests` and updated test project file
 - Updated `ci/run-tests.ps1` and GitHub workflows to new paths
-- Cleaned legacy `SimRacingDashboard` csproj and artifacts
+- Cleaned legacy `SimRacingDashboard` csproj and artifacts (references updated to `USBDeviceManager`)
 
 ## Blockers / Risks
 - Remaining StyleCop/analyzer warnings (~119) to triage
@@ -38,7 +38,7 @@ dotnet test USBDeviceManager.sln --logger "trx;LogFileName=dotnet-tests-after-re
 ## Files touched (high level)
 - `server/USBDeviceManager/**`
 - `server/USBDeviceManager.Tests/**`
-- `Device-Sentinel.sln`
+- `Device-Sentinel.sln` (consider renaming to `USBDeviceManager.sln`)
 - `ci/run-tests.ps1`
 - `.github/workflows/dotnet.yml`
 - `docs/*` (updated test references)

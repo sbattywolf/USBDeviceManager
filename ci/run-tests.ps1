@@ -1,10 +1,9 @@
 <#
 CI helper script: run server and agent tests locally.
-- Runs `dotnet test` in `server/SimRacingDashboard` if `dotnet` is available.
-- Runs agent PowerShell tests by importing the test harness and invoking `Invoke-AgentMonitoringTests`.
 
 Exits with non-zero code if any test group fails.
 #>
+ Runs `dotnet test` in `server/USBDeviceManager` if `dotnet` is available.
 
 param(
     [switch]$RunAgentTests = $true,
