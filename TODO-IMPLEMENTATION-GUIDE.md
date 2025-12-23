@@ -286,7 +286,7 @@ dotnet ef --version
 #### **Development Database Setup**
 ```powershell
 # Navigate to server project
-cd server/SimRacingDashboard
+cd server/USBDeviceManager
 
 # Create initial migration
 dotnet ef migrations add InitialCreate
