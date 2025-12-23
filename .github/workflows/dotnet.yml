@@ -43,4 +43,4 @@ jobs:
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test server/SimRacingDashboard.Tests/SimRacingDashboard.Tests.csproj --no-build --verbosity normal
+        run: dotnet test server/USBDeviceManager.Tests/USBDeviceManager.Tests.csproj --no-build --verbosity normal

@@ -1,0 +1,502 @@
+@page "/"
+@using USBDeviceManager.Models
+@using Microsoft.AspNetCore.SignalR.Client
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+<PageTitle>USB Device Manager</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>USB Device Manager</h1>
+            <p class="text-muted">Last updated: @lastUpdate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        </div>
+    </div>
+
+    <!-- Status Cards Row -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Connected Devices</h5>
+                    <h2 class="card-text">@dashboardData?.deviceSummary?.connectedDevices / @dashboardData?.deviceSummary?.totalDevices</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Running Software</h5>
+                    <h2 class="card-text">@dashboardData?.softwareSummary?.runningSoftware / @dashboardData?.softwareSummary?.totalSoftware</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Active Rules</h5>
+                    <h2 class="card-text">@dashboardData?.systemStatus?.ActiveRules</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">CPU Usage</h5>
+                    <h2 class="card-text">@($"{dashboardData?.systemStatus?.CpuUsage:F1}")%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="devices-tab" data-bs-toggle="tab" data-bs-target="#devices" type="button" role="tab">
+                USB Devices
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="software-tab" data-bs-toggle="tab" data-bs-target="#software" type="button" role="tab">
+                Software Management
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="automation-tab" data-bs-toggle="tab" data-bs-target="#automation" type="button" role="tab">
+                Automation Rules
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="monitoring-tab" data-bs-toggle="tab" data-bs-target="#monitoring" type="button" role="tab">
+                System Monitoring
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content mt-3" id="dashboardTabContent">
+        <!-- USB Devices Tab -->
+        <div class="tab-pane fade show active" id="devices" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>USB Devices</h3>
+                <button class="btn btn-primary" @onclick="ScanForDevices">
+                    <i class="fas fa-search"></i> Scan for Devices
+                </button>
+            </div>
+
+            @if (devices == null)
+            {
+                <p>Loading devices...</p>
+            }
+            else if (devices.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Device ID</th>
+                                <th>Status</th>
+                                <th>Last Seen</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var device in devices)
+                            {
+                                <tr>
+                                    <td>@device.Name</td>
+                                    <td><code>@device.DeviceId</code></td>
+                                    <td>
+                                        <span class="badge @(device.IsEnabled ? "bg-success" : "bg-secondary")">
+                                            @(device.IsEnabled ? "Enabled" : "Disabled")
+                                        </span>
+                                    </td>
+                                    <td>@device.LastSeen.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>
+                                        <button class="btn btn-sm @(device.IsEnabled ? "btn-warning" : "btn-success")" 
+                                                @onclick="() => ToggleDevice(device.Id, !device.IsEnabled)">
+                                            @(device.IsEnabled ? "Disable" : "Enable")
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No devices found. Try scanning for devices.</p>
+            }
+        </div>
+
+        <!-- Software Management Tab -->
+        <div class="tab-pane fade" id="software" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Managed Software</h3>
+                <button class="btn btn-primary" @onclick="ShowAddSoftwareModal">
+                    <i class="fas fa-plus"></i> Add Software
+                </button>
+            </div>
+
+            @if (software == null)
+            {
+                <p>Loading software...</p>
+            }
+            else if (software.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Executable Path</th>
+                                <th>Status</th>
+                                <th>Auto Start</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sw in software)
+                            {
+                                <tr>
+                                    <td>@sw.Name</td>
+                                    <td><code>@sw.ExecutablePath</code></td>
+                                    <td>
+                                        <span class="badge @(sw.IsEnabled ? "bg-success" : "bg-secondary")">
+                                            @(sw.IsEnabled ? "Enabled" : "Disabled")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(sw.AutoStart ? "bg-info" : "bg-light text-dark")">
+                                            @(sw.AutoStart ? "Yes" : "No")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-success" @onclick="() => StartSoftware(sw.Id)">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" @onclick="() => StopSoftware(sw.Id)">
+                                                <i class="fas fa-stop"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-info" @onclick="() => RestartSoftware(sw.Id)">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No software configured for management.</p>
+            }
+        </div>
+
+        <!-- Automation Rules Tab -->
+        <div class="tab-pane fade" id="automation" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Automation Rules</h3>
+                <button class="btn btn-primary" @onclick="ShowAddRuleModal">
+                    <i class="fas fa-plus"></i> Add Rule
+                </button>
+            </div>
+
+            @if (automationRules == null)
+            {
+                <p>Loading automation rules...</p>
+            }
+            else if (automationRules.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Trigger</th>
+                                <th>Action</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var rule in automationRules)
+                            {
+                                <tr>
+                                    <td>@rule.Name</td>
+                                    <td>@rule.Description</td>
+                                    <td>@rule.Trigger.ToString()</td>
+                                    <td>@rule.Action.ToString()</td>
+                                    <td>
+                                        <span class="badge @(rule.IsEnabled ? "bg-success" : "bg-secondary")">
+                                            @(rule.IsEnabled ? "Enabled" : "Disabled")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-primary" @onclick="() => ExecuteRule(rule.Id)">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                            <button class="btn btn-sm @(rule.IsEnabled ? "btn-warning" : "btn-success")"
+                                                    @onclick="() => ToggleRule(rule.Id, !rule.IsEnabled)">
+                                                @(rule.IsEnabled ? "Disable" : "Enable")
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No automation rules configured.</p>
+            }
+        </div>
+
+        <!-- System Monitoring Tab -->
+        <div class="tab-pane fade" id="monitoring" role="tabpanel">
+            <h3>System Monitoring</h3>
+            
+            @if (dashboardData?.systemStatus != null)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>System Resources</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label>CPU Usage: @($"{dashboardData.systemStatus.CpuUsage:F1}")%</label>
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: @($"{dashboardData.systemStatus.CpuUsage}%")"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Memory Usage: @($"{dashboardData.systemStatus.MemoryUsage:F1}")%</label>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" style="width: @($"{dashboardData.systemStatus.MemoryUsage}%")"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Disk Usage: @($"{dashboardData.systemStatus.DiskUsage:F1}")%</label>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-warning" style="width: @($"{dashboardData.systemStatus.DiskUsage}%")"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Activity Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Connected Devices:</strong> @dashboardData.systemStatus.ConnectedDevices</p>
+                                <p><strong>Running Software:</strong> @dashboardData.systemStatus.RunningSoftware</p>
+                                <p><strong>Active Rules:</strong> @dashboardData.systemStatus.ActiveRules</p>
+                                <p><strong>Last Update:</strong> @dashboardData.systemStatus.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private DateTime lastUpdate = DateTime.Now;
+    private dynamic? dashboardData;
+    private List<UsbDevice>? devices;
+    private List<ManagedSoftware>? software;
+    private List<AutomationRule>? automationRules;
+    private HubConnection? hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Initialize SignalR connection
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl("/hubs/monitoring")
+            .Build();
+
+        await hubConnection.StartAsync();
+        await hubConnection.SendAsync("JoinGroup", "dashboard");
+
+        // Load initial data
+        await LoadDashboardData();
+        await LoadDevices();
+        await LoadSoftware();
+        await LoadAutomationRules();
+    }
+
+    private async Task LoadDashboardData()
+    {
+        try
+        {
+            var response = await HttpClient.GetFromJsonAsync<dynamic>("/api/monitoring/dashboard");
+            dashboardData = response;
+            lastUpdate = DateTime.Now;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading dashboard data: {ex.Message}");
+        }
+    }
+
+    private async Task LoadDevices()
+    {
+        try
+        {
+            devices = await HttpClient.GetFromJsonAsync<List<UsbDevice>>("/api/devices");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading devices: {ex.Message}");
+        }
+    }
+
+    private async Task LoadSoftware()
+    {
+        try
+        {
+            software = await HttpClient.GetFromJsonAsync<List<ManagedSoftware>>("/api/software");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading software: {ex.Message}");
+        }
+    }
+
+    private async Task LoadAutomationRules()
+    {
+        try
+        {
+            automationRules = await HttpClient.GetFromJsonAsync<List<AutomationRule>>("/api/automation");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading automation rules: {ex.Message}");
+        }
+    }
+
+    private async Task ScanForDevices()
+    {
+        try
+        {
+            await HttpClient.PostAsync("/api/devices/scan", null);
+            await LoadDevices();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error scanning for devices: {ex.Message}");
+        }
+    }
+
+    private async Task ToggleDevice(int deviceId, bool enabled)
+    {
+        try
+        {
+            await HttpClient.PostAsJsonAsync($"/api/devices/{deviceId}/toggle", enabled);
+            await LoadDevices();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error toggling device: {ex.Message}");
+        }
+    }
+
+    private async Task StartSoftware(int softwareId)
+    {
+        try
+        {
+            await HttpClient.PostAsync($"/api/software/{softwareId}/start", null);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error starting software: {ex.Message}");
+        }
+    }
+
+    private async Task StopSoftware(int softwareId)
+    {
+        try
+        {
+            await HttpClient.PostAsync($"/api/software/{softwareId}/stop", null);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error stopping software: {ex.Message}");
+        }
+    }
+
+    private async Task RestartSoftware(int softwareId)
+    {
+        try
+        {
+            await HttpClient.PostAsync($"/api/software/{softwareId}/restart", null);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error restarting software: {ex.Message}");
+        }
+    }
+
+    private async Task ExecuteRule(int ruleId)
+    {
+        try
+        {
+            await HttpClient.PostAsync($"/api/automation/{ruleId}/execute", null);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error executing rule: {ex.Message}");
+        }
+    }
+
+    private async Task ToggleRule(int ruleId, bool enabled)
+    {
+        try
+        {
+            await HttpClient.PostAsJsonAsync($"/api/automation/{ruleId}/toggle", enabled);
+            await LoadAutomationRules();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error toggling rule: {ex.Message}");
+        }
+    }
+
+    private void ShowAddSoftwareModal()
+    {
+        // TODO: Implement modal for adding software
+    }
+
+    private void ShowAddRuleModal()
+    {
+        // TODO: Implement modal for adding automation rules
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection != null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
