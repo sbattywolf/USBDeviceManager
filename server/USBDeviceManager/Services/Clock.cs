@@ -1,28 +1,17 @@
+
 // <copyright file="Clock.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace USBDeviceManager.Services
 {
-    using System;
-
-    /// <summary>
-    /// Provides an abstraction over system time for easier testing.
-    /// </summary>
-    public interface IDateTime
-    {
-        /// <summary>
-        /// Gets the current UTC time.
-        /// </summary>
-        DateTime UtcNow { get; }
-    }
-
-    /// <summary>
-    /// Default implementation of <see cref="IDateTime"/> that uses <see cref="DateTime.UtcNow"/>.
-    /// </summary>
-    public class SystemDateTime : IDateTime
-    {
-        /// <inheritdoc />
-        public DateTime UtcNow => DateTime.UtcNow;
-    }
+	/// <summary>
+	/// Placeholder container for the original clock file. The clock types
+	/// were moved to <see cref="IDateTime"/>. This file remains to avoid
+	/// breaking references in older branches and to satisfy file header rules.
+	/// </summary>
+	internal static class ClockPlaceholder
+	{
+	}
 }
+
