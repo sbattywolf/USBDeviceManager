@@ -10,12 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using USBDeviceManager.Data;
 using USBDeviceManager.Models;
 
+/// <summary>
+/// Controller for retrieving monitoring and health information.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
-    /// <summary>
-    /// Controller for retrieving monitoring and health information.
-    /// </summary>
-    public class MonitoringController : ControllerBase
+public class MonitoringController : ControllerBase
     {
         private readonly SimRacingContext context;
         private readonly ILogger<MonitoringController> logger;

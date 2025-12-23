@@ -12,13 +12,13 @@ using USBDeviceManager.DTOs;
 using USBDeviceManager.Models;
 using USBDeviceManager.Services;
 
-    /// <summary>
-    /// Controller for managing managed software entries and execution.
-    /// </summary>
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SoftwareController : ControllerBase
-    { 
+/// <summary>
+/// Controller for managing managed software entries and execution.
+/// </summary>
+[ApiController]
+[Route("api/[controller]")]
+public class SoftwareController : ControllerBase
+{
         private readonly SimRacingContext context;
         private readonly ILogger<SoftwareController> logger;
         private readonly IDateTime clock;
