@@ -19,22 +19,22 @@ using USBDeviceManager.Services;
 [Route("api/[controller]")]
 public class SoftwareController : ControllerBase
 {
-        private readonly SimRacingContext context;
-        private readonly ILogger<SoftwareController> logger;
-        private readonly IDateTime clock;
+    private readonly SimRacingContext context;
+    private readonly ILogger<SoftwareController> logger;
+    private readonly IDateTime clock;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoftwareController"/> class.
-        /// </summary>
-        /// <param name="context">Database context.</param>
-        /// <param name="logger">Logger instance.</param>
-        /// <param name="clock">Clock abstraction.</param>
-        public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock)
-        {
-            this.context = context;
-            this.logger = logger;
-            this.clock = clock;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SoftwareController"/> class.
+    /// </summary>
+    /// <param name="context">Database context.</param>
+    /// <param name="logger">Logger instance.</param>
+    /// <param name="clock">Clock abstraction.</param>
+    public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock)
+    {
+        this.context = context;
+        this.logger = logger;
+        this.clock = clock;
+    }
 
     /// <summary>
     /// Get all managed software.
@@ -311,6 +311,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Get software status.
     /// </summary>
+    /// <param name="id">The id of the software.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/status")]
     public async Task<ActionResult<SoftwareStatus>> GetSoftwareStatus(int id)

@@ -11,7 +11,7 @@ Write-Host "Building project..."
 dotnet build $proj -c Debug
 
 $urls = "http://localhost:$Port"
-$startInfo = @{ 
+$startInfo = @{
     FilePath = "dotnet"
     ArgumentList = @('run','--no-build','--urls',$urls)
     WorkingDirectory = $proj

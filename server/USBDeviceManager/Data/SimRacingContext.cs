@@ -23,23 +23,51 @@ public class SimRacingContext : DbContext
     }
 
     // Device Management
+
+    /// <summary>
+    /// Gets or sets the collection of configured USB devices.
+    /// </summary>
     public DbSet<UsbDevice> UsbDevices { get; set; } = null!;
 
+    /// <summary>
+    /// Gets or sets the device status log entries.
+    /// </summary>
     public DbSet<DeviceStatus> DeviceStatuses { get; set; } = null!;
 
     // Software Management
+
+    /// <summary>
+    /// Gets or sets the managed software entries.
+    /// </summary>
     public DbSet<ManagedSoftware> ManagedSoftware { get; set; } = null!;
 
+    /// <summary>
+    /// Gets or sets the software status log entries.
+    /// </summary>
     public DbSet<SoftwareStatus> SoftwareStatuses { get; set; } = null!;
 
     // Automation
+
+    /// <summary>
+    /// Gets or sets the automation rules configured on the server.
+    /// </summary>
     public DbSet<AutomationRule> AutomationRules { get; set; } = null!;
 
+    /// <summary>
+    /// Gets or sets the execution history for automation rules.
+    /// </summary>
     public DbSet<RuleExecution> RuleExecutions { get; set; } = null!;
 
     // Monitoring
+
+    /// <summary>
+    /// Gets or sets the current system status records.
+    /// </summary>
     public DbSet<SystemStatus> SystemStatuses { get; set; } = null!;
 
+    /// <summary>
+    /// Gets or sets health metric time series data.
+    /// </summary>
     public DbSet<HealthMetric> HealthMetrics { get; set; } = null!;
 
     /// <inheritdoc/>
