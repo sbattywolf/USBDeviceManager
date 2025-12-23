@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 # Test configuration
 $TestConfig = @{
     AgentPath = "agent\SimRacingAgent\SimRacingAgent.ps1"
-    DashboardPath = "test-dashboard-server.ps1"
+    DashboardPath = "Helpers/test-dashboard-server.ps1"
     Port = 5000
     TestDuration = 30 # seconds
 }
