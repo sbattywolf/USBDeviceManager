@@ -16,20 +16,20 @@ using USBDeviceManager.Models;
 [ApiController]
 [Route("api/[controller]")]
 public class MonitoringController : ControllerBase
-    {
-        private readonly SimRacingContext context;
-        private readonly ILogger<MonitoringController> logger;
+{
+    private readonly SimRacingContext context;
+    private readonly ILogger<MonitoringController> logger;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MonitoringController"/> class.
-        /// </summary>
-        /// <param name="context">Database context.</param>
-        /// <param name="logger">Logger instance.</param>
-        public MonitoringController(SimRacingContext context, ILogger<MonitoringController> logger)
-        {
-            this.context = context;
-            this.logger = logger;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MonitoringController"/> class.
+    /// </summary>
+    /// <param name="context">Database context.</param>
+    /// <param name="logger">Logger instance.</param>
+    public MonitoringController(SimRacingContext context, ILogger<MonitoringController> logger)
+    {
+        this.context = context;
+        this.logger = logger;
+    }
 
     /// <summary>
     /// Get current system status.

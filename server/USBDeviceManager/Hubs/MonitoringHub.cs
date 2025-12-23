@@ -28,6 +28,7 @@ public class MonitoringHub : Hub
     /// Add the caller to a named group.
     /// </summary>
     /// <param name="groupName">Group name to join.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public async Task JoinGroup(string groupName)
     {
         await this.Groups.AddToGroupAsync(this.Context.ConnectionId, groupName);
@@ -38,6 +39,7 @@ public class MonitoringHub : Hub
     /// Remove the caller from a named group.
     /// </summary>
     /// <param name="groupName">Group name to leave.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public async Task LeaveGroup(string groupName)
     {
         await this.Groups.RemoveFromGroupAsync(this.Context.ConnectionId, groupName);

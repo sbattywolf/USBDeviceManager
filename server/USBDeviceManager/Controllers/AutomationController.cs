@@ -39,7 +39,6 @@ namespace USBDeviceManager.Controllers
         /// Get all automation rules.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AutomationRule>>> GetRules()
         {
@@ -52,8 +51,8 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Get specific automation rule by ID.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
+        /// <param name="id">The automation rule identifier.</param>
+        /// <returns>An <see cref="ActionResult{AutomationRule}"/> wrapped in a <see cref="Task"/>.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<AutomationRule>> GetRule(int id)
         {
@@ -73,8 +72,8 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Create new automation rule.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
+        /// <param name="dto">Creation DTO describing the automation rule to create.</param>
+        /// <returns>An <see cref="ActionResult{AutomationRule}"/> wrapped in a <see cref="Task"/>.</returns>
         [HttpPost]
         public async Task<ActionResult<AutomationRule>> CreateRule([FromBody] AutomationRuleCreateDto dto)
         {
@@ -113,8 +112,9 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Update automation rule.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
+        /// <param name="id">Identifier of the rule to update.</param>
+        /// <param name="rule">Updated rule payload.</param>
+        /// <returns>An <see cref="IActionResult"/> wrapped in a <see cref="Task"/>.</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRule(int id, AutomationRule rule)
         {
@@ -145,8 +145,8 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Delete automation rule.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
+        /// <param name="id">Identifier of the rule to delete.</param>
+        /// <returns>An <see cref="IActionResult"/> wrapped in a <see cref="Task"/>.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRule(int id)
         {
@@ -165,8 +165,8 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Execute automation rule manually.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
+        /// <param name="id">Identifier of the rule to execute.</param>
+        /// <returns>An <see cref="IActionResult"/> wrapped in a <see cref="Task"/>.</returns>
         [HttpPost("{id}/execute")]
         public async Task<IActionResult> ExecuteRule(int id)
         {
@@ -229,8 +229,9 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Enable/disable automation rule.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
+        /// <param name="id">Identifier of the rule to toggle.</param>
+        /// <param name="enabled">New enabled state.</param>
+        /// <returns>An <see cref="IActionResult"/> wrapped in a <see cref="Task"/>.</returns>
         [HttpPost("{id}/toggle")]
         public async Task<IActionResult> ToggleRule(int id, [FromBody] bool enabled)
         {
@@ -251,8 +252,9 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Get execution history for a rule.
         /// </summary>
+        /// <param name="id">Identifier of the rule to fetch executions for.</param>
+        /// <param name="limit">Maximum number of executions to return.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
         [HttpGet("{id}/executions")]
         public async Task<ActionResult<IEnumerable<RuleExecution>>> GetRuleExecutions(int id, [FromQuery] int limit = 100)
         {
@@ -268,8 +270,9 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Get all rule executions across all rules.
         /// </summary>
+        /// <param name="hours">Time window in hours to include executions.</param>
+        /// <param name="limit">Maximum number of executions to return.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
         [HttpGet("executions")]
         public async Task<ActionResult<IEnumerable<RuleExecution>>> GetAllExecutions([FromQuery] int hours = 24, [FromQuery] int limit = 1000)
         {
@@ -288,8 +291,8 @@ namespace USBDeviceManager.Controllers
         /// <summary>
         /// Trigger rules based on device events.
         /// </summary>
+        /// <param name="request">Device event request containing device id and event type.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        /// <inheritdoc/>
         [HttpPost("trigger/device")]
         public async Task<IActionResult> TriggerDeviceRules([FromBody] DeviceEventRequest request)
         {

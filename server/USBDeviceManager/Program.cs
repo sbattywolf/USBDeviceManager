@@ -4,11 +4,11 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using USBDeviceManager.Adapters;
 using USBDeviceManager.Components;
 using USBDeviceManager.Data;
 using USBDeviceManager.Hubs;
 using USBDeviceManager.Services;
-using USBDeviceManager.Adapters;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -80,14 +80,16 @@ builder.Services.AddCors(options =>
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline
+// Enable Swagger UI for local debugging regardless of environment
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "USB Device Manager API v1");
+    c.RoutePrefix = "swagger";
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "USB Device Manager API v1");
-        c.RoutePrefix = "swagger";
-    });
     app.UseDeveloperExceptionPage();
 }
 else
@@ -129,6 +131,10 @@ Console.WriteLine("Press Ctrl+C to shut down.");
 app.Run();
 
 // Expose Program class to WebApplicationFactory in tests
+
+/// <summary>
+/// Program entrypoint exposed as a partial class for test hosts (WebApplicationFactory).
+/// </summary>
 public partial class Program
 {
 }
