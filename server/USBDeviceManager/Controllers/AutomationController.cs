@@ -11,11 +11,11 @@ namespace USBDeviceManager.Controllers
     using USBDeviceManager.Models;
     using USBDeviceManager.Services;
 
-    [ApiController]
-    [Route("api/[controller]")]
     /// <summary>
     /// Controller for managing automation rules and executions.
     /// </summary>
+    [ApiController]
+    [Route("api/[controller]")]
     public class AutomationController : ControllerBase
     {
         private readonly SimRacingContext context;
