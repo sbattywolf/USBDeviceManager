@@ -24,7 +24,7 @@ public class CompatController : ControllerBase
     [HttpGet("configs")]
     public async Task<IActionResult> ListConfigs()
     {
-        // Device-Sentinel expects a flat config object combining device and software info.
+        // USB Device Manager expects a flat config object combining device and software info.
         var devices = await _context.UsbDevices.ToListAsync();
         var software = await _context.ManagedSoftware.ToListAsync();
         var rules = await _context.AutomationRules.Include(r => r.TriggerDevice).Include(r => r.TargetSoftware).ToListAsync();
