@@ -1,6 +1,6 @@
-# SimRacing Dashboard Server
+# USB Device Manager Server
 
-A comprehensive monitoring and automation server for SimRacing environments with USB device management, software control, and rule-based automation.
+A comprehensive monitoring and automation server for USB Device Manager with USB device management, software control, and rule-based automation.
 
 ## 🚀 **Features**
 
@@ -39,7 +39,7 @@ A comprehensive monitoring and automation server for SimRacing environments with
 
 ```
 server/
-├── SimRacingDashboard/              # Main ASP.NET Core application
+├── USBDeviceManager/              # Main ASP.NET Core application
 │   ├── Controllers/                 # HTTP API controllers
 │   ├── Models/                      # Data models
 │   ├── Services/                    # Business logic services
@@ -47,7 +47,7 @@ server/
 │   ├── Views/                       # Blazor components and pages
 │   ├── wwwroot/                     # Static files (CSS, JS, images)
 │   └── Program.cs                   # Application entry point
-├── SimRacingDashboard.Data/         # Data layer project
-├── SimRacingDashboard.Core/         # Core models and interfaces
+├── USBDeviceManager.Data/         # Data layer project
+├── USBDeviceManager.Core/         # Core models and interfaces
 └── docker/                         # Docker configurations for deployment
 ```

@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <NoWarn>$(NoWarn);1591</NoWarn>
+    <NoWarn>$(NoWarn)</NoWarn>
     <!-- Enable analyzers during build by default -->
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
@@ -12,7 +12,11 @@
 
   <!-- Analyzer packages for non-test projects only -->
   <ItemGroup Condition=" '$([System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' != 'True' ">
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
   </ItemGroup>
+
+  <!-- Generate XML documentation for non-test projects so doc analyzers run -->
+  <PropertyGroup Condition=" '$( [System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' != 'True' ">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
 </Project>

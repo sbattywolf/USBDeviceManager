@@ -2,20 +2,34 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+namespace USBDeviceManager.Controllers;
+
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using USBDeviceManager.Data;
 using USBDeviceManager.Models;
 
-namespace USBDeviceManager.Controllers;
-
 [ApiController]
 [Route("api/[controller]")]
-public class MonitoringController(SimRacingContext context, ILogger<MonitoringController> logger) : ControllerBase
-{
-    private readonly SimRacingContext context = context;
-    private readonly ILogger<MonitoringController> logger = logger;
+    /// <summary>
+    /// Controller for retrieving monitoring and health information.
+    /// </summary>
+    public class MonitoringController : ControllerBase
+    {
+        private readonly SimRacingContext context;
+        private readonly ILogger<MonitoringController> logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MonitoringController"/> class.
+        /// </summary>
+        /// <param name="context">Database context.</param>
+        /// <param name="logger">Logger instance.</param>
+        public MonitoringController(SimRacingContext context, ILogger<MonitoringController> logger)
+        {
+            this.context = context;
+            this.logger = logger;
+        }
 
     /// <summary>
     /// Get current system status.

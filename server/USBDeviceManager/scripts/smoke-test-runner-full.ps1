@@ -1,5 +1,5 @@
 <#
-Feature-rich smoke test runner for SimRacingDashboard
+Feature-rich smoke test runner for USBDeviceManager
 
 Usage:
   powershell -NoProfile -ExecutionPolicy Bypass -File .\smoke-test-runner-full.ps1 [-Port 5006] [-TimeoutSeconds 90] [-NoBuild] [-KeepRunning] [-BuildConfig Debug|Release] [-Verbose]

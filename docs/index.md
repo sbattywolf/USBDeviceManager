@@ -1,6 +1,6 @@
 # USB Device Manager docs
 
-Welcome — this documentation hub covers the SimRacingDashboard server, agent tools, testing, and contribution guidelines.
+Welcome — this documentation hub covers the USBDeviceManager server, agent tools, testing, and contribution guidelines.
 
 Quick links:
 - Overview: [overview.md](overview.md)

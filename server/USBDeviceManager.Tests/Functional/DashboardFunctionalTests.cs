@@ -64,7 +64,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         created.Should().NotBeNull();
 
         // Act - attempt to start the disabled software
-        HttpResponseMessage startResp = await _client.PostAsync($"/api/software/{created.Id}/start", null);
+        HttpResponseMessage startResp = await _client.PostAsync($"/api/software/{created!.Id}/start", null);
 
         // Assert
         startResp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -138,7 +138,7 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         dashboardJson.TryGetProperty("systemStatus", out _).Should().BeTrue();
 
         // Step 5: Test automation trigger - Simulate device connection
-        var deviceEvent = new { DeviceId = createdDevice.Id, EventType = "connected" };
+        var deviceEvent = new { DeviceId = createdDevice!.Id, EventType = "connected" };
         HttpResponseMessage triggerResponse = await _client.PostAsJsonAsync("/api/automation/trigger/device", deviceEvent);
         triggerResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -151,13 +151,13 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         executions!.Should().HaveCountGreaterOrEqualTo(1);
 
         // Step 7: Clean up - Test deletion cascade
-        HttpResponseMessage deleteRuleResponse = await _client.DeleteAsync($"/api/automation/{createdRule.Id}");
+        HttpResponseMessage deleteRuleResponse = await _client.DeleteAsync($"/api/automation/{createdRule!.Id}");
         deleteRuleResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        HttpResponseMessage deleteSoftwareResponse = await _client.DeleteAsync($"/api/software/{createdSoftware.Id}");
+        HttpResponseMessage deleteSoftwareResponse = await _client.DeleteAsync($"/api/software/{createdSoftware!.Id}");
         deleteSoftwareResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        HttpResponseMessage deleteDeviceResponse = await _client.DeleteAsync($"/api/devices/{createdDevice.Id}");
+        HttpResponseMessage deleteDeviceResponse = await _client.DeleteAsync($"/api/devices/{createdDevice!.Id}");
         deleteDeviceResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 

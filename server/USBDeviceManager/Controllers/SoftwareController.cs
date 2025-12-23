@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+namespace USBDeviceManager.Controllers;
+
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +12,29 @@ using USBDeviceManager.DTOs;
 using USBDeviceManager.Models;
 using USBDeviceManager.Services;
 
-namespace USBDeviceManager.Controllers;
+    /// <summary>
+    /// Controller for managing managed software entries and execution.
+    /// </summary>
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SoftwareController : ControllerBase
+    { 
+        private readonly SimRacingContext context;
+        private readonly ILogger<SoftwareController> logger;
+        private readonly IDateTime clock;
 
-[ApiController]
-[Route("api/[controller]")]
-public class SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock) : ControllerBase
-{
-    private readonly SimRacingContext context = context;
-    private readonly ILogger<SoftwareController> logger = logger;
-    private readonly IDateTime clock = clock;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SoftwareController"/> class.
+        /// </summary>
+        /// <param name="context">Database context.</param>
+        /// <param name="logger">Logger instance.</param>
+        /// <param name="clock">Clock abstraction.</param>
+        public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock)
+        {
+            this.context = context;
+            this.logger = logger;
+            this.clock = clock;
+        }
 
     /// <summary>
     /// Get all managed software.

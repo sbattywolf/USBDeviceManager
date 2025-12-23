@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimRacingDashboard\SimRacingDashboard.csproj" />
+    <ProjectReference Include="..\USBDeviceManager\USBDeviceManager.csproj" />
   </ItemGroup>
 
   <ItemGroup>
