@@ -1,7 +1,7 @@
 Param(
-    [string]$RepoPath = "C:\Users\sbatt\Downloads\Device-Sentinel\USBMonitor",
-    [string]$Name = "sbatt",
-    [string]$Email = "sbatt@localhost"
+    [string]$RepoPath = "<REPO_PATH>",
+    [string]$Name = "<USER_NAME>",
+    [string]$Email = "<USER_EMAIL>"
 )
 
 Write-Host "RepoPath: $RepoPath"

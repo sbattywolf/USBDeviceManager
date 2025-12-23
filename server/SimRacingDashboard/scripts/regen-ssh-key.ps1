@@ -1,5 +1,5 @@
 Param(
-    [string]$Email = "sbatt@localhost",
+    [string]$Email = "<USER_EMAIL>",
     [string]$KeyPath = "$env:USERPROFILE\.ssh\id_ed25519"
 )
 

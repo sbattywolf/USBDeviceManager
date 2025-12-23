@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve Device Sentinel.
+Thanks for helping improve USB Device Manager.
 
 Quick checklist for contributors:
 
@@ -19,7 +19,7 @@ cd agent/SimRacingAgent.Tests
 
 ```powershell
 dotnet tool restore
-dotnet format Device-Sentinel.sln
+dotnet format USBDeviceManager.sln
 ```
 
 - Keep commits small and focused. Use conventional commit prefixes: `feat:`, `fix:`, `chore:`, `docs:`.

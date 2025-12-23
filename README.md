@@ -117,8 +117,8 @@ dotnet test
 
 - **Full docs hub**: `docs/index.md`
 - **Agent Guide**: `agent/README.md`
-- **Health Check System**: `shared/docs/Health-Check-System.md`
-- **Project Structure**: `shared/docs/Project-Structure.md`
+- **Health Check System**: `docs/shared/Health-Check-System.md`
+- **Project Structure**: `docs/shared/Project-Structure.md`
 
 ## Testing
 

@@ -23,7 +23,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
 
       - name: Restore
-        run: dotnet restore Device-Sentinel.sln
+        run: dotnet restore USBDeviceManager.sln
 
       - name: Install dotnet-format tool
         run: |
@@ -40,7 +40,7 @@ jobs:
         continue-on-error: false
 
       - name: Build
-        run: dotnet build Device-Sentinel.sln --configuration Release --no-restore
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
       - name: Test
         run: dotnet test server/SimRacingDashboard.Tests/SimRacingDashboard.Tests.csproj --no-build --verbosity normal

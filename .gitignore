@@ -76,3 +76,5 @@ coverage.opencover.xml
 
 # JetBrains Rider
 *.sln.iml
+.tmp_*.txt
+.tmp_*.ps1

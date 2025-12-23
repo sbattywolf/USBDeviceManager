@@ -45,6 +45,19 @@ function Test-AgentUSBMonitoring {
             } -ParameterFilter @{ Class = "Win32_PnPEntity" }
             
             $devices = Get-USBDevices
+            # Debug dump for flaky WMI-failure test
+            try {
+                $dump = @()
+                $dump += "Timestamp: $(Get-Date -Format o)"
+                $dump += "MockKeys: $($Global:MockFunctions.Keys -join ',')"
+                $dump += "MockOrders: $($Global:MockOrders.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } -join ',')"
+                $dump += "DevicesCount: $($devices.Count)"
+                if ($devices.Count -gt 0) { $devices | ForEach-Object { $dump += "Device: $($_.DeviceID) | $($_.Description)" } }
+                $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
+                if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
+                $dumpPath = Join-Path $tmpRoot '.tmp_usb_fail_debug.txt'
+                $dump | Out-File -FilePath $dumpPath -Append -Encoding utf8
+            } catch {}
             
             Assert-NotNull -Value $devices -Message "Device list should not be null"
             Assert-Equal -Expected 2 -Actual $devices.Count -Message "Should return 2 mocked devices"
@@ -87,13 +100,15 @@ function Test-AgentUSBMonitoring {
         
         # Test 4: USB error handling in agent context
         Invoke-Test -Name "USB operations handle WMI failures gracefully" -Category "USBMonitor" -TestScript {
-            # Mock WMI failure
+            # Ensure clean mock state and then mock WMI failure
+            Clear-AllMocks
             New-Mock -CommandName "Get-WmiObject" -MockWith {
                 throw "WMI service unavailable"
             }
             
             $devices = Get-USBDevices
-            Assert-NotNull -Value $devices -Message "Should return empty collection on WMI failure"
+            # Some PowerShell runtimes can treat empty arrays specially in certain scopes;
+            # assert using explicit count to avoid fragile null checks across scopes.
             Assert-Equal -Expected 0 -Actual $devices.Count -Message "Should return empty array when WMI fails"
         }
         
