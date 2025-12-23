@@ -11,14 +11,14 @@ What changed
   - Moved integration test helpers into `agent/SimRacingAgent.Tests/Integration/Helpers/` and updated tests to reference the new path.
   - Removed legacy `shared/test-utils` directory.
 - Cleanup:
-  - Removed personal git/SSH helper scripts under `server/SimRacingDashboard/scripts`.
+  - Removed personal git/SSH helper scripts under `server/USBDeviceManager/scripts`.
   - Removed legacy `shared/docs` duplicates (consolidated under `docs/shared`).
 - Tooling:
   - Added/verified `ci/run-tests.ps1` and `scripts/sanitize-repo.ps1` helpers.
 - Minor code comment updates reflecting product-name change.
 
 Files changed (high level)
-- docs/*, SESSION_SUMMARY.md, README.md, server/SimRacingDashboard/Controllers/CompatController.cs
+- docs/*, SESSION_SUMMARY.md, README.md, server/USBDeviceManager/Controllers/CompatController.cs
 - moved: agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1(.js)
 - deleted: shared/* (legacy docs and test utils)
 

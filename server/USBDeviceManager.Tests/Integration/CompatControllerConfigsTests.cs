@@ -47,7 +47,7 @@ public class CompatControllerConfigsTests : IClassFixture<SimRacingTestFactory>
         ManagedSoftware? sw = ctx.ManagedSoftware.FirstOrDefault(s => s.Name == "TestApp");
         sw.Should().NotBeNull();
 
-        AutomationRule? rule = ctx.AutomationRules.FirstOrDefault(r => r.TriggerDeviceId == device.Id && r.TargetSoftwareId == sw.Id);
+        AutomationRule? rule = ctx.AutomationRules.FirstOrDefault(r => r.TriggerDeviceId == device!.Id && r.TargetSoftwareId == sw!.Id);
         rule.Should().NotBeNull();
     }
 

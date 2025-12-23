@@ -4,9 +4,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{A3AC6F3B-8145-4631-910C-51EF3AE3FCB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDeviceManager", "server\\USBDeviceManager\\USBDeviceManager.csproj", "{F0D6E02B-7CD0-4610-8D14-518517198066}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDeviceManager", "server\USBDeviceManager\USBDeviceManager.csproj", "{F0D6E02B-7CD0-4610-8D14-518517198066}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDeviceManager.Tests", "server\\USBDeviceManager.Tests\\USBDeviceManager.Tests.csproj", "{34462288-0F08-44BF-959F-68C61218F4A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDeviceManager.Tests", "server\USBDeviceManager.Tests\USBDeviceManager.Tests.csproj", "{34462288-0F08-44BF-959F-68C61218F4A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -38,7 +38,7 @@ Thumbs.db
 .DS_Store
 
 # Generated files
-server/SimRacingDashboard/SimRacingDashboard.db
+server/USBDeviceManager/USBDeviceManager.db
 
 # Ignore published app outputs
 publish/
@@ -78,3 +78,9 @@ coverage.opencover.xml
 *.sln.iml
 .tmp_*.txt
 .tmp_*.ps1
+# Ignore build outputs
+**/bin/
+**/obj/
+# Ignore build outputs
+**/bin/
+**/obj/

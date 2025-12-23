@@ -1,14 +1,12 @@
-# USB Monitor System
+# USB Device Manager
 
-# SimRacing Dashboard System
-
-A comprehensive SimRacing hardware monitoring, software management, and automation solution with intelligent health monitoring and dashboard interface.
+A comprehensive USB Device Manager for hardware monitoring, software management, and automation with intelligent health monitoring and a simple dashboard interface.
 
 ## Overview
 
-This project provides a complete SimRacing environment management system consisting of:
+This project provides a complete USB Device Manager environment consisting of:
 
-- **PowerShell Agent**: Real-time device monitoring and automation
+- **PowerShell Agent (USB Device Manager Agent)**: Real-time device monitoring and automation
 - **ASP.NET Core Dashboard Server**: Web-based management interface and HTTP APIs
 - **Comprehensive Testing**: Professional test suites for both components
 
@@ -17,8 +15,8 @@ This project provides a complete SimRacing environment management system consist
 ```
 USBMonitor/
 ├── agent/                          # PowerShell Agent Implementation
-│   ├── SimRacingAgent/             # Main agent implementation
-│   │   ├── SimRacingAgent.ps1      # Main entry point
+│   ├── SimRacingAgent/             # Main agent implementation (folder: SimRacingAgent)
+│   │   ├── SimRacingAgent.ps1      # Main entry point (USB Device Manager Agent)
 │   │   ├── Core/                   # Core engine components
 │   │   ├── Modules/                # Feature modules (USB, Process, Automation)
 │   │   ├── Services/               # External integrations (API, Notifications)
@@ -32,15 +30,15 @@ USBMonitor/
 │   │   ├── Regression/             # Regression tests
 │   │   └── Helpers/                # Test utilities
 │   └── README.md                   # Agent overview and quick start
-├── server/                         # ASP.NET Core Dashboard Server
-│   ├── SimRacingDashboard/         # Main server implementation
+├── server/                         # ASP.NET Core Server
+│   ├── USBDeviceManager/           # Main server implementation
 │   │   ├── Controllers/            # HTTP API controllers
 │   │   ├── Models/                 # Data models
 │   │   ├── Data/                   # Entity Framework context
 │   │   ├── Components/             # Blazor UI components
 │   │   ├── Hubs/                   # SignalR hubs
 │   │   └── Program.cs              # Server entry point
-│   ├── SimRacingDashboard.Tests/   # Comprehensive test suite
+│   ├── USBDeviceManager.Tests/     # Comprehensive test suite
 │   │   ├── Unit/                   # Unit tests
 │   │   ├── Integration/            # Integration tests
 │   │   ├── Functional/             # End-to-end functional tests
@@ -76,7 +74,7 @@ USBMonitor/
 
 ## Quick Start
 
-### Agent Setup
+### Agent Setup (USB Device Manager Agent)
 ```powershell
 # Navigate to agent
 cd agent/SimRacingAgent
@@ -88,48 +86,54 @@ cd agent/SimRacingAgent
 
 ### Server Setup
 ```powershell
-# Navigate to server
-cd server/SimRacingDashboard
+# USB Device Manager
 
-# Build and run server
-dotnet run
+A comprehensive USB Device Manager for hardware monitoring, software management, and automation with intelligent health monitoring and a simple dashboard interface.
 
-# Access dashboard: http://localhost:5000
-# API docs: http://localhost:5000/swagger
+## Overview
+
+This project provides a complete environment management system consisting of:
+
+- **PowerShell Agent**: Real-time device monitoring and automation
+- **ASP.NET Core Server**: Web-based management interface and HTTP APIs
+- **Comprehensive Testing**: Professional test suites for both components
+
+## Project Structure
+
 ```
-
-### Testing
-```powershell
-# Test agent
-cd agent/SimRacingAgent.Tests
-./TestRunner.ps1
-
-# Test server
-cd server/SimRacingDashboard.Tests
-dotnet test
+USBMonitor/
+├── agent/                          # PowerShell Agent Implementation
+│   ├── SimRacingAgent/             # Main agent implementation
+│   │   ├── SimRacingAgent.ps1      # Main entry point
+│   │   ├── Core/                   # Core engine components
+│   │   ├── Modules/                # Feature modules (USB, Process, Automation)
+│   │   ├── Services/               # External integrations (API, Notifications)
+│   │   ├── Utils/                  # Utilities and configuration
+│   │   ├── Tools/                  # Development tools
+│   │   └── Docs/                   # Detailed documentation
+│   ├── SimRacingAgent.Tests/       # Comprehensive test suite
+│   │   ├── TestRunner.ps1          # Test execution entry point
+│   │   ├── Unit/                   # Unit tests
+│   │   ├── Integration/            # Integration tests
+│   │   ├── Regression/             # Regression tests
+│   │   └── Helpers/                # Test utilities
+│   └── README.md                   # Agent overview and quick start
+├── server/                         # ASP.NET Core Server
+│   ├── USBDeviceManager/           # Main server implementation
+│   │   ├── Controllers/            # HTTP API controllers
+│   │   ├── Models/                 # Data models
+│   │   ├── Data/                   # Entity Framework context
+│   │   ├── Components/             # Blazor UI components
+│   │   ├── Hubs/                   # SignalR hubs
+│   │   └── Program.cs              # Server entry point
+│   ├── USBDeviceManager.Tests/     # Comprehensive test suite
+│   │   ├── Unit/                   # Unit tests
+│   │   ├── Integration/            # Integration tests
+│   │   ├── Functional/             # End-to-end functional tests
+│   │   ├── Fixtures/               # Test infrastructure
+│   │   └── Helpers/                # Test utilities
+│   └── README.md                   # Server documentation
+└── shared/                         # Shared resources
+    ├── config/                     # Common configuration files
+    └── docs/                       # Project-wide documentation
 ```
-
-- `PUT /healthcheck` - Complete system health analysis
-- `PUT /healthcheck/usb` - USB-specific device monitoring
-- `PUT /healthcheck/processes` - Process health with intelligent scoring
-
-## Documentation
-
-- **Full docs hub**: `docs/index.md`
-- **Agent Guide**: `agent/README.md`
-- **Health Check System**: `docs/shared/Health-Check-System.md`
-- **Project Structure**: `docs/shared/Project-Structure.md`
-
-## Testing
-
-```powershell
-cd agent/tests
-# Run component tests
-```
-
-## Architecture
-
-This system follows a clean separation of concerns:
-- **Agent**: Lightweight Windows monitoring client
-- **Server**: Future centralized management platform (planned)
-- **Shared**: Common utilities and comprehensive documentation

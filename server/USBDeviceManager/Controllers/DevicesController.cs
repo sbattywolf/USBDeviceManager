@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+namespace USBDeviceManager.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using USBDeviceManager.Data;
@@ -9,15 +11,29 @@ using USBDeviceManager.DTOs;
 using USBDeviceManager.Models;
 using USBDeviceManager.Services;
 
-namespace USBDeviceManager.Controllers;
-
 [ApiController]
 [Route("api/[controller]")]
-public class DevicesController(SimRacingContext context, ILogger<DevicesController> logger, IDateTime clock) : ControllerBase
+public class DevicesController : ControllerBase
 {
-    private readonly SimRacingContext context = context;
-    private readonly ILogger<DevicesController> logger = logger;
-    private readonly IDateTime clock = clock;
+    /// <summary>
+    /// Controller for managing USB devices.
+    /// </summary>
+    private readonly SimRacingContext context;
+    private readonly ILogger<DevicesController> logger;
+    private readonly IDateTime clock;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DevicesController"/> class.
+    /// </summary>
+    /// <param name="context">The database context.</param>
+    /// <param name="logger">Logger instance.</param>
+    /// <param name="clock">Clock abstraction.</param>
+    public DevicesController(SimRacingContext context, ILogger<DevicesController> logger, IDateTime clock)
+    {
+        this.context = context;
+        this.logger = logger;
+        this.clock = clock;
+    }
 
     /// <summary>
     /// Get all USB devices.
@@ -167,14 +183,14 @@ public class DevicesController(SimRacingContext context, ILogger<DevicesControll
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("scan")]
-    public async Task<ActionResult<IEnumerable<UsbDevice>>> ScanForDevices()
+    public Task<ActionResult<IEnumerable<UsbDevice>>> ScanForDevices()
     {
         // This would typically call a service to scan for USB devices
         // For now, return a placeholder response
         this.logger.LogInformation("USB device scan requested");
 
         // TODO: Implement actual USB device scanning
-        return this.Ok(new { message = "Device scan initiated", timestamp = this.clock.UtcNow });
+        return Task.FromResult<ActionResult<IEnumerable<UsbDevice>>>(this.Ok(new { message = "Device scan initiated", timestamp = this.clock.UtcNow }));
     }
 
     /// <summary>

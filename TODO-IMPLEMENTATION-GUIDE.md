@@ -1,4 +1,4 @@
-# SimRacing Dashboard System - Complete Implementation Guide
+# USB Device Manager - Complete Implementation Guide
 
 ## 🎯 **VS Code Extensions Required for Full Server Implementation**
 
