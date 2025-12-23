@@ -53,7 +53,10 @@ function Test-AgentUSBMonitoring {
                 $dump += "MockOrders: $($Global:MockOrders.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } -join ',')"
                 $dump += "DevicesCount: $($devices.Count)"
                 if ($devices.Count -gt 0) { $devices | ForEach-Object { $dump += "Device: $($_.DeviceID) | $($_.Description)" } }
-                $dump | Out-File -FilePath "e:\Workspaces\Git\SimRacing\USBDeviceManager\.tmp_usb_fail_debug.txt" -Append -Encoding utf8
+                $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
+                if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
+                $dumpPath = Join-Path $tmpRoot '.tmp_usb_fail_debug.txt'
+                $dump | Out-File -FilePath $dumpPath -Append -Encoding utf8
             } catch {}
             
             Assert-NotNull -Value $devices -Message "Device list should not be null"

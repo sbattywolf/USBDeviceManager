@@ -3,17 +3,6 @@ Import-Module (Join-Path $PSScriptRoot "..\..\SimRacingAgent\Modules\DeviceMonit
 
 function Get-USBDevices {
     try {
-        # Debug: record current mock registration state
-        try {
-                $keys = $null
-                if ($Global:MockFunctions) { $keys = ($Global:MockFunctions.Keys -join ',') } else { $keys = '<none>' }
-                $orders = $null
-                if ($Global:MockOrders) { $orders = ($Global:MockOrders.GetEnumerator() | ForEach-Object { "${($_.Key)}=${($_.Value)}" } -join ',') } else { $orders = '<none>' }
-                $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
-                if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
-                $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
-                Add-Content -Path $logPath -Value ("MockKeys=$keys | MockOrders=$orders") -ErrorAction SilentlyContinue
-            } catch {}
         # Mock-driven behavior: if test mocks exist, prefer them.
         $hasGetUsbMock = $Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Get-USBDevices')
         $hasWmiMock = $Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Get-WmiObject')
@@ -23,25 +12,15 @@ function Get-USBDevices {
             if ($Global:MockOrders.ContainsKey('Get-USBDevices')) { $orderGet = $Global:MockOrders['Get-USBDevices'] -as [int] }
             if ($Global:MockOrders.ContainsKey('Get-WmiObject')) { $orderWmi = $Global:MockOrders['Get-WmiObject'] -as [int] }
 
-            # Prefer WMI mock when present (tests often mock WMI directly for enumeration/failure)
-            if ($hasWmiMock) {
+            # If WMI mock is newest (or equal), prefer it; otherwise prefer direct Get-USBDevices mock
+            if ($orderWmi -ge $orderGet -and $hasWmiMock) {
                 if (-not $Global:MockCalls.ContainsKey('Get-WmiObject')) { $Global:MockCalls['Get-WmiObject'] = 0 }
                 $Global:MockCalls['Get-WmiObject'] = ($Global:MockCalls['Get-WmiObject'] -as [int]) + 1
                 try {
                     $raw = & $Global:MockFunctions['Get-WmiObject'].GetNewClosure()
                 }
                 catch {
-                    $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
-                    if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
-                    $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
-                    Add-Content -Path $logPath -Value ("Get-WmiObject mock threw: $($_.Exception.Message)") -ErrorAction SilentlyContinue
-                    try {
-                        if ($Global:MockFunctions.ContainsKey('Get-USBDevices')) {
-                            $null = $Global:MockFunctions.Remove('Get-USBDevices')
-                        }
-                        if ($Global:MockOrders.ContainsKey('Get-USBDevices')) { $null = $Global:MockOrders.Remove('Get-USBDevices') }
-                        if ($Global:MockCalls.ContainsKey('Get-USBDevices')) { $null = $Global:MockCalls.Remove('Get-USBDevices') }
-                    } catch {}
+                    Add-Content -Path 'e:\Workspaces\Git\SimRacing\USBDeviceManager\.tmp_usb_log.txt' -Value ("Get-WmiObject mock threw: $($_.Exception.Message)") -ErrorAction SilentlyContinue
                     return @()
                 }
 
@@ -56,10 +35,7 @@ function Get-USBDevices {
                         PNPClass = $d.PNPClass
                     }
                 }
-                $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
-                if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
-                $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
-                Add-Content -Path $logPath -Value ("Used branch: Get-WmiObject | DevicesFound=$($devices.Count) | orderWmi=$orderWmi | orderGet=$orderGet") -ErrorAction SilentlyContinue
+                Add-Content -Path 'e:\Workspaces\Git\SimRacing\USBDeviceManager\.tmp_usb_log.txt' -Value ("Used branch: Get-WmiObject | DevicesFound=$($devices.Count) | orderWmi=$orderWmi | orderGet=$orderGet") -ErrorAction SilentlyContinue
                 return $devices
             }
 
