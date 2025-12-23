@@ -1,48 +1,48 @@
+// <copyright file="CompatController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using USBDeviceManager.Data;
-using USBDeviceManager.Models;
 using USBDeviceManager.DTOs;
+using USBDeviceManager.Models;
 
 namespace USBDeviceManager.Controllers;
 
 [ApiController]
 [Route("api")]
-public class CompatController : ControllerBase
+public class CompatController(SimRacingContext context, ILogger<CompatController> logger) : ControllerBase
 {
-    private readonly SimRacingContext _context;
-    private readonly ILogger<CompatController> _logger;
-
-    public CompatController(SimRacingContext context, ILogger<CompatController> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
+    private readonly SimRacingContext context = context;
+    private readonly ILogger<CompatController> logger = logger;
 
     // GET /api/configs -> map to devices + software + automation rules
     [HttpGet("configs")]
     public async Task<IActionResult> ListConfigs()
     {
         // USB Device Manager expects a flat config object combining device and software info.
-        var devices = await _context.UsbDevices.ToListAsync();
-        var software = await _context.ManagedSoftware.ToListAsync();
-        var rules = await _context.AutomationRules.Include(r => r.TriggerDevice).Include(r => r.TargetSoftware).ToListAsync();
+        List<UsbDevice> devices = await this.context.UsbDevices.ToListAsync();
+        List<ManagedSoftware> software = await this.context.ManagedSoftware.ToListAsync();
+        List<AutomationRule> rules = await this.context.AutomationRules.Include(r => r.TriggerDevice).Include(r => r.TargetSoftware).ToListAsync();
 
-            var configs = rules.Select(r => new {
+        var configs = rules.Select(r => new
+        {
             id = r.Id,
             deviceId = r.TriggerDevice?.DeviceId ?? string.Empty,
             friendlyName = r.TriggerDevice?.Name ?? r.Name,
-            	usbPort = r.TriggerDevice?.Description ?? string.Empty,
+            usbPort = r.TriggerDevice?.Description ?? string.Empty,
             isEnabled = r.IsEnabled,
             softwareId = r.TargetSoftware?.Id,
             softwareName = r.TargetSoftware?.Name,
-                triggerPath = r.TargetSoftware?.ExecutablePath ?? string.Empty,
-                triggerParams = r.TargetSoftware?.StartupArguments ?? string.Empty,
+            triggerPath = r.TargetSoftware?.ExecutablePath ?? string.Empty,
+            triggerParams = r.TargetSoftware?.StartupArguments ?? string.Empty,
         });
 
         // also include standalone software entries as configs without device
-        var standalone = software.Where(s => !rules.Any(r => r.TargetSoftwareId == s.Id)).Select(s => new {
+        var standalone = software.Where(s => !rules.Any(r => r.TargetSoftwareId == s.Id)).Select(s => new
+        {
             id = -s.Id,
             deviceId = string.Empty,
             friendlyName = s.Name,
@@ -54,7 +54,7 @@ public class CompatController : ControllerBase
             triggerParams = s.StartupArguments ?? string.Empty,
         });
 
-        return Ok(configs.Concat(standalone));
+        return this.Ok(configs.Concat(standalone));
     }
 
     // POST /api/configs -> create a device + software + rule
@@ -63,42 +63,42 @@ public class CompatController : ControllerBase
     {
         // Create or find device
         UsbDevice device = null;
-        if (!string.IsNullOrWhiteSpace(input.deviceId))
+        if (!string.IsNullOrWhiteSpace(input.DeviceId))
         {
-            device = await _context.UsbDevices.FirstOrDefaultAsync(d => d.DeviceId == input.deviceId);
+            device = await this.context.UsbDevices.FirstOrDefaultAsync(d => d.DeviceId == input.DeviceId);
             if (device == null)
             {
                 device = new UsbDevice
                 {
-                    DeviceId = input.deviceId,
-                    Name = input.friendlyName ?? "",
-                    Description = input.usbPort,
-                    VendorId = input.vendorId,
-                    ProductId = input.productId,
+                    DeviceId = input.DeviceId,
+                    Name = input.FriendlyName ?? string.Empty,
+                    Description = input.UsbPort,
+                    VendorId = input.VendorId,
+                    ProductId = input.ProductId,
                     IsEnabled = true,
                     CreatedAt = DateTime.UtcNow,
                     LastSeen = DateTime.UtcNow,
                 };
-                _context.UsbDevices.Add(device);
-                await _context.SaveChangesAsync();
+                this.context.UsbDevices.Add(device);
+                await this.context.SaveChangesAsync();
             }
         }
 
         // Create software if provided
         ManagedSoftware sw = null;
-        if (!string.IsNullOrWhiteSpace(input.triggerPath))
+        if (!string.IsNullOrWhiteSpace(input.TriggerPath))
         {
             sw = new ManagedSoftware
             {
-                Name = input.softwareName ?? Path.GetFileName(input.triggerPath),
-                ExecutablePath = input.triggerPath,
-                StartupArguments = input.triggerParams,
-                WorkingDirectory = input.workingDirectory,
+                Name = input.SoftwareName ?? Path.GetFileName(input.TriggerPath),
+                ExecutablePath = input.TriggerPath,
+                StartupArguments = input.TriggerParams,
+                WorkingDirectory = input.WorkingDirectory,
                 IsEnabled = true,
                 CreatedAt = DateTime.UtcNow,
             };
-            _context.ManagedSoftware.Add(sw);
-            await _context.SaveChangesAsync();
+            this.context.ManagedSoftware.Add(sw);
+            await this.context.SaveChangesAsync();
         }
 
         // Create automation rule linking device -> software
@@ -111,44 +111,46 @@ public class CompatController : ControllerBase
                 TriggerDeviceId = device.Id,
                 TargetSoftwareId = sw.Id,
                 Action = AutomationAction.StartSoftware,
-                IsEnabled = input.isEnabled ?? true,
+                IsEnabled = input.IsEnabled ?? true,
                 CreatedAt = DateTime.UtcNow,
             };
-            _context.AutomationRules.Add(rule);
-            await _context.SaveChangesAsync();
-            return Created($"/api/configs/{rule.Id}", rule);
+            this.context.AutomationRules.Add(rule);
+            await this.context.SaveChangesAsync();
+            return this.Created($"/api/configs/{rule.Id}", rule);
         }
 
         // If only software created, return it
         if (sw != null)
         {
-            return Created($"/api/configs/{sw.Id}", new { softwareId = sw.Id });
+            return this.Created($"/api/configs/{sw.Id}", new { softwareId = sw.Id });
         }
 
-        return BadRequest(new { message = "Invalid config payload" });
+        return this.BadRequest(new { message = "Invalid config payload" });
     }
 
     // GET /api/logs -> map device/software statuses to logs
     [HttpGet("logs")]
     public async Task<IActionResult> GetLogs()
     {
-        var deviceStatuses = await _context.DeviceStatuses.OrderByDescending(s => s.Timestamp).Take(500).ToListAsync();
-        var softwareStatuses = await _context.SoftwareStatuses.OrderByDescending(s => s.Timestamp).Take(500).ToListAsync();
+        List<DeviceStatus> deviceStatuses = await this.context.DeviceStatuses.OrderByDescending(s => s.Timestamp).Take(500).ToListAsync();
+        List<SoftwareStatus> softwareStatuses = await this.context.SoftwareStatuses.OrderByDescending(s => s.Timestamp).Take(500).ToListAsync();
 
         // Normalize into a simple log shape
-        var logs = deviceStatuses.Select(s => new {
+        var logs = deviceStatuses.Select(s => new
+        {
             timestamp = s.Timestamp,
             type = "device",
             id = s.DeviceId,
             message = s.IsConnected ? "connected" : "disconnected",
-        }).Concat(softwareStatuses.Select(s => new {
+        }).Concat(softwareStatuses.Select(s => new
+        {
             timestamp = s.Timestamp,
             type = "software",
             id = s.SoftwareId,
             message = s.Status,
         })).OrderByDescending(l => l.timestamp).Take(1000);
 
-        return Ok(logs);
+        return this.Ok(logs);
     }
 
     // POST /api/logs -> accept client logs (store as DeviceStatus entries)
@@ -157,17 +159,17 @@ public class CompatController : ControllerBase
     {
         try
         {
-            string deviceId = string.Empty;
-            string eventType = string.Empty;
+            var deviceId = string.Empty;
+            var eventType = string.Empty;
 
             if (payload.ValueKind == System.Text.Json.JsonValueKind.Object)
             {
-                if (payload.TryGetProperty("deviceId", out var did) && did.ValueKind == System.Text.Json.JsonValueKind.String)
+                if (payload.TryGetProperty("deviceId", out System.Text.Json.JsonElement did) && did.ValueKind == System.Text.Json.JsonValueKind.String)
                 {
                     deviceId = did.GetString() ?? string.Empty;
                 }
 
-                if (payload.TryGetProperty("eventType", out var et) && et.ValueKind == System.Text.Json.JsonValueKind.String)
+                if (payload.TryGetProperty("eventType", out System.Text.Json.JsonElement et) && et.ValueKind == System.Text.Json.JsonValueKind.String)
                 {
                     eventType = et.GetString() ?? string.Empty;
                 }
@@ -175,7 +177,7 @@ public class CompatController : ControllerBase
 
             if (!string.IsNullOrWhiteSpace(deviceId))
             {
-                var device = await _context.UsbDevices.FirstOrDefaultAsync(d => d.DeviceId == deviceId);
+                UsbDevice? device = await this.context.UsbDevices.FirstOrDefaultAsync(d => d.DeviceId == deviceId);
                 if (device != null)
                 {
                     var ds = new DeviceStatus
@@ -185,17 +187,17 @@ public class CompatController : ControllerBase
                         Status = string.IsNullOrWhiteSpace(eventType) ? "log" : eventType,
                         Timestamp = DateTime.UtcNow,
                     };
-                    _context.DeviceStatuses.Add(ds);
-                    await _context.SaveChangesAsync();
+                    this.context.DeviceStatuses.Add(ds);
+                    await this.context.SaveChangesAsync();
                 }
             }
 
-            return Created(string.Empty, payload);
+            return this.Created(string.Empty, payload);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to store log");
-            return StatusCode(500, new { error = ex.Message });
+            this.logger.LogError(ex, "Failed to store log");
+            return this.StatusCode(500, new { error = ex.Message });
         }
     }
 
@@ -207,11 +209,11 @@ public class CompatController : ControllerBase
         if (System.IO.File.Exists(agentPath))
         {
             var bytes = System.IO.File.ReadAllBytes(agentPath);
-            return File(bytes, "application/octet-stream", "SimRacingAgent.ps1");
+            return this.File(bytes, "application/octet-stream", "SimRacingAgent.ps1");
         }
 
         // fallback: return a small placeholder script
         var placeholder = "# Agent script not found on server\nWrite-Output \"Agent not available\"";
-        return File(System.Text.Encoding.UTF8.GetBytes(placeholder), "text/plain", "agent.ps1");
+        return this.File(System.Text.Encoding.UTF8.GetBytes(placeholder), "text/plain", "agent.ps1");
     }
 }

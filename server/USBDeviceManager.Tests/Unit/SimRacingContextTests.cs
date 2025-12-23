@@ -22,7 +22,7 @@ public class SimRacingContextTests : IDisposable
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
 
-        var options = new DbContextOptionsBuilder<SimRacingContext>()
+        DbContextOptions<SimRacingContext> options = new DbContextOptionsBuilder<SimRacingContext>()
             .UseSqlite(_connection)
             .Options;
 
@@ -34,14 +34,14 @@ public class SimRacingContextTests : IDisposable
     public async Task AddUsbDevice_ShouldCreateDeviceSuccessfully()
     {
         // Arrange
-        var device = TestDataGenerator.CreateSimpleTestDevice("Test Wheel");
+        UsbDevice device = TestDataGenerator.CreateSimpleTestDevice("Test Wheel");
 
         // Act
         _context.UsbDevices.Add(device);
         await _context.SaveChangesAsync();
 
         // Assert
-        var savedDevice = await _context.UsbDevices.FindAsync(device.Id);
+        UsbDevice? savedDevice = await _context.UsbDevices.FindAsync(device.Id);
         savedDevice.Should().NotBeNull();
         savedDevice!.Name.Should().Be("Test Wheel");
         savedDevice.DeviceId.Should().Be(device.DeviceId);
@@ -53,8 +53,8 @@ public class SimRacingContextTests : IDisposable
     {
         // Arrange
         var deviceId = "USB\\VID_046D&PID_C29A";
-        var device1 = TestDataGenerator.CreateSimpleTestDevice("Device 1");
-        var device2 = TestDataGenerator.CreateSimpleTestDevice("Device 2");
+        UsbDevice device1 = TestDataGenerator.CreateSimpleTestDevice("Device 1");
+        UsbDevice device2 = TestDataGenerator.CreateSimpleTestDevice("Device 2");
 
         device1.DeviceId = deviceId;
         device2.DeviceId = deviceId; // Same device ID
@@ -75,7 +75,7 @@ public class SimRacingContextTests : IDisposable
     public async Task DeviceStatus_CascadeDelete_ShouldRemoveStatusesWhenDeviceDeleted()
     {
         // Arrange
-        var device = TestDataGenerator.CreateSimpleTestDevice();
+        UsbDevice device = TestDataGenerator.CreateSimpleTestDevice();
         _context.UsbDevices.Add(device);
         await _context.SaveChangesAsync();
 
@@ -94,7 +94,7 @@ public class SimRacingContextTests : IDisposable
         await _context.SaveChangesAsync();
 
         // Assert
-        var remainingStatuses = await _context.DeviceStatuses
+        List<DeviceStatus> remainingStatuses = await _context.DeviceStatuses
             .Where(s => s.DeviceId == device.Id)
             .ToListAsync();
 
@@ -118,7 +118,7 @@ public class SimRacingContextTests : IDisposable
 
         // Assert - EF/SQLite allows empty strings for required string properties (not null),
         // so ensure the entity was persisted and fields are present (may be empty)
-        var saved = await _context.ManagedSoftware.FirstAsync(s => s.Id == software.Id);
+        ManagedSoftware saved = await _context.ManagedSoftware.FirstAsync(s => s.Id == software.Id);
         saved.Should().NotBeNull();
         saved.Name.Should().BeEmpty();
         saved.ExecutablePath.Should().BeEmpty();
@@ -128,8 +128,8 @@ public class SimRacingContextTests : IDisposable
     public async Task AutomationRule_WithDeviceAndSoftwareReferences_ShouldMaintainRelationships()
     {
         // Arrange
-        var device = TestDataGenerator.CreateSimpleTestDevice();
-        var software = TestDataGenerator.CreateSimpleTestSoftware();
+        UsbDevice device = TestDataGenerator.CreateSimpleTestDevice();
+        ManagedSoftware software = TestDataGenerator.CreateSimpleTestSoftware();
 
         _context.UsbDevices.Add(device);
         _context.ManagedSoftware.Add(software);
@@ -151,7 +151,7 @@ public class SimRacingContextTests : IDisposable
         await _context.SaveChangesAsync();
 
         // Assert
-        var savedRule = await _context.AutomationRules
+        AutomationRule savedRule = await _context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
             .FirstAsync(r => r.Id == rule.Id);
@@ -192,7 +192,7 @@ public class SimRacingContextTests : IDisposable
         await _context.SaveChangesAsync();
 
         // Assert
-        var remainingExecutions = await _context.RuleExecutions
+        List<RuleExecution> remainingExecutions = await _context.RuleExecutions
             .Where(e => e.RuleId == rule.Id)
             .ToListAsync();
 
@@ -203,10 +203,10 @@ public class SimRacingContextTests : IDisposable
     public async Task SystemStatus_MultipleEntries_ShouldStoreChronologically()
     {
         // Arrange
-        var statuses = TestDataGenerator.GenerateSystemStatuses(5);
+        List<SystemStatus> statuses = TestDataGenerator.GenerateSystemStatuses(5);
 
         // Ensure different timestamps
-        for (int i = 0; i < statuses.Count; i++)
+        for (var i = 0; i < statuses.Count; i++)
         {
             statuses[i].Timestamp = DateTime.UtcNow.AddMinutes(-i);
         }
@@ -216,7 +216,7 @@ public class SimRacingContextTests : IDisposable
         await _context.SaveChangesAsync();
 
         // Assert
-        var savedStatuses = await _context.SystemStatuses
+        List<SystemStatus> savedStatuses = await _context.SystemStatuses
             .OrderByDescending(s => s.Timestamp)
             .ToListAsync();
 
@@ -231,23 +231,23 @@ public class SimRacingContextTests : IDisposable
     public async Task HealthMetric_DifferentSources_ShouldGroupByMetricName()
     {
         // Arrange
-        var metrics = new[]
-        {
+        HealthMetric[] metrics =
+        [
             new HealthMetric { MetricName = "CPU_Usage", Value = 45.5, Source = "System", Timestamp = DateTime.UtcNow },
             new HealthMetric { MetricName = "CPU_Usage", Value = 52.1, Source = "Application", Timestamp = DateTime.UtcNow },
             new HealthMetric { MetricName = "Memory_Usage", Value = 67.8, Source = "System", Timestamp = DateTime.UtcNow }
-        };
+        ];
 
         // Act
         _context.HealthMetrics.AddRange(metrics);
         await _context.SaveChangesAsync();
 
         // Assert
-        var cpuMetrics = await _context.HealthMetrics
+        List<HealthMetric> cpuMetrics = await _context.HealthMetrics
             .Where(m => m.MetricName == "CPU_Usage")
             .ToListAsync();
 
-        var memoryMetrics = await _context.HealthMetrics
+        List<HealthMetric> memoryMetrics = await _context.HealthMetrics
             .Where(m => m.MetricName == "Memory_Usage")
             .ToListAsync();
 
@@ -280,7 +280,7 @@ public class SimRacingContextTests : IDisposable
         await _context.SaveChangesAsync();
 
         // Assert
-        var savedRule = await _context.AutomationRules.FindAsync(rule.Id);
+        AutomationRule? savedRule = await _context.AutomationRules.FindAsync(rule.Id);
         savedRule.Should().NotBeNull();
         savedRule!.Trigger.Should().Be(trigger);
         savedRule.Action.Should().Be(action);
@@ -290,23 +290,23 @@ public class SimRacingContextTests : IDisposable
     public async Task DeviceStatus_TimestampIndexing_ShouldSupportTimeRangeQueries()
     {
         // Arrange
-        var device = TestDataGenerator.CreateSimpleTestDevice();
+        UsbDevice device = TestDataGenerator.CreateSimpleTestDevice();
         _context.UsbDevices.Add(device);
         await _context.SaveChangesAsync();
 
-        var now = DateTime.UtcNow;
-        var statuses = new[]
-        {
+        DateTime now = DateTime.UtcNow;
+        DeviceStatus[] statuses =
+        [
             new DeviceStatus { DeviceId = device.Id, IsConnected = true, Status = "Connected", Timestamp = now.AddHours(-2) },
             new DeviceStatus { DeviceId = device.Id, IsConnected = false, Status = "Disconnected", Timestamp = now.AddHours(-1) },
             new DeviceStatus { DeviceId = device.Id, IsConnected = true, Status = "Connected", Timestamp = now }
-        };
+        ];
 
         _context.DeviceStatuses.AddRange(statuses);
         await _context.SaveChangesAsync();
 
         // Act
-        var recentStatuses = await _context.DeviceStatuses
+        List<DeviceStatus> recentStatuses = await _context.DeviceStatuses
             .Where(s => s.DeviceId == device.Id && s.Timestamp >= now.AddHours(-1.5))
             .OrderByDescending(s => s.Timestamp)
             .ToListAsync();

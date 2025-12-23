@@ -17,7 +17,7 @@ public static class TestDataGenerator
     /// </summary>
     public static List<UsbDevice> GenerateTestDevices(int count = 5)
     {
-        var deviceFaker = new Faker<UsbDevice>()
+        Faker<UsbDevice> deviceFaker = new Faker<UsbDevice>()
             .RuleFor(d => d.DeviceId, f => $"USB\\VID_{f.Random.Hexadecimal(4, "").ToUpper()}&PID_{f.Random.Hexadecimal(4, "").ToUpper()}")
             .RuleFor(d => d.Name, f => f.PickRandom(new[]
             {
@@ -47,7 +47,7 @@ public static class TestDataGenerator
     /// </summary>
     public static List<ManagedSoftware> GenerateTestSoftware(int count = 3)
     {
-        var softwareFaker = new Faker<ManagedSoftware>()
+        Faker<ManagedSoftware> softwareFaker = new Faker<ManagedSoftware>()
             .RuleFor(s => s.Name, f => f.PickRandom(new[]
             {
                 "iRacing",
@@ -76,7 +76,7 @@ public static class TestDataGenerator
     /// </summary>
     public static List<AutomationRule> GenerateTestAutomationRules(int count, List<UsbDevice> devices, List<ManagedSoftware> software)
     {
-        var ruleFaker = new Faker<AutomationRule>()
+        Faker<AutomationRule> ruleFaker = new Faker<AutomationRule>()
             .RuleFor(r => r.Name, f => f.PickRandom(new[]
             {
                 "Start iRacing when G29 connects",
@@ -102,7 +102,7 @@ public static class TestDataGenerator
     /// </summary>
     public static List<DeviceStatus> GenerateDeviceStatuses(IEnumerable<UsbDevice> devices, int entriesPerDevice = 5)
     {
-        var statusFaker = new Faker<DeviceStatus>()
+        Faker<DeviceStatus> statusFaker = new Faker<DeviceStatus>()
             .RuleFor(s => s.IsConnected, f => f.Random.Bool(0.7f))
             .RuleFor(s => s.Status, (f, s) => s.IsConnected ? "Connected" : f.PickRandom("Disconnected", "Error", "Timeout"))
             .RuleFor(s => s.ErrorMessage, (f, s) => !s.IsConnected && f.Random.Bool(0.3f) ? f.Lorem.Sentence() : null)
@@ -111,9 +111,9 @@ public static class TestDataGenerator
         var statuses = new List<DeviceStatus>();
         var deviceList = devices.ToList();
 
-        foreach (var device in deviceList)
+        foreach (UsbDevice? device in deviceList)
         {
-            var deviceStatuses = statusFaker
+            List<DeviceStatus> deviceStatuses = statusFaker
                 .RuleFor(s => s.DeviceId, device.Id)
                 .Generate(entriesPerDevice);
 
@@ -128,7 +128,7 @@ public static class TestDataGenerator
     /// </summary>
     public static List<SoftwareStatus> GenerateSoftwareStatuses(List<ManagedSoftware> software, int entriesPerSoftware = 3)
     {
-        var statusFaker = new Faker<SoftwareStatus>()
+        Faker<SoftwareStatus> statusFaker = new Faker<SoftwareStatus>()
             // Let EF assign identity Id when persisted
             .RuleFor(s => s.IsRunning, f => f.Random.Bool(0.4f))
             .RuleFor(s => s.ProcessId, (f, s) => s.IsRunning ? f.Random.Int(1000, 9999) : null)
@@ -140,9 +140,9 @@ public static class TestDataGenerator
 
         var statuses = new List<SoftwareStatus>();
 
-        foreach (var sw in software)
+        foreach (ManagedSoftware sw in software)
         {
-            var swStatuses = statusFaker
+            List<SoftwareStatus> swStatuses = statusFaker
                 .RuleFor(s => s.SoftwareId, sw.Id)
                 .Generate(entriesPerSoftware);
 
@@ -157,7 +157,7 @@ public static class TestDataGenerator
     /// </summary>
     public static List<SystemStatus> GenerateSystemStatuses(int count = 10)
     {
-        var statusFaker = new Faker<SystemStatus>()
+        Faker<SystemStatus> statusFaker = new Faker<SystemStatus>()
             // Let EF assign identity Id when persisted
             .RuleFor(s => s.CpuUsage, f => f.Random.Double(5.0, 95.0))
             .RuleFor(s => s.MemoryUsage, f => f.Random.Double(20.0, 85.0))
@@ -175,7 +175,7 @@ public static class TestDataGenerator
     /// </summary>
     public static List<HealthMetric> GenerateHealthMetrics(int count = 20)
     {
-        var metricFaker = new Faker<HealthMetric>()
+        Faker<HealthMetric> metricFaker = new Faker<HealthMetric>()
             // Let EF assign identity Id when persisted
             .RuleFor(m => m.MetricName, f => f.PickRandom(new[]
             {

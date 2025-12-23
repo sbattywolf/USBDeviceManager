@@ -12,25 +12,19 @@ namespace USBDeviceManager.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MonitoringController : ControllerBase
+public class MonitoringController(SimRacingContext context, ILogger<MonitoringController> logger) : ControllerBase
 {
-    private readonly SimRacingContext context;
-    private readonly ILogger<MonitoringController> logger;
-
-    public MonitoringController(SimRacingContext context, ILogger<MonitoringController> logger)
-    {
-        this.context = context;
-        this.logger = logger;
-    }
+    private readonly SimRacingContext context = context;
+    private readonly ILogger<MonitoringController> logger = logger;
 
     /// <summary>
     /// Get current system status.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("status")]
     public async Task<ActionResult<SystemStatus>> GetSystemStatus()
     {
-        var status = await this.context.SystemStatuses
+        SystemStatus? status = await this.context.SystemStatuses
             .OrderByDescending(s => s.Timestamp)
             .FirstOrDefaultAsync();
 
@@ -48,13 +42,13 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get system status history.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("status/history")]
     public async Task<ActionResult<IEnumerable<SystemStatus>>> GetSystemStatusHistory([FromQuery] int hours = 24)
     {
-        var cutoff = DateTime.UtcNow.AddHours(-hours);
+        DateTime cutoff = DateTime.UtcNow.AddHours(-hours);
 
-        var history = await this.context.SystemStatuses
+        List<SystemStatus> history = await this.context.SystemStatuses
             .Where(s => s.Timestamp >= cutoff)
             .OrderByDescending(s => s.Timestamp)
             .ToListAsync();
@@ -65,13 +59,13 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get all health metrics.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("metrics")]
     public async Task<ActionResult<IEnumerable<HealthMetric>>> GetHealthMetrics([FromQuery] int hours = 24)
     {
-        var cutoff = DateTime.UtcNow.AddHours(-hours);
+        DateTime cutoff = DateTime.UtcNow.AddHours(-hours);
 
-        var metrics = await this.context.HealthMetrics
+        List<HealthMetric> metrics = await this.context.HealthMetrics
             .Where(m => m.Timestamp >= cutoff)
             .OrderByDescending(m => m.Timestamp)
             .ToListAsync();
@@ -82,13 +76,13 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get specific health metric by name.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("metrics/{metricName}")]
     public async Task<ActionResult<IEnumerable<HealthMetric>>> GetHealthMetric(string metricName, [FromQuery] int hours = 24)
     {
-        var cutoff = DateTime.UtcNow.AddHours(-hours);
+        DateTime cutoff = DateTime.UtcNow.AddHours(-hours);
 
-        var metrics = await this.context.HealthMetrics
+        List<HealthMetric> metrics = await this.context.HealthMetrics
             .Where(m => m.MetricName == metricName && m.Timestamp >= cutoff)
             .OrderByDescending(m => m.Timestamp)
             .ToListAsync();
@@ -99,7 +93,7 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Record a new health metric.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("metrics")]
     public async Task<ActionResult<HealthMetric>> RecordMetric(HealthMetric metric)
     {
@@ -113,15 +107,15 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get dashboard summary data.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("dashboard")]
     public async Task<ActionResult<object>> GetDashboardSummary()
     {
-        var currentTime = DateTime.UtcNow;
-        var last24Hours = currentTime.AddHours(-24);
+        DateTime currentTime = DateTime.UtcNow;
+        DateTime last24Hours = currentTime.AddHours(-24);
 
         // Get current system status
-        var systemStatus = await this.GenerateCurrentSystemStatus();
+        SystemStatus systemStatus = await this.GenerateCurrentSystemStatus();
 
         // Get recent device activity
         var recentDeviceActivity = await this.context.DeviceStatuses
@@ -131,7 +125,7 @@ public class MonitoringController : ControllerBase
             {
                 DeviceId = g.Key,
                 LastActivity = g.Max(s => s.Timestamp),
-                IsConnected = g.OrderByDescending(s => s.Timestamp).First().IsConnected,
+                g.OrderByDescending(s => s.Timestamp).First().IsConnected,
             })
             .ToListAsync();
 
@@ -143,7 +137,7 @@ public class MonitoringController : ControllerBase
             {
                 SoftwareId = g.Key,
                 LastActivity = g.Max(s => s.Timestamp),
-                IsRunning = g.OrderByDescending(s => s.Timestamp).First().IsRunning,
+                g.OrderByDescending(s => s.Timestamp).First().IsRunning,
             })
             .ToListAsync();
 
@@ -199,7 +193,7 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get system health check.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("health")]
     public async Task<ActionResult<object>> GetHealthCheck()
     {
@@ -250,11 +244,11 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Refresh system status.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("status/refresh")]
     public async Task<ActionResult<SystemStatus>> RefreshSystemStatus()
     {
-        var status = await this.GenerateCurrentSystemStatus();
+        SystemStatus status = await this.GenerateCurrentSystemStatus();
         this.context.SystemStatuses.Add(status);
         await this.context.SaveChangesAsync();
 

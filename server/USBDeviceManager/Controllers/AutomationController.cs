@@ -13,23 +13,16 @@ namespace USBDeviceManager.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AutomationController : ControllerBase
+public class AutomationController(SimRacingContext context, ILogger<AutomationController> logger, IDateTime clock) : ControllerBase
 {
-    private readonly SimRacingContext context;
-    private readonly ILogger<AutomationController> logger;
-    private readonly IDateTime clock;
-
-    public AutomationController(SimRacingContext context, ILogger<AutomationController> logger, IDateTime clock)
-    {
-        this.context = context;
-        this.logger = logger;
-        this.clock = clock;
-    }
+    private readonly SimRacingContext context = context;
+    private readonly ILogger<AutomationController> logger = logger;
+    private readonly IDateTime clock = clock;
 
     /// <summary>
     /// Get all automation rules.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AutomationRule>>> GetRules()
     {
@@ -42,11 +35,11 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Get specific automation rule by ID.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<AutomationRule>> GetRule(int id)
     {
-        var rule = await this.context.AutomationRules
+        AutomationRule? rule = await this.context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
             .FirstOrDefaultAsync(r => r.Id == id);
@@ -62,15 +55,15 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Create new automation rule.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost]
     public async Task<ActionResult<AutomationRule>> CreateRule([FromBody] AutomationRuleCreateDto dto)
     {
-        var rule = dto.ToModel();
+        AutomationRule rule = dto.ToModel();
 
         if (rule.TriggerDeviceId.HasValue)
         {
-            var device = await this.context.UsbDevices.FindAsync(rule.TriggerDeviceId.Value);
+            UsbDevice? device = await this.context.UsbDevices.FindAsync(rule.TriggerDeviceId.Value);
             if (device == null)
             {
                 return this.BadRequest(new { error = "Trigger device not found" });
@@ -81,7 +74,7 @@ public class AutomationController : ControllerBase
 
         if (rule.TargetSoftwareId.HasValue)
         {
-            var sw = await this.context.ManagedSoftware.FindAsync(rule.TargetSoftwareId.Value);
+            ManagedSoftware? sw = await this.context.ManagedSoftware.FindAsync(rule.TargetSoftwareId.Value);
             if (sw == null)
             {
                 return this.BadRequest(new { error = "Target software not found" });
@@ -101,7 +94,7 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Update automation rule.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRule(int id, AutomationRule rule)
     {
@@ -132,11 +125,11 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Delete automation rule.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRule(int id)
     {
-        var rule = await this.context.AutomationRules.FindAsync(id);
+        AutomationRule? rule = await this.context.AutomationRules.FindAsync(id);
         if (rule == null)
         {
             return this.NotFound();
@@ -151,11 +144,11 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Execute automation rule manually.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/execute")]
     public async Task<IActionResult> ExecuteRule(int id)
     {
-        var rule = await this.context.AutomationRules
+        AutomationRule? rule = await this.context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
             .FirstOrDefaultAsync(r => r.Id == id);
@@ -189,7 +182,7 @@ public class AutomationController : ControllerBase
             return this.Ok(new
             {
                 ruleId = id,
-                success = success,
+                success,
                 timestamp = this.clock.UtcNow,
             });
         }
@@ -214,11 +207,11 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Enable/disable automation rule.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/toggle")]
     public async Task<IActionResult> ToggleRule(int id, [FromBody] bool enabled)
     {
-        var rule = await this.context.AutomationRules.FindAsync(id);
+        AutomationRule? rule = await this.context.AutomationRules.FindAsync(id);
         if (rule == null)
         {
             return this.NotFound();
@@ -229,17 +222,17 @@ public class AutomationController : ControllerBase
 
         this.logger.LogInformation("Automation rule {RuleName} {Action}", rule.Name, enabled ? "enabled" : "disabled");
 
-        return this.Ok(new { ruleId = id, enabled = enabled, timestamp = this.clock.UtcNow });
+        return this.Ok(new { ruleId = id, enabled, timestamp = this.clock.UtcNow });
     }
 
     /// <summary>
     /// Get execution history for a rule.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/executions")]
     public async Task<ActionResult<IEnumerable<RuleExecution>>> GetRuleExecutions(int id, [FromQuery] int limit = 100)
     {
-        var executions = await this.context.RuleExecutions
+        List<RuleExecution> executions = await this.context.RuleExecutions
             .Where(e => e.RuleId == id)
             .OrderByDescending(e => e.ExecutedAt)
             .Take(limit)
@@ -251,13 +244,13 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Get all rule executions across all rules.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("executions")]
     public async Task<ActionResult<IEnumerable<RuleExecution>>> GetAllExecutions([FromQuery] int hours = 24, [FromQuery] int limit = 1000)
     {
-        var cutoff = this.clock.UtcNow.AddHours(-hours);
+        DateTime cutoff = this.clock.UtcNow.AddHours(-hours);
 
-        var executions = await this.context.RuleExecutions
+        List<RuleExecution> executions = await this.context.RuleExecutions
             .Include(e => e.Rule)
             .Where(e => e.ExecutedAt >= cutoff)
             .OrderByDescending(e => e.ExecutedAt)
@@ -270,11 +263,11 @@ public class AutomationController : ControllerBase
     /// <summary>
     /// Trigger rules based on device events.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("trigger/device")]
     public async Task<IActionResult> TriggerDeviceRules([FromBody] DeviceEventRequest request)
     {
-        var trigger = request.EventType switch
+        AutomationTrigger? trigger = request.EventType switch
         {
             "connected" => AutomationTrigger.DeviceConnected,
             "disconnected" => AutomationTrigger.DeviceDisconnected,
@@ -286,7 +279,7 @@ public class AutomationController : ControllerBase
             return this.BadRequest("Invalid event type");
         }
 
-        var rules = await this.context.AutomationRules
+        List<AutomationRule> rules = await this.context.AutomationRules
             .Include(r => r.TriggerDevice)
             .Include(r => r.TargetSoftware)
             .Where(r => r.IsEnabled &&
@@ -296,7 +289,7 @@ public class AutomationController : ControllerBase
 
         var results = new List<object>();
 
-        foreach (var rule in rules)
+        foreach (AutomationRule? rule in rules)
         {
             try
             {
@@ -311,7 +304,7 @@ public class AutomationController : ControllerBase
 
                 this.context.RuleExecutions.Add(execution);
 
-                results.Add(new { ruleId = rule.Id, ruleName = rule.Name, success = success });
+                results.Add(new { ruleId = rule.Id, ruleName = rule.Name, success });
 
                 this.logger.LogInformation(
                     "Triggered rule {RuleName} for device event {EventType} with result: {Success}",
@@ -340,7 +333,7 @@ public class AutomationController : ControllerBase
         return this.Ok(new
         {
             triggeredRules = results.Count,
-            results = results,
+            results,
             timestamp = this.clock.UtcNow,
         });
     }
