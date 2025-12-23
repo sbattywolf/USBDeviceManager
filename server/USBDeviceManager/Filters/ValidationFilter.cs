@@ -14,7 +14,10 @@ namespace USBDeviceManager.Filters
     /// </summary>
     public class ValidationFilter : IActionFilter
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Called before an action executes; validates the model state and returns a BadRequest if invalid.
+        /// </summary>
+        /// <param name="context">The <see cref="ActionExecutingContext"/> for the current request.</param>
         public void OnActionExecuting(ActionExecutingContext context)
         {
             if (context?.ModelState == null)
@@ -34,7 +37,10 @@ namespace USBDeviceManager.Filters
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Called after an action executes. No-op in this filter.
+        /// </summary>
+        /// <param name="context">The <see cref="ActionExecutedContext"/> for the current request.</param>
         public void OnActionExecuted(ActionExecutedContext context)
         {
             // no-op
