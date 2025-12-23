@@ -38,7 +38,7 @@ dotnet test USBDeviceManager.sln --logger "trx;LogFileName=dotnet-tests-after-re
 ## Files touched (high level)
 - `server/USBDeviceManager/**`
 - `server/USBDeviceManager.Tests/**`
-- `Device-Sentinel.sln` (consider renaming to `USBDeviceManager.sln`)
+- (legacy solution files `Device-Sentinel.sln` and `USBDeviceManager.fixed.sln` were removed in cleanup branch)
 - `ci/run-tests.ps1`
 - `.github/workflows/dotnet.yml`
 - `docs/*` (updated test references)

@@ -1,5 +1,5 @@
 param(
-    [string]$Sln = 'USBDeviceManager.fixed.sln'
+    [string]$Sln = 'USBDeviceManager.sln'
 )
 
 Write-Output "Building solution: $Sln (Release) and collecting warnings..."

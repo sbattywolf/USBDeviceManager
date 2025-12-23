@@ -26,5 +26,5 @@ Testing
 - Run `./ci/run-tests.ps1` to run server and agent tests where available.
 
 Notes
-- Did NOT rename solution or binary filenames (e.g., `Device-Sentinel.sln`). Renaming files would require broader coordination.
+- Removed legacy solution files `Device-Sentinel.sln` and `USBDeviceManager.fixed.sln` (cleaned in `cleanup/remove-obsolete` branch).
 - Added a follow-up TODO to consider history-scrub (`git filter-repo`) if you want to remove personal paths from history.
