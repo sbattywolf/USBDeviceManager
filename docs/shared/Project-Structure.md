@@ -102,13 +102,28 @@ graph TD
     E --> C
     F --> B
     F --> C
-    # Project documentation moved
+    F --> D
+    F --> E
+```
 
-    The original documentation in `shared/docs/Project-Structure.md` has been consolidated into `docs/shared/Project-Structure.md`.
+## Getting Started with New Structure
 
-    Please find the canonical copy here:
+### 1. Agent Development
+```powershell
+cd agent
+.\SimRacingAgent.ps1
+```
 
-    - `docs/shared/Project-Structure.md`
+### 2. Adding New Modules
+1. Create module in appropriate `src/` subdirectory
+2. Add corresponding test file in `tests/`
+3. Update main agent script imports
+4. Document in module-specific README if needed
 
-    The old file remains as a stub pointing to the new location to preserve history for a short time during transition.
-    If you want the original deleted instead of redirected, tell me and I will remove it.
+### 3. Testing
+```powershell
+cd agent/tests
+# Run specific test files
+```
+
+This structure provides a solid foundation for both current agent functionality and future server-side development while maintaining clean, readable, and maintainable code organization.
