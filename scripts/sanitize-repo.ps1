@@ -86,7 +86,7 @@ if ($sensitiveMatches.Count -gt 0) {
             Copy-Item -LiteralPath $f -Destination $backup -Force
             Set-Content -LiteralPath $f -Value $new -Encoding UTF8
             Write-Host "Sanitized: $f (backup: $backup)"
-        } catch { Write-Host "Failed to sanitize $f: $($_.Exception.Message)" }
+        } catch { Write-Host "Failed to sanitize $($f): $($_.Exception.Message)" }
     }
 }
 

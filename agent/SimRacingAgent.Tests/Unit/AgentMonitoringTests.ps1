@@ -333,7 +333,8 @@ function Invoke-AgentMonitoringTests {
 }
 
 # Export functions when run as module
-if ($MyInvocation.PSScriptRoot) {
+# Only export when loaded as a module (inside module context `$PSModuleInfo` exists)
+if ($PSModuleInfo) {
     Export-ModuleMember -Function @(
         'Test-AgentUSBMonitoring',
         'Test-AgentProcessManager',
