@@ -11,7 +11,10 @@ This quickstart shows how to run the server and agent tests and start the server
 Open a PowerShell (5.1) prompt and run:
 
 ```powershell
-Set-Location E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Unit
+# Use repository-root relative paths so these commands work on any machine.
+Set-Location <REPO_ROOT>/agent/SimRacingAgent.Tests/Unit
+# or, from the repository root:
+# cd agent/SimRacingAgent.Tests/Unit
 Import-Module .\AgentMonitoringTests.ps1 -Force
 Invoke-AgentMonitoringTests
 ```
@@ -20,7 +23,7 @@ Invoke-AgentMonitoringTests
 From a developer PowerShell or terminal with dotnet available:
 
 ```powershell
-Set-Location E:\Workspaces\Git\SimRacing\USBDeviceManager\server\SimRacingDashboard
+Set-Location <REPO_ROOT>/server/SimRacingDashboard
 dotnet test
 ```
 
@@ -32,7 +35,7 @@ A helper script is provided at `ci/run-tests.ps1`. It will:
 To run:
 
 ```powershell
-Set-Location E:\Workspaces\Git\SimRacing\USBDeviceManager
+Set-Location <REPO_ROOT>
 .\ci\run-tests.ps1
 ```
 

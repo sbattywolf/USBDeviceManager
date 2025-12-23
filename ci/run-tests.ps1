@@ -9,6 +9,9 @@ Exits with non-zero code if any test group fails.
 $ErrorActionPreference = 'Stop'
 $script:exitCode = 0
 
+# Compute repository root (parent of the `ci` folder) so paths are repo-root-relative
+$RepoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
+
 Write-Host "CI: Running tests for repository" -ForegroundColor Cyan
 
 # Run server tests if dotnet is installed
@@ -16,7 +19,7 @@ try {
     $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
     if ($dotnet) {
         Write-Host "Found dotnet CLI at $($dotnet.Path). Running server tests..." -ForegroundColor Yellow
-        Push-Location -Path "$(Join-Path $PSScriptRoot '..\server\SimRacingDashboard')"
+        Push-Location -Path (Join-Path $RepoRoot 'server\SimRacingDashboard')
         try {
             dotnet test --nologo
         } catch {
@@ -35,8 +38,13 @@ try {
 # Run agent tests (PowerShell)
 try {
     Write-Host "Running agent PowerShell unit tests..." -ForegroundColor Yellow
-    Push-Location -Path "$(Join-Path $PSScriptRoot 'agent\SimRacingAgent.Tests\Unit')"
-    Import-Module .\AgentMonitoringTests.ps1 -Force
+    Push-Location -Path (Join-Path $RepoRoot 'agent\SimRacingAgent.Tests\Unit')
+    # Dot-source the test script to avoid Export-ModuleMember errors when importing as a module
+    try {
+        . .\AgentMonitoringTests.ps1
+    } catch {
+        Write-Host "Warning: failed to dot-source AgentMonitoringTests.ps1: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
     $res = Invoke-AgentMonitoringTests
     if (-not $res.Success) {
         Write-Host "Agent tests reported failures." -ForegroundColor Red
