@@ -10,7 +10,7 @@ Quick links:
 
 Getting started:
 - Install .NET SDK 8.0
-- Build: `dotnet build Device-Sentinel.sln`
+-- Build: `dotnet build USBDeviceManager.sln`
 - Run tests: `dotnet test server/SimRacingDashboard.Tests/SimRacingDashboard.Tests.csproj`
 
 Contribution:
