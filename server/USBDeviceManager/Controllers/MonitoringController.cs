@@ -56,6 +56,7 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get system status history.
     /// </summary>
+    /// <param name="hours">Time window in hours to include in history.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("status/history")]
     public async Task<ActionResult<IEnumerable<SystemStatus>>> GetSystemStatusHistory([FromQuery] int hours = 24)
@@ -73,6 +74,7 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get all health metrics.
     /// </summary>
+    /// <param name="hours">Time window in hours to include in metrics.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("metrics")]
     public async Task<ActionResult<IEnumerable<HealthMetric>>> GetHealthMetrics([FromQuery] int hours = 24)
@@ -90,6 +92,8 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Get specific health metric by name.
     /// </summary>
+    /// <param name="metricName">Name of the health metric.</param>
+    /// <param name="hours">Time window in hours to include in metric history.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("metrics/{metricName}")]
     public async Task<ActionResult<IEnumerable<HealthMetric>>> GetHealthMetric(string metricName, [FromQuery] int hours = 24)
@@ -107,6 +111,7 @@ public class MonitoringController : ControllerBase
     /// <summary>
     /// Record a new health metric.
     /// </summary>
+    /// <param name="metric">The health metric to record.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("metrics")]
     public async Task<ActionResult<HealthMetric>> RecordMetric(HealthMetric metric)
