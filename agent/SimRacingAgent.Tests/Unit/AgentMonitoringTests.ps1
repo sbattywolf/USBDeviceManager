@@ -45,6 +45,16 @@ function Test-AgentUSBMonitoring {
             } -ParameterFilter @{ Class = "Win32_PnPEntity" }
             
             $devices = Get-USBDevices
+            # Debug dump for flaky WMI-failure test
+            try {
+                $dump = @()
+                $dump += "Timestamp: $(Get-Date -Format o)"
+                $dump += "MockKeys: $($Global:MockFunctions.Keys -join ',')"
+                $dump += "MockOrders: $($Global:MockOrders.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } -join ',')"
+                $dump += "DevicesCount: $($devices.Count)"
+                if ($devices.Count -gt 0) { $devices | ForEach-Object { $dump += "Device: $($_.DeviceID) | $($_.Description)" } }
+                $dump | Out-File -FilePath "e:\Workspaces\Git\SimRacing\USBDeviceManager\.tmp_usb_fail_debug.txt" -Append -Encoding utf8
+            } catch {}
             
             Assert-NotNull -Value $devices -Message "Device list should not be null"
             Assert-Equal -Expected 2 -Actual $devices.Count -Message "Should return 2 mocked devices"
@@ -87,7 +97,8 @@ function Test-AgentUSBMonitoring {
         
         # Test 4: USB error handling in agent context
         Invoke-Test -Name "USB operations handle WMI failures gracefully" -Category "USBMonitor" -TestScript {
-            # Mock WMI failure
+            # Ensure clean mock state and then mock WMI failure
+            Clear-AllMocks
             New-Mock -CommandName "Get-WmiObject" -MockWith {
                 throw "WMI service unavailable"
             }
