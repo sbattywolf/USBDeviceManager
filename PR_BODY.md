@@ -27,4 +27,4 @@ Testing
 
 Notes
 - Did NOT rename solution or binary filenames (e.g., `Device-Sentinel.sln`). Renaming files would require broader coordination.
-- Added a follow-up TODO to consider history-scrub (`git filter-repo`) if you want to remove personal paths from history.
+- Added a follow-up note to consider history-scrub (`git filter-repo`) if you want to remove personal paths from history.
