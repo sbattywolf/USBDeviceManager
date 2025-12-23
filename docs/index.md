@@ -1,4 +1,4 @@
-# Device Sentinel docs
+# USB Device Manager docs
 
 Welcome — this documentation hub covers the SimRacingDashboard server, agent tools, testing, and contribution guidelines.
 

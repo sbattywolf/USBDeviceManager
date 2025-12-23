@@ -1,4 +1,4 @@
-# Session summary — Device‑Sentinel / USBMonitor work
+# Session summary — USB Device Manager / USBMonitor work
 
 Date: 2025-12-23
 
@@ -22,7 +22,7 @@ How to pick up this session in a new VS Code window:
 
    git clone https://github.com/<REPO_OWNER>/USBDeviceManager.git
 
-2. Open the workspace folder in VS Code: open the `Device-Sentinel/Device-Sentinel` folder.
+2. Open the workspace folder in VS Code: open the `USBDeviceManager` folder.
 
 3. Checkout the work branch:
 

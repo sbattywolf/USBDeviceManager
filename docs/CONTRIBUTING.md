@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve Device Sentinel.
+Thanks for helping improve USB Device Manager.
 
 Quick checklist for contributors:
 

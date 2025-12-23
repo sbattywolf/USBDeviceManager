@@ -1,7 +1,7 @@
 # Device Sentinel - SimRacingDashboard: Overview & Scope
 
 ## Purpose
-Device Sentinel (SimRacingDashboard) is a lightweight home-user focused service + agent to monitor USB racing hardware, manage important sim-related software, and provide simple automation rules (e.g., start game when wheel connects).
+USB Device Manager (SimRacingDashboard) is a lightweight home-user focused service + agent to monitor USB racing hardware, manage important sim-related software, and provide simple automation rules (e.g., start game when wheel connects).
 
 Design goals:
 - Simplicity first: minimal configuration and minimal surface area for users.
