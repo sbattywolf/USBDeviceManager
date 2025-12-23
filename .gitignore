@@ -84,3 +84,5 @@ coverage.opencover.xml
 # Ignore build outputs
 **/bin/
 **/obj/
+**/bin/
+**/obj/

@@ -11,13 +11,13 @@ using USBDeviceManager.DTOs;
 using USBDeviceManager.Models;
 using USBDeviceManager.Services;
 
+/// <summary>
+/// Controller for managing USB devices.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class DevicesController : ControllerBase
 {
-    /// <summary>
-    /// Controller for managing USB devices.
-    /// </summary>
     private readonly SimRacingContext context;
     private readonly ILogger<DevicesController> logger;
     private readonly IDateTime clock;
@@ -48,6 +48,7 @@ public class DevicesController : ControllerBase
     /// <summary>
     /// Get specific USB device by ID.
     /// </summary>
+    /// <param name="id">The device identifier.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<UsbDevice>> GetDevice(int id)
@@ -65,6 +66,7 @@ public class DevicesController : ControllerBase
     /// <summary>
     /// Add a new USB device to monitoring.
     /// </summary>
+    /// <param name="dto">The device create DTO.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost]
     public async Task<ActionResult<UsbDevice>> CreateDevice([FromBody] DeviceCreateDto dto)
@@ -87,6 +89,8 @@ public class DevicesController : ControllerBase
     /// <summary>
     /// Update USB device configuration.
     /// </summary>
+    /// <param name="id">The id of the device to update.</param>
+    /// <param name="dto">The device create DTO containing updated values.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDevice(int id, [FromBody] DeviceCreateDto dto)
@@ -125,6 +129,7 @@ public class DevicesController : ControllerBase
     /// <summary>
     /// Remove USB device from monitoring.
     /// </summary>
+    /// <param name="id">The id of the device to remove.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDevice(int id)
@@ -164,6 +169,8 @@ public class DevicesController : ControllerBase
     /// <summary>
     /// Get status history for a USB device.
     /// </summary>
+    /// <param name="id">The id of the device.</param>
+    /// <param name="hours">Time window in hours to include in history.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/status/history")]
     public async Task<ActionResult<IEnumerable<DeviceStatus>>> GetDeviceStatusHistory(int id, [FromQuery] int hours = 24)
@@ -196,6 +203,8 @@ public class DevicesController : ControllerBase
     /// <summary>
     /// Enable/disable a USB device.
     /// </summary>
+    /// <param name="id">The id of the device to toggle.</param>
+    /// <param name="enabled">True to enable, false to disable.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/toggle")]
     public async Task<IActionResult> ToggleDevice(int id, [FromBody] bool enabled)
