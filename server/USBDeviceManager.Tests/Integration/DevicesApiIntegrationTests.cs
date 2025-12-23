@@ -32,12 +32,12 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/devices");
+        HttpResponseMessage response = await _client.GetAsync("/api/devices");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
+        UsbDevice[]? devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
         devices.Should().NotBeNull();
         devices!.Should().BeEmpty();
     }
@@ -50,12 +50,12 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.SeedTestDataAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/devices");
+        HttpResponseMessage response = await _client.GetAsync("/api/devices");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
+        UsbDevice[]? devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
         devices.Should().NotBeNull();
         devices!.Should().HaveCountGreaterThan(0);
         devices.Should().OnlyContain(d => !string.IsNullOrEmpty(d.Name));
@@ -79,20 +79,20 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/devices", newDevice);
+        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/devices", newDevice);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
 
-        var createdDevice = await response.Content.ReadFromJsonAsync<UsbDevice>();
+        UsbDevice? createdDevice = await response.Content.ReadFromJsonAsync<UsbDevice>();
         createdDevice.Should().NotBeNull();
         createdDevice!.Id.Should().BeGreaterThan(0);
         createdDevice.Name.Should().Be("Integration Test Device");
         createdDevice.DeviceId.Should().Be("USB\\VID_TEST&PID_1234");
 
         // Verify device exists in database
-        var getResponse = await _client.GetAsync($"/api/devices/{createdDevice.Id}");
+        HttpResponseMessage getResponse = await _client.GetAsync($"/api/devices/{createdDevice.Id}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -103,16 +103,16 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
 
-        using var context = _factory.GetDbContext();
-        var existingDevice = context.UsbDevices.First();
+        using SimRacingContext context = _factory.GetDbContext();
+        UsbDevice existingDevice = context.UsbDevices.First();
 
         // Act
-        var response = await _client.GetAsync($"/api/devices/{existingDevice.Id}");
+        HttpResponseMessage response = await _client.GetAsync($"/api/devices/{existingDevice.Id}");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var device = await response.Content.ReadFromJsonAsync<UsbDevice>();
+        UsbDevice? device = await response.Content.ReadFromJsonAsync<UsbDevice>();
         device.Should().NotBeNull();
         device!.Id.Should().Be(existingDevice.Id);
         device.Name.Should().Be(existingDevice.Name);
@@ -126,7 +126,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/devices/99999");
+        HttpResponseMessage response = await _client.GetAsync("/api/devices/99999");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -139,22 +139,22 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
 
-        using var context = _factory.GetDbContext();
-        var deviceToUpdate = context.UsbDevices.First();
+        using SimRacingContext context = _factory.GetDbContext();
+        UsbDevice deviceToUpdate = context.UsbDevices.First();
 
         deviceToUpdate.Name = "Updated Integration Test Name";
         deviceToUpdate.Description = "Updated during integration test";
         deviceToUpdate.IsEnabled = !deviceToUpdate.IsEnabled;
 
         // Act
-        var response = await _client.PutAsJsonAsync($"/api/devices/{deviceToUpdate.Id}", deviceToUpdate);
+        HttpResponseMessage response = await _client.PutAsJsonAsync($"/api/devices/{deviceToUpdate.Id}", deviceToUpdate);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Verify changes persisted
-        var getResponse = await _client.GetAsync($"/api/devices/{deviceToUpdate.Id}");
-        var updatedDevice = await getResponse.Content.ReadFromJsonAsync<UsbDevice>();
+        HttpResponseMessage getResponse = await _client.GetAsync($"/api/devices/{deviceToUpdate.Id}");
+        UsbDevice? updatedDevice = await getResponse.Content.ReadFromJsonAsync<UsbDevice>();
 
         updatedDevice.Should().NotBeNull();
         updatedDevice!.Name.Should().Be("Updated Integration Test Name");
@@ -167,11 +167,11 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
     {
         // Arrange
         await _factory.ResetDatabaseAsync();
-        var device = TestDataGenerator.CreateSimpleTestDevice();
+        UsbDevice device = TestDataGenerator.CreateSimpleTestDevice();
         device.Id = 123;
 
         // Act
-        var response = await _client.PutAsJsonAsync("/api/devices/456", device);
+        HttpResponseMessage response = await _client.PutAsJsonAsync("/api/devices/456", device);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -184,17 +184,17 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
 
-        using var context = _factory.GetDbContext();
-        var deviceToDelete = context.UsbDevices.First();
+        using SimRacingContext context = _factory.GetDbContext();
+        UsbDevice deviceToDelete = context.UsbDevices.First();
 
         // Act
-        var deleteResponse = await _client.DeleteAsync($"/api/devices/{deviceToDelete.Id}");
+        HttpResponseMessage deleteResponse = await _client.DeleteAsync($"/api/devices/{deviceToDelete.Id}");
 
         // Assert
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Verify device no longer exists
-        var getResponse = await _client.GetAsync($"/api/devices/{deviceToDelete.Id}");
+        HttpResponseMessage getResponse = await _client.GetAsync($"/api/devices/{deviceToDelete.Id}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -205,7 +205,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
 
         // Act
-        var response = await _client.DeleteAsync("/api/devices/99999");
+        HttpResponseMessage response = await _client.DeleteAsync("/api/devices/99999");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -218,22 +218,22 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
 
-        using var context = _factory.GetDbContext();
-        var device = context.UsbDevices.First();
+        using SimRacingContext context = _factory.GetDbContext();
+        UsbDevice device = context.UsbDevices.First();
         var originalState = device.IsEnabled;
 
         // Act - Toggle to opposite state
-        var toggleResponse = await _client.PostAsJsonAsync($"/api/devices/{device.Id}/toggle", !originalState);
+        HttpResponseMessage toggleResponse = await _client.PostAsJsonAsync($"/api/devices/{device.Id}/toggle", !originalState);
 
         // Assert
         toggleResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var toggleJson = System.Text.Json.JsonDocument.Parse(await toggleResponse.Content.ReadAsStringAsync()).RootElement;
+        System.Text.Json.JsonElement toggleJson = System.Text.Json.JsonDocument.Parse(await toggleResponse.Content.ReadAsStringAsync()).RootElement;
         toggleJson.GetProperty("enabled").GetBoolean().Should().Be(!originalState);
 
         // Verify state changed in database
-        var getResponse = await _client.GetAsync($"/api/devices/{device.Id}");
-        var updatedDevice = await getResponse.Content.ReadFromJsonAsync<UsbDevice>();
+        HttpResponseMessage getResponse = await _client.GetAsync($"/api/devices/{device.Id}");
+        UsbDevice? updatedDevice = await getResponse.Content.ReadFromJsonAsync<UsbDevice>();
 
         updatedDevice.Should().NotBeNull();
         updatedDevice!.IsEnabled.Should().Be(!originalState);
@@ -246,12 +246,12 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
 
         // Act
-        var response = await _client.PostAsync("/api/devices/scan", null);
+        HttpResponseMessage response = await _client.PostAsync("/api/devices/scan", null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var scanJson = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+        System.Text.Json.JsonElement scanJson = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
         scanJson.GetProperty("message").GetString().Should().NotBeNullOrWhiteSpace();
     }
 
@@ -262,12 +262,12 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
 
-        using var context = _factory.GetDbContext();
-        var device = context.UsbDevices.First();
+        using SimRacingContext context = _factory.GetDbContext();
+        UsbDevice device = context.UsbDevices.First();
 
         // Add some status entries
-        var statuses = new[]
-        {
+        DeviceStatus[] statuses =
+        [
             new DeviceStatus
             {
                 DeviceId = device.Id,
@@ -282,18 +282,18 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
                 Status = "Connected",
                 Timestamp = DateTime.UtcNow
             }
-        };
+        ];
 
         context.DeviceStatuses.AddRange(statuses);
         await context.SaveChangesAsync();
 
         // Act
-        var response = await _client.GetAsync($"/api/devices/{device.Id}/status");
+        HttpResponseMessage response = await _client.GetAsync($"/api/devices/{device.Id}/status");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var status = await response.Content.ReadFromJsonAsync<DeviceStatus>();
+        DeviceStatus? status = await response.Content.ReadFromJsonAsync<DeviceStatus>();
         status.Should().NotBeNull();
         status!.IsConnected.Should().BeTrue();
         status.Status.Should().Be("Connected");
@@ -306,28 +306,28 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();
 
-        using var context = _factory.GetDbContext();
-        var device = context.UsbDevices.First();
+        using SimRacingContext context = _factory.GetDbContext();
+        UsbDevice device = context.UsbDevices.First();
 
-        var now = DateTime.UtcNow;
-        var statuses = new[]
-        {
+        DateTime now = DateTime.UtcNow;
+        DeviceStatus[] statuses =
+        [
             new DeviceStatus { DeviceId = device.Id, Status = "Old", Timestamp = now.AddHours(-25) },
             new DeviceStatus { DeviceId = device.Id, Status = "Recent1", Timestamp = now.AddHours(-12) },
             new DeviceStatus { DeviceId = device.Id, Status = "Recent2", Timestamp = now.AddHours(-6) },
             new DeviceStatus { DeviceId = device.Id, Status = "Current", Timestamp = now }
-        };
+        ];
 
         context.DeviceStatuses.AddRange(statuses);
         await context.SaveChangesAsync();
 
         // Act
-        var response = await _client.GetAsync($"/api/devices/{device.Id}/status/history?hours=24");
+        HttpResponseMessage response = await _client.GetAsync($"/api/devices/{device.Id}/status/history?hours=24");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var history = await response.Content.ReadFromJsonAsync<DeviceStatus[]>();
+        DeviceStatus[]? history = await response.Content.ReadFromJsonAsync<DeviceStatus[]>();
         history.Should().NotBeNull();
         history!.Should().HaveCount(3); // Should exclude the 25-hour old entry
         history.Should().OnlyContain(s => s.Timestamp >= now.AddHours(-24));
@@ -348,7 +348,7 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/devices", invalidDevice);
+        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/devices", invalidDevice);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -371,39 +371,39 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         };
 
         // Act & Assert - Create
-        var createResponse = await _client.PostAsJsonAsync("/api/devices", testDevice);
+        HttpResponseMessage createResponse = await _client.PostAsJsonAsync("/api/devices", testDevice);
         createResponse.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var createdDevice = await createResponse.Content.ReadFromJsonAsync<UsbDevice>();
+        UsbDevice? createdDevice = await createResponse.Content.ReadFromJsonAsync<UsbDevice>();
         createdDevice.Should().NotBeNull();
         var deviceId = createdDevice!.Id;
 
         // Act & Assert - Read
-        var readResponse = await _client.GetAsync($"/api/devices/{deviceId}");
+        HttpResponseMessage readResponse = await _client.GetAsync($"/api/devices/{deviceId}");
         readResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var readDevice = await readResponse.Content.ReadFromJsonAsync<UsbDevice>();
+        UsbDevice? readDevice = await readResponse.Content.ReadFromJsonAsync<UsbDevice>();
         readDevice!.Name.Should().Be("End-to-End Test Device");
 
         // Act & Assert - Update
         readDevice.Name = "Updated End-to-End Device";
         readDevice.IsEnabled = false;
 
-        var updateResponse = await _client.PutAsJsonAsync($"/api/devices/{deviceId}", readDevice);
+        HttpResponseMessage updateResponse = await _client.PutAsJsonAsync($"/api/devices/{deviceId}", readDevice);
         updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Verify update
-        var verifyResponse = await _client.GetAsync($"/api/devices/{deviceId}");
-        var verifiedDevice = await verifyResponse.Content.ReadFromJsonAsync<UsbDevice>();
+        HttpResponseMessage verifyResponse = await _client.GetAsync($"/api/devices/{deviceId}");
+        UsbDevice? verifiedDevice = await verifyResponse.Content.ReadFromJsonAsync<UsbDevice>();
         verifiedDevice!.Name.Should().Be("Updated End-to-End Device");
         verifiedDevice.IsEnabled.Should().BeFalse();
 
         // Act & Assert - Delete
-        var deleteResponse = await _client.DeleteAsync($"/api/devices/{deviceId}");
+        HttpResponseMessage deleteResponse = await _client.DeleteAsync($"/api/devices/{deviceId}");
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Verify deletion
-        var finalResponse = await _client.GetAsync($"/api/devices/{deviceId}");
+        HttpResponseMessage finalResponse = await _client.GetAsync($"/api/devices/{deviceId}");
         finalResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -418,27 +418,27 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
         var tasks = new List<Task<HttpResponseMessage>>();
 
         // Multiple GET requests
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             tasks.Add(_client.GetAsync("/api/devices"));
         }
 
         // Multiple scan requests
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
             tasks.Add(_client.PostAsync("/api/devices/scan", null));
         }
 
-        var responses = await Task.WhenAll(tasks);
+        HttpResponseMessage[] responses = await Task.WhenAll(tasks);
 
         // Assert
         responses.Should().OnlyContain(r => r.IsSuccessStatusCode);
 
         // Verify all GET requests returned valid data
-        var getResponses = responses.Take(5);
-        foreach (var response in getResponses)
+        IEnumerable<HttpResponseMessage> getResponses = responses.Take(5);
+        foreach (HttpResponseMessage? response in getResponses)
         {
-            var devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
+            UsbDevice[]? devices = await response.Content.ReadFromJsonAsync<UsbDevice[]>();
             devices.Should().NotBeNull();
         }
     }

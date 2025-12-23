@@ -9,7 +9,7 @@ using USBDeviceManager.Data;
 using USBDeviceManager.Hubs;
 using USBDeviceManager.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddRazorComponents()
@@ -22,8 +22,10 @@ builder.Services.AddDbContext<SimRacingContext>(options =>
 // Add HTTP client for API calls
 builder.Services.AddScoped<HttpClient>(sp =>
 {
-    var httpClient = new HttpClient();
-    httpClient.BaseAddress = new Uri("https://localhost:7001"); // Adjust port as needed
+    var httpClient = new HttpClient
+    {
+        BaseAddress = new Uri("https://localhost:7001"), // Adjust port as needed
+    };
     return httpClient;
 });
 
@@ -70,7 +72,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -108,9 +110,9 @@ app.MapRazorComponents<App>()
 app.MapHub<MonitoringHub>("/hubs/monitoring");
 
 // Initialize database
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<SimRacingContext>();
+    SimRacingContext context = scope.ServiceProvider.GetRequiredService<SimRacingContext>();
     context.Database.EnsureCreated();
 }
 

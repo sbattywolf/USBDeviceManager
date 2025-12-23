@@ -11,7 +11,7 @@ Quick links:
 Getting started:
 - Install .NET SDK 8.0
 -- Build: `dotnet build USBDeviceManager.sln`
-- Run tests: `dotnet test server/SimRacingDashboard.Tests/SimRacingDashboard.Tests.csproj`
+- Run tests: `dotnet test server/USBDeviceManager.Tests/USBDeviceManager.Tests.csproj`
 
 Contribution:
 - See `docs/CONTRIBUTING.md` for PR checklist and code style notes.

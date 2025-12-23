@@ -37,9 +37,9 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         try
         {
             var tempDir = Path.GetTempPath();
-            var files = Directory.EnumerateFiles(tempDir, "SimRacingTest_*.db");
+            IEnumerable<string> files = Directory.EnumerateFiles(tempDir, "SimRacingTest_*.db");
 
-            int expirationHours = 6;
+            var expirationHours = 6;
             var env = Environment.GetEnvironmentVariable("SIMRACING_TEST_DB_EXPIRATION_HOURS");
             if (!string.IsNullOrEmpty(env) && int.TryParse(env, out var parsed) && parsed >= 0)
             {
@@ -74,12 +74,12 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         {
             using var tmpConn = new SqliteConnection(_connectionString);
             tmpConn.Open();
-            using (var cmd = tmpConn.CreateCommand())
+            using (SqliteCommand cmd = tmpConn.CreateCommand())
             {
                 cmd.CommandText = "PRAGMA journal_mode=WAL;";
                 cmd.ExecuteNonQuery();
             }
-            using (var cmd = tmpConn.CreateCommand())
+            using (SqliteCommand cmd = tmpConn.CreateCommand())
             {
                 cmd.CommandText = "PRAGMA busy_timeout=10000;";
                 cmd.ExecuteNonQuery();
@@ -94,7 +94,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         // that any SQLite user-function registration happens before concurrent tests.
         try
         {
-            using var initContext = GetDbContext();
+            using SimRacingContext initContext = GetDbContext();
             initContext.Database.EnsureCreated();
             // force model creation
             _ = initContext.Model;
@@ -113,7 +113,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             // Remove existing database context registration
-            var descriptor = services.SingleOrDefault(
+            ServiceDescriptor? descriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<SimRacingContext>));
 
             if (descriptor != null)
@@ -141,9 +141,9 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             // EF/SQLite registers any required functions while single-threaded.
             try
             {
-                var sp = services.BuildServiceProvider();
-                using var scope = sp.CreateScope();
-                var ctx = scope.ServiceProvider.GetRequiredService<SimRacingContext>();
+                ServiceProvider sp = services.BuildServiceProvider();
+                using IServiceScope scope = sp.CreateScope();
+                SimRacingContext ctx = scope.ServiceProvider.GetRequiredService<SimRacingContext>();
                 ctx.Database.EnsureCreated();
             }
             catch
@@ -167,7 +167,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     /// </summary>
     public SimRacingContext GetDbContext()
     {
-        var options = new DbContextOptionsBuilder<SimRacingContext>()
+        DbContextOptions<SimRacingContext> options = new DbContextOptionsBuilder<SimRacingContext>()
             .UseSqlite(_connectionString)
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors()
@@ -181,7 +181,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     /// </summary>
     public async Task SeedTestDataAsync()
     {
-        using var context = GetDbContext();
+        using SimRacingContext context = GetDbContext();
 
         // Ensure database is created
         await context.Database.EnsureCreatedAsync();
@@ -193,10 +193,10 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         await context.SaveChangesAsync();
 
         // Add test devices and software, save them first so EF assigns IDs
-        var testDevices = TestDataGenerator.GenerateTestDevices(3);
+        List<UsbDevice> testDevices = TestDataGenerator.GenerateTestDevices(3);
         context.UsbDevices.AddRange(testDevices);
 
-        var testSoftware = TestDataGenerator.GenerateTestSoftware(2);
+        List<ManagedSoftware> testSoftware = TestDataGenerator.GenerateTestSoftware(2);
         context.ManagedSoftware.AddRange(testSoftware);
 
         await context.SaveChangesAsync();
@@ -212,9 +212,9 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             "Notify on device connect"
         };
 
-        for (int i = 0; i < 2; i++)
+        for (var i = 0; i < 2; i++)
         {
-            var device = testDevices[rng.Next(testDevices.Count)];
+            UsbDevice device = testDevices[rng.Next(testDevices.Count)];
             ManagedSoftware? sw = null;
             if (testSoftware.Any())
             {
@@ -245,7 +245,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     /// </summary>
     public async Task ResetDatabaseAsync()
     {
-        using var context = GetDbContext();
+        using SimRacingContext context = GetDbContext();
 
         // Clear all data
         context.RuleExecutions.RemoveRange(context.RuleExecutions);
@@ -265,7 +265,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     /// </summary>
     public HttpClient CreateAuthenticatedClient()
     {
-        var client = CreateClient();
+        HttpClient client = CreateClient();
 
         // Add any authentication headers if needed
         // client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

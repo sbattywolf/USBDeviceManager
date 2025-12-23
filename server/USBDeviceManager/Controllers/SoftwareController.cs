@@ -14,23 +14,16 @@ namespace USBDeviceManager.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SoftwareController : ControllerBase
+public class SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock) : ControllerBase
 {
-    private readonly SimRacingContext context;
-    private readonly ILogger<SoftwareController> logger;
-    private readonly IDateTime clock;
-
-    public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock)
-    {
-        this.context = context;
-        this.logger = logger;
-        this.clock = clock;
-    }
+    private readonly SimRacingContext context = context;
+    private readonly ILogger<SoftwareController> logger = logger;
+    private readonly IDateTime clock = clock;
 
     /// <summary>
     /// Get all managed software.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ManagedSoftware>>> GetSoftware()
     {
@@ -40,11 +33,11 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Get specific software by ID.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<ManagedSoftware>> GetSoftware(int id)
     {
-        var software = await this.context.ManagedSoftware.FindAsync(id);
+        ManagedSoftware? software = await this.context.ManagedSoftware.FindAsync(id);
 
         if (software == null)
         {
@@ -57,7 +50,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Add new software to management.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost]
     public async Task<ActionResult<ManagedSoftware>> CreateSoftware([FromBody] SoftwareCreateDto dto)
     {
@@ -66,7 +59,7 @@ public class SoftwareController : ControllerBase
             return this.BadRequest(this.ModelState);
         }
 
-        var software = dto.ToModel();
+        ManagedSoftware software = dto.ToModel();
         software.CreatedAt = this.clock.UtcNow;
 
         this.context.ManagedSoftware.Add(software);
@@ -78,11 +71,11 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Update software configuration.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSoftware(int id, [FromBody] SoftwareCreateDto dto)
     {
-        var software = await this.context.ManagedSoftware.FindAsync(id);
+        ManagedSoftware? software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
             return this.NotFound();
@@ -116,11 +109,11 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Remove software from management.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSoftware(int id)
     {
-        var software = await this.context.ManagedSoftware.FindAsync(id);
+        ManagedSoftware? software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
             return this.NotFound();
@@ -135,11 +128,11 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Start software.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/start")]
     public async Task<IActionResult> StartSoftware(int id)
     {
-        var software = await this.context.ManagedSoftware.FindAsync(id);
+        ManagedSoftware? software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
             return this.NotFound();
@@ -160,11 +153,7 @@ public class SoftwareController : ControllerBase
                 UseShellExecute = false,
             };
 
-            var process = Process.Start(startInfo);
-            if (process == null)
-            {
-                throw new InvalidOperationException("Failed to start process");
-            }
+            Process process = Process.Start(startInfo) ?? throw new InvalidOperationException("Failed to start process");
 
             // Log status
             var status = new SoftwareStatus
@@ -213,11 +202,11 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Stop software.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/stop")]
     public async Task<IActionResult> StopSoftware(int id)
     {
-        var software = await this.context.ManagedSoftware.FindAsync(id);
+        ManagedSoftware? software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
             return this.NotFound();
@@ -226,7 +215,7 @@ public class SoftwareController : ControllerBase
         try
         {
             // Find running process
-            var currentStatus = await this.context.SoftwareStatuses
+            SoftwareStatus? currentStatus = await this.context.SoftwareStatuses
                 .Where(s => s.SoftwareId == id && s.IsRunning)
                 .OrderByDescending(s => s.Timestamp)
                 .FirstOrDefaultAsync();
@@ -281,7 +270,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Restart software.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/restart")]
     public async Task<IActionResult> RestartSoftware(int id)
     {
@@ -298,11 +287,11 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Get software status.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/status")]
     public async Task<ActionResult<SoftwareStatus>> GetSoftwareStatus(int id)
     {
-        var status = await this.context.SoftwareStatuses
+        SoftwareStatus? status = await this.context.SoftwareStatuses
             .Where(s => s.SoftwareId == id)
             .OrderByDescending(s => s.Timestamp)
             .FirstOrDefaultAsync();
@@ -318,13 +307,13 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Get software status history.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/status/history")]
     public async Task<ActionResult<IEnumerable<SoftwareStatus>>> GetSoftwareStatusHistory(int id, [FromQuery] int hours = 24)
     {
-        var cutoff = this.clock.UtcNow.AddHours(-hours);
+        DateTime cutoff = this.clock.UtcNow.AddHours(-hours);
 
-        var history = await this.context.SoftwareStatuses
+        List<SoftwareStatus> history = await this.context.SoftwareStatuses
             .Where(s => s.SoftwareId == id && s.Timestamp >= cutoff)
             .OrderByDescending(s => s.Timestamp)
             .ToListAsync();
@@ -335,11 +324,11 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Enable/disable software.
     /// </summary>
-    /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("{id}/toggle")]
     public async Task<IActionResult> ToggleSoftware(int id, [FromBody] bool enabled)
     {
-        var software = await this.context.ManagedSoftware.FindAsync(id);
+        ManagedSoftware? software = await this.context.ManagedSoftware.FindAsync(id);
         if (software == null)
         {
             return this.NotFound();
@@ -350,7 +339,7 @@ public class SoftwareController : ControllerBase
 
         this.logger.LogInformation("Software {SoftwareName} {Action}", software.Name, enabled ? "enabled" : "disabled");
 
-        return this.Ok(new { softwareId = id, enabled = enabled, timestamp = this.clock.UtcNow });
+        return this.Ok(new { softwareId = id, enabled, timestamp = this.clock.UtcNow });
     }
 
     private bool SoftwareExists(int id)

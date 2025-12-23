@@ -7,13 +7,8 @@ using USBDeviceManager.Models;
 
 namespace USBDeviceManager.Data;
 
-public class SimRacingContext : DbContext
+public class SimRacingContext(DbContextOptions<SimRacingContext> options) : DbContext(options)
 {
-    public SimRacingContext(DbContextOptions<SimRacingContext> options)
-        : base(options)
-    {
-    }
-
     // Device Management
     public DbSet<UsbDevice> UsbDevices { get; set; } = null!;
 

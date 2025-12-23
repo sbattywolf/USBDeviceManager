@@ -8,14 +8,9 @@ using USBDeviceManager.Models;
 
 namespace USBDeviceManager.Hubs;
 
-public class MonitoringHub : Hub
+public class MonitoringHub(ILogger<MonitoringHub> logger) : Hub
 {
-    private readonly ILogger<MonitoringHub> logger;
-
-    public MonitoringHub(ILogger<MonitoringHub> logger)
-    {
-        this.logger = logger;
-    }
+    private readonly ILogger<MonitoringHub> logger = logger;
 
     public async Task JoinGroup(string groupName)
     {

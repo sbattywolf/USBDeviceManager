@@ -20,7 +20,7 @@ public class SmokeServerTests
             CreateNoWindow = true,
         };
 
-        using var proc = Process.Start(psi)!;
+        using Process proc = Process.Start(psi)!;
         var outBuf = new System.Text.StringBuilder();
         var errBuf = new System.Text.StringBuilder();
         proc.OutputDataReceived += (_, e) => { if (e.Data is not null) outBuf.AppendLine(e.Data); };
@@ -37,7 +37,7 @@ public class SmokeServerTests
             {
                 try
                 {
-                    var r = await client.GetAsync("/api/configs");
+                    HttpResponseMessage r = await client.GetAsync("/api/configs");
                     if (r.IsSuccessStatusCode) { ready = true; break; }
                 }
                 catch

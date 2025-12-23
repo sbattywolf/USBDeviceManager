@@ -30,7 +30,7 @@ namespace USBDeviceManager.Filters
                         kvp => kvp.Key,
                         kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray());
 
-                context.Result = new BadRequestObjectResult(new { errors = errors });
+                context.Result = new BadRequestObjectResult(new { errors });
             }
         }
 

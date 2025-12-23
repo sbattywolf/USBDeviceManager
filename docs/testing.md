@@ -17,7 +17,7 @@ Running tests locally:
 dotnet test
 
 # run only server tests
-dotnet test server\SimRacingDashboard.Tests\SimRacingDashboard.Tests.csproj
+dotnet test server\USBDeviceManager.Tests\USBDeviceManager.Tests.csproj
 ```
 
 Troubleshooting:
@@ -27,4 +27,4 @@ Troubleshooting:
 Environment variables:
 - `SIMRACING_TEST_DB_EXPIRATION_HOURS` - number of hours after which old temp DB files are deleted (integer). Set to `0` to skip deletion.
 
-For more details, see the test factory at `server/SimRacingDashboard.Tests/Fixtures/SimRacingTestFactory.cs`.
+For more details, see the test factory at `server/USBDeviceManager.Tests/Fixtures/SimRacingTestFactory.cs`.

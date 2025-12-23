@@ -39,8 +39,6 @@
     <ProjectReference Include="..\USBDeviceManager\USBDeviceManager.csproj" />
   </ItemGroup>
 
-  <!-- Rely on SDK-style implicit includes for test sources and assets now that tests live in this project folder -->
-
   <ItemGroup>
     <None Update="appsettings.Testing.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

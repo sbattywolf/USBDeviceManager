@@ -37,17 +37,17 @@ public class CompatControllerConfigsTests : IClassFixture<SimRacingTestFactory>
             isEnabled = true
         };
 
-        var response = await _client.PostAsJsonAsync("/api/configs", payload);
+        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/configs", payload);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        using var ctx = _factory.GetDbContext();
-        var device = ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == "TEST-DEVICE-123");
+        using Data.SimRacingContext ctx = _factory.GetDbContext();
+        UsbDevice? device = ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == "TEST-DEVICE-123");
         device.Should().NotBeNull();
 
-        var sw = ctx.ManagedSoftware.FirstOrDefault(s => s.Name == "TestApp");
+        ManagedSoftware? sw = ctx.ManagedSoftware.FirstOrDefault(s => s.Name == "TestApp");
         sw.Should().NotBeNull();
 
-        var rule = ctx.AutomationRules.FirstOrDefault(r => r.TriggerDeviceId == device.Id && r.TargetSoftwareId == sw.Id);
+        AutomationRule? rule = ctx.AutomationRules.FirstOrDefault(r => r.TriggerDeviceId == device.Id && r.TargetSoftwareId == sw.Id);
         rule.Should().NotBeNull();
     }
 
@@ -65,11 +65,11 @@ public class CompatControllerConfigsTests : IClassFixture<SimRacingTestFactory>
             isEnabled = true
         };
 
-        var response = await _client.PostAsJsonAsync("/api/configs", payload);
+        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/configs", payload);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        using var ctx = _factory.GetDbContext();
-        var sw = ctx.ManagedSoftware.FirstOrDefault(s => s.Name == "StandaloneApp");
+        using Data.SimRacingContext ctx = _factory.GetDbContext();
+        ManagedSoftware? sw = ctx.ManagedSoftware.FirstOrDefault(s => s.Name == "StandaloneApp");
         sw.Should().NotBeNull();
     }
 
@@ -85,7 +85,7 @@ public class CompatControllerConfigsTests : IClassFixture<SimRacingTestFactory>
             isEnabled = true
         };
 
-        var response = await _client.PostAsJsonAsync("/api/configs", payload);
+        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/configs", payload);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }

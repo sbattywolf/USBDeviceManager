@@ -26,7 +26,7 @@ public class CompatControllerIntegrationTests : IClassFixture<SimRacingTestFacto
         await _factory.ResetDatabaseAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/configs");
+        HttpResponseMessage response = await _client.GetAsync("/api/configs");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -45,8 +45,8 @@ public class CompatControllerIntegrationTests : IClassFixture<SimRacingTestFacto
         await _factory.SeedTestDataAsync();
 
         // pick an existing device from seeded data
-        using var ctx = _factory.GetDbContext();
-        var device = ctx.UsbDevices.First();
+        using SimRacingContext ctx = _factory.GetDbContext();
+        UsbDevice device = ctx.UsbDevices.First();
 
         var payload = new
         {
@@ -56,14 +56,14 @@ public class CompatControllerIntegrationTests : IClassFixture<SimRacingTestFacto
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/logs", payload);
+        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/logs", payload);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         // Verify entry exists in DB
-        using var verifyCtx = _factory.GetDbContext();
-        var status = verifyCtx.DeviceStatuses.OrderByDescending(s => s.Timestamp).FirstOrDefault(s => s.DeviceId == device.Id);
+        using SimRacingContext verifyCtx = _factory.GetDbContext();
+        DeviceStatus? status = verifyCtx.DeviceStatuses.OrderByDescending(s => s.Timestamp).FirstOrDefault(s => s.DeviceId == device.Id);
         status.Should().NotBeNull();
         status!.IsConnected.Should().BeTrue();
         status.Status.Should().Contain("CONNECTED");

@@ -9,7 +9,7 @@ Quick checklist for contributors:
 
 ```powershell
 # server tests
-dotnet test server/SimRacingDashboard.Tests/SimRacingDashboard.Tests.csproj
+dotnet test server/USBDeviceManager.Tests/USBDeviceManager.Tests.csproj
 # agent tests (PowerShell)
 cd agent/SimRacingAgent.Tests
 ./TestRunner.ps1
