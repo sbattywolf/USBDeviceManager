@@ -11,13 +11,13 @@ using USBDeviceManager.DTOs;
 using USBDeviceManager.Models;
 using USBDeviceManager.Services;
 
+/// <summary>
+/// Controller for managing USB devices.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class DevicesController : ControllerBase
 {
-    /// <summary>
-    /// Controller for managing USB devices.
-    /// </summary>
     private readonly SimRacingContext context;
     private readonly ILogger<DevicesController> logger;
     private readonly IDateTime clock;

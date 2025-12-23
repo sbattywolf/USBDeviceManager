@@ -33,8 +33,8 @@ namespace USBDeviceManager.Controllers
         }
 
         // GET /api/configs -> map to devices + software + automation rules
-        [HttpGet("configs")]
         /// <inheritdoc/>
+        [HttpGet("configs")]
         public async Task<IActionResult> ListConfigs()
         {
             // USB Device Manager expects a flat config object combining device and software info.
@@ -78,8 +78,8 @@ namespace USBDeviceManager.Controllers
         }
 
         // POST /api/configs -> create a device + software + rule
-        [HttpPost("configs")]
         /// <inheritdoc/>
+        [HttpPost("configs")]
         public async Task<IActionResult> CreateConfig([FromBody] ConfigCreateDto input)
         {
             // Create or find device
@@ -155,8 +155,8 @@ namespace USBDeviceManager.Controllers
         }
 
         // GET /api/logs -> map device/software statuses to logs
-        [HttpGet("logs")]
         /// <inheritdoc/>
+        [HttpGet("logs")]
         public async Task<IActionResult> GetLogs()
         {
             List<DeviceStatus> deviceStatuses = await this.context.DeviceStatuses
@@ -191,8 +191,8 @@ namespace USBDeviceManager.Controllers
         }
 
         // POST /api/logs -> accept client logs (store as DeviceStatus entries)
-        [HttpPost("logs")]
         /// <inheritdoc/>
+        [HttpPost("logs")]
         public async Task<IActionResult> CreateLog([FromBody] System.Text.Json.JsonElement payload)
         {
             try
