@@ -37,7 +37,8 @@ namespace USBDeviceManager.Controllers
         [HttpGet("health")]
         public IActionResult Health()
         {
-            return this.Ok(new { status = "ok" });
+            // Return the format expected by legacy agents: { Status = "Healthy" }
+            return this.Ok(new { Status = "Healthy" });
         }
     }
 }

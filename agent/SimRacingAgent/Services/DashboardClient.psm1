@@ -51,9 +51,14 @@ class DashboardClient {
             if ($Body) {
                 $params.Body = if ($Body -is [string]) { $Body } else { $Body | ConvertTo-Json -Depth 10 }
             }
-            
+            # Detailed logging for heartbeat POSTs
+            if ($Endpoint -like "/api/agents/*/heartbeat" -and $Method -eq "POST") {
+                Write-AgentLog "[DEBUG] Heartbeat POST: $uri Body: $($params.Body)" -Level Info
+            }
             $response = Invoke-RestMethod @params
-            
+            if ($Endpoint -like "/api/agents/*/heartbeat" -and $Method -eq "POST") {
+                Write-AgentLog "[DEBUG] Heartbeat response: $($response | ConvertTo-Json -Compress)" -Level Info
+            }
             return @{
                 Success = $true
                 Data = $response
@@ -61,8 +66,11 @@ class DashboardClient {
             }
         }
         catch {
+            # Detailed error logging for heartbeat POSTs
+            if ($Endpoint -like "/api/agents/*/heartbeat" -and $Method -eq "POST") {
+                Write-AgentLog "[DEBUG] Heartbeat error: Status $($_.Exception.Response.StatusCode.value__) Message: $($_.Exception.Message)" -Level Error
+            }
             Write-AgentLog "Dashboard API error ($Method $Endpoint): $($_.Exception.Message)" -Level Error
-            
             return @{
                 Success = $false
                 Error = $_.Exception.Message
