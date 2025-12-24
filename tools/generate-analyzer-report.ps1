@@ -21,11 +21,26 @@ $procInfo.CreateNoWindow = $true
 
 $proc = New-Object System.Diagnostics.Process
 $proc.StartInfo = $procInfo
+
+$stdoutList = New-Object System.Collections.Generic.List[System.String]
+$stderrList = New-Object System.Collections.Generic.List[System.String]
+
 $proc.Start() | Out-Null
 
-$stdout = $proc.StandardOutput.ReadToEnd()
-$stderr = $proc.StandardError.ReadToEnd()
+$outSub = Register-ObjectEvent -InputObject $proc -EventName 'OutputDataReceived' -Action { if ($EventArgs.Data) { [void]$stdoutList.Add($EventArgs.Data) } }
+$errSub = Register-ObjectEvent -InputObject $proc -EventName 'ErrorDataReceived' -Action { if ($EventArgs.Data) { [void]$stderrList.Add($EventArgs.Data) } }
+
+$proc.BeginOutputReadLine()
+$proc.BeginErrorReadLine()
+
 $proc.WaitForExit()
+Start-Sleep -Milliseconds 50
+
+$stdout = if ($stdoutList.Count -gt 0) { $stdoutList -join "`n" } else { "" }
+$stderr = if ($stderrList.Count -gt 0) { $stderrList -join "`n" } else { "" }
+
+try { Unregister-Event -SubscriptionId $outSub.Id -ErrorAction SilentlyContinue } catch { }
+try { Unregister-Event -SubscriptionId $errSub.Id -ErrorAction SilentlyContinue } catch { }
 
 $logPath = Join-Path $artifactsDir 'build_full_analyzer_output.log'
 Set-Content -Path $logPath -Value ($stdout + "`r`n" + $stderr)

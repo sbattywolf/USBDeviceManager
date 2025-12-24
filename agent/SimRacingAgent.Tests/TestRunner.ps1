@@ -23,6 +23,45 @@ Import-Module "$PSScriptRoot\agent\regression\AgentRegressionTests.ps1" -Force
 Import-Module "$PSScriptRoot\application\api\ApplicationAPITests.ps1" -Force
 Import-Module "$PSScriptRoot\application\integration\ApplicationIntegrationTests.ps1" -Force
 
+# Helper: run external PowerShell script without blocking on streams
+function Invoke-ScriptWithCapture {
+    param(
+        [Parameter(Mandatory=$true)] [System.Diagnostics.ProcessStartInfo] $StartInfo
+    )
+
+    $proc = New-Object System.Diagnostics.Process
+    $proc.StartInfo = $StartInfo
+
+    $stdout = New-Object System.Collections.Generic.List[System.String]
+    $stderr = New-Object System.Collections.Generic.List[System.String]
+
+    try {
+        $proc.Start() | Out-Null
+
+        $outSub = Register-ObjectEvent -InputObject $proc -EventName 'OutputDataReceived' -Action {
+            if ($EventArgs.Data) { [void]$stdout.Add($EventArgs.Data) }
+        }
+        $errSub = Register-ObjectEvent -InputObject $proc -EventName 'ErrorDataReceived' -Action {
+            if ($EventArgs.Data) { [void]$stderr.Add($EventArgs.Data) }
+        }
+
+        $proc.BeginOutputReadLine()
+        $proc.BeginErrorReadLine()
+
+        $proc.WaitForExit()
+        Start-Sleep -Milliseconds 50
+
+        $outText = if ($stdout.Count -gt 0) { $stdout -join "`n" } else { "" }
+        $errText = if ($stderr.Count -gt 0) { $stderr -join "`n" } else { "" }
+
+        return @{ ExitCode = $proc.ExitCode; StdOut = $outText; StdErr = $errText; Process = $proc }
+    }
+    finally {
+        try { Unregister-Event -SubscriptionId $outSub.Id -ErrorAction SilentlyContinue } catch { }
+        try { Unregister-Event -SubscriptionId $errSub.Id -ErrorAction SilentlyContinue } catch { }
+    }
+}
+
 function Invoke-CompleteTestSuite {
     <#
     .SYNOPSIS
@@ -68,7 +107,7 @@ function Invoke-CompleteTestSuite {
     #>
     [CmdletBinding()]
     param(
-        [ValidateSet('AgentUnit', 'AgentIntegration', 'AgentRegression', 'ApplicationAPI', 'ApplicationIntegration')]
+        [ValidateSet('AgentUnit', 'AgentIntegration', 'AgentRegression', 'AgentFunctional', 'ApplicationAPI', 'ApplicationIntegration')]
         [string[]]$TestCategories,
         
         [switch]$IncludePerformance,
@@ -81,6 +120,15 @@ function Invoke-CompleteTestSuite {
     
     # Initialize test execution
     $testStartTime = Get-Date
+    # Detect OS to skip Windows-only agent tests on non-Windows runners
+    try {
+        $IsWindows = $false
+        if ($PSVersionTable.Platform -match 'Win32NT') { $IsWindows = $true }
+        elseif ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)) { $IsWindows = $true }
+    } catch {
+        # Fallback: assume non-Windows
+        $IsWindows = $false
+    }
     $overallResults = @{
         StartTime = $testStartTime
         TestCategories = @()
@@ -101,7 +149,36 @@ function Invoke-CompleteTestSuite {
     
     # Determine test categories to run
     if (-not $TestCategories) {
-        $TestCategories = @('AgentUnit', 'AgentIntegration', 'AgentRegression', 'ApplicationAPI', 'ApplicationIntegration')
+        $TestCategories = @('AgentUnit', 'AgentIntegration', 'AgentRegression', 'AgentFunctional', 'ApplicationAPI', 'ApplicationIntegration')
+    }
+
+    # If not running on Windows, skip agent-only categories
+    $agentOnly = @('AgentUnit','AgentIntegration','AgentRegression','AgentFunctional')
+    if (-not $IsWindows) {
+        Write-Host "Non-Windows runner detected; removing agent-only categories from execution." -ForegroundColor Yellow
+        $originalCategories = $TestCategories
+        $TestCategories = $TestCategories | Where-Object { $agentOnly -notcontains $_ }
+
+        # Record skipped categories to a log for CI visibility
+        $skipped = @()
+        foreach ($c in $agentOnly) {
+            if ($originalCategories -contains $c -and ($TestCategories -notcontains $c)) { $skipped += $c }
+        }
+        if ($skipped.Count -gt 0) {
+            $logDir = Join-Path $PSScriptRoot 'logs'
+            if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
+            $skipFile = Join-Path $logDir 'skipped-categories.txt'
+            $header = "Skipped agent-only test categories on non-Windows runner:"
+            $time = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+            $platformInfo = "IsWindows=$IsWindows; PSVersion=$($PSVersionTable.PSVersion)"
+            $content = @()
+            $content += "# $time"
+            $content += $platformInfo
+            $content += $header
+            $content += $skipped
+            $content | Out-File -FilePath $skipFile -Encoding utf8
+            Write-Host "Wrote skipped categories to $skipFile" -ForegroundColor Yellow
+        }
     }
     
     Write-Host "Test Categories to Execute:" -ForegroundColor Yellow
@@ -141,13 +218,116 @@ function Invoke-CompleteTestSuite {
                     }
                     
                     'AgentIntegration' {
-                        $categoryResult = Invoke-AgentIntegrationTests -StopOnFirstFailure:$StopOnFirstFailure
-                        $categoryResult.CategoryName = "AgentIntegration"
+                        # Use the focused non-interactive integration runner for CI (agent + server)
+                        $agentIntegration = Join-Path $PSScriptRoot 'agent\SimRacingAgent.Tests\Integration\run-integration-tests.ps1'
+                        $serverIntegration = Join-Path $PSScriptRoot '..\..\server\USBDeviceManager.Tests\Integration\run-integration-tests.ps1'
+
+                        foreach ($integrationScript in @($agentIntegration, $serverIntegration)) {
+                            Write-Host "Invoking integration runner: $integrationScript" -ForegroundColor Cyan
+                            if (-not (Test-Path $integrationScript)) { Write-Warning "Integration script not found: $integrationScript"; continue }
+
+                            $psi = New-Object System.Diagnostics.ProcessStartInfo
+                            $psi.FileName = 'powershell.exe'
+                            $psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$integrationScript`""
+                            $psi.UseShellExecute = $false
+                            $psi.RedirectStandardOutput = $true
+                            $psi.RedirectStandardError = $true
+                            $psi.CreateNoWindow = $true
+
+                            $result = Invoke-ScriptWithCapture -StartInfo $psi
+                            if ($result.StdOut) { Write-Host $result.StdOut }
+                            if ($result.StdErr) { Write-Host $result.StdErr -ForegroundColor Red }
+
+                            if ($result.ExitCode -ne 0) { Write-Error "Integration runner failed: $integrationScript"; $overallResults.OverallSuccess = $false }
+                        }
+
+                        $categoryResult = @{
+                            Success = $overallResults.OverallSuccess
+                            CategoryName = "AgentIntegration"
+                            Results = @()
+                            Summary = @{
+                                Passed = 1
+                                Failed = (if ($overallResults.OverallSuccess) { 0 } else { 1 })
+                                Skipped = 0
+                            }
+                        }
                     }
+                        'AgentFunctional' {
+                            # Run agent functional runner
+                            $functionalScript = Join-Path $PSScriptRoot 'agent\SimRacingAgent.Tests\Functional\run-functional-tests.ps1'
+                            Write-Host "Invoking functional runner: $functionalScript" -ForegroundColor Cyan
+                            if (Test-Path $functionalScript) {
+                                $psi = New-Object System.Diagnostics.ProcessStartInfo
+                                $psi.FileName = 'powershell.exe'
+                                $psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$functionalScript`""
+                                $psi.UseShellExecute = $false
+                                $psi.RedirectStandardOutput = $true
+                                $psi.RedirectStandardError = $true
+                                $psi.CreateNoWindow = $true
+
+                                $result = Invoke-ScriptWithCapture -StartInfo $psi
+                                if ($result.StdOut) { Write-Host $result.StdOut }
+                                if ($result.StdErr) { Write-Host $result.StdErr -ForegroundColor Red }
+
+                                $categoryResult = @{
+                                    Success = ($result.ExitCode -eq 0)
+                                    CategoryName = 'AgentFunctional'
+                                    Results = @()
+                                    Summary = @{
+                                        Passed = (if ($result.ExitCode -eq 0) { 1 } else { 0 })
+                                        Failed = (if ($result.ExitCode -ne 0) { 1 } else { 0 })
+                                        Skipped = 0
+                                    }
+                                }
+                            } else {
+                                Write-Warning "Functional runner not found: $functionalScript"
+                                $categoryResult = @{
+                                    Success = $false
+                                    CategoryName = 'AgentFunctional'
+                                    Results = @()
+                                    Summary = @{
+                                        Passed = 0; Failed = 1; Skipped = 0
+                                    }
+                                }
+                            }
+                        }
                     
                     'AgentRegression' {
-                        $categoryResult = Invoke-AgentRegressionTests -StopOnFirstFailure:$StopOnFirstFailure -IncludePerformanceBenchmarks:$IncludePerformance
-                        $categoryResult.CategoryName = "AgentRegression"
+                            # Run regression runner script (standalone) for CI
+                            $regressionScript = Join-Path $PSScriptRoot 'Regression\run-regression-tests.ps1'
+                            Write-Host "Invoking regression runner: $regressionScript" -ForegroundColor Cyan
+                            if (Test-Path $regressionScript) {
+                                $psi = New-Object System.Diagnostics.ProcessStartInfo
+                                $psi.FileName = 'powershell.exe'
+                                $psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -File \"$regressionScript\""
+                                $psi.UseShellExecute = $false
+                                $psi.RedirectStandardOutput = $true
+                                $psi.RedirectStandardError = $true
+                                $psi.CreateNoWindow = $true
+
+                                $result = Invoke-ScriptWithCapture -StartInfo $psi
+                                if ($result.StdOut) { Write-Host $result.StdOut }
+                                if ($result.StdErr) { Write-Host $result.StdErr -ForegroundColor Red }
+
+                                $categoryResult = @{
+                                    Success = ($result.ExitCode -eq 0)
+                                    CategoryName = 'AgentRegression'
+                                    Results = @()
+                                    Summary = @{
+                                        Passed = (if ($result.ExitCode -eq 0) { 1 } else { 0 })
+                                        Failed = (if ($result.ExitCode -ne 0) { 1 } else { 0 })
+                                        Skipped = 0
+                                    }
+                                }
+                            } else {
+                                Write-Warning "Regression runner not found: $regressionScript"
+                                $categoryResult = @{
+                                    Success = $false
+                                    CategoryName = 'AgentRegression'
+                                    Results = @()
+                                    Summary = @{ Passed = 0; Failed = 1; Skipped = 0 }
+                                }
+                            }
                     }
                     
                     'ApplicationAPI' {
