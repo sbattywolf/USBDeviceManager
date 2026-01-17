@@ -1,4 +1,4 @@
-# Configuration Management Utilities
+﻿# Configuration Management Utilities
 # Centralized configuration loading and validation
 
 using module .\Logging.psm1
@@ -23,18 +23,18 @@ class ConfigurationManager {
                 $this.CreateDefaultConfiguration()
                 return $false
             }
-            
+
             $content = Get-Content -Path $this.ConfigPath -Raw | ConvertFrom-Json
             $this.Configuration = @{}
-            
+
             # Convert PSObject to hashtable
             foreach ($property in $content.PSObject.Properties) {
                 $this.Configuration[$property.Name] = $this.ConvertToHashtable($property.Value)
             }
-            
+
             $this.LastLoaded = Get-Date
             $this.IsLoaded = $true
-            
+
             Write-AgentInfo "Configuration loaded from: $($this.ConfigPath)" -Source "ConfigManager"
             return $true
         }
@@ -119,16 +119,16 @@ class ConfigurationManager {
                     MaxLogFiles = 30
                 }
             }
-            
+
             $configDir = Split-Path $this.ConfigPath -Parent
             if (-not (Test-Path $configDir)) {
                 New-Item -Path $configDir -ItemType Directory -Force | Out-Null
             }
-            
+
             $defaultConfig | ConvertTo-Json -Depth 10 | Set-Content -Path $this.ConfigPath -Encoding UTF8
             $this.Configuration = $defaultConfig
             $this.IsLoaded = $true
-            
+
             Write-AgentInfo "Created default configuration at: $($this.ConfigPath)" -Source "ConfigManager"
         }
         catch {
@@ -152,7 +152,7 @@ class ConfigurationManager {
         try {
             $parts = $Path.Split('.')
             $current = $this.Configuration
-            
+
             foreach ($part in $parts) {
                 if ($current -is [hashtable] -and $current.ContainsKey($part)) {
                     $current = $current[$part]
@@ -160,7 +160,7 @@ class ConfigurationManager {
                     return $Default
                 }
             }
-            
+
             return $current
         }
         catch {
@@ -173,7 +173,7 @@ class ConfigurationManager {
         try {
             $parts = $Path.Split('.')
             $current = $this.Configuration
-            
+
             # Navigate to parent
             for ($i = 0; $i -lt ($parts.Length - 1); $i++) {
                 $part = $parts[$i]
@@ -182,10 +182,10 @@ class ConfigurationManager {
                 }
                 $current = $current[$part]
             }
-            
+
             # Set the value
             $current[$parts[-1]] = $Value
-            
+
             Write-AgentDebug "Configuration value set: $Path = $Value" -Source "ConfigManager"
             return $true
         }
@@ -211,11 +211,11 @@ class ConfigurationManager {
     [array]GetKeys([string]$Path = "") {
         try {
             $section = if ($Path) { $this.Get($Path, @{}) } else { $this.Configuration }
-            
+
             if ($section -is [hashtable]) {
                 return $section.Keys
             }
-            
+
             return @()
         }
         catch {
@@ -241,27 +241,27 @@ class ConfigurationManager {
     [bool]Validate() {
         try {
             $requiredSections = @("Agent", "Dashboard", "Logging")
-            
+
             foreach ($section in $requiredSections) {
                 if (-not $this.Configuration.ContainsKey($section)) {
                     Write-AgentError "Missing required configuration section: $section" -Source "ConfigManager"
                     return $false
                 }
             }
-            
+
             # Validate specific settings
             $agentName = $this.Get("Agent.Name", "")
             if ([string]::IsNullOrEmpty($agentName)) {
                 Write-AgentError "Agent.Name cannot be empty" -Source "ConfigManager"
                 return $false
             }
-            
+
             $dashboardUrl = $this.Get("Dashboard.Url", "")
             if ([string]::IsNullOrEmpty($dashboardUrl)) {
                 Write-AgentError "Dashboard.Url cannot be empty" -Source "ConfigManager"
                 return $false
             }
-            
+
             Write-AgentInfo "Configuration validation passed" -Source "ConfigManager"
             return $true
         }
@@ -272,19 +272,22 @@ class ConfigurationManager {
     }
 }
 
-# Global configuration manager
-$Global:ConfigManager = $null
+## Prefer module-scoped ConfigManager with fallback to global for backward compatibility
+if (-not $Script:ConfigManager) { if ($Global:ConfigManager) { $Script:ConfigManager = $Global:ConfigManager } else { $Script:ConfigManager = $null } }
 
 # Module functions
 function Initialize-Configuration {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param([string]$ConfigPath)
-    
-    if (-not $ConfigPath) {
-        $ConfigPath = Join-Path $PSScriptRoot "agent-config.json"
-    }
-    
-    $Global:ConfigManager = [ConfigurationManager]::new($ConfigPath)
-    return $Global:ConfigManager.IsLoaded
+
+    if (-not $ConfigPath) { $ConfigPath = Join-Path $PSScriptRoot "agent-config.json" }
+
+    if (-not $PSCmdlet.ShouldProcess('ConfigManager','Initialize')) { return $false }
+
+    if (-not $Script:ConfigManager) { $Script:ConfigManager = [ConfigurationManager]::new($ConfigPath) }
+    # Mirror into global scope for backward compatibility
+    if (-not $Global:ConfigManager) { $Global:ConfigManager = $Script:ConfigManager }
+    return $Script:ConfigManager.IsLoaded
 }
 
 function Get-AgentConfiguration {
@@ -292,94 +295,75 @@ function Get-AgentConfiguration {
         [string]$Path = "",
         [object]$Default = $null
     )
-    
-    if (-not $Global:ConfigManager) {
-        Initialize-Configuration
-    }
-    
-    if ($Path) {
-        return $Global:ConfigManager.Get($Path, $Default)
-    } else {
-        return $Global:ConfigManager.Configuration
-    }
+
+    if (-not $Script:ConfigManager) { Initialize-Configuration }
+    if ($Path) { return $Script:ConfigManager.Get($Path, $Default) } else { return $Script:ConfigManager.Configuration }
 }
 
 function Set-AgentConfiguration {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [string]$Path,
         [object]$Value
     )
-    
-    if (-not $Global:ConfigManager) {
-        Initialize-Configuration
-    }
-    
-    return $Global:ConfigManager.Set($Path, $Value)
+
+    if (-not $PSCmdlet.ShouldProcess('ConfigManager','Set')) { return $false }
+    if (-not $Script:ConfigManager) { Initialize-Configuration }
+    return $Script:ConfigManager.Set($Path, $Value)
 }
 
 function Save-AgentConfiguration {
-    if ($Global:ConfigManager) {
-        return $Global:ConfigManager.SaveConfiguration()
-    }
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+    if (-not $PSCmdlet.ShouldProcess('ConfigManager','Save')) { return $false }
+    if ($Script:ConfigManager) { return $Script:ConfigManager.SaveConfiguration() }
     return $false
 }
 
 function Test-AgentConfiguration {
-    if ($Global:ConfigManager) {
-        return $Global:ConfigManager.Validate()
-    }
+    if ($Script:ConfigManager) { return $Script:ConfigManager.Validate() }
     return $false
 }
 
 function Get-ConfigurationSection {
     param([string]$Section)
-    
-    if ($Global:ConfigManager) {
-        return $Global:ConfigManager.GetSection($Section)
-    }
+
+    if ($Script:ConfigManager) { return $Script:ConfigManager.GetSection($Section) }
     return @{}
 }
 
 function Set-ConfigurationSection {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [string]$Section,
         [hashtable]$Values
     )
-    
-    if ($Global:ConfigManager) {
-        return $Global:ConfigManager.SetSection($Section, $Values)
-    }
+
+    if (-not $PSCmdlet.ShouldProcess('ConfigManager','SetSection')) { return $false }
+    if ($Script:ConfigManager) { return $Script:ConfigManager.SetSection($Section, $Values) }
     return $false
 }
 
 function Reset-AgentConfiguration {
-    if ($Global:ConfigManager) {
-        $Global:ConfigManager.Reload()
-    }
+    if ($Script:ConfigManager) { $Script:ConfigManager.Reload() }
 }
 
 function Get-ConfigurationStatus {
-    if ($Global:ConfigManager) {
-        return $Global:ConfigManager.GetStatus()
-    }
+    if ($Script:ConfigManager) { return $Script:ConfigManager.GetStatus() }
     return @{ IsLoaded = $false }
 }
 
 function Test-ConfigurationExists {
     param([string]$Path)
-    
-    if ($Global:ConfigManager) {
-        return $Global:ConfigManager.Exists($Path)
-    }
+
+    if ($Script:ConfigManager) { return $Script:ConfigManager.Exists($Path) }
     return $false
 }
 
 function Get-ConfigurationKeys {
     param([string]$Path = "")
-    
-    if ($Global:ConfigManager) {
-        return $Global:ConfigManager.GetKeys($Path)
-    }
+
+    if ($Script:ConfigManager) { return $Script:ConfigManager.GetKeys($Path) }
     return @()
 }
 
@@ -414,3 +398,6 @@ function Get-HealthConfig {
 
 # Export module members
 Export-ModuleMember -Function Initialize-Configuration, Get-AgentConfiguration, Set-AgentConfiguration, Save-AgentConfiguration, Test-AgentConfiguration, Get-ConfigurationSection, Set-ConfigurationSection, Reset-AgentConfiguration, Get-ConfigurationStatus, Test-ConfigurationExists, Get-ConfigurationKeys, Get-AgentInfo, Get-DashboardConfig, Get-LoggingConfig, Get-DeviceConfig, Get-SoftwareConfig, Get-AutomationConfig, Get-HealthConfig
+
+
+
