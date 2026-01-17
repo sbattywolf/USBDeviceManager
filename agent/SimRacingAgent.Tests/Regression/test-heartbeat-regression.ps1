@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # Heartbeat-focused regression script (standalone)
 
 $ErrorActionPreference = 'Stop'
@@ -35,3 +35,7 @@ try {
 }
 
 Complete-TestSession
+
+
+
+

@@ -1,4 +1,4 @@
-<#
+﻿<#
 Run only selected integration tests (InteractiveMode and DashboardConnectivity)
 This script is a temporary runner used to capture focused logs for debugging.
 #>
@@ -33,3 +33,7 @@ Write-TestLog "Selected test results: $(($results | ConvertTo-Json -Compress))" 
 
 $failed = $results.GetEnumerator() | Where-Object { -not $_.Value }
 if ($failed) { exit 1 } else { exit 0 }
+
+
+
+

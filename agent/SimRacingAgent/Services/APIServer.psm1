@@ -5,13 +5,23 @@
 $Script:HttpListener = $null
 $Script:APIServerRunspace = $null
 
-# Script-level fallbacks for globals to reduce PSA warnings and keep tests stable.
-# These prefer module-scoped values when present, otherwise read from $Global: to remain compatible.
-if (-not $Script:AgentConfig) { if ($Global:AgentConfig) { $Script:AgentConfig = $Global:AgentConfig } else { $Script:AgentConfig = @{} } }
-if (-not $Script:AgentVersion) { if ($Global:AgentVersion) { $Script:AgentVersion = $Global:AgentVersion } else { $Script:AgentVersion = '' } }
-if (-not $Script:AgentPID) { if ($Global:AgentPID) { $Script:AgentPID = $Global:AgentPID } else { $Script:AgentPID = $PID } }
-if (-not $Script:ManagedProcesses) { if ($Global:ManagedProcesses) { $Script:ManagedProcesses = $Global:ManagedProcesses } else { $Script:ManagedProcesses = @{} } }
-if (-not $Script:APIRequestCount) { if ($Global:APIRequestCount) { $Script:APIRequestCount = $Global:APIRequestCount } else { $Script:APIRequestCount = 0 } }
+# Script-scoped defaults (avoid direct $Global: reads to reduce PSA warnings).
+# Tests and callers may set configuration via Set-APIServerConfig when needed.
+if (-not $Script:AgentConfig) { $Script:AgentConfig = @{ API = @{ Port = 8080 }; USB = @{ Enabled = $true; HealthCheckInterval = 600 }; ProcessManager = @{ Enabled = $true; HealthCheckInterval = 120 }; AgentHealthCheck = @{ IdleTimeoutSeconds = 300 } } }
+if (-not $Script:AgentVersion) { $Script:AgentVersion = '' }
+if (-not $Script:AgentPID) { $Script:AgentPID = $PID }
+if (-not $Script:ManagedProcesses) { $Script:ManagedProcesses = @{} }
+if (-not $Script:APIRequestCount) { $Script:APIRequestCount = 0 }
+
+function Set-APIServerConfig {
+    param(
+        [hashtable]$Config,
+        [switch]$MirrorToGlobal
+    )
+
+    if ($Config) { $Script:AgentConfig = $Config }
+    if ($MirrorToGlobal) { $Global:AgentConfig = $Script:AgentConfig }
+}
 
 function Start-APIServer {
     <#
@@ -81,6 +91,20 @@ function Start-APIServer {
     }
     catch {
         Write-AgentLog "Failed to start API server: $_" -Level Error -Component "API"
+
+        # Attempt best-effort cleanup of background runspace
+        if ($Script:APIServerRunspace) {
+            try {
+                $Script:APIServerRunspace.Stop()
+                $Script:APIServerRunspace.Dispose()
+                $Script:APIServerRunspace = $null
+                Write-AgentLog "API server stopped" -Level Info -Component "API"
+            }
+            catch {
+                Write-AgentLog "Error stopping API server: $_" -Level Error -Component "API"
+            }
+        }
+
         return @{ 
             StatusCode = 200
             Data = @{ 
@@ -102,16 +126,6 @@ function Start-APIServer {
                 timestamp = Get-Date
             }
         }
-        if ($Script:APIServerRunspace) {
-            $Script:APIServerRunspace.Stop()
-            $Script:APIServerRunspace.Dispose()
-            $Script:APIServerRunspace = $null
-        }
-
-            Write-AgentLog "API server stopped" -Level Info -Component "API"
-    }
-    catch {
-        Write-AgentLog "Error stopping API server: $_" -Level Error -Component "API"
     }
 }
 
@@ -124,6 +138,10 @@ function Invoke-APIRoute {
         [System.Net.HttpListenerRequest]$Request,
         [hashtable]$Config
     )
+
+    # Some callers pass a config for routing controls (in runspaces); not all
+    # execution paths use it directly. Silence PSA about unused parameter.
+    [void]$Config
 
     $method = $Request.HttpMethod
     $path = $Request.Url.AbsolutePath.TrimEnd('/')
@@ -235,6 +253,10 @@ function Invoke-APIRoute {
 
 function Invoke-StatusAPI {
     param($Method, $Query, $Body)
+    # Avoid PSA unused-parameter warnings when specific handlers don't use all params
+    [void]$Method
+    [void]$Query
+    [void]$Body
 
     if ($Method -eq "GET") {
         $versionInfo = Get-AgentVersion
@@ -269,6 +291,11 @@ function Invoke-StatusAPI {
 function Invoke-USBAPI {
     [CmdletBinding(SupportsShouldProcess=$true)]
     param($Method, $Query, $Body)
+
+    # Query is currently unused in this handler; silence analyzer
+    [void]$Method
+    [void]$Query
+    [void]$Body
 
     switch ($Method) {
         "GET" {
@@ -322,6 +349,10 @@ function Invoke-USBAPI {
 function Invoke-USBDeviceAPI {
     [CmdletBinding(SupportsShouldProcess=$true)]
     param($Method, $DeviceId, $Query, $Body)
+
+    # Query is unused for device-specific actions; silence analyzer
+    [void]$Method
+    [void]$Query
 
     switch ($Method) {
         "POST" {
@@ -386,6 +417,11 @@ function Invoke-ProcessAPI {
     [CmdletBinding(SupportsShouldProcess=$true)]
     param($Method, $Query, $Body)
 
+    # Some handlers don't use all parameters; silence analyzer
+    [void]$Method
+    [void]$Query
+    [void]$Body
+
     switch ($Method) {
         "GET" {
             $processes = Get-ManagedProcesses
@@ -435,6 +471,11 @@ function Invoke-ProcessControlAPI {
     param($Method, $ProcessName, $Query, $Body)
 
     $decodedProcessName = [System.Net.WebUtility]::UrlDecode($ProcessName)
+
+    # Some handlers don't use all parameters; silence analyzer
+    [void]$Method
+    [void]$Query
+    [void]$Body
 
     switch ($Method) {
         "GET" {
@@ -540,6 +581,11 @@ function Invoke-ConfigAPI {
     [CmdletBinding(SupportsShouldProcess=$true)]
     param($Method, $Query, $Body)
 
+    # Query is not used by handlers; keep parameter for future compatibility
+    [void]$Method
+    [void]$Query
+    [void]$Body
+
     switch ($Method) {
         "GET" {
             # Get configuration (sanitized)
@@ -604,6 +650,11 @@ function Invoke-HealthCheckAPI {
         Clients should use PUT to trigger fresh status collection.
     #>
     param($Method, $Query, $Body)
+
+    # Handler doesn't use Query/Body; silence analyzer
+    [void]$Method
+    [void]$Query
+    [void]$Body
 
     switch ($Method) {
         "GET" {
@@ -714,6 +765,11 @@ function Invoke-USBHealthCheckAPI {
     #>
     param($Method, $Query, $Body)
 
+    # Handler doesn't use Query/Body; silence analyzer
+    [void]$Method
+    [void]$Query
+    [void]$Body
+
     switch ($Method) {
         "GET" {
             # Return USB health check configuration
@@ -773,6 +829,11 @@ function Invoke-ProcessHealthCheckAPI {
         Critical for process lifecycle management and auto-restart decisions.
     #>
     param($Method, $Query, $Body)
+
+    # Handler doesn't use Query/Body; silence analyzer
+    [void]$Method
+    [void]$Query
+    [void]$Body
 
     switch ($Method) {
         "GET" {

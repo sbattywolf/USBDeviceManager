@@ -1,7 +1,47 @@
-# Dashboard API Client
+﻿# Dashboard API Client
 # REST API client for communicating with SimRacing Dashboard
 
 using module ..\Utils\Logging.psm1
+
+# Ensure module-scoped mock containers exist. Tests can set mocks via `Set-DashboardClientMocks`.
+function Set-DashboardClientMocks {
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param(
+        [hashtable]$Functions = @{},
+        [hashtable]$Calls = @{},
+        [hashtable]$Orders = @{},
+        [switch]$MirrorToGlobal
+    )
+
+    # Always set module-scoped mocks for test usage
+    $Script:MockFunctions = $Functions
+    $Script:MockCalls = $Calls
+    $Script:MockOrders = $Orders
+
+    # Mirror into Global only when explicitly requested; guard with ShouldProcess
+    if ($MirrorToGlobal) {
+        if (-not $PSCmdlet.ShouldProcess('DashboardClient','Mirror mocks to global')) { return }
+        try {
+            Set-Variable -Name MockFunctions -Value $Script:MockFunctions -Scope Global -ErrorAction SilentlyContinue
+            Set-Variable -Name MockCalls -Value $Script:MockCalls -Scope Global -ErrorAction SilentlyContinue
+            Set-Variable -Name MockOrders -Value $Script:MockOrders -Scope Global -ErrorAction SilentlyContinue
+        }
+        catch {
+            Write-AgentLog "Failed to mirror DashboardClient mocks to global scope: $($_.Exception.Message)" -Level Debug
+        }
+    }
+}
+
+# Initialize from global if present (back-compat)
+if (-not $Script:MockFunctions) {
+    if (Get-Variable -Name MockFunctions -Scope Global -ErrorAction SilentlyContinue) { $Script:MockFunctions = (Get-Variable -Name MockFunctions -Scope Global -ValueOnly) } else { $Script:MockFunctions = @{} }
+}
+if (-not $Script:MockCalls) {
+    if (Get-Variable -Name MockCalls -Scope Global -ErrorAction SilentlyContinue) { $Script:MockCalls = (Get-Variable -Name MockCalls -Scope Global -ValueOnly) } else { $Script:MockCalls = @{} }
+}
+if (-not $Script:MockOrders) {
+    if (Get-Variable -Name MockOrders -Scope Global -ErrorAction SilentlyContinue) { $Script:MockOrders = (Get-Variable -Name MockOrders -Scope Global -ValueOnly) } else { $Script:MockOrders = @{} }
+}
 
 class DashboardClient {
     [string]$BaseUrl
@@ -22,13 +62,20 @@ class DashboardClient {
 
     [bool]TestConnection() {
         try {
-            $response = Invoke-RestMethod -Uri "$($this.BaseUrl)/api/health" -Method GET -Headers $this.Headers -TimeoutSec 5
+            # Prefer a test-provided mock for Invoke-RestMethod when available
+            $mockInvoke = if ($Script:MockFunctions -and $Script:MockFunctions.ContainsKey('Invoke-RestMethod')) { $Script:MockFunctions['Invoke-RestMethod'] } else { $null }
+            if ($mockInvoke) {
+                $response = & $mockInvoke.GetNewClosure() -Uri "$($this.BaseUrl)/api/health" -Method GET -Headers $this.Headers -TimeoutSec 5
+            }
+            else {
+                $response = Invoke-RestMethod -Uri "$($this.BaseUrl)/api/health" -Method GET -Headers $this.Headers -TimeoutSec 5
+            }
             $this.IsConnected = $response.Status -eq "Healthy"
-            
+
             if ($this.IsConnected) {
                 Write-AgentLog "Connected to dashboard at $($this.BaseUrl)" -Level Info
             }
-            
+
             return $this.IsConnected
         }
         catch {
@@ -47,7 +94,7 @@ class DashboardClient {
                 Headers = $this.Headers
                 TimeoutSec = $this.TimeoutSeconds
             }
-            
+
             if ($Body) {
                 $params.Body = if ($Body -is [string]) { $Body } else { $Body | ConvertTo-Json -Depth 10 }
             }
@@ -55,7 +102,13 @@ class DashboardClient {
             if ($Endpoint -like "/api/agents/*/heartbeat" -and $Method -eq "POST") {
                 Write-AgentLog "[DEBUG] Heartbeat POST: $uri Body: $($params.Body)" -Level Info
             }
-            $response = Invoke-RestMethod @params
+            # Prefer mocked Invoke-RestMethod if provided by tests (use script-scoped mocks)
+            if ($Script:MockFunctions -and $Script:MockFunctions.ContainsKey('Invoke-RestMethod')) {
+                $response = & $Script:MockFunctions['Invoke-RestMethod'].GetNewClosure() @params
+            }
+            else {
+                $response = Invoke-RestMethod @params
+            }
             if ($Endpoint -like "/api/agents/*/heartbeat" -and $Method -eq "POST") {
                 Write-AgentLog "[DEBUG] Heartbeat response: $($response | ConvertTo-Json -Compress)" -Level Info
             }
@@ -87,7 +140,7 @@ class DashboardClient {
             Timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ss.fffZ"
             Device = $DeviceData
         }
-        
+
         return $this.SendRequest("POST", $endpoint, $payload)
     }
 
@@ -111,7 +164,7 @@ class DashboardClient {
             Timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ss.fffZ"
             Software = $SoftwareData
         }
-        
+
         return $this.SendRequest("POST", $endpoint, $payload)
     }
 
@@ -140,7 +193,7 @@ class DashboardClient {
             Timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ss.fffZ"
             Context = $Context
         }
-        
+
         return $this.SendRequest("POST", $endpoint, $payload)
     }
 
@@ -189,7 +242,7 @@ class DashboardClient {
             Capabilities = $AgentInfo.Capabilities
             RegisteredAt = Get-Date -Format "yyyy-MM-ddTHH:mm:ss.fffZ"
         }
-        
+
         return $this.SendRequest("POST", $endpoint, $payload)
     }
 
@@ -202,7 +255,7 @@ class DashboardClient {
             Timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ss.fffZ"
             Status = "Active"
         }
-        
+
         return $this.SendRequest("POST", "/api/agents/$AgentId/heartbeat", $payload)
     }
 
@@ -223,7 +276,7 @@ class DashboardClient {
             Source = "SimRacingAgent"
             Entries = $LogEntries
         }
-        
+
         return $this.SendRequest("POST", $endpoint, $payload)
     }
 
@@ -252,19 +305,34 @@ class DashboardClient {
 
 # Module functions
 function Initialize-DashboardClient {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param([string]$BaseUrl = "http://localhost:5000")
-    
-    if (-not $Global:DashboardClient -or $Global:DashboardClient.BaseUrl -ne $BaseUrl) {
-        $Global:DashboardClient = [DashboardClient]::new($BaseUrl)
+
+    # module-scoped DashboardClient with safe fallback to global
+    if (-not $Script:DashboardClient) {
+        $g = Get-Variable -Name DashboardClient -Scope Global -ErrorAction SilentlyContinue
+        if ($g) { $Script:DashboardClient = $g.Value } else { $Script:DashboardClient = $null }
     }
-    
-    return $Global:DashboardClient.IsConnected
+
+    if (-not $PSCmdlet.ShouldProcess('DashboardClient','Initialize')) { return $false }
+
+    if (-not $Script:DashboardClient -or $Script:DashboardClient.BaseUrl -ne $BaseUrl) {
+        $Script:DashboardClient = [DashboardClient]::new($BaseUrl)
+    }
+
+    # Mirror into global scope for backward compatibility with older modules (best-effort)
+    try {
+        if (-not (Get-Variable -Name DashboardClient -Scope Global -ErrorAction SilentlyContinue)) { Set-Variable -Name DashboardClient -Value $Script:DashboardClient -Scope Global -ErrorAction SilentlyContinue }
+    }
+    catch {
+        Write-AgentLog "Failed to mirror DashboardClient to global scope: $($_.Exception.Message)" -Level Debug
+    }
+
+    return $Script:DashboardClient.IsConnected
 }
 
 function Test-DashboardConnection {
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.TestConnection()
-    }
+    if ($Script:DashboardClient) { return $Script:DashboardClient.TestConnection() }
     return $false
 }
 
@@ -273,10 +341,8 @@ function Send-DeviceEvent {
         [string]$EventType,
         [hashtable]$DeviceData
     )
-    
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.SendDeviceEvent($EventType, $DeviceData)
-    }
+
+    if ($Script:DashboardClient) { return $Script:DashboardClient.SendDeviceEvent($EventType, $DeviceData) }
     return @{ Success = $false; Error = "Dashboard client not initialized" }
 }
 
@@ -285,64 +351,53 @@ function Send-SoftwareEvent {
         [string]$EventType,
         [hashtable]$SoftwareData
     )
-    
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.SendSoftwareEvent($EventType, $SoftwareData)
-    }
+
+    if ($Script:DashboardClient) { return $Script:DashboardClient.SendSoftwareEvent($EventType, $SoftwareData) }
     return @{ Success = $false; Error = "Dashboard client not initialized" }
 }
 
 function Send-HealthMetrics {
     param([hashtable]$Metrics)
-    
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.SendHealthMetrics($Metrics)
-    }
+
+    if ($Script:DashboardClient) { return $Script:DashboardClient.SendHealthMetrics($Metrics) }
     return @{ Success = $false; Error = "Dashboard client not initialized" }
 }
 
 function Register-Agent {
     param([hashtable]$AgentInfo)
-    
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.RegisterAgent($AgentInfo)
-    }
+
+    if ($Script:DashboardClient) { return $Script:DashboardClient.RegisterAgent($AgentInfo) }
     return @{ Success = $false; Error = "Dashboard client not initialized" }
 }
 
 function Send-AgentHeartbeat {
     param([string]$AgentId)
-    
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.SendAgentHeartbeat($AgentId)
-    }
+
+    if ($Script:DashboardClient) { return $Script:DashboardClient.SendAgentHeartbeat($AgentId) }
     return @{ Success = $false; Error = "Dashboard client not initialized" }
 }
 
 function Get-DashboardConfiguration {
     param([string]$Section = "")
-    
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.GetConfiguration($Section)
-    }
+
+    if ($Script:DashboardClient) { return $Script:DashboardClient.GetConfiguration($Section) }
     return @{ Success = $false; Error = "Dashboard client not initialized" }
 }
 
 function Send-LogsToDashboard {
     param([array]$LogEntries)
-    
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.SendLogs($LogEntries)
-    }
+
+    if ($Script:DashboardClient) { return $Script:DashboardClient.SendLogs($LogEntries) }
     return @{ Success = $false; Error = "Dashboard client not initialized" }
 }
 
 function Get-DashboardClientStatus {
-    if ($Global:DashboardClient) {
-        return $Global:DashboardClient.GetStatus()
-    }
+    if ($Script:DashboardClient) { return $Script:DashboardClient.GetStatus() }
     return @{ IsConnected = $false; BaseUrl = ""; Error = "Not initialized" }
 }
 
 # Export module members
 Export-ModuleMember -Function *
+
+
+

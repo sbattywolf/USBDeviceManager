@@ -1,11 +1,11 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # Agent regression tests - minimal, robust heartbeat-focused suite
 
 Import-Module "$PSScriptRoot\..\..\shared\TestFramework.psm1" -Force
 
 $AgentPath = Join-Path -Path $PSScriptRoot -ChildPath "..\..\..\agent"
 
-function Safe-ImportModule([string]$Path) {
+function Import-ModuleIfExists([string]$Path) {
     if (Test-Path $Path) {
         try { Import-Module $Path -Force } catch { Write-Warning ("Failed to import module " + $Path + ": " + $_.Exception.Message) }
     } else {
@@ -14,7 +14,7 @@ function Safe-ImportModule([string]$Path) {
 }
 
 # Try to import the dashboard client if available; otherwise tests will use local stubs/mocks
-Safe-ImportModule (Join-Path $AgentPath 'Services\DashboardClient.psm1')
+Import-ModuleIfExists (Join-Path $AgentPath 'Services\DashboardClient.psm1')
 
 function Test-AgentHeartbeatRegression {
     [CmdletBinding()]
@@ -50,14 +50,14 @@ function Test-AgentHeartbeatRegression {
 
             # Robust capture for Invoke-RestMethod calls regardless of splatting/positional args
             New-Mock -CommandName 'Invoke-RestMethod' -MockWith {
-                param($args)
+                param($inArgs)
                 $body = $null
                 if ($PSBoundParameters.ContainsKey('Body')) {
                     $body = $PSBoundParameters['Body']
-                } elseif ($args -and $args[0] -is [hashtable] -and $args[0].ContainsKey('Body')) {
-                    $body = $args[0]['Body']
-                } elseif ($args -and $args[0] -is [string]) {
-                    $body = $args[0]
+                } elseif ($inArgs -and $inArgs[0] -is [hashtable] -and $inArgs[0].ContainsKey('Body')) {
+                    $body = $inArgs[0]['Body']
+                } elseif ($inArgs -and $inArgs[0] -is [string]) {
+                    $body = $inArgs[0]
                 }
 
                 try {
@@ -113,4 +113,10 @@ function Invoke-AgentRegressionTests {
     return @{ Success = $overallSuccess; Results = $results; Summary = $summary }
 }
 
-try { Export-ModuleMember -Function @('Test-AgentHeartbeatRegression','Invoke-AgentRegressionTests') } catch { }
+if ($null -ne $PSModuleInfo) {
+    Export-ModuleMember -Function @('Test-AgentHeartbeatRegression','Invoke-AgentRegressionTests')
+}
+
+
+
+
