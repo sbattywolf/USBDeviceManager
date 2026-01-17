@@ -1,4 +1,4 @@
-# Simple PowerShell HTTP server for testing SimRacing Agent dashboard connection
+﻿# Simple PowerShell HTTP server for testing SimRacing Agent dashboard connection
 param(
     [int]$Port = 5000
 )
@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = "Stop"
 $startTime = Get-Date
 
-Write-Host "Starting SimRacing Dashboard Test Server on port $Port..." -ForegroundColor Green
+Write-Output "Starting SimRacing Dashboard Test Server on port $Port..."
 
 # Create HTTP listener
 $listener = New-Object System.Net.HttpListener
@@ -14,25 +14,25 @@ $listener.Prefixes.Add("http://localhost:$Port/")
 
 try {
     $listener.Start()
-    Write-Host "Test Dashboard Server running at: http://localhost:$Port" -ForegroundColor Yellow
-    Write-Host "Ready to receive agent connections..." -ForegroundColor Cyan
-    Write-Host "Press Ctrl+C to stop server" -ForegroundColor Gray
-    
+    Write-Output "Test Dashboard Server running at: http://localhost:$Port"
+    Write-Output "Ready to receive agent connections..."
+    Write-Output "Press Ctrl+C to stop server"
+
     while ($listener.IsListening) {
         try {
             $context = $listener.GetContext()
             $request = $context.Request
             $response = $context.Response
-            
+
             $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-            Write-Host "[$timestamp] $($request.HttpMethod) $($request.Url.AbsolutePath)" -ForegroundColor White
-            
+            Write-Output "[$timestamp] $($request.HttpMethod) $($request.Url.AbsolutePath)"
+
             $body = ""
             if ($request.HasEntityBody) {
                 $reader = New-Object System.IO.StreamReader($request.InputStream)
                 $body = $reader.ReadToEnd()
                 $reader.Close()
-                if ($body) { Write-Host "  Body: $body" -ForegroundColor Gray }
+                if ($body) { Write-Output "  Body: $body" }
             }
 
             $response.Headers.Add("Access-Control-Allow-Origin", "*")
@@ -88,6 +88,10 @@ catch {
     Write-Error "Failed to start server: $($_.Exception.Message)"
 }
 finally {
-    if ($listener.IsListening) { $listener.Stop(); Write-Host "Dashboard test server stopped." -ForegroundColor Red }
+    if ($listener.IsListening) { $listener.Stop(); Write-Output "Dashboard test server stopped." }
     $listener.Dispose()
 }
+
+
+
+

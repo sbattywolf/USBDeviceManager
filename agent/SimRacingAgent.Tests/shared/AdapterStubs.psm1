@@ -1,4 +1,4 @@
-# Adapter stubs to provide functions expected by legacy tests
+﻿# Adapter stubs to provide functions expected by legacy tests
 
 function ConvertTo-HashtableRecursive {
     param($obj)
@@ -114,7 +114,7 @@ function Write-AgentLog {
     if ($LogPath) {
         if ($Component) { $Source = $Component }
         $formatted = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [$Level] [$Source] $Message"
-        Write-Host $formatted
+        Write-Output $formatted
         try {
             $dir = Split-Path $LogPath -Parent
             if (-not (Test-Path $dir)) { New-Item -Path $dir -ItemType Directory -Force | Out-Null }
@@ -131,7 +131,7 @@ function Write-AgentLog {
 
     if ($Component) { $Source = $Component }
     $formatted = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] [$Level] [$Source] $Message"
-    Write-Host $formatted
+    Write-Output $formatted
     try {
         $target = if ($LogPath) { $LogPath } else { Join-Path $env:TEMP 'SimRacingAgent-tests.log' }
         $dir = Split-Path $target -Parent
@@ -207,3 +207,7 @@ function Get-AgentStatus {
 }
 
 Export-ModuleMember -Function Get-DefaultConfiguration, Test-AgentRunning, Set-AgentLock, Clear-AgentLock, Write-AgentLog, Test-Configuration, Save-Configuration, Load-Configuration, Export-Configuration, Get-AgentStatus
+
+
+
+

@@ -1,4 +1,4 @@
-# SimRacing Agent Automated Integration Tests
+﻿# SimRacing Agent Automated Integration Tests
 # Tests for health alert suppression and interactive mode functionality
 
 param(
@@ -35,7 +35,7 @@ function Write-TestLog {
         "Error" { "Red" }
     }
     $line = "[$timestamp] [$Level] $Message"
-    Write-Host $line -ForegroundColor $color
+    Write-Output $line
     try { Add-Content -Path $Global:TestLogFile -Value $line -Encoding utf8 } catch { }
 }
 
@@ -102,16 +102,16 @@ function Start-TestProcess {
 
 function Test-HealthAlertSuppression {
     Write-TestLog "Testing health alert suppression..." "Info"
-    
+
     # Start dashboard server
     $dashboardProcess = Start-TestProcess -FilePath $TestConfig.DashboardPath -Arguments "-Port $($TestConfig.Port)" -TestName "Dashboard Server"
-    
+
     try {
         Start-Sleep -Seconds 3 # Allow dashboard to start
-        
+
         # Start agent
         $agentProcess = Start-TestProcess -FilePath $TestConfig.AgentPath -Arguments "-LogLevel Info" -TestName "SimRacing Agent"
-        
+
         try {
             # Monitor agent output for health alerts
             $alertsFound = $false
@@ -140,7 +140,7 @@ function Test-HealthAlertSuppression {
                 }
                 Start-Sleep -Seconds 1
             }
-            
+
             if (-not $alertsFound) {
                 Write-TestLog "✅ No health alerts found - suppression working correctly" "Success"
                 return $true
@@ -174,13 +174,13 @@ function Test-HealthAlertSuppression {
 
 function Test-InteractiveMode {
     Write-TestLog "Testing interactive mode functionality..." "Info"
-    
+
     # Start dashboard server
     $dashboardProcess = Start-TestProcess -FilePath $TestConfig.DashboardPath -Arguments "-Port $($TestConfig.Port)" -TestName "Dashboard Server"
-    
+
     try {
         Start-Sleep -Seconds 3
-        
+
         # Start agent with explicit output redirection to files so we can reliably capture logs
         $workspaceRoot = (Resolve-Path -Path (Join-Path $PSScriptRoot '..\..\..')).Path
         $fullAgentPath = (Resolve-Path -Path (Join-Path $workspaceRoot $TestConfig.AgentPath)).Path
@@ -239,22 +239,22 @@ function Test-InteractiveMode {
 
 function Test-AgentStartupClean {
     Write-TestLog "Testing agent startup for clean execution..." "Info"
-    
+
     # Start dashboard server
     $dashboardProcess = Start-TestProcess -FilePath $TestConfig.DashboardPath -Arguments "-Port $($TestConfig.Port)" -TestName "Dashboard Server"
-    
+
     try {
         Start-Sleep -Seconds 3
-        
+
         # Start agent
         $agentProcess = Start-TestProcess -FilePath $TestConfig.AgentPath -Arguments "-LogLevel Info" -TestName "SimRacing Agent"
-        
+
         try {
             # Monitor for errors during startup
             $errorsFound = $false
             $startupOutput = ""
             $startTime = Get-Date
-            
+
             while ((Get-Date) -lt $startTime.AddSeconds(15)) { # 15 second startup window
                 if (-not $agentProcess.Process.HasExited) {
                     try {
@@ -274,16 +274,16 @@ function Test-AgentStartupClean {
                         # Continue monitoring
                     }
                 }
-                
+
                 # Check if agent reached interactive mode
                 if ($startupOutput -match "SimRacing Agent Interactive Mode") {
                     Write-TestLog "✅ Agent reached interactive mode successfully" "Success"
                     break
                 }
-                
+
                 Start-Sleep -Seconds 1
             }
-            
+
             if (-not $errorsFound) {
                 Write-TestLog "✅ Clean startup test passed" "Success"
                 return $true
@@ -317,13 +317,13 @@ function Test-AgentStartupClean {
 
 function Test-DashboardConnectivity {
     Write-TestLog "Testing agent-dashboard connectivity..." "Info"
-    
+
     # Start dashboard server
     $dashboardProcess = Start-TestProcess -FilePath $TestConfig.DashboardPath -Arguments "-Port $($TestConfig.Port)" -TestName "Dashboard Server"
-    
+
     try {
         Start-Sleep -Seconds 3
-        
+
         # Test direct connection
         try {
             $uri = "http://localhost:$($TestConfig.Port)/api/health"
@@ -400,8 +400,7 @@ $totalTests = $testResults.Count
 
 foreach ($test in $testResults.GetEnumerator()) {
     $status = if ($test.Value) { "PASS" } else { "FAIL" }
-    $color = if ($test.Value) { "Green" } else { "Red" }
-    Write-Host "  $($test.Key): $status" -ForegroundColor $color
+    Write-Output "  $($test.Key): $status"
     if ($test.Value) { $passedTests++ }
 }
 
@@ -415,3 +414,6 @@ if ($passedTests -eq $totalTests) {
     Write-TestLog "❌ Some tests failed. Check the output above for details." "Error"
     exit 1
 }
+
+
+

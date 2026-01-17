@@ -1,34 +1,79 @@
-# Test wrapper for USB monitor expected by tests
+﻿# Test wrapper for USB monitor expected by tests
 Import-Module (Join-Path $PSScriptRoot "..\..\SimRacingAgent\Modules\DeviceMonitor.psm1") -ErrorAction SilentlyContinue
 
+# Test helpers: allow tests to set module-scoped mock containers
+function Set-USBMonitorMocks {
+    param(
+        [hashtable]$Functions = @{},
+        [hashtable]$Calls = @{},
+        [hashtable]$Orders = @{},
+        [switch]$MirrorToGlobal
+    )
+    $Script:MockFunctions = $Functions
+    $Script:MockCalls = $Calls
+    $Script:MockOrders = $Orders
+    if ($MirrorToGlobal) {
+        Set-Variable -Name MockFunctions -Value $Script:MockFunctions -Scope Global -ErrorAction SilentlyContinue
+        Set-Variable -Name MockCalls -Value $Script:MockCalls -Scope Global -ErrorAction SilentlyContinue
+        Set-Variable -Name MockOrders -Value $Script:MockOrders -Scope Global -ErrorAction SilentlyContinue
+    }
+}
+
+# Initialize from global if present (back-compat)
+if (-not $Script:MockFunctions) {
+    $g = Get-Variable -Name MockFunctions -Scope Global -ErrorAction SilentlyContinue
+    if ($g) { $Script:MockFunctions = $g.Value } else { $Script:MockFunctions = @{} }
+}
+if (-not $Script:MockCalls) {
+    if (Get-Variable -Name MockCalls -Scope Global -ErrorAction SilentlyContinue) { $Script:MockCalls = (Get-Variable -Name MockCalls -Scope Global -ValueOnly) } else { $Script:MockCalls = @{} }
+}
+if (-not $Script:MockOrders) {
+    if (Get-Variable -Name MockOrders -Scope Global -ErrorAction SilentlyContinue) { $Script:MockOrders = (Get-Variable -Name MockOrders -Scope Global -ValueOnly) } else { $Script:MockOrders = @{} }
+}
 function Get-USBDevices {
     try {
         # Debug: record current mock registration state
         try {
                 $keys = $null
-                if ($Global:MockFunctions) { $keys = ($Global:MockFunctions.Keys -join ',') } else { $keys = '<none>' }
+                $gKeys = Get-Variable -Name MockFunctions -Scope Global -ErrorAction SilentlyContinue
+                $keys = if ($Script:MockFunctions -and $Script:MockFunctions.Count) { ($Script:MockFunctions.Keys -join ',') } elseif ($gKeys) { ($gKeys.Value.Keys -join ',') } else { '<none>' }
                 $orders = $null
-                if ($Global:MockOrders) { $orders = ($Global:MockOrders.GetEnumerator() | ForEach-Object { "${($_.Key)}=${($_.Value)}" } -join ',') } else { $orders = '<none>' }
+                $gOrders = Get-Variable -Name MockOrders -Scope Global -ErrorAction SilentlyContinue
+                if ($Script:MockOrders -and $Script:MockOrders.Count) { $orders = ($Script:MockOrders.GetEnumerator() | ForEach-Object { "${($_.Key)}=${($_.Value)}" } -join ',') }
+                elseif ($gOrders) { $orders = (($gOrders.Value).GetEnumerator() | ForEach-Object { "${($_.Key)}=${($_.Value)}" } -join ',') } else { $orders = '<none>' }
                 $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
                 if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
                 $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
                 Add-Content -Path $logPath -Value ("MockKeys=$keys | MockOrders=$orders") -ErrorAction SilentlyContinue
-            } catch {}
+            } catch {
+                $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
+                if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
+                $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
+                Add-Content -Path $logPath -Value ("Debug log write failed: $($_.Exception.Message)") -ErrorAction SilentlyContinue
+            }
         # Mock-driven behavior: if test mocks exist, prefer them.
-        $hasGetUsbMock = $Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Get-USBDevices')
-        $hasWmiMock = $Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Get-WmiObject')
+        $gMockFunctions = Get-Variable -Name MockFunctions -Scope Global -ErrorAction SilentlyContinue
+        $gMockCalls = Get-Variable -Name MockCalls -Scope Global -ErrorAction SilentlyContinue
+        $gMockOrders = Get-Variable -Name MockOrders -Scope Global -ErrorAction SilentlyContinue
+
+        $mockFunctions = if ($Script:MockFunctions -and $Script:MockFunctions.Count) { $Script:MockFunctions } elseif ($gMockFunctions) { $gMockFunctions.Value } else { $null }
+        $mockCalls = if ($Script:MockCalls -and $Script:MockCalls.Count) { $Script:MockCalls } elseif ($gMockCalls) { $gMockCalls.Value } else { @{} }
+        $mockOrders = if ($Script:MockOrders -and $Script:MockOrders.Count) { $Script:MockOrders } elseif ($gMockOrders) { $gMockOrders.Value } else { @{} }
+
+        $hasGetUsbMock = $mockFunctions -and $mockFunctions.ContainsKey('Get-USBDevices')
+        $hasWmiMock = $mockFunctions -and $mockFunctions.ContainsKey('Get-WmiObject')
 
         if ($hasGetUsbMock -or $hasWmiMock) {
             $orderGet = 0; $orderWmi = 0
-            if ($Global:MockOrders.ContainsKey('Get-USBDevices')) { $orderGet = $Global:MockOrders['Get-USBDevices'] -as [int] }
-            if ($Global:MockOrders.ContainsKey('Get-WmiObject')) { $orderWmi = $Global:MockOrders['Get-WmiObject'] -as [int] }
+            if ($mockOrders.ContainsKey('Get-USBDevices')) { $orderGet = $mockOrders['Get-USBDevices'] -as [int] }
+            if ($mockOrders.ContainsKey('Get-WmiObject')) { $orderWmi = $mockOrders['Get-WmiObject'] -as [int] }
 
             # Prefer WMI mock when present (tests often mock WMI directly for enumeration/failure)
             if ($hasWmiMock) {
-                if (-not $Global:MockCalls.ContainsKey('Get-WmiObject')) { $Global:MockCalls['Get-WmiObject'] = 0 }
-                $Global:MockCalls['Get-WmiObject'] = ($Global:MockCalls['Get-WmiObject'] -as [int]) + 1
+                if (-not $mockCalls.ContainsKey('Get-WmiObject')) { $mockCalls['Get-WmiObject'] = 0 }
+                $mockCalls['Get-WmiObject'] = ($mockCalls['Get-WmiObject'] -as [int]) + 1
                 try {
-                    $raw = & $Global:MockFunctions['Get-WmiObject'].GetNewClosure()
+                    $raw = & $mockFunctions['Get-WmiObject'].GetNewClosure()
                 }
                 catch {
                     $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
@@ -36,12 +81,14 @@ function Get-USBDevices {
                     $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
                     Add-Content -Path $logPath -Value ("Get-WmiObject mock threw: $($_.Exception.Message)") -ErrorAction SilentlyContinue
                     try {
-                        if ($Global:MockFunctions.ContainsKey('Get-USBDevices')) {
-                            $null = $Global:MockFunctions.Remove('Get-USBDevices')
+                        if ($mockFunctions.ContainsKey('Get-USBDevices')) {
+                            $null = $mockFunctions.Remove('Get-USBDevices')
                         }
-                        if ($Global:MockOrders.ContainsKey('Get-USBDevices')) { $null = $Global:MockOrders.Remove('Get-USBDevices') }
-                        if ($Global:MockCalls.ContainsKey('Get-USBDevices')) { $null = $Global:MockCalls.Remove('Get-USBDevices') }
-                    } catch {}
+                        if ($mockOrders.ContainsKey('Get-USBDevices')) { $null = $mockOrders.Remove('Get-USBDevices') }
+                        if ($mockCalls.ContainsKey('Get-USBDevices')) { $null = $mockCalls.Remove('Get-USBDevices') }
+                    } catch {
+                        Write-AgentLog "Error cleaning up mocks after Get-WmiObject mock failure: $($_.Exception.Message)" -Level Debug
+                    }
                     return @()
                 }
 
@@ -64,24 +111,23 @@ function Get-USBDevices {
             }
 
             if ($hasGetUsbMock) {
-                if (-not $Global:MockCalls.ContainsKey('Get-USBDevices')) { $Global:MockCalls['Get-USBDevices'] = 0 }
-                $Global:MockCalls['Get-USBDevices'] = ($Global:MockCalls['Get-USBDevices'] -as [int]) + 1
-                $res = & $Global:MockFunctions['Get-USBDevices'].GetNewClosure()
+                if (-not $mockCalls.ContainsKey('Get-USBDevices')) { $mockCalls['Get-USBDevices'] = 0 }
+                $mockCalls['Get-USBDevices'] = ($mockCalls['Get-USBDevices'] -as [int]) + 1
+                $res = & $mockFunctions['Get-USBDevices'].GetNewClosure()
                 if ($res -is [System.Array] -or $res -is [System.Collections.ArrayList]) { return $res }
                 return @($res)
             }
         }
 
-        # No mocks: prefer legacy WMI enumeration when available
-        if (Get-Command Get-WmiObject -ErrorAction SilentlyContinue) {
-            $raw = @()
-            try {
-                $raw = Get-WmiObject -Class Win32_PnPEntity -ErrorAction Stop
-            }
-            catch {
-                return @()
-            }
-
+        # No mocks: prefer CIM-based enumeration; avoid using legacy Get-WmiObject
+        if (Get-Command Get-CimInstance -ErrorAction SilentlyContinue) {
+            $raw = Get-CimInstance -ClassName Win32_PnPEntity -ErrorAction SilentlyContinue
+            if (-not $raw) { return @() }
+        }
+        else {
+            # If CIM isn't available, return empty to avoid using deprecated WMI cmdlets
+            return @()
+        }
             $devices = @()
             foreach ($d in $raw) {
                 $isUsb = (($d.PNPClass -and ($d.PNPClass -match 'USB|HID')) -or ($d.DeviceID -and $d.DeviceID -like 'USB\\*') -or ($d.Description -and $d.Description -match 'USB'))
@@ -94,7 +140,6 @@ function Get-USBDevices {
                 }
             }
             return $devices
-        }
 
         if (Get-Command Get-ConnectedDevices -ErrorAction SilentlyContinue) {
             return Get-ConnectedDevices
@@ -118,6 +163,10 @@ function Get-USBDevices {
         return @()
     }
     catch {
+        $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
+        if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
+        $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
+        Add-Content -Path $logPath -Value ("Get-USBDevices failed: $($_.Exception.Message)") -ErrorAction SilentlyContinue
         return @()
     }
 }
@@ -137,18 +186,32 @@ function Initialize-USBMonitoring {
     try {
         # Query initial device state through the module function (will honor mocks)
         $null = Get-USBDevices
-    } catch {}
+    } catch {
+        $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
+        if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
+        $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
+        Add-Content -Path $logPath -Value ("Initial Get-USBDevices failed: $($_.Exception.Message)") -ErrorAction SilentlyContinue
+    }
 
     # If tests provide a mock for Register-ObjectEvent, avoid starting the real monitor and call the mock
-    if ($Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Register-ObjectEvent')) {
+    $gMockFunctions = Get-Variable -Name MockFunctions -Scope Global -ErrorAction SilentlyContinue
+    $mockFunctions = if ($Script:MockFunctions -and $Script:MockFunctions.Count) { $Script:MockFunctions } elseif ($gMockFunctions) { $gMockFunctions.Value } else { $null }
+    if ($mockFunctions -and $mockFunctions.ContainsKey('Register-ObjectEvent')) {
         try {
             if (Test-Path "function:\Global\Register-ObjectEvent") {
                 & (Get-Item "function:\Global\Register-ObjectEvent").ScriptBlock -InputObject $null -EventName 'Elapsed' -Action {} -MessageData $null
             }
-            else { & $Global:MockFunctions['Register-ObjectEvent'].GetNewClosure() -InputObject $null -EventName 'Elapsed' -Action {} -MessageData $null }
-        } catch {}
+            else { & $mockFunctions['Register-ObjectEvent'].GetNewClosure() -InputObject $null -EventName 'Elapsed' -Action {} -MessageData $null }
+        } catch {
+            $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'
+            if (-not (Test-Path $tmpRoot)) { New-Item -Path $tmpRoot -ItemType Directory -Force | Out-Null }
+            $logPath = Join-Path $tmpRoot '.tmp_usb_log.txt'
+            Add-Content -Path $logPath -Value ("Register-ObjectEvent mock failed: $($_.Exception.Message)") -ErrorAction SilentlyContinue
+        }
         return $true
     }
+
+    # (duplicate mock-check removed — handled above)
 
     if (Get-Command Start-DeviceMonitoring -ErrorAction SilentlyContinue) {
         Start-DeviceMonitoring -IntervalSeconds $PollingInterval
@@ -158,3 +221,7 @@ function Initialize-USBMonitoring {
 }
 
 Export-ModuleMember -Function *
+
+
+
+

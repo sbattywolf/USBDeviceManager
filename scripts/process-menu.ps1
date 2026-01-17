@@ -95,14 +95,14 @@ function Start-ServerDetached {
     Write-Host "Started server (detached); PID=$($proc.Id); logs -> server/USBDeviceManager/server.log"
     $exitLog = Join-Path -Path ([string]$cwd) -ChildPath 'server-exit-capture.log'
     Start-Job -Name "ServerExitWatcher_$($proc.Id)" -ScriptBlock {
-        param($pid,$log)
+        param($processId,$log)
         Try {
-            Wait-Process -Id $pid -ErrorAction Stop
+            Wait-Process -Id $processId -ErrorAction Stop
             $ts = (Get-Date).ToUniversalTime().ToString('o')
-            "$ts ProcessExited PID=$pid" | Out-File -FilePath $log -Append -Encoding UTF8
+            "$ts ProcessExited PID=$processId" | Out-File -FilePath $log -Append -Encoding UTF8
         } Catch {
             $ts = (Get-Date).ToUniversalTime().ToString('o')
-            "$ts Wait-Process failed for PID=$pid - $_" | Out-File -FilePath $log -Append -Encoding UTF8
+            "$ts Wait-Process failed for PID=$processId - $_" | Out-File -FilePath $log -Append -Encoding UTF8
         }
     } -ArgumentList $proc.Id,$exitLog | Out-Null
 }
@@ -117,14 +117,14 @@ function Start-AgentDetached {
     Write-Host "Started agent (detached); PID=$($proc.Id); logs -> agent/SimRacingAgent/agent-run.log"
     $exitLog = Join-Path -Path ([string]$cwd) -ChildPath 'agent-exit-capture.log'
     Start-Job -Name "AgentExitWatcher_$($proc.Id)" -ScriptBlock {
-        param($pid,$log)
+        param($processId,$log)
         Try {
-            Wait-Process -Id $pid -ErrorAction Stop
+            Wait-Process -Id $processId -ErrorAction Stop
             $ts = (Get-Date).ToUniversalTime().ToString('o')
-            "$ts ProcessExited PID=$pid" | Out-File -FilePath $log -Append -Encoding UTF8
+            "$ts ProcessExited PID=$processId" | Out-File -FilePath $log -Append -Encoding UTF8
         } Catch {
             $ts = (Get-Date).ToUniversalTime().ToString('o')
-            "$ts Wait-Process failed for PID=$pid - $_" | Out-File -FilePath $log -Append -Encoding UTF8
+            "$ts Wait-Process failed for PID=$processId - $_" | Out-File -FilePath $log -Append -Encoding UTF8
         }
     } -ArgumentList $proc.Id,$exitLog | Out-Null
 }
