@@ -28,12 +28,6 @@
 - **Coverage Gutters** (ryanluker.vscode-coverage-gutters) - Code coverage visualization
 
 ### **Development Productivity**
-- **Auto Rename Tag** (formulahendry.auto-rename-tag) - HTML/Razor tag management
-- **Bracket Pair Colorizer** - Visual bracket matching
-- **GitLens** (eamodio.gitlens) - Advanced Git capabilities
-- **TODO Highlight** (wayou.vscode-todo-highlight) - Track TODOs and FIXMEs
-
----
 
 ## 📋 **Complete TODO List & Project Status**
 

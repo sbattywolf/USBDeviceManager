@@ -29,7 +29,7 @@ A comprehensive monitoring and automation server for USB Device Manager with USB
 - HTTP API access
 - Intranet-only operation (no security)
 
-### **Future Extensions (TODO)**
+### **Future Extensions**
 - MQTT message broker integration
 - HomeAssistant plugin/addon
 - Android companion app

@@ -1,4 +1,4 @@
-# Automation Engine Module
+﻿# Automation Engine Module
 # Rule-based automation system for SimRacing environments
 
 using module ..\Utils\Logging.psm1
@@ -41,7 +41,7 @@ class AutomationRule {
                     return $false
                 }
             }
-            
+
             return $true
         }
         catch {
@@ -70,7 +70,7 @@ class AutomationRule {
                 "NotExists" { return $null -eq $actualValue }
                 default { return $false }
             }
-            
+
             # Explicit fallback return (should never reach here)
             return $false
         }
@@ -83,7 +83,7 @@ class AutomationRule {
     [object]GetContextValue([string]$property, [hashtable]$context) {
         $parts = $property.Split('.')
         $value = $context
-        
+
         foreach ($part in $parts) {
             if ($value -and $value.ContainsKey($part)) {
                 $value = $value[$part]
@@ -91,23 +91,23 @@ class AutomationRule {
                 return $null
             }
         }
-        
+
         return $value
     }
 
     [array]ExecuteActions([hashtable]$context) {
         $results = @()
-        
+
         try {
             foreach ($action in $this.Actions) {
                 $result = $this.ExecuteAction($action, $context)
                 $results += $result
             }
-            
+
             $this.LastExecuted = Get-Date
             $this.ExecutionCount++
             $this.Status = "Completed"
-            
+
             Write-AgentLog "Executed rule: $($this.Name) ($($this.Actions.Count) actions)" -Level Info
         }
         catch {
@@ -115,21 +115,21 @@ class AutomationRule {
             Write-AgentLog "Failed to execute rule $($this.Name): $($_.Exception.Message)" -Level Error
             throw
         }
-        
+
         return $results
     }
 
     [hashtable]ExecuteAction([hashtable]$action, [hashtable]$context) {
         $actionType = $action.Type
         $actionConfig = $action.Config
-        
+
         $result = @{
             Type = $actionType
             Success = $false
             Message = ""
             Timestamp = Get-Date
         }
-        
+
         try {
             switch ($actionType) {
                 "StartSoftware" {
@@ -140,7 +140,7 @@ class AutomationRule {
                         $result.Message = if ($success) { "Started $softwareName" } else { "Failed to start $softwareName" }
                     }
                 }
-                
+
                 "StopSoftware" {
                     $softwareName = $actionConfig.SoftwareName
                     if (Get-Command "Stop-Software" -ErrorAction SilentlyContinue) {
@@ -149,7 +149,7 @@ class AutomationRule {
                         $result.Message = if ($success) { "Stopped $softwareName" } else { "Failed to stop $softwareName" }
                     }
                 }
-                
+
                 "SendNotification" {
                     $message = $actionConfig.Message
                     $title = $actionConfig.Title
@@ -157,11 +157,11 @@ class AutomationRule {
                     $result.Success = $true
                     $result.Message = "Notification sent: $title - $message"
                 }
-                
+
                 "ExecuteScript" {
                     $scriptPath = $actionConfig.ScriptPath
                     $arguments = $actionConfig.Arguments
-                    
+
                     if (Test-Path $scriptPath) {
                         $output = & $scriptPath @arguments 2>&1
                         $result.Success = $LASTEXITCODE -eq 0
@@ -171,7 +171,7 @@ class AutomationRule {
                         $result.Message = "Script not found: $scriptPath"
                     }
                 }
-                
+
                 "Log" {
                     $message = $actionConfig.Message
                     $level = $actionConfig.Level
@@ -179,7 +179,7 @@ class AutomationRule {
                     $result.Success = $true
                     $result.Message = "Logged: $message"
                 }
-                
+
                 default {
                     $result.Message = "Unknown action type: $actionType"
                 }
@@ -189,7 +189,7 @@ class AutomationRule {
             $result.Success = $false
             $result.Message = "Action failed: $($_.Exception.Message)"
         }
-        
+
         return $result
     }
 }
@@ -212,14 +212,14 @@ class AutomationEngine {
             $rulesPath = Join-Path $PSScriptRoot "..\Utils\automation-rules.json"
             if (Test-Path $rulesPath) {
                 $rulesConfig = Get-Content $rulesPath | ConvertFrom-Json
-                
+
                 foreach ($ruleConfig in $rulesConfig.Rules) {
                     # Convert PSCustomObject to Hashtable
                     $ruleHashtable = $this.ConvertToHashtable($ruleConfig)
                     $rule = [AutomationRule]::new($ruleHashtable)
                     $this.Rules[$rule.Id] = $rule
                 }
-                
+
                 Write-AgentLog "Loaded $($this.Rules.Count) automation rules" -Level Info
             }
         }
@@ -227,7 +227,7 @@ class AutomationEngine {
             Write-AgentLog "Failed to load automation rules: $($_.Exception.Message)" -Level Error
         }
     }
-    
+
     [object]ConvertToHashtable([object]$InputObject) {
         if ($InputObject -is [PSCustomObject]) {
             $hashtable = @{}
@@ -252,11 +252,11 @@ class AutomationEngine {
 
         try {
             Write-AgentLog "Starting automation engine" -Level Info
-            
+
             # Setup schedule timer for time-based triggers
             $this.ScheduleTimer = New-Object System.Timers.Timer(60000) # Check every minute
             $this.ScheduleTimer.AutoReset = $true
-            
+
             Register-ObjectEvent -InputObject $this.ScheduleTimer -EventName Elapsed -Action {
                 try {
                     [AutomationEngine]$engine = $Event.MessageData
@@ -266,10 +266,10 @@ class AutomationEngine {
                     Write-AgentLog "Schedule processing error: $($_.Exception.Message)" -Level Error
                 }
             } -MessageData $this | Out-Null
-            
+
             $this.ScheduleTimer.Start()
             $this.IsRunning = $true
-            
+
             Write-AgentLog "Automation engine started successfully" -Level Info
         }
         catch {
@@ -288,7 +288,7 @@ class AutomationEngine {
                 $this.ScheduleTimer.Stop()
                 $this.ScheduleTimer.Dispose()
             }
-            
+
             $this.IsRunning = $false
             Write-AgentLog "Automation engine stopped" -Level Info
         }
@@ -299,14 +299,14 @@ class AutomationEngine {
 
     [void]ProcessTrigger([string]$triggerType, [hashtable]$context) {
         try {
-            $triggeredRules = $this.Rules.Values | Where-Object { 
-                $_.IsEnabled -and $_.TriggerType -eq $triggerType 
+            $triggeredRules = $this.Rules.Values | Where-Object {
+                $_.IsEnabled -and $_.TriggerType -eq $triggerType
             }
-            
+
             foreach ($rule in $triggeredRules) {
                 if ($rule.EvaluateConditions($context)) {
                     Write-AgentLog "Trigger matched rule: $($rule.Name)" -Level Info
-                    
+
                     try {
                         $rule.ExecuteActions($context)
                         Write-AgentLog "Rule executed successfully: $($rule.Name)" -Level Info
@@ -324,23 +324,23 @@ class AutomationEngine {
 
     [void]ProcessScheduledTriggers() {
         $now = Get-Date
-        
-        $scheduledRules = $this.Rules.Values | Where-Object { 
-            $_.IsEnabled -and $_.TriggerType -eq "Schedule" 
+
+        $scheduledRules = $this.Rules.Values | Where-Object {
+            $_.IsEnabled -and $_.TriggerType -eq "Schedule"
         }
-        
+
         foreach ($rule in $scheduledRules) {
             try {
                 $schedule = $rule.TriggerConfig.Schedule
                 if ($this.IsScheduleMatch($schedule, $now, $rule.LastExecuted)) {
                     Write-AgentLog "Schedule triggered rule: $($rule.Name)" -Level Info
-                    
+
                     $context = @{
                         TriggerType = "Schedule"
                         Timestamp = $now
                         Schedule = $schedule
                     }
-                    
+
                     $rule.ExecuteActions($context)
                 }
             }
@@ -353,30 +353,30 @@ class AutomationEngine {
     [bool]IsScheduleMatch([hashtable]$schedule, [datetime]$now, [datetime]$lastExecuted) {
         $type = $schedule.Type
         $interval = $schedule.Interval
-        
+
         switch ($type) {
             "Interval" {
                 $intervalMinutes = [int]$interval
                 return ($now - $lastExecuted).TotalMinutes -ge $intervalMinutes
             }
-            
+
             "Daily" {
                 $targetTime = [datetime]$schedule.Time
                 $todayTarget = Get-Date -Hour $targetTime.Hour -Minute $targetTime.Minute -Second 0
-                
+
                 return $now -ge $todayTarget -and $lastExecuted.Date -lt $now.Date
             }
-            
+
             "Weekly" {
                 $dayOfWeek = $schedule.DayOfWeek
                 $targetTime = [datetime]$schedule.Time
-                
-                return $now.DayOfWeek -eq $dayOfWeek -and 
-                       $now.Hour -eq $targetTime.Hour -and 
+
+                return $now.DayOfWeek -eq $dayOfWeek -and
+                       $now.Hour -eq $targetTime.Hour -and
                        $now.Minute -eq $targetTime.Minute -and
                        ($now - $lastExecuted).TotalDays -ge 7
             }
-            
+
             default {
                 return $false
             }
@@ -387,19 +387,19 @@ class AutomationEngine {
     [void]ExecuteRule([string]$ruleId) {
         if ($this.Rules.ContainsKey($ruleId)) {
             $rule = $this.Rules[$ruleId]
-            
+
             if (-not $rule.IsEnabled) {
                 Write-AgentLog "Rule is disabled: $($rule.Name)" -Level Warning
                 return
             }
-            
+
             try {
                 $context = @{
                     TriggerType = "Manual"
                     Timestamp = Get-Date
                     RuleId = $ruleId
                 }
-                
+
                 $rule.ExecuteActions($context)
                 Write-AgentLog "Manually executed rule: $($rule.Name)" -Level Info
             }
@@ -457,18 +457,32 @@ class AutomationEngine {
 }
 
 # Module functions
+## Use script-scoped AutomationEngine instance with fallback to global for backward compatibility
+if (-not $Script:AutomationEngine) { if ($Global:AutomationEngine) { $Script:AutomationEngine = $Global:AutomationEngine } else { $Script:AutomationEngine = $null } }
+
 function Start-AutomationEngine {
-    if (-not $Global:AutomationEngine) {
-        $Global:AutomationEngine = [AutomationEngine]::new()
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+
+    if ($Script:AutomationEngine -and $Script:AutomationEngine.IsRunning) {
+        Write-AgentLog "Automation engine is already running" -Level Warning
+        return
     }
-    
-    $Global:AutomationEngine.Start()
+
+    if (-not $PSCmdlet.ShouldProcess('AutomationEngine','Start')) { return $false }
+
+    if (-not $Script:AutomationEngine) { $Script:AutomationEngine = [AutomationEngine]::new() }
+    return $Script:AutomationEngine.Start()
 }
 
 function Stop-AutomationEngine {
-    if ($Global:AutomationEngine) {
-        $Global:AutomationEngine.Stop()
-    }
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+
+    if (-not $Script:AutomationEngine) { return }
+    if (-not $PSCmdlet.ShouldProcess('AutomationEngine','Stop')) { return }
+
+    $Script:AutomationEngine.Stop()
 }
 
 function Invoke-AutomationTrigger {
@@ -476,39 +490,39 @@ function Invoke-AutomationTrigger {
         [string]$TriggerType,
         [hashtable]$Context
     )
-    
-    if ($Global:AutomationEngine -and $Global:AutomationEngine.IsRunning) {
-        $Global:AutomationEngine.ProcessTrigger($TriggerType, $Context)
+
+    if ($Script:AutomationEngine -and $Script:AutomationEngine.IsRunning) {
+        $Script:AutomationEngine.ProcessTrigger($TriggerType, $Context)
     }
 }
 
 function Invoke-AutomationRule {
     param([string]$RuleId)
-    
-    if ($Global:AutomationEngine) {
-        $Global:AutomationEngine.ExecuteRule($RuleId)
+
+    if ($Script:AutomationEngine) {
+        $Script:AutomationEngine.ExecuteRule($RuleId)
     }
 }
 
 function Get-AutomationRules {
-    if ($Global:AutomationEngine) {
-        return $Global:AutomationEngine.GetRules()
+    if ($Script:AutomationEngine) {
+        return $Script:AutomationEngine.GetRules()
     }
     return @()
 }
 
 function Get-AutomationRule {
     param([string]$RuleId)
-    
-    if ($Global:AutomationEngine) {
-        return $Global:AutomationEngine.GetRuleDetails($RuleId)
+
+    if ($Script:AutomationEngine) {
+        return $Script:AutomationEngine.GetRuleDetails($RuleId)
     }
     return @{}
 }
 
 function Get-AutomationStatus {
-    if ($Global:AutomationEngine) {
-        return $Global:AutomationEngine.GetStatus()
+    if ($Script:AutomationEngine) {
+        return $Script:AutomationEngine.GetStatus()
     }
     return @{ IsRunning = $false }
 }
@@ -519,14 +533,14 @@ function Invoke-DeviceAutomation {
         [string]$EventType,
         [hashtable]$Device
     )
-    
+
     $context = @{
         TriggerType = "Device"
         EventType = $EventType
         Device = $Device
         Timestamp = Get-Date
     }
-    
+
     Invoke-AutomationTrigger -TriggerType "Device" -Context $context
 }
 
@@ -535,16 +549,19 @@ function Invoke-SoftwareAutomation {
         [string]$EventType,
         [hashtable]$Software
     )
-    
+
     $context = @{
         TriggerType = "Software"
         EventType = $EventType
         Software = $Software
         Timestamp = Get-Date
     }
-    
+
     Invoke-AutomationTrigger -TriggerType "Software" -Context $context
 }
 
 # Export module members
 Export-ModuleMember -Function *
+
+
+

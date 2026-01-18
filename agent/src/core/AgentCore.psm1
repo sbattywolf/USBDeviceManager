@@ -1,4 +1,4 @@
-# Wrapper module to import the real AgentEngine implementation
+﻿# Wrapper module to import the real AgentEngine implementation
 $real = Join-Path $PSScriptRoot "..\..\SimRacingAgent\Core\AgentEngine.psm1"
 if (Test-Path $real) {
     Import-Module $real -Force
@@ -7,3 +7,7 @@ if (Test-Path $real) {
 }
 
 Export-ModuleMember -Function * -ErrorAction SilentlyContinue
+
+
+
+

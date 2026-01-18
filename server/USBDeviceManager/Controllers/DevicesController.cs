@@ -1,3 +1,5 @@
+// Note: Actionable TODOs have been centralized in docs/TODOs-collected.md.
+// When adding new actionable items, add them to that file instead of leaving TODO comments.
 // <copyright file="DevicesController.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
@@ -149,6 +151,7 @@ public class DevicesController : ControllerBase
     /// <summary>
     /// Get current status of a USB device.
     /// </summary>
+    /// <param name="id">The id of the device.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/status")]
     public async Task<ActionResult<DeviceStatus>> GetDeviceStatus(int id)
