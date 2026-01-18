@@ -69,6 +69,16 @@ jobs:
             Write-Host 'No agent tests found; skipping.'
           }
 
+      - name: Run Master TestRunner (PowerShell, cross-platform)
+        shell: pwsh
+        run: |
+          if (Test-Path ./agent/SimRacingAgent.Tests/TestRunner.ps1) {
+            Write-Host 'Invoking master TestRunner (agent + server focused runners)...'
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./agent/SimRacingAgent.Tests/TestRunner.ps1
+          } else {
+            Write-Host 'No master TestRunner found; skipping.'
+          }
+
       - name: Upload agent test results (Windows only)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
@@ -77,3 +87,7 @@ jobs:
           path: |
             agent-pester-results.xml
             **/TestResults/*.trx
+            agent/SimRacingAgent.Tests/Integration/logs/**
+            server/USBDeviceManager.Tests/Integration/logs/**
+            agent/SimRacingAgent.Tests/Functional/logs/**
+            agent/SimRacingAgent.Tests/logs/**

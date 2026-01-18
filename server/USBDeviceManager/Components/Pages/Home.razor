@@ -7,6 +7,8 @@
 
 <PageTitle>USB Device Manager</PageTitle>
 
+@* Note: Actionable TODOs have been centralized in docs/TODOs-collected.md. *@
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -116,8 +118,8 @@
                                     </td>
                                     <td>@device.LastSeen.ToString("yyyy-MM-dd HH:mm")</td>
                                     <td>
-                                        <button class="btn btn-sm @(device.IsEnabled ? "btn-warning" : "btn-success")" 
-                                                @onclick="() => ToggleDevice(device.Id, !device.IsEnabled)">
+                                        <button class="btn btn-sm @(device.IsEnabled ? "btn-warning" : "btn-success")"
+                                            @onclick="() => ToggleDevice(device.Id, !device.IsEnabled)">
                                             @(device.IsEnabled ? "Disable" : "Enable")
                                         </button>
                                     </td>
@@ -132,7 +134,7 @@
                 <p class="text-muted">No devices found. Try scanning for devices.</p>
             }
         </div>
-
+            
         <!-- Software Management Tab -->
         <div class="tab-pane fade" id="software" role="tabpanel">
             <div class="d-flex justify-content-between align-items-center mb-3">
