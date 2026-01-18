@@ -62,7 +62,7 @@
                         },
                         "[PASS] AgentCore - Test-AgentRunning detects agent instances correctly",
                         "[PASS] AgentCore - Set-AgentLock creates lock file with correct data",
-                        "[2026-01-17 14:00:45] [Info] [Test] Test agent message",
+                        "[2026-01-18 12:06:58] [Info] [Test] Test agent message",
                         "[PASS] AgentCore - Write-AgentLog writes agent-specific logs",
                         "[PASS] AgentCore - Get-AgentStatus provides comprehensive agent information",
                         "[PASS] AgentCore - Clear-AgentLock removes lock file properly",
