@@ -10,18 +10,29 @@
     reporting, filtering, and failure handling capabilities.
 #>
 
-# Import shared test framework and modules
-Import-Module "$PSScriptRoot\shared\TestFramework.psm1" -Force
+# Import shared test framework and modules (guarded)
+$module = Join-Path $PSScriptRoot 'shared\TestFramework.psm1'
+if (Test-Path $module) { Import-Module $module -Force } else { Write-Warning "Missing module: $module" }
 
-# Import agent test modules
-Import-Module "$PSScriptRoot\agent\unit\AgentCoreTests.ps1" -Force
-Import-Module "$PSScriptRoot\agent\unit\AgentMonitoringTests.ps1" -Force
-Import-Module "$PSScriptRoot\agent\integration\AgentWorkflowTests.ps1" -Force
-Import-Module "$PSScriptRoot\agent\regression\AgentRegressionTests.ps1" -Force
+# Import agent test modules (paths normalized to current layout)
+$m = Join-Path $PSScriptRoot 'Unit\AgentCoreTests.ps1'
+if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent unit tests: $m" }
 
-# Import application test modules
-Import-Module "$PSScriptRoot\application\api\ApplicationAPITests.ps1" -Force
-Import-Module "$PSScriptRoot\application\integration\ApplicationIntegrationTests.ps1" -Force
+$m = Join-Path $PSScriptRoot 'Unit\AgentMonitoringTests.ps1'
+if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent monitoring tests: $m" }
+
+$m = Join-Path $PSScriptRoot 'Integration\AgentWorkflowTests.ps1'
+if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent integration tests: $m" }
+
+$m = Join-Path $PSScriptRoot 'Regression\AgentRegressionTests.ps1'
+if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent regression tests: $m" }
+
+# Import application test modules (if present)
+$m = Join-Path $PSScriptRoot 'application\api\ApplicationAPITests.ps1'
+if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing application API tests: $m" }
+
+$m = Join-Path $PSScriptRoot 'application\integration\ApplicationIntegrationTests.ps1'
+if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing application integration tests: $m" }
 
 # Helper: run external PowerShell script without blocking on streams
 function Invoke-ScriptWithCapture {

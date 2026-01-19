@@ -66,7 +66,7 @@ catch {
 }
 
 # Initialize logging with console output
-Set-AgentLogOutputs -Console $true -File $true -Dashboard $false
+Set-AgentLogOutput -Console $true -File $true -Dashboard $false
 Set-AgentLogLevel -Level $LogLevel
 
 Write-AgentInfo "Starting SimRacing Agent v$($Script:AgentInfo.Version)" -Source "Startup"
@@ -180,7 +180,7 @@ function Start-AgentServices {
 
         # Enable dashboard logging if connected
         if ($dashboardConnected) {
-            Set-AgentLogOutputs -Console $true -File $true -Dashboard $true
+            Set-AgentLogOutput -Console $true -File $true -Dashboard $true
         }
 
         Write-AgentInfo "All services started successfully" -Source "Services"

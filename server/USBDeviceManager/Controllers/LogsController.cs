@@ -3,6 +3,7 @@ namespace USBDeviceManager.Controllers
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
+    using System.Text.Json.Serialization;
     using USBDeviceManager.Data;
     using USBDeviceManager.Models;
 
@@ -37,31 +38,36 @@ namespace USBDeviceManager.Controllers
 
         public class LogPayload
         {
-            public string? deviceId { get; set; }
-            public string? eventType { get; set; }
-            public string? message { get; set; }
+            [JsonPropertyName("deviceId")]
+            public string? DeviceId { get; set; }
+
+            [JsonPropertyName("eventType")]
+            public string? EventType { get; set; }
+
+            [JsonPropertyName("message")]
+            public string? Message { get; set; }
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] LogPayload payload)
         {
-            if (payload == null || string.IsNullOrWhiteSpace(payload.eventType))
+            if (payload == null || string.IsNullOrWhiteSpace(payload.EventType))
             {
                 return BadRequest();
             }
 
             UsbDevice? device = null;
-            if (!string.IsNullOrWhiteSpace(payload.deviceId))
+            if (!string.IsNullOrWhiteSpace(payload.DeviceId))
             {
-                device = _ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == payload.deviceId);
+                device = _ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == payload.DeviceId);
             }
 
-            if (device == null && !string.IsNullOrWhiteSpace(payload.deviceId))
+            if (device == null && !string.IsNullOrWhiteSpace(payload.DeviceId))
             {
                 device = new UsbDevice
                 {
-                    DeviceId = payload.deviceId,
-                    Name = payload.deviceId,
+                    DeviceId = payload.DeviceId,
+                    Name = payload.DeviceId,
                 };
                 _ctx.UsbDevices.Add(device);
                 await _ctx.SaveChangesAsync();
@@ -71,9 +77,9 @@ namespace USBDeviceManager.Controllers
             {
                 DeviceId = device != null ? device.Id : 0,
                 Device = device!,
-                IsConnected = string.Equals(payload.eventType, "CONNECTED", System.StringComparison.OrdinalIgnoreCase),
-                Status = payload.eventType ?? "",
-                ErrorMessage = payload.message,
+                IsConnected = string.Equals(payload.EventType, "CONNECTED", System.StringComparison.OrdinalIgnoreCase),
+                Status = payload.EventType ?? string.Empty,
+                ErrorMessage = payload.Message,
             };
 
             _ctx.DeviceStatuses.Add(status);

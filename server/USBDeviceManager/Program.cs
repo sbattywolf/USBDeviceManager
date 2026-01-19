@@ -129,6 +129,14 @@ app.MapRazorComponents<App>()
 // Map SignalR hubs
 app.MapHub<MonitoringHub>("/hubs/monitoring");
 
+// Serve a tiny embedded favicon to avoid 404s from browsers
+app.MapGet("/favicon.png", () =>
+{
+    // 1x1 transparent PNG
+    var png = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=");
+    return Results.File(png, "image/png");
+});
+
 // Initialize database
 using (IServiceScope scope = app.Services.CreateScope())
 {
