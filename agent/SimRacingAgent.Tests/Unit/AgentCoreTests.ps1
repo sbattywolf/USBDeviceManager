@@ -261,13 +261,15 @@ function Invoke-AgentCoreTests {
     }
 }
 
-# Export functions when run as module
-if ($MyInvocation.PSScriptRoot) {
+# Attempt to export functions when run as a module; ignore when dot-sourced
+try {
     Export-ModuleMember -Function @(
         'Test-AgentConfigManager',
         'Test-AgentCore',
         'Invoke-AgentCoreTests'
     )
+} catch {
+    # Export-ModuleMember throws when executed in script scope (dot-sourced); ignore
 }
 
 

@@ -42,9 +42,14 @@ function Write-TestLog {
 function Resolve-WorkspacePath {
     param([string]$RelativePath)
     try {
-        $workspaceRoot = (Resolve-Path -Path (Join-Path $PSScriptRoot '..\..\..'))
-        $candidate = Join-Path $workspaceRoot.Path $RelativePath
-        if (Test-Path $candidate) { return (Resolve-Path $candidate).Path }
+        $workspaceRoot = Resolve-Path -Path (Join-Path $PSScriptRoot '..\..\..') -ErrorAction SilentlyContinue
+        if ($workspaceRoot -is [array]) { $workspaceRoot = $workspaceRoot[0] }
+        if ($workspaceRoot) { $workspaceRoot = $workspaceRoot.Path } else { $workspaceRoot = (Join-Path $PSScriptRoot '..\..\..') }
+
+        $candidate = Join-Path $workspaceRoot $RelativePath
+        $resolvedCandidate = Resolve-Path -Path $candidate -ErrorAction SilentlyContinue
+        if ($resolvedCandidate -is [array]) { $resolvedCandidate = $resolvedCandidate[0] }
+        if ($resolvedCandidate) { return $resolvedCandidate.Path }
         if (Test-Path $RelativePath) { return (Resolve-Path $RelativePath).Path }
         return $null
     } catch { return $null }
@@ -182,8 +187,13 @@ function Test-InteractiveMode {
         Start-Sleep -Seconds 3
 
         # Start agent with explicit output redirection to files so we can reliably capture logs
-        $workspaceRoot = (Resolve-Path -Path (Join-Path $PSScriptRoot '..\..\..')).Path
-        $fullAgentPath = (Resolve-Path -Path (Join-Path $workspaceRoot $TestConfig.AgentPath)).Path
+        $resolved = Resolve-Path -Path (Join-Path $PSScriptRoot '..\..\..') -ErrorAction SilentlyContinue
+        if ($resolved -is [array]) { $resolved = $resolved[0] }
+        if ($resolved) { $workspaceRoot = $resolved.Path } else { $workspaceRoot = (Join-Path $PSScriptRoot '..\..\..') }
+
+        $fullAgentResolved = Resolve-Path -Path (Join-Path $workspaceRoot $TestConfig.AgentPath) -ErrorAction SilentlyContinue
+        if ($fullAgentResolved -is [array]) { $fullAgentResolved = $fullAgentResolved[0] }
+        if ($fullAgentResolved) { $fullAgentPath = $fullAgentResolved.Path } else { $fullAgentPath = (Join-Path $workspaceRoot $TestConfig.AgentPath) }
         $outFile = Join-Path $logDir 'agent-interactive-out.txt'
         $errFile = Join-Path $logDir 'agent-interactive-err.txt'
 

@@ -1,0 +1,2 @@
+Get-Process -Name pythonw -ErrorAction SilentlyContinue | ForEach-Object { "Id=$($_.Id) Name=$($_.ProcessName) Title=$($_.MainWindowTitle)" } 
+if (-not (Get-Process -Name pythonw -ErrorAction SilentlyContinue)) { Write-Output "NO_PYTHONW" }

@@ -2,6 +2,25 @@ name: CI
 
 on:
   push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run CI orchestrator
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File ci/run-ci.ps1 -ArtifactsDir artifacts/gh-ci
+name: CI
+
+on:
+  push:
     branches: [ main, master, '**/chore/**', '**/feat/**' ]
   pull_request:
     branches: [ main, master ]

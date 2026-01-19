@@ -1,0 +1,1128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="8b2c7eda-bb53-4b1c-bdc4-decc34113cc0" name="sbatt@LITTLE_BEAST 2026-01-19 12:38:15" runUser="LITTLE_BEAST\sbatt" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-19T12:38:15.9096975+01:00" queuing="2026-01-19T12:38:15.9096976+01:00" start="2026-01-19T12:38:14.9875649+01:00" finish="2026-01-19T12:38:19.4164498+01:00" />
+  <TestSettings name="default" id="1762be7e-cc73-4f22-94bd-2b650a84caa0">
+    <Deployment runDeploymentRoot="sbatt_LITTLE_BEAST_2026-01-19_12_38_15" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="fa866043-b139-4586-85ce-cc6ab6233047" testId="169ca4b2-e1ad-d05f-efb3-4af03e43c044" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.DeviceStatus_CascadeDelete_ShouldRemoveStatusesWhenDeviceDeleted" computerName="LITTLE_BEAST" duration="00:00:00.0108758" startTime="2026-01-19T12:38:17.0311199+01:00" endTime="2026-01-19T12:38:17.0311200+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fa866043-b139-4586-85ce-cc6ab6233047" />
+    <UnitTestResult executionId="eedf6363-e5dd-483b-9556-512ce3364f33" testId="406d650e-8af5-b5ed-34f1-6010e3d56165" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.UpdateDevice_WithNonExistentDevice_ShouldReturnNotFound" computerName="LITTLE_BEAST" duration="00:00:00.0008822" startTime="2026-01-19T12:38:15.8916792+01:00" endTime="2026-01-19T12:38:15.8916792+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eedf6363-e5dd-483b-9556-512ce3364f33" />
+    <UnitTestResult executionId="e30e42a9-663b-4137-a003-3b7407fb8188" testId="0c040494-76fc-bb27-2c4a-b5f185e69a7c" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: DeviceConnected, action: StartSoftware)" computerName="LITTLE_BEAST" duration="00:00:00.0062941" startTime="2026-01-19T12:38:17.0025395+01:00" endTime="2026-01-19T12:38:17.0025396+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e30e42a9-663b-4137-a003-3b7407fb8188" />
+    <UnitTestResult executionId="abeb221c-3486-4a4a-89d6-dd689e0ddda6" testId="a9ad3787-449b-9a3c-4d0e-e47880fb8dc5" testName="USBDeviceManager.Tests.Integration.CompatControllerIntegrationTests.GetConfigs_EmptyDatabase_ShouldReturnEmptyArray" computerName="LITTLE_BEAST" duration="00:00:00.0713839" startTime="2026-01-19T12:38:18.6492328+01:00" endTime="2026-01-19T12:38:18.6492329+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="abeb221c-3486-4a4a-89d6-dd689e0ddda6" />
+    <UnitTestResult executionId="6ae72b9f-3916-4676-bdf1-1e009a54ca3f" testId="251719bd-5bf3-7a07-b8c4-48bb68222006" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.SystemHealthMonitoring_ContinuousMonitoring_ShouldTrackSystemMetrics" computerName="LITTLE_BEAST" duration="00:00:00.0678195" startTime="2026-01-19T12:38:19.2592830+01:00" endTime="2026-01-19T12:38:19.2592832+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6ae72b9f-3916-4676-bdf1-1e009a54ca3f" />
+    <UnitTestResult executionId="d2fe711e-cf0d-4d1a-bb23-ab6c40d7de79" testId="57943011-683c-d008-e817-e7739d5b7bbb" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.CreateDevice_WithValidDevice_ShouldCreateSuccessfully" computerName="LITTLE_BEAST" duration="00:00:00.0008023" startTime="2026-01-19T12:38:15.8924805+01:00" endTime="2026-01-19T12:38:15.8924806+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d2fe711e-cf0d-4d1a-bb23-ab6c40d7de79" />
+    <UnitTestResult executionId="7558e41f-020a-463a-b2ef-c25617797b68" testId="c1290ef0-b52d-f705-40a4-97d5e4b9346f" testName="USBDeviceManager.Tests.Functional.SmokeServerTests.RunServerAndSmokeEndpoints" computerName="LITTLE_BEAST" duration="00:00:01.4358677" startTime="2026-01-19T12:38:18.5494218+01:00" endTime="2026-01-19T12:38:18.5494221+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7558e41f-020a-463a-b2ef-c25617797b68" />
+    <UnitTestResult executionId="5318e2dc-3d04-433b-96d8-85af3c460651" testId="f715cbcd-2377-202f-c29b-9ca40ce6414f" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.DeviceApiWorkflow_CreateReadUpdateDelete_ShouldWorkEndToEnd" computerName="LITTLE_BEAST" duration="00:00:00.0128386" startTime="2026-01-19T12:38:16.7821095+01:00" endTime="2026-01-19T12:38:16.7821097+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5318e2dc-3d04-433b-96d8-85af3c460651" />
+    <UnitTestResult executionId="ab310f5f-3194-4da5-b003-1a89ad14fd10" testId="d79e71f7-b631-4aad-1118-906af570de45" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.CreateDevice_WithInvalidName_ShouldHandleValidationError(invalidName: null)" computerName="LITTLE_BEAST" duration="00:00:00.0017136" startTime="2026-01-19T12:38:15.8768812+01:00" endTime="2026-01-19T12:38:15.8768813+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab310f5f-3194-4da5-b003-1a89ad14fd10" />
+    <UnitTestResult executionId="67977f44-c806-4f93-b9c9-4928aee17f30" testId="f44b5a09-0e41-5296-ee59-c2187e327deb" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.DeleteDevice_ExistingDevice_ShouldDeleteSuccessfully" computerName="LITTLE_BEAST" duration="00:00:00.4901632" startTime="2026-01-19T12:38:16.5991040+01:00" endTime="2026-01-19T12:38:16.5991041+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="67977f44-c806-4f93-b9c9-4928aee17f30" />
+    <UnitTestResult executionId="b4aba3e5-8a2e-4999-94e6-99c52f9017b5" testId="fb6164b5-5fdd-0363-b1d1-8e0ac579e14b" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: Manual, action: SendNotification)" computerName="LITTLE_BEAST" duration="00:00:00.0064251" startTime="2026-01-19T12:38:16.9962067+01:00" endTime="2026-01-19T12:38:16.9962068+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b4aba3e5-8a2e-4999-94e6-99c52f9017b5" />
+    <UnitTestResult executionId="8c77d8a1-d8fb-4df3-8449-1c2ea2574b91" testId="6ace27e5-2097-4fc7-0432-866b105e30d5" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.AutomationWorkflow_ComplexRuleExecution_ShouldExecuteInCorrectOrder" computerName="LITTLE_BEAST" duration="00:00:00.0427647" startTime="2026-01-19T12:38:19.3493126+01:00" endTime="2026-01-19T12:38:19.3493130+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c77d8a1-d8fb-4df3-8449-1c2ea2574b91" />
+    <UnitTestResult executionId="ceb2633e-f7fc-4616-a4f4-efe95e270bdc" testId="1ec54255-633f-fd54-587f-350cc5bf77ca" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatus_WithNoStatus_ShouldReturnNotFound" computerName="LITTLE_BEAST" duration="00:00:00.0005996" startTime="2026-01-19T12:38:15.8917497+01:00" endTime="2026-01-19T12:38:15.8917498+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ceb2633e-f7fc-4616-a4f4-efe95e270bdc" />
+    <UnitTestResult executionId="2c3ac068-8086-46c7-9491-70000215726a" testId="4cb210e3-9f55-d26a-d73c-43b790f46faf" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.UpdateDevice_ValidChanges_ShouldUpdateSuccessfully" computerName="LITTLE_BEAST" duration="00:00:00.0186208" startTime="2026-01-19T12:38:16.7283494+01:00" endTime="2026-01-19T12:38:16.7283495+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c3ac068-8086-46c7-9491-70000215726a" />
+    <UnitTestResult executionId="b7723605-9cde-467c-9aaf-0823ce920bef" testId="89bafb1a-9f4d-5471-245f-aa81225c0bc1" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.UpdateDevice_WithValidData_ShouldUpdateSuccessfully" computerName="LITTLE_BEAST" duration="00:00:00.0007001" startTime="2026-01-19T12:38:15.8917331+01:00" endTime="2026-01-19T12:38:15.8917332+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b7723605-9cde-467c-9aaf-0823ce920bef" />
+    <UnitTestResult executionId="1c5cda6e-0881-4ccf-a4bc-f95a59dec1c4" testId="9fe1b9c4-ef45-0b6f-5097-63e9435ad4df" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatusHistory_WithLargeTimeRange_ShouldHandlePerformanceGracefully" computerName="LITTLE_BEAST" duration="00:00:00.0074057" startTime="2026-01-19T12:38:15.8695248+01:00" endTime="2026-01-19T12:38:15.8695249+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c5cda6e-0881-4ccf-a4bc-f95a59dec1c4" />
+    <UnitTestResult executionId="cc297b25-ae23-4769-a4b5-2ef34b521c8f" testId="48dd7249-92a0-4a7a-6c43-cdb1f540ec07" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatus_WithExistingStatus_ShouldReturnLatestStatus" computerName="LITTLE_BEAST" duration="00:00:00.0055743" startTime="2026-01-19T12:38:15.8751383+01:00" endTime="2026-01-19T12:38:15.8751384+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cc297b25-ae23-4769-a4b5-2ef34b521c8f" />
+    <UnitTestResult executionId="20126690-e5a1-4ff8-8b9d-df32183c98e3" testId="a182f345-7e9e-b2b6-bd8d-91ae4ca7c729" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.CreateDevice_ValidDevice_ShouldReturnCreatedWithLocation" computerName="LITTLE_BEAST" duration="00:00:00.0203248" startTime="2026-01-19T12:38:16.7094977+01:00" endTime="2026-01-19T12:38:16.7094978+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20126690-e5a1-4ff8-8b9d-df32183c98e3" />
+    <UnitTestResult executionId="f8e600d2-3479-4cb5-9ed7-e9b2b175a3a5" testId="fdf7417d-5e8e-8251-736b-3d3db19207fc" testName="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests.PostConfigs_InvalidPayload_ShouldReturnBadRequest" computerName="LITTLE_BEAST" duration="00:00:00.0081373" startTime="2026-01-19T12:38:18.8175996+01:00" endTime="2026-01-19T12:38:18.8175999+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f8e600d2-3479-4cb5-9ed7-e9b2b175a3a5" />
+    <UnitTestResult executionId="bb244b45-145d-4ea4-ac19-bcf76270b5fa" testId="752133f3-9301-dcc1-abd3-d209d41cc939" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.UsbDevice_UniqueDeviceId_ShouldEnforceConstraint" computerName="LITTLE_BEAST" duration="00:00:00.0108847" startTime="2026-01-19T12:38:17.0202009+01:00" endTime="2026-01-19T12:38:17.0202010+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb244b45-145d-4ea4-ac19-bcf76270b5fa" />
+    <UnitTestResult executionId="77a88380-e017-4481-b043-f207bce173d3" testId="6374c80e-2406-27b5-1113-063bb78dce21" testName="USBDeviceManager.Tests.Integration.Regression.HeartbeatRegressionTests.HealthEndpoint_Compatibility_ShouldReturn200" computerName="LITTLE_BEAST" duration="00:00:00.0034922" startTime="2026-01-19T12:38:18.8725497+01:00" endTime="2026-01-19T12:38:18.8725498+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77a88380-e017-4481-b043-f207bce173d3" />
+    <UnitTestResult executionId="a4f4692c-a7c9-4104-89a7-f3ade3a59303" testId="3577e245-324e-33c4-1008-069c2b1446a3" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevices_WithNoDevices_ShouldReturnEmptyList" computerName="LITTLE_BEAST" duration="00:00:00.0008056" startTime="2026-01-19T12:38:15.8916607+01:00" endTime="2026-01-19T12:38:15.8916608+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4f4692c-a7c9-4104-89a7-f3ade3a59303" />
+    <UnitTestResult executionId="923a783b-f1e0-4d28-a37a-0fe82897dcac" testId="87f1b0b9-2b70-a7e4-83ed-8d6c0cec1764" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.ScanForDevices_ShouldReturnSuccessResponse" computerName="LITTLE_BEAST" duration="00:00:00.0013215" startTime="2026-01-19T12:38:15.8916340+01:00" endTime="2026-01-19T12:38:15.8916340+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="923a783b-f1e0-4d28-a37a-0fe82897dcac" />
+    <UnitTestResult executionId="2c27e99c-0cdf-4bba-9c70-357ddaddd15b" testId="c07b4c16-1b49-3471-966b-a99d04304369" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.DeleteDevice_WithInvalidId_ShouldReturnNotFound" computerName="LITTLE_BEAST" duration="00:00:00.0019239" startTime="2026-01-19T12:38:15.8620975+01:00" endTime="2026-01-19T12:38:15.8620976+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c27e99c-0cdf-4bba-9c70-357ddaddd15b" />
+    <UnitTestResult executionId="f3fb57ea-d19d-43d7-911c-9609a444193b" testId="7cb87aea-7170-76dc-3fe3-a772230ccea6" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.ManagedSoftware_RequiredFields_ShouldEnforceValidation" computerName="LITTLE_BEAST" duration="00:00:00.0088007" startTime="2026-01-19T12:38:17.1131300+01:00" endTime="2026-01-19T12:38:17.1131301+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3fb57ea-d19d-43d7-911c-9609a444193b" />
+    <UnitTestResult executionId="4e95455b-2b04-440c-9fa6-d4f346b3e273" testId="9ac3d203-a2da-300d-dac1-b1011d17ce5a" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.UpdateDevice_WithMismatchedId_ShouldReturnBadRequest" computerName="LITTLE_BEAST" duration="00:00:00.0005227" startTime="2026-01-19T12:38:15.8917163+01:00" endTime="2026-01-19T12:38:15.8917164+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4e95455b-2b04-440c-9fa6-d4f346b3e273" />
+    <UnitTestResult executionId="737b034b-b545-46f0-8646-5d526ffb04db" testId="66d12bef-80f3-421e-daf5-f613a878904d" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.DataConsistency_ConcurrentModifications_ShouldMaintainIntegrity" computerName="LITTLE_BEAST" duration="00:00:00.0513235" startTime="2026-01-19T12:38:19.0639700+01:00" endTime="2026-01-19T12:38:19.0639702+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="737b034b-b545-46f0-8646-5d526ffb04db" />
+    <UnitTestResult executionId="23fe0ebd-884b-4cd2-b088-a6b462ec9fd5" testId="e7ea919c-cf75-b430-b71c-f75f864707f6" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevice_WithValidId_ShouldReturnDevice" computerName="LITTLE_BEAST" duration="00:00:00.0139197" startTime="2026-01-19T12:38:15.7802451+01:00" endTime="2026-01-19T12:38:15.7802452+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="23fe0ebd-884b-4cd2-b088-a6b462ec9fd5" />
+    <UnitTestResult executionId="1edddf38-6f7d-4c3c-8274-3aac8c5a7276" testId="f1cf935a-2026-44fc-c4e7-bc74f5dfc657" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevices_WithSeedData_ShouldReturnAllDevices" computerName="LITTLE_BEAST" duration="00:00:00.0134189" startTime="2026-01-19T12:38:16.8007267+01:00" endTime="2026-01-19T12:38:16.8007268+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1edddf38-6f7d-4c3c-8274-3aac8c5a7276" />
+    <UnitTestResult executionId="27e4dc07-c539-4cb3-ba92-020eb751cc03" testId="c7c8ad78-d389-e6fc-9486-6211b9776f36" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.StartSoftware_WhenDisabled_ReturnsBadRequest" computerName="LITTLE_BEAST" duration="00:00:00.0077963" startTime="2026-01-19T12:38:19.3062069+01:00" endTime="2026-01-19T12:38:19.3062070+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="27e4dc07-c539-4cb3-ba92-020eb751cc03" />
+    <UnitTestResult executionId="44fcebc1-d5f4-4d2d-a2a6-3de9d4e761a1" testId="d50f58a8-6253-3b49-6eca-bc8634df1396" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDeviceStatusHistory_WithTimeFilter_ShouldReturnFilteredResults" computerName="LITTLE_BEAST" duration="00:00:00.0560545" startTime="2026-01-19T12:38:16.6561545+01:00" endTime="2026-01-19T12:38:16.6561547+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44fcebc1-d5f4-4d2d-a2a6-3de9d4e761a1" />
+    <UnitTestResult executionId="a8c60099-72b6-43de-8f9f-de740ea132f9" testId="3242f0f8-413e-4669-5b50-e91c84e4f6f2" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.UpdateDevice_MismatchedId_ShouldReturnBadRequest" computerName="LITTLE_BEAST" duration="00:00:00.0023571" startTime="2026-01-19T12:38:16.7847198+01:00" endTime="2026-01-19T12:38:16.7847199+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8c60099-72b6-43de-8f9f-de740ea132f9" />
+    <UnitTestResult executionId="1be4801f-b66a-467b-a10c-8592bffd194b" testId="4d313015-194c-2c15-b8fc-b349d2d65c4b" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.ToggleDevice_WithValidDevice_ShouldUpdateEnabledState" computerName="LITTLE_BEAST" duration="00:00:00.0138766" startTime="2026-01-19T12:38:15.8507066+01:00" endTime="2026-01-19T12:38:15.8507067+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1be4801f-b66a-467b-a10c-8592bffd194b" />
+    <UnitTestResult executionId="21c2d769-e1dd-4a20-a584-0b6fdf850a4d" testId="e92f673f-3bbe-c04b-fea9-ee97b2c3754c" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.CreateSoftware_MissingRequiredField_ReturnsBadRequest" computerName="LITTLE_BEAST" duration="00:00:00.0067535" startTime="2026-01-19T12:38:19.1911465+01:00" endTime="2026-01-19T12:38:19.1911466+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21c2d769-e1dd-4a20-a584-0b6fdf850a4d" />
+    <UnitTestResult executionId="e00ecbb1-66fd-4844-aa75-4ada78a28e5d" testId="15766d8b-769e-c511-6484-4de5ac266b55" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevice_NonExistentDevice_ShouldReturnNotFound" computerName="LITTLE_BEAST" duration="00:00:00.0055287" startTime="2026-01-19T12:38:16.8306396+01:00" endTime="2026-01-19T12:38:16.8306397+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e00ecbb1-66fd-4844-aa75-4ada78a28e5d" />
+    <UnitTestResult executionId="87daaddd-1229-44f1-86a2-2e097fdfe365" testId="9996432f-8d01-ebc3-ef1e-714693e03c4d" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.DeleteDevice_WithValidId_ShouldDeleteSuccessfully" computerName="LITTLE_BEAST" duration="00:00:00.0043406" startTime="2026-01-19T12:38:15.8916967+01:00" endTime="2026-01-19T12:38:15.8916967+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="87daaddd-1229-44f1-86a2-2e097fdfe365" />
+    <UnitTestResult executionId="a1901710-8cc1-4e61-8af0-995724bb036a" testId="0c4271a2-bc44-cc77-95ca-260e4b31813c" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatusHistory_WithCustomTimeRange_ShouldFilterCorrectly" computerName="LITTLE_BEAST" duration="00:00:00.0565103" startTime="2026-01-19T12:38:15.8368016+01:00" endTime="2026-01-19T12:38:15.8368018+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1901710-8cc1-4e61-8af0-995724bb036a" />
+    <UnitTestResult executionId="56cedac0-6490-4ece-9509-4aaf656be994" testId="783cdefe-a38c-dfac-ab70-63ce6f1cee2b" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: SystemStartup, action: RunScript)" computerName="LITTLE_BEAST" duration="00:00:00.0491713" startTime="2026-01-19T12:38:16.9830047+01:00" endTime="2026-01-19T12:38:16.9830048+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="56cedac0-6490-4ece-9509-4aaf656be994" />
+    <UnitTestResult executionId="8fbdfede-a0e8-47b5-868f-da0bb50f4039" testId="b29cba0b-099c-451c-658e-e4d53b95b7ce" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.ErrorHandlingAndRecovery_InvalidOperations_ShouldHandleGracefully" computerName="LITTLE_BEAST" duration="00:00:00.0385085" startTime="2026-01-19T12:38:19.2981174+01:00" endTime="2026-01-19T12:38:19.2981175+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8fbdfede-a0e8-47b5-868f-da0bb50f4039" />
+    <UnitTestResult executionId="f3c571a7-2e8c-4d57-91dc-1713becca2e8" testId="da0f4753-cc88-a477-6e11-4870ccd80dcd" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.ScanForDevices_ShouldReturnSuccessResponse" computerName="LITTLE_BEAST" duration="00:00:00.0053377" startTime="2026-01-19T12:38:16.7690062+01:00" endTime="2026-01-19T12:38:16.7690063+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3c571a7-2e8c-4d57-91dc-1713becca2e8" />
+    <UnitTestResult executionId="0d76eda3-482a-4291-8d19-a67b93553638" testId="14348b90-4ebf-b77f-8737-a77f91c20830" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: DeviceDisconnected, action: StopSoftware)" computerName="LITTLE_BEAST" duration="00:00:00.0066925" startTime="2026-01-19T12:38:16.9897332+01:00" endTime="2026-01-19T12:38:16.9897333+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d76eda3-482a-4291-8d19-a67b93553638" />
+    <UnitTestResult executionId="4bdfe6ce-abd3-4303-9918-6c0e2fa488bc" testId="d693a885-be4f-e9d7-3a4d-2930f443c076" testName="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests.PostConfigs_CreateDeviceAndSoftware_ShouldReturnCreatedAndPersistRule" computerName="LITTLE_BEAST" duration="00:00:00.1091448" startTime="2026-01-19T12:38:18.7944588+01:00" endTime="2026-01-19T12:38:18.7944589+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bdfe6ce-abd3-4303-9918-6c0e2fa488bc" />
+    <UnitTestResult executionId="091085f7-a46b-4844-9ecf-9bde2d3443b5" testId="24a59ada-687a-3ae6-ccac-b8b090046908" testName="USBDeviceManager.Tests.Integration.CompatControllerIntegrationTests.PostLogs_WithKnownDeviceId_ShouldCreateDeviceStatus" computerName="LITTLE_BEAST" duration="00:00:00.0320804" startTime="2026-01-19T12:38:18.6816788+01:00" endTime="2026-01-19T12:38:18.6816789+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="091085f7-a46b-4844-9ecf-9bde2d3443b5" />
+    <UnitTestResult executionId="2137a40c-d3fb-489a-9cba-1f3f589b8686" testId="6b18ebab-8e0c-05d7-e47d-35219bb342bf" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDeviceStatus_ExistingDevice_ShouldReturnLatestStatus" computerName="LITTLE_BEAST" duration="00:00:00.0185700" startTime="2026-01-19T12:38:16.8248729+01:00" endTime="2026-01-19T12:38:16.8248731+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2137a40c-d3fb-489a-9cba-1f3f589b8686" />
+    <UnitTestResult executionId="230d96d2-057d-4e4b-8b9d-f38410a58ecc" testId="68a205d8-ee11-30f5-8f98-eea37a2e1ff9" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_WithDeviceAndSoftwareReferences_ShouldMaintainRelationships" computerName="LITTLE_BEAST" duration="00:00:00.0396049" startTime="2026-01-19T12:38:17.0886005+01:00" endTime="2026-01-19T12:38:17.0886006+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="230d96d2-057d-4e4b-8b9d-f38410a58ecc" />
+    <UnitTestResult executionId="30d6c469-d4e6-4c1f-90e1-16f168b474c4" testId="ced52e83-96b5-9909-989d-25eb4ce217f9" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.SystemStatus_MultipleEntries_ShouldStoreChronologically" computerName="LITTLE_BEAST" duration="00:00:00.0593609" startTime="2026-01-19T12:38:16.9031993+01:00" endTime="2026-01-19T12:38:16.9031995+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30d6c469-d4e6-4c1f-90e1-16f168b474c4" />
+    <UnitTestResult executionId="53a2a508-faa4-4365-a438-8bb0a2f835a6" testId="fcb0a15a-73f9-14ca-21b5-4fba0751720f" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevice_ExistingDevice_ShouldReturnDeviceDetails" computerName="LITTLE_BEAST" duration="00:00:00.0145986" startTime="2026-01-19T12:38:16.7431736+01:00" endTime="2026-01-19T12:38:16.7431738+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="53a2a508-faa4-4365-a438-8bb0a2f835a6" />
+    <UnitTestResult executionId="d155ca24-1306-4532-9f33-f4398243e1e7" testId="9a918b46-5485-38e1-6195-d63ff70e4cb3" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.CreateDevice_WithInvalidName_ShouldHandleValidationError(invalidName: &quot;&quot;)" computerName="LITTLE_BEAST" duration="00:00:00.0008034" startTime="2026-01-19T12:38:15.8915290+01:00" endTime="2026-01-19T12:38:15.8915294+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d155ca24-1306-4532-9f33-f4398243e1e7" />
+    <UnitTestResult executionId="d92aff6d-1a75-40b6-8b79-cf3266085ef0" testId="4cadfce5-dfb9-f81b-0695-40b2b2e617e8" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevice_WithInvalidId_ShouldReturnNotFound" computerName="LITTLE_BEAST" duration="00:00:00.0093826" startTime="2026-01-19T12:38:15.8601346+01:00" endTime="2026-01-19T12:38:15.8601347+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d92aff6d-1a75-40b6-8b79-cf3266085ef0" />
+    <UnitTestResult executionId="4fe0a7e6-cbc5-4c14-afee-566dc3cc52f0" testId="a757b74b-5eb6-6ff1-0405-604fe3022a30" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.RuleExecution_CascadeDelete_ShouldRemoveExecutionsWhenRuleDeleted" computerName="LITTLE_BEAST" duration="00:00:00.0156277" startTime="2026-01-19T12:38:17.1042886+01:00" endTime="2026-01-19T12:38:17.1042887+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4fe0a7e6-cbc5-4c14-afee-566dc3cc52f0" />
+    <UnitTestResult executionId="e6b191dd-1108-4569-9fb6-e31621067aac" testId="2580a49a-bc5f-601c-7982-c413b36eb5f3" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.PerformanceUnderLoad_MultipleSimultaneousRequests_ShouldMaintainResponsiveness" computerName="LITTLE_BEAST" duration="00:00:00.1366422" startTime="2026-01-19T12:38:19.0122694+01:00" endTime="2026-01-19T12:38:19.0122696+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e6b191dd-1108-4569-9fb6-e31621067aac" />
+    <UnitTestResult executionId="26542614-b628-4390-b26d-4e52a0406227" testId="7f78dc9e-dca3-2220-bd77-eeade20ce57a" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.ToggleDevice_WithInvalidDevice_ShouldReturnNotFound" computerName="LITTLE_BEAST" duration="00:00:00.0004752" startTime="2026-01-19T12:38:15.8916114+01:00" endTime="2026-01-19T12:38:15.8916115+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26542614-b628-4390-b26d-4e52a0406227" />
+    <UnitTestResult executionId="82577fe4-606f-4b17-b535-202c21506e75" testId="b1dad546-500d-cd56-ee42-50d78ac58dbc" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.DeviceStatus_TimestampIndexing_ShouldSupportTimeRangeQueries" computerName="LITTLE_BEAST" duration="00:00:00.0305191" startTime="2026-01-19T12:38:16.9337733+01:00" endTime="2026-01-19T12:38:16.9337734+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82577fe4-606f-4b17-b535-202c21506e75" />
+    <UnitTestResult executionId="c86eab09-443d-45a5-bd13-9d6a8cbe19c5" testId="d4754b5b-c16d-3b6c-f7bb-bdf9b03ef847" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.MultiDeviceRacingSetup_ComplexAutomation_ShouldHandleMultipleDevicesAndSoftware" computerName="LITTLE_BEAST" duration="00:00:00.0305734" startTime="2026-01-19T12:38:19.1840937+01:00" endTime="2026-01-19T12:38:19.1840942+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c86eab09-443d-45a5-bd13-9d6a8cbe19c5" />
+    <UnitTestResult executionId="016af9ed-6945-4263-9ea8-39a489b138c9" testId="6215f624-50bc-e02b-aa25-8a2b79fe3900" testName="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevices_WithMultipleDevices_ShouldReturnAllDevices" computerName="LITTLE_BEAST" duration="00:00:00.4200267" startTime="2026-01-19T12:38:15.7667322+01:00" endTime="2026-01-19T12:38:15.7667435+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="016af9ed-6945-4263-9ea8-39a489b138c9" />
+    <UnitTestResult executionId="6111870b-840e-470e-89ae-b57ae0cba97b" testId="693950b6-2366-ab72-6393-6039701e115c" testName="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.SimRacingWorkflow_SetupDeviceAndSoftwareWithAutomation_ShouldWorkEndToEnd" computerName="LITTLE_BEAST" duration="00:00:00.0888734" startTime="2026-01-19T12:38:19.1531924+01:00" endTime="2026-01-19T12:38:19.1531926+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6111870b-840e-470e-89ae-b57ae0cba97b" />
+    <UnitTestResult executionId="120496d2-3f58-4da2-ba19-f5d6c8138f2d" testId="18f30a39-8859-4c68-494a-c13e1c649464" testName="USBDeviceManager.Tests.Integration.Regression.HeartbeatRegressionTests.Heartbeat_Post_WithLegacySchema_ShouldReturnOk" computerName="LITTLE_BEAST" duration="00:00:00.0475961" startTime="2026-01-19T12:38:18.8687998+01:00" endTime="2026-01-19T12:38:18.8688000+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="120496d2-3f58-4da2-ba19-f5d6c8138f2d" />
+    <UnitTestResult executionId="e7220c21-8aa8-4913-88fd-f5876a3d293b" testId="45d832f0-037f-811a-83dc-839252daf9dd" testName="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests.PostConfigs_CreateStandaloneSoftware_ShouldReturnCreatedAndPersistSoftware" computerName="LITTLE_BEAST" duration="00:00:00.0143399" startTime="2026-01-19T12:38:18.8091481+01:00" endTime="2026-01-19T12:38:18.8091483+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e7220c21-8aa8-4913-88fd-f5876a3d293b" />
+    <UnitTestResult executionId="9a4a9bd8-7128-4d0b-bbf5-bd62afc3e866" testId="f212ac7c-2cb5-c260-a38f-2cb3a9c64068" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.CreateDevice_InvalidData_ShouldReturnValidationError" computerName="LITTLE_BEAST" duration="00:00:00.0038031" startTime="2026-01-19T12:38:16.8347259+01:00" endTime="2026-01-19T12:38:16.8347260+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9a4a9bd8-7128-4d0b-bbf5-bd62afc3e866" />
+    <UnitTestResult executionId="b49ed09a-0967-453e-b9ec-ae76a29d9b0b" testId="c9a97ae1-6374-82d6-679b-286cbe676de5" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.ToggleDevice_EnableDisable_ShouldUpdateState" computerName="LITTLE_BEAST" duration="00:00:00.0324694" startTime="2026-01-19T12:38:16.6889473+01:00" endTime="2026-01-19T12:38:16.6889475+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b49ed09a-0967-453e-b9ec-ae76a29d9b0b" />
+    <UnitTestResult executionId="107d8d2b-361c-4c46-828b-8e79389ab50d" testId="7b6b3cda-6a73-e7b0-d226-3151edacfb3e" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.DeleteDevice_NonExistentDevice_ShouldReturnNotFound" computerName="LITTLE_BEAST" duration="00:00:00.0021364" startTime="2026-01-19T12:38:16.7870796+01:00" endTime="2026-01-19T12:38:16.7870797+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="107d8d2b-361c-4c46-828b-8e79389ab50d" />
+    <UnitTestResult executionId="6f9408bf-9a8e-472d-ad52-c2c0bf6cd911" testId="7fce1116-eee6-8bbf-d272-1140bf7b3e2c" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.AddUsbDevice_ShouldCreateDeviceSuccessfully" computerName="LITTLE_BEAST" duration="00:00:00.0066822" startTime="2026-01-19T12:38:17.0092686+01:00" endTime="2026-01-19T12:38:17.0092687+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6f9408bf-9a8e-472d-ad52-c2c0bf6cd911" />
+    <UnitTestResult executionId="28474a36-442d-446f-83ac-160b1700c8c4" testId="b4d1297b-0396-d49e-279a-0db2a16f7768" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.ConcurrentDeviceOperations_ShouldHandleGracefully" computerName="LITTLE_BEAST" duration="00:00:00.0200172" startTime="2026-01-19T12:38:16.7634325+01:00" endTime="2026-01-19T12:38:16.7634326+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28474a36-442d-446f-83ac-160b1700c8c4" />
+    <UnitTestResult executionId="db2c4b4f-afc2-4a59-872b-08ecb5546e45" testId="6ad19d2e-a5a2-77e2-d835-2be38a21fbe5" testName="USBDeviceManager.Tests.Unit.SimRacingContextTests.HealthMetric_DifferentSources_ShouldGroupByMetricName" computerName="LITTLE_BEAST" duration="00:00:00.0177805" startTime="2026-01-19T12:38:17.0489435+01:00" endTime="2026-01-19T12:38:17.0489436+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db2c4b4f-afc2-4a59-872b-08ecb5546e45" />
+    <UnitTestResult executionId="4bfbc5f0-3b17-446e-ae1a-d9384fb85fee" testId="c3bb1a46-72db-23eb-6ec3-087ddddae496" testName="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevices_EmptyDatabase_ShouldReturnEmptyArray" computerName="LITTLE_BEAST" duration="00:00:00.0051183" startTime="2026-01-19T12:38:16.8060772+01:00" endTime="2026-01-19T12:38:16.8060773+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bfbc5f0-3b17-446e-ae1a-d9384fb85fee" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.UpdateDevice_WithMismatchedId_ShouldReturnBadRequest" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="9ac3d203-a2da-300d-dac1-b1011d17ce5a">
+      <Execution id="4e95455b-2b04-440c-9fa6-d4f346b3e273" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="UpdateDevice_WithMismatchedId_ShouldReturnBadRequest" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevice_ExistingDevice_ShouldReturnDeviceDetails" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="fcb0a15a-73f9-14ca-21b5-4fba0751720f">
+      <Execution id="53a2a508-faa4-4365-a438-8bb0a2f835a6" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="GetDevice_ExistingDevice_ShouldReturnDeviceDetails" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.DeleteDevice_ExistingDevice_ShouldDeleteSuccessfully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="f44b5a09-0e41-5296-ee59-c2187e327deb">
+      <Execution id="67977f44-c806-4f93-b9c9-4928aee17f30" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="DeleteDevice_ExistingDevice_ShouldDeleteSuccessfully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.DeleteDevice_WithInvalidId_ShouldReturnNotFound" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="c07b4c16-1b49-3471-966b-a99d04304369">
+      <Execution id="2c27e99c-0cdf-4bba-9c70-357ddaddd15b" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="DeleteDevice_WithInvalidId_ShouldReturnNotFound" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevices_WithSeedData_ShouldReturnAllDevices" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="f1cf935a-2026-44fc-c4e7-bc74f5dfc657">
+      <Execution id="1edddf38-6f7d-4c3c-8274-3aac8c5a7276" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="GetDevices_WithSeedData_ShouldReturnAllDevices" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDeviceStatusHistory_WithTimeFilter_ShouldReturnFilteredResults" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="d50f58a8-6253-3b49-6eca-bc8634df1396">
+      <Execution id="44fcebc1-d5f4-4d2d-a2a6-3de9d4e761a1" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="GetDeviceStatusHistory_WithTimeFilter_ShouldReturnFilteredResults" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatusHistory_WithCustomTimeRange_ShouldFilterCorrectly" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="0c4271a2-bc44-cc77-95ca-260e4b31813c">
+      <Execution id="a1901710-8cc1-4e61-8af0-995724bb036a" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDeviceStatusHistory_WithCustomTimeRange_ShouldFilterCorrectly" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.ManagedSoftware_RequiredFields_ShouldEnforceValidation" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="7cb87aea-7170-76dc-3fe3-a772230ccea6">
+      <Execution id="f3fb57ea-d19d-43d7-911c-9609a444193b" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="ManagedSoftware_RequiredFields_ShouldEnforceValidation" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.ConcurrentDeviceOperations_ShouldHandleGracefully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="b4d1297b-0396-d49e-279a-0db2a16f7768">
+      <Execution id="28474a36-442d-446f-83ac-160b1700c8c4" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="ConcurrentDeviceOperations_ShouldHandleGracefully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.ToggleDevice_WithInvalidDevice_ShouldReturnNotFound" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="7f78dc9e-dca3-2220-bd77-eeade20ce57a">
+      <Execution id="26542614-b628-4390-b26d-4e52a0406227" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="ToggleDevice_WithInvalidDevice_ShouldReturnNotFound" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.CompatControllerIntegrationTests.GetConfigs_EmptyDatabase_ShouldReturnEmptyArray" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="a9ad3787-449b-9a3c-4d0e-e47880fb8dc5">
+      <Execution id="abeb221c-3486-4a4a-89d6-dd689e0ddda6" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.CompatControllerIntegrationTests" name="GetConfigs_EmptyDatabase_ShouldReturnEmptyArray" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_WithDeviceAndSoftwareReferences_ShouldMaintainRelationships" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="68a205d8-ee11-30f5-8f98-eea37a2e1ff9">
+      <Execution id="230d96d2-057d-4e4b-8b9d-f38410a58ecc" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="AutomationRule_WithDeviceAndSoftwareReferences_ShouldMaintainRelationships" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.SystemHealthMonitoring_ContinuousMonitoring_ShouldTrackSystemMetrics" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="251719bd-5bf3-7a07-b8c4-48bb68222006">
+      <Execution id="6ae72b9f-3916-4676-bdf1-1e009a54ca3f" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="SystemHealthMonitoring_ContinuousMonitoring_ShouldTrackSystemMetrics" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.DeviceStatus_CascadeDelete_ShouldRemoveStatusesWhenDeviceDeleted" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="169ca4b2-e1ad-d05f-efb3-4af03e43c044">
+      <Execution id="fa866043-b139-4586-85ce-cc6ab6233047" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="DeviceStatus_CascadeDelete_ShouldRemoveStatusesWhenDeviceDeleted" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.StartSoftware_WhenDisabled_ReturnsBadRequest" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="c7c8ad78-d389-e6fc-9486-6211b9776f36">
+      <Execution id="27e4dc07-c539-4cb3-ba92-020eb751cc03" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="StartSoftware_WhenDisabled_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.SimRacingWorkflow_SetupDeviceAndSoftwareWithAutomation_ShouldWorkEndToEnd" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="693950b6-2366-ab72-6393-6039701e115c">
+      <Execution id="6111870b-840e-470e-89ae-b57ae0cba97b" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="SimRacingWorkflow_SetupDeviceAndSoftwareWithAutomation_ShouldWorkEndToEnd" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.HealthMetric_DifferentSources_ShouldGroupByMetricName" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="6ad19d2e-a5a2-77e2-d835-2be38a21fbe5">
+      <Execution id="db2c4b4f-afc2-4a59-872b-08ecb5546e45" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="HealthMetric_DifferentSources_ShouldGroupByMetricName" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.UpdateDevice_MismatchedId_ShouldReturnBadRequest" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="3242f0f8-413e-4669-5b50-e91c84e4f6f2">
+      <Execution id="a8c60099-72b6-43de-8f9f-de740ea132f9" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="UpdateDevice_MismatchedId_ShouldReturnBadRequest" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.ErrorHandlingAndRecovery_InvalidOperations_ShouldHandleGracefully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="b29cba0b-099c-451c-658e-e4d53b95b7ce">
+      <Execution id="8fbdfede-a0e8-47b5-868f-da0bb50f4039" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="ErrorHandlingAndRecovery_InvalidOperations_ShouldHandleGracefully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.CreateDevice_WithValidDevice_ShouldCreateSuccessfully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="57943011-683c-d008-e817-e7739d5b7bbb">
+      <Execution id="d2fe711e-cf0d-4d1a-bb23-ab6c40d7de79" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="CreateDevice_WithValidDevice_ShouldCreateSuccessfully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.PerformanceUnderLoad_MultipleSimultaneousRequests_ShouldMaintainResponsiveness" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="2580a49a-bc5f-601c-7982-c413b36eb5f3">
+      <Execution id="e6b191dd-1108-4569-9fb6-e31621067aac" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="PerformanceUnderLoad_MultipleSimultaneousRequests_ShouldMaintainResponsiveness" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.RuleExecution_CascadeDelete_ShouldRemoveExecutionsWhenRuleDeleted" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="a757b74b-5eb6-6ff1-0405-604fe3022a30">
+      <Execution id="4fe0a7e6-cbc5-4c14-afee-566dc3cc52f0" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="RuleExecution_CascadeDelete_ShouldRemoveExecutionsWhenRuleDeleted" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.UsbDevice_UniqueDeviceId_ShouldEnforceConstraint" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="752133f3-9301-dcc1-abd3-d209d41cc939">
+      <Execution id="bb244b45-145d-4ea4-ac19-bcf76270b5fa" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="UsbDevice_UniqueDeviceId_ShouldEnforceConstraint" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevice_WithInvalidId_ShouldReturnNotFound" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="4cadfce5-dfb9-f81b-0695-40b2b2e617e8">
+      <Execution id="d92aff6d-1a75-40b6-8b79-cf3266085ef0" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDevice_WithInvalidId_ShouldReturnNotFound" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.Regression.HeartbeatRegressionTests.Heartbeat_Post_WithLegacySchema_ShouldReturnOk" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="18f30a39-8859-4c68-494a-c13e1c649464">
+      <Execution id="120496d2-3f58-4da2-ba19-f5d6c8138f2d" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.Regression.HeartbeatRegressionTests" name="Heartbeat_Post_WithLegacySchema_ShouldReturnOk" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.UpdateDevice_WithValidData_ShouldUpdateSuccessfully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="89bafb1a-9f4d-5471-245f-aa81225c0bc1">
+      <Execution id="b7723605-9cde-467c-9aaf-0823ce920bef" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="UpdateDevice_WithValidData_ShouldUpdateSuccessfully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.CreateDevice_WithInvalidName_ShouldHandleValidationError(invalidName: &quot;&quot;)" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="9a918b46-5485-38e1-6195-d63ff70e4cb3">
+      <Execution id="d155ca24-1306-4532-9f33-f4398243e1e7" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="CreateDevice_WithInvalidName_ShouldHandleValidationError" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevices_WithNoDevices_ShouldReturnEmptyList" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="3577e245-324e-33c4-1008-069c2b1446a3">
+      <Execution id="a4f4692c-a7c9-4104-89a7-f3ade3a59303" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDevices_WithNoDevices_ShouldReturnEmptyList" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.DataConsistency_ConcurrentModifications_ShouldMaintainIntegrity" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="66d12bef-80f3-421e-daf5-f613a878904d">
+      <Execution id="737b034b-b545-46f0-8646-5d526ffb04db" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="DataConsistency_ConcurrentModifications_ShouldMaintainIntegrity" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevices_WithMultipleDevices_ShouldReturnAllDevices" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="6215f624-50bc-e02b-aa25-8a2b79fe3900">
+      <Execution id="016af9ed-6945-4263-9ea8-39a489b138c9" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDevices_WithMultipleDevices_ShouldReturnAllDevices" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatus_WithNoStatus_ShouldReturnNotFound" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="1ec54255-633f-fd54-587f-350cc5bf77ca">
+      <Execution id="ceb2633e-f7fc-4616-a4f4-efe95e270bdc" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDeviceStatus_WithNoStatus_ShouldReturnNotFound" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.CreateDevice_WithInvalidName_ShouldHandleValidationError(invalidName: null)" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="d79e71f7-b631-4aad-1118-906af570de45">
+      <Execution id="ab310f5f-3194-4da5-b003-1a89ad14fd10" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="CreateDevice_WithInvalidName_ShouldHandleValidationError" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.ToggleDevice_WithValidDevice_ShouldUpdateEnabledState" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="4d313015-194c-2c15-b8fc-b349d2d65c4b">
+      <Execution id="1be4801f-b66a-467b-a10c-8592bffd194b" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="ToggleDevice_WithValidDevice_ShouldUpdateEnabledState" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.CreateDevice_InvalidData_ShouldReturnValidationError" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="f212ac7c-2cb5-c260-a38f-2cb3a9c64068">
+      <Execution id="9a4a9bd8-7128-4d0b-bbf5-bd62afc3e866" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="CreateDevice_InvalidData_ShouldReturnValidationError" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatus_WithExistingStatus_ShouldReturnLatestStatus" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="48dd7249-92a0-4a7a-6c43-cdb1f540ec07">
+      <Execution id="cc297b25-ae23-4769-a4b5-2ef34b521c8f" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDeviceStatus_WithExistingStatus_ShouldReturnLatestStatus" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevices_EmptyDatabase_ShouldReturnEmptyArray" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="c3bb1a46-72db-23eb-6ec3-087ddddae496">
+      <Execution id="4bfbc5f0-3b17-446e-ae1a-d9384fb85fee" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="GetDevices_EmptyDatabase_ShouldReturnEmptyArray" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.AddUsbDevice_ShouldCreateDeviceSuccessfully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="7fce1116-eee6-8bbf-d272-1140bf7b3e2c">
+      <Execution id="6f9408bf-9a8e-472d-ad52-c2c0bf6cd911" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="AddUsbDevice_ShouldCreateDeviceSuccessfully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.CreateSoftware_MissingRequiredField_ReturnsBadRequest" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="e92f673f-3bbe-c04b-fea9-ee97b2c3754c">
+      <Execution id="21c2d769-e1dd-4a20-a584-0b6fdf850a4d" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="CreateSoftware_MissingRequiredField_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.UpdateDevice_ValidChanges_ShouldUpdateSuccessfully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="4cb210e3-9f55-d26a-d73c-43b790f46faf">
+      <Execution id="2c3ac068-8086-46c7-9491-70000215726a" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="UpdateDevice_ValidChanges_ShouldUpdateSuccessfully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDevice_NonExistentDevice_ShouldReturnNotFound" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="15766d8b-769e-c511-6484-4de5ac266b55">
+      <Execution id="e00ecbb1-66fd-4844-aa75-4ada78a28e5d" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="GetDevice_NonExistentDevice_ShouldReturnNotFound" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.CreateDevice_ValidDevice_ShouldReturnCreatedWithLocation" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="a182f345-7e9e-b2b6-bd8d-91ae4ca7c729">
+      <Execution id="20126690-e5a1-4ff8-8b9d-df32183c98e3" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="CreateDevice_ValidDevice_ShouldReturnCreatedWithLocation" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.UpdateDevice_WithNonExistentDevice_ShouldReturnNotFound" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="406d650e-8af5-b5ed-34f1-6010e3d56165">
+      <Execution id="eedf6363-e5dd-483b-9556-512ce3364f33" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="UpdateDevice_WithNonExistentDevice_ShouldReturnNotFound" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.CompatControllerIntegrationTests.PostLogs_WithKnownDeviceId_ShouldCreateDeviceStatus" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="24a59ada-687a-3ae6-ccac-b8b090046908">
+      <Execution id="091085f7-a46b-4844-9ecf-9bde2d3443b5" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.CompatControllerIntegrationTests" name="PostLogs_WithKnownDeviceId_ShouldCreateDeviceStatus" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.GetDeviceStatus_ExistingDevice_ShouldReturnLatestStatus" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="6b18ebab-8e0c-05d7-e47d-35219bb342bf">
+      <Execution id="2137a40c-d3fb-489a-9cba-1f3f589b8686" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="GetDeviceStatus_ExistingDevice_ShouldReturnLatestStatus" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: DeviceDisconnected, action: StopSoftware)" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="14348b90-4ebf-b77f-8737-a77f91c20830">
+      <Execution id="0d76eda3-482a-4291-8d19-a67b93553638" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.SmokeServerTests.RunServerAndSmokeEndpoints" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="c1290ef0-b52d-f705-40a4-97d5e4b9346f">
+      <Execution id="7558e41f-020a-463a-b2ef-c25617797b68" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.SmokeServerTests" name="RunServerAndSmokeEndpoints" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.SystemStatus_MultipleEntries_ShouldStoreChronologically" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="ced52e83-96b5-9909-989d-25eb4ce217f9">
+      <Execution id="30d6c469-d4e6-4c1f-90e1-16f168b474c4" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="SystemStatus_MultipleEntries_ShouldStoreChronologically" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.Regression.HeartbeatRegressionTests.HealthEndpoint_Compatibility_ShouldReturn200" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="6374c80e-2406-27b5-1113-063bb78dce21">
+      <Execution id="77a88380-e017-4481-b043-f207bce173d3" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.Regression.HeartbeatRegressionTests" name="HealthEndpoint_Compatibility_ShouldReturn200" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests.PostConfigs_CreateStandaloneSoftware_ShouldReturnCreatedAndPersistSoftware" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="45d832f0-037f-811a-83dc-839252daf9dd">
+      <Execution id="e7220c21-8aa8-4913-88fd-f5876a3d293b" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests" name="PostConfigs_CreateStandaloneSoftware_ShouldReturnCreatedAndPersistSoftware" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDevice_WithValidId_ShouldReturnDevice" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="e7ea919c-cf75-b430-b71c-f75f864707f6">
+      <Execution id="23fe0ebd-884b-4cd2-b088-a6b462ec9fd5" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDevice_WithValidId_ShouldReturnDevice" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.ScanForDevices_ShouldReturnSuccessResponse" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="da0f4753-cc88-a477-6e11-4870ccd80dcd">
+      <Execution id="f3c571a7-2e8c-4d57-91dc-1713becca2e8" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="ScanForDevices_ShouldReturnSuccessResponse" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: Manual, action: SendNotification)" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="fb6164b5-5fdd-0363-b1d1-8e0ac579e14b">
+      <Execution id="b4aba3e5-8a2e-4999-94e6-99c52f9017b5" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.DeviceStatus_TimestampIndexing_ShouldSupportTimeRangeQueries" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="b1dad546-500d-cd56-ee42-50d78ac58dbc">
+      <Execution id="82577fe4-606f-4b17-b535-202c21506e75" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="DeviceStatus_TimestampIndexing_ShouldSupportTimeRangeQueries" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests.PostConfigs_CreateDeviceAndSoftware_ShouldReturnCreatedAndPersistRule" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="d693a885-be4f-e9d7-3a4d-2930f443c076">
+      <Execution id="4bdfe6ce-abd3-4303-9918-6c0e2fa488bc" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests" name="PostConfigs_CreateDeviceAndSoftware_ShouldReturnCreatedAndPersistRule" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: DeviceConnected, action: StartSoftware)" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="0c040494-76fc-bb27-2c4a-b5f185e69a7c">
+      <Execution id="e30e42a9-663b-4137-a003-3b7407fb8188" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.ScanForDevices_ShouldReturnSuccessResponse" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="87f1b0b9-2b70-a7e4-83ed-8d6c0cec1764">
+      <Execution id="923a783b-f1e0-4d28-a37a-0fe82897dcac" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="ScanForDevices_ShouldReturnSuccessResponse" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests.PostConfigs_InvalidPayload_ShouldReturnBadRequest" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="fdf7417d-5e8e-8251-736b-3d3db19207fc">
+      <Execution id="f8e600d2-3479-4cb5-9ed7-e9b2b175a3a5" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.CompatControllerConfigsTests" name="PostConfigs_InvalidPayload_ShouldReturnBadRequest" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.DeleteDevice_WithValidId_ShouldDeleteSuccessfully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="9996432f-8d01-ebc3-ef1e-714693e03c4d">
+      <Execution id="87daaddd-1229-44f1-86a2-2e097fdfe365" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="DeleteDevice_WithValidId_ShouldDeleteSuccessfully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.DevicesControllerTests.GetDeviceStatusHistory_WithLargeTimeRange_ShouldHandlePerformanceGracefully" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="9fe1b9c4-ef45-0b6f-5097-63e9435ad4df">
+      <Execution id="1c5cda6e-0881-4ccf-a4bc-f95a59dec1c4" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.DevicesControllerTests" name="GetDeviceStatusHistory_WithLargeTimeRange_ShouldHandlePerformanceGracefully" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.ToggleDevice_EnableDisable_ShouldUpdateState" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="c9a97ae1-6374-82d6-679b-286cbe676de5">
+      <Execution id="b49ed09a-0967-453e-b9ec-ae76a29d9b0b" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="ToggleDevice_EnableDisable_ShouldUpdateState" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.DeviceApiWorkflow_CreateReadUpdateDelete_ShouldWorkEndToEnd" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="f715cbcd-2377-202f-c29b-9ca40ce6414f">
+      <Execution id="5318e2dc-3d04-433b-96d8-85af3c460651" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="DeviceApiWorkflow_CreateReadUpdateDelete_ShouldWorkEndToEnd" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.MultiDeviceRacingSetup_ComplexAutomation_ShouldHandleMultipleDevicesAndSoftware" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="d4754b5b-c16d-3b6c-f7bb-bdf9b03ef847">
+      <Execution id="c86eab09-443d-45a5-bd13-9d6a8cbe19c5" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="MultiDeviceRacingSetup_ComplexAutomation_ShouldHandleMultipleDevicesAndSoftware" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Unit.SimRacingContextTests.AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly(trigger: SystemStartup, action: RunScript)" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="783cdefe-a38c-dfac-ab70-63ce6f1cee2b">
+      <Execution id="56cedac0-6490-4ece-9509-4aaf656be994" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Unit.SimRacingContextTests" name="AutomationRule_ValidTriggerActionCombinations_ShouldPersistCorrectly" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Functional.DashboardFunctionalTests.AutomationWorkflow_ComplexRuleExecution_ShouldExecuteInCorrectOrder" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="6ace27e5-2097-4fc7-0432-866b105e30d5">
+      <Execution id="8c77d8a1-d8fb-4df3-8449-1c2ea2574b91" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Functional.DashboardFunctionalTests" name="AutomationWorkflow_ComplexRuleExecution_ShouldExecuteInCorrectOrder" />
+    </UnitTest>
+    <UnitTest name="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests.DeleteDevice_NonExistentDevice_ShouldReturnNotFound" storage="e:\workspaces\git\simracing\usbdevicemanager\server\usbdevicemanager.tests\bin\debug\net8.0\usbdevicemanager.tests.dll" id="7b6b3cda-6a73-e7b0-d226-3151edacfb3e">
+      <Execution id="107d8d2b-361c-4c46-828b-8e79389ab50d" />
+      <TestMethod codeBase="E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0\USBDeviceManager.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="USBDeviceManager.Tests.Integration.DevicesApiIntegrationTests" name="DeleteDevice_NonExistentDevice_ShouldReturnNotFound" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="169ca4b2-e1ad-d05f-efb3-4af03e43c044" executionId="fa866043-b139-4586-85ce-cc6ab6233047" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="406d650e-8af5-b5ed-34f1-6010e3d56165" executionId="eedf6363-e5dd-483b-9556-512ce3364f33" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c040494-76fc-bb27-2c4a-b5f185e69a7c" executionId="e30e42a9-663b-4137-a003-3b7407fb8188" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a9ad3787-449b-9a3c-4d0e-e47880fb8dc5" executionId="abeb221c-3486-4a4a-89d6-dd689e0ddda6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="251719bd-5bf3-7a07-b8c4-48bb68222006" executionId="6ae72b9f-3916-4676-bdf1-1e009a54ca3f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57943011-683c-d008-e817-e7739d5b7bbb" executionId="d2fe711e-cf0d-4d1a-bb23-ab6c40d7de79" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c1290ef0-b52d-f705-40a4-97d5e4b9346f" executionId="7558e41f-020a-463a-b2ef-c25617797b68" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f715cbcd-2377-202f-c29b-9ca40ce6414f" executionId="5318e2dc-3d04-433b-96d8-85af3c460651" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d79e71f7-b631-4aad-1118-906af570de45" executionId="ab310f5f-3194-4da5-b003-1a89ad14fd10" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f44b5a09-0e41-5296-ee59-c2187e327deb" executionId="67977f44-c806-4f93-b9c9-4928aee17f30" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fb6164b5-5fdd-0363-b1d1-8e0ac579e14b" executionId="b4aba3e5-8a2e-4999-94e6-99c52f9017b5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ace27e5-2097-4fc7-0432-866b105e30d5" executionId="8c77d8a1-d8fb-4df3-8449-1c2ea2574b91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ec54255-633f-fd54-587f-350cc5bf77ca" executionId="ceb2633e-f7fc-4616-a4f4-efe95e270bdc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4cb210e3-9f55-d26a-d73c-43b790f46faf" executionId="2c3ac068-8086-46c7-9491-70000215726a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89bafb1a-9f4d-5471-245f-aa81225c0bc1" executionId="b7723605-9cde-467c-9aaf-0823ce920bef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9fe1b9c4-ef45-0b6f-5097-63e9435ad4df" executionId="1c5cda6e-0881-4ccf-a4bc-f95a59dec1c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48dd7249-92a0-4a7a-6c43-cdb1f540ec07" executionId="cc297b25-ae23-4769-a4b5-2ef34b521c8f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a182f345-7e9e-b2b6-bd8d-91ae4ca7c729" executionId="20126690-e5a1-4ff8-8b9d-df32183c98e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fdf7417d-5e8e-8251-736b-3d3db19207fc" executionId="f8e600d2-3479-4cb5-9ed7-e9b2b175a3a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="752133f3-9301-dcc1-abd3-d209d41cc939" executionId="bb244b45-145d-4ea4-ac19-bcf76270b5fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6374c80e-2406-27b5-1113-063bb78dce21" executionId="77a88380-e017-4481-b043-f207bce173d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3577e245-324e-33c4-1008-069c2b1446a3" executionId="a4f4692c-a7c9-4104-89a7-f3ade3a59303" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="87f1b0b9-2b70-a7e4-83ed-8d6c0cec1764" executionId="923a783b-f1e0-4d28-a37a-0fe82897dcac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c07b4c16-1b49-3471-966b-a99d04304369" executionId="2c27e99c-0cdf-4bba-9c70-357ddaddd15b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7cb87aea-7170-76dc-3fe3-a772230ccea6" executionId="f3fb57ea-d19d-43d7-911c-9609a444193b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ac3d203-a2da-300d-dac1-b1011d17ce5a" executionId="4e95455b-2b04-440c-9fa6-d4f346b3e273" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="66d12bef-80f3-421e-daf5-f613a878904d" executionId="737b034b-b545-46f0-8646-5d526ffb04db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7ea919c-cf75-b430-b71c-f75f864707f6" executionId="23fe0ebd-884b-4cd2-b088-a6b462ec9fd5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f1cf935a-2026-44fc-c4e7-bc74f5dfc657" executionId="1edddf38-6f7d-4c3c-8274-3aac8c5a7276" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7c8ad78-d389-e6fc-9486-6211b9776f36" executionId="27e4dc07-c539-4cb3-ba92-020eb751cc03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d50f58a8-6253-3b49-6eca-bc8634df1396" executionId="44fcebc1-d5f4-4d2d-a2a6-3de9d4e761a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3242f0f8-413e-4669-5b50-e91c84e4f6f2" executionId="a8c60099-72b6-43de-8f9f-de740ea132f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4d313015-194c-2c15-b8fc-b349d2d65c4b" executionId="1be4801f-b66a-467b-a10c-8592bffd194b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e92f673f-3bbe-c04b-fea9-ee97b2c3754c" executionId="21c2d769-e1dd-4a20-a584-0b6fdf850a4d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="15766d8b-769e-c511-6484-4de5ac266b55" executionId="e00ecbb1-66fd-4844-aa75-4ada78a28e5d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9996432f-8d01-ebc3-ef1e-714693e03c4d" executionId="87daaddd-1229-44f1-86a2-2e097fdfe365" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c4271a2-bc44-cc77-95ca-260e4b31813c" executionId="a1901710-8cc1-4e61-8af0-995724bb036a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="783cdefe-a38c-dfac-ab70-63ce6f1cee2b" executionId="56cedac0-6490-4ece-9509-4aaf656be994" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b29cba0b-099c-451c-658e-e4d53b95b7ce" executionId="8fbdfede-a0e8-47b5-868f-da0bb50f4039" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="da0f4753-cc88-a477-6e11-4870ccd80dcd" executionId="f3c571a7-2e8c-4d57-91dc-1713becca2e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="14348b90-4ebf-b77f-8737-a77f91c20830" executionId="0d76eda3-482a-4291-8d19-a67b93553638" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d693a885-be4f-e9d7-3a4d-2930f443c076" executionId="4bdfe6ce-abd3-4303-9918-6c0e2fa488bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="24a59ada-687a-3ae6-ccac-b8b090046908" executionId="091085f7-a46b-4844-9ecf-9bde2d3443b5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6b18ebab-8e0c-05d7-e47d-35219bb342bf" executionId="2137a40c-d3fb-489a-9cba-1f3f589b8686" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68a205d8-ee11-30f5-8f98-eea37a2e1ff9" executionId="230d96d2-057d-4e4b-8b9d-f38410a58ecc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ced52e83-96b5-9909-989d-25eb4ce217f9" executionId="30d6c469-d4e6-4c1f-90e1-16f168b474c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fcb0a15a-73f9-14ca-21b5-4fba0751720f" executionId="53a2a508-faa4-4365-a438-8bb0a2f835a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9a918b46-5485-38e1-6195-d63ff70e4cb3" executionId="d155ca24-1306-4532-9f33-f4398243e1e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4cadfce5-dfb9-f81b-0695-40b2b2e617e8" executionId="d92aff6d-1a75-40b6-8b79-cf3266085ef0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a757b74b-5eb6-6ff1-0405-604fe3022a30" executionId="4fe0a7e6-cbc5-4c14-afee-566dc3cc52f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2580a49a-bc5f-601c-7982-c413b36eb5f3" executionId="e6b191dd-1108-4569-9fb6-e31621067aac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7f78dc9e-dca3-2220-bd77-eeade20ce57a" executionId="26542614-b628-4390-b26d-4e52a0406227" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b1dad546-500d-cd56-ee42-50d78ac58dbc" executionId="82577fe4-606f-4b17-b535-202c21506e75" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d4754b5b-c16d-3b6c-f7bb-bdf9b03ef847" executionId="c86eab09-443d-45a5-bd13-9d6a8cbe19c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6215f624-50bc-e02b-aa25-8a2b79fe3900" executionId="016af9ed-6945-4263-9ea8-39a489b138c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="693950b6-2366-ab72-6393-6039701e115c" executionId="6111870b-840e-470e-89ae-b57ae0cba97b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18f30a39-8859-4c68-494a-c13e1c649464" executionId="120496d2-3f58-4da2-ba19-f5d6c8138f2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45d832f0-037f-811a-83dc-839252daf9dd" executionId="e7220c21-8aa8-4913-88fd-f5876a3d293b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f212ac7c-2cb5-c260-a38f-2cb3a9c64068" executionId="9a4a9bd8-7128-4d0b-bbf5-bd62afc3e866" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c9a97ae1-6374-82d6-679b-286cbe676de5" executionId="b49ed09a-0967-453e-b9ec-ae76a29d9b0b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b6b3cda-6a73-e7b0-d226-3151edacfb3e" executionId="107d8d2b-361c-4c46-828b-8e79389ab50d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7fce1116-eee6-8bbf-d272-1140bf7b3e2c" executionId="6f9408bf-9a8e-472d-ad52-c2c0bf6cd911" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b4d1297b-0396-d49e-279a-0db2a16f7768" executionId="28474a36-442d-446f-83ac-160b1700c8c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ad19d2e-a5a2-77e2-d835-2be38a21fbe5" executionId="db2c4b4f-afc2-4a59-872b-08ecb5546e45" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c3bb1a46-72db-23eb-6ec3-087ddddae496" executionId="4bfbc5f0-3b17-446e-ae1a-d9384fb85fee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Risultati non in elenco" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="Tutti i risultati caricati" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="65" executed="65" passed="65" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.23)&#xD;
+[xUnit.net 00:00:00.06]   Discovering: USBDeviceManager.Tests&#xD;
+[xUnit.net 00:00:00.09]   Discovered:  USBDeviceManager.Tests&#xD;
+[xUnit.net 00:00:00.09]   Starting:    USBDeviceManager.Tests&#xD;
+[DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
+[DIAG] WebRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\wwwroot&#xD;
+USB Device Manager Server starting...&#xD;
+Dashboard: http://localhost:5000&#xD;
+API Documentation: http://localhost:5000/swagger&#xD;
+Press Ctrl+C to shut down.&#xD;
+[DIAG] ApplicationStarted: 2026-01-19T11:38:16.2945928Z&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113815_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113815_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] ApplicationStopping: 2026-01-19T11:38:16.8385463Z&#xD;
+[DIAG] Environment.ExitCode = 0&#xD;
+[DIAG] Managed thread id: 174&#xD;
+[DIAG] StackTrace:&#xD;
+   at System.Environment.get_StackTrace()&#xD;
+   at Program.&lt;&gt;c.&lt;&lt;Main&gt;$&gt;b__0_8() in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\Program.cs:line 170&#xD;
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.ApplicationLifetime.StopApplication()&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose(Boolean disposing)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 296&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose()&#xD;
+   at Xunit.Sdk.ExceptionAggregator.Run(Action code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 73&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestClassRunner.cs:line 194&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync()&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 178&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunTestMethodsAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 234&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 124&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunTestCasesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 142&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestCaseRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCaseRunner.cs:line 99&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestRunner.cs:line 185&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.XunitTestRunner.InvokeTestAsync(ExceptionAggregator aggregator) in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestRunner.cs:line 76&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.&lt;RunAsync&gt;b__47_0() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 222&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.InvokeTestMethodAsync(Object testClassInstance) in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 304&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at Xunit.Sdk.AsyncTestSyncContext.&lt;&gt;c__DisplayClass7_0.&lt;Post&gt;b__0() in /_/src/xunit.execution/Sdk/AsyncTestSyncContext.cs:line 58&#xD;
+   at Xunit.Sdk.XunitWorkerThread.&lt;&gt;c.&lt;QueueUserWorkItem&gt;b__5_0(Object _) in /_/src/common/XunitWorkerThread.cs:line 37&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
+[DIAG] ApplicationStopped: 2026-01-19T11:38:16.8423356Z&#xD;
+[DIAG] app.Run() exited normally.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113815_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113815_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
+[DIAG] WebRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\wwwroot&#xD;
+USB Device Manager Server starting...&#xD;
+Dashboard: http://localhost:5000&#xD;
+API Documentation: http://localhost:5000/swagger&#xD;
+Press Ctrl+C to shut down.&#xD;
+[DIAG] ApplicationStarted: 2026-01-19T11:38:18.6394475Z&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+[DIAG] ApplicationStopping: 2026-01-19T11:38:18.6819701Z&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] Environment.ExitCode = 0&#xD;
+[DIAG] Managed thread id: 197&#xD;
+[DIAG] StackTrace:&#xD;
+   at System.Environment.get_StackTrace()&#xD;
+   at Program.&lt;&gt;c.&lt;&lt;Main&gt;$&gt;b__0_8() in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\Program.cs:line 170&#xD;
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.ApplicationLifetime.StopApplication()&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose(Boolean disposing)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 296&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose()&#xD;
+   at Xunit.Sdk.ExceptionAggregator.Run(Action code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 73&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestClassRunner.cs:line 194&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync()&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 178&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunTestMethodsAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 234&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 124&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunTestCasesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 142&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestCaseRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCaseRunner.cs:line 99&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestRunner.cs:line 185&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.XunitTestRunner.InvokeTestAsync(ExceptionAggregator aggregator) in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestRunner.cs:line 76&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.&lt;RunAsync&gt;b__47_0() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 222&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.InvokeTestMethodAsync(Object testClassInstance) in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 304&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at Xunit.Sdk.AsyncTestSyncContext.&lt;&gt;c__DisplayClass7_0.&lt;Post&gt;b__0() in /_/src/xunit.execution/Sdk/AsyncTestSyncContext.cs:line 58&#xD;
+   at Xunit.Sdk.XunitWorkerThread.&lt;&gt;c.&lt;QueueUserWorkItem&gt;b__5_0(Object _) in /_/src/common/XunitWorkerThread.cs:line 37&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
+[DIAG] ApplicationStopped: 2026-01-19T11:38:18.6830513Z&#xD;
+[DIAG] app.Run() exited normally.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
+[DIAG] WebRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\wwwroot&#xD;
+USB Device Manager Server starting...&#xD;
+Dashboard: http://localhost:5000&#xD;
+API Documentation: http://localhost:5000/swagger&#xD;
+Press Ctrl+C to shut down.&#xD;
+[DIAG] ApplicationStarted: 2026-01-19T11:38:18.7222850Z&#xD;
+[DIAG] ApplicationStopping: 2026-01-19T11:38:18.8178727Z&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] Environment.ExitCode = 0&#xD;
+[DIAG] Managed thread id: 222&#xD;
+[DIAG] StackTrace:&#xD;
+   at System.Environment.get_StackTrace()&#xD;
+   at Program.&lt;&gt;c.&lt;&lt;Main&gt;$&gt;b__0_8() in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\Program.cs:line 170&#xD;
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.ApplicationLifetime.StopApplication()&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose(Boolean disposing)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 296&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose()&#xD;
+   at Xunit.Sdk.ExceptionAggregator.Run(Action code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 73&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestClassRunner.cs:line 194&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync()&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 178&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunTestMethodsAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 234&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 124&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunTestCasesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 142&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestCaseRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCaseRunner.cs:line 99&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestRunner.cs:line 185&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.XunitTestRunner.InvokeTestAsync(ExceptionAggregator aggregator) in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestRunner.cs:line 76&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.&lt;RunAsync&gt;b__47_0() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 222&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.InvokeTestMethodAsync(Object testClassInstance) in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 304&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at Xunit.Sdk.AsyncTestSyncContext.&lt;&gt;c__DisplayClass7_0.&lt;Post&gt;b__0() in /_/src/xunit.execution/Sdk/AsyncTestSyncContext.cs:line 58&#xD;
+   at Xunit.Sdk.XunitWorkerThread.&lt;&gt;c.&lt;QueueUserWorkItem&gt;b__5_0(Object _) in /_/src/common/XunitWorkerThread.cs:line 37&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
+[DIAG] ApplicationStopped: 2026-01-19T11:38:18.8190186Z&#xD;
+[DIAG] app.Run() exited normally.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
+[DIAG] WebRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\wwwroot&#xD;
+USB Device Manager Server starting...&#xD;
+Dashboard: http://localhost:5000&#xD;
+API Documentation: http://localhost:5000/swagger&#xD;
+Press Ctrl+C to shut down.&#xD;
+[DIAG] ApplicationStarted: 2026-01-19T11:38:18.8597170Z&#xD;
+[DIAG] ApplicationStopping: 2026-01-19T11:38:18.8727773Z&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] Environment.ExitCode = 0&#xD;
+[DIAG] Managed thread id: 239&#xD;
+[DIAG] StackTrace:&#xD;
+   at System.Environment.get_StackTrace()&#xD;
+   at Program.&lt;&gt;c.&lt;&lt;Main&gt;$&gt;b__0_8() in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\Program.cs:line 170&#xD;
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.ApplicationLifetime.StopApplication()&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose(Boolean disposing)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 296&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose()&#xD;
+   at Xunit.Sdk.ExceptionAggregator.Run(Action code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 73&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestClassRunner.cs:line 194&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync()&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 178&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunTestMethodsAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 234&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 124&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunTestCasesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 142&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestCaseRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCaseRunner.cs:line 99&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestRunner.cs:line 185&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.XunitTestRunner.InvokeTestAsync(ExceptionAggregator aggregator) in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestRunner.cs:line 76&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.&lt;RunAsync&gt;b__47_0() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 222&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.InvokeTestMethodAsync(Object testClassInstance) in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 304&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at Xunit.Sdk.AsyncTestSyncContext.&lt;&gt;c__DisplayClass7_0.&lt;Post&gt;b__0() in /_/src/xunit.execution/Sdk/AsyncTestSyncContext.cs:line 58&#xD;
+   at Xunit.Sdk.XunitWorkerThread.&lt;&gt;c.&lt;QueueUserWorkItem&gt;b__5_0(Object _) in /_/src/common/XunitWorkerThread.cs:line 37&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
+[DIAG] ApplicationStopped: 2026-01-19T11:38:18.8735852Z&#xD;
+[DIAG] app.Run() exited normally.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
+[DIAG] WebRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\wwwroot&#xD;
+USB Device Manager Server starting...&#xD;
+Dashboard: http://localhost:5000&#xD;
+API Documentation: http://localhost:5000/swagger&#xD;
+Press Ctrl+C to shut down.&#xD;
+[DIAG] ApplicationStarted: 2026-01-19T11:38:18.9148949Z&#xD;
+[DIAG] ApplicationStopping: 2026-01-19T11:38:19.3496426Z&#xD;
+[DIAG] Environment.ExitCode = 0&#xD;
+[DIAG] Managed thread id: 407&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[DIAG] StackTrace:&#xD;
+   at System.Environment.get_StackTrace()&#xD;
+   at Program.&lt;&gt;c.&lt;&lt;Main&gt;$&gt;b__0_8() in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager\Program.cs:line 170&#xD;
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.ApplicationLifetime.StopApplication()&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.Extensions.Hosting.Internal.Host.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder.DeferredHost.StopAsync(CancellationToken cancellationToken)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.DisposeAsync()&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose(Boolean disposing)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 296&#xD;
+   at Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1.Dispose()&#xD;
+   at Xunit.Sdk.ExceptionAggregator.Run(Action code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 73&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestClassRunner.cs:line 194&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at Xunit.Sdk.XunitTestClassRunner.BeforeTestClassFinishedAsync()&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 178&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestClassRunner`1.RunTestMethodsAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 234&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 124&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestMethodRunner`1.RunTestCasesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 142&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestCaseRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCaseRunner.cs:line 99&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.TestRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestRunner.cs:line 185&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at Xunit.Sdk.XunitTestRunner.InvokeTestAsync(ExceptionAggregator aggregator) in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestRunner.cs:line 76&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.ExceptionAggregator.RunAsync[T](Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 114&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.&lt;RunAsync&gt;b__47_0() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 222&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)&#xD;
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)&#xD;
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)&#xD;
+   at Xunit.Sdk.TestInvoker`1.InvokeTestMethodAsync(Object testClassInstance) in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 304&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)&#xD;
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()&#xD;
+   at Xunit.Sdk.AsyncTestSyncContext.&lt;&gt;c__DisplayClass7_0.&lt;Post&gt;b__0() in /_/src/xunit.execution/Sdk/AsyncTestSyncContext.cs:line 58&#xD;
+   at Xunit.Sdk.XunitWorkerThread.&lt;&gt;c.&lt;QueueUserWorkItem&gt;b__5_0(Object _) in /_/src/common/XunitWorkerThread.cs:line 37&#xD;
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
+[DIAG] ApplicationStopped: 2026-01-19T11:38:19.3505705Z&#xD;
+[DIAG] app.Run() exited normally.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119113818_28844.db' because it is being used by another process.&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
+[xUnit.net 00:00:04.12]   Finished:    USBDeviceManager.Tests&#xD;
+[DIAG] ProcessExit event fired at 2026-01-19T11:38:19.3717516Z. ExitCode=0&#xD;
+[DIAG] ProcessExit event fired at 2026-01-19T11:38:19.3717771Z. ExitCode=0&#xD;
+[DIAG] ProcessExit event fired at 2026-01-19T11:38:19.3717800Z. ExitCode=0&#xD;
+[DIAG] ProcessExit event fired at 2026-01-19T11:38:19.3717817Z. ExitCode=0&#xD;
+[DIAG] ProcessExit event fired at 2026-01-19T11:38:19.3717831Z. ExitCode=0&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
