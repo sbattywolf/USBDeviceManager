@@ -8,13 +8,14 @@ using USBDeviceManager.Data;
 using USBDeviceManager.Models;
 using USBDeviceManager.Tests.Helpers;
 
-namespace USBDeviceManager.Tests.Unit;
-
-/// <summary>
-/// Unit tests for DevicesController API endpoints
-/// Tests CRUD operations, validation, and error handling
-/// </summary>
-public class DevicesControllerTests : IDisposable
+namespace USBDeviceManager.Tests.Unit
+{
+    /// <summary>
+    /// Unit tests for DevicesController API endpoints
+    /// Tests CRUD operations, validation, and error handling
+    /// </summary>
+    [Trait("Category","Unit")]
+    public class DevicesControllerTests : IDisposable
 {
     private readonly SimRacingContext _context;
     private readonly Mock<ILogger<DevicesController>> _mockLogger;
@@ -439,4 +440,5 @@ public class DevicesControllerTests : IDisposable
         _context.Database.EnsureDeleted();
         _context.Dispose();
     }
+}
 }
