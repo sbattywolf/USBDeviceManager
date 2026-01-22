@@ -4,6 +4,7 @@ using FluentAssertions;
 
 namespace USBDeviceManager.Tests.Functional;
 
+[Trait("Category","Smoke")]
 public class SmokeServerTests
 {
     [Fact]
