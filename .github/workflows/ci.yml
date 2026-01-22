@@ -50,6 +50,22 @@ jobs:
       - name: Restore NuGet
         run: dotnet restore USBDeviceManager.sln
 
+      - name: Ensure server stopped (optional auto-kill)
+        shell: pwsh
+        run: |
+          if (Test-Path .\scripts\ensure-server-stopped.ps1) {
+            Write-Host 'Running ensure-server-stopped.ps1 (respects AUTO_KILL env var).'
+            & .\scripts\ensure-server-stopped.ps1
+            $rc = $LASTEXITCODE
+            if ($rc -eq 2) {
+              Write-Host "ensure-server-stopped returned 2 (AUTO_KILL=false and process present). Continuing as configured."
+            } elseif ($rc -ne 0) {
+              throw "ensure-server-stopped.ps1 failed with exit code $rc"
+            }
+          } else {
+            Write-Host 'No ensure-server-stopped.ps1 present; skipping.'
+          }
+
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
@@ -116,6 +132,16 @@ jobs:
             server/USBDeviceManager.Tests/Integration/logs/**
             agent/SimRacingAgent.Tests/Functional/logs/**
             agent/SimRacingAgent.Tests/logs/**
+
+      - name: Upload server logs (build matrix)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log-${{ matrix.os }}
+          path: |
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
     needs: build-and-test
@@ -176,6 +202,16 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path ./scripts/stop-test-environment.ps1) { .\scripts\stop-test-environment.ps1 } else { Write-Host 'No stop script present.' }
+
+      - name: Upload server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log-${{ runner.os }}
+          path: |
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ensure-stopped.log
 
       - name: Upload integration results
         if: always()
