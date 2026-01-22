@@ -11,6 +11,7 @@ namespace USBDeviceManager.Tests.Functional;
 /// Functional tests for complete SimRacing Dashboard workflows
 /// Tests end-to-end user scenarios and system integration
 /// </summary>
+[Trait("Category","Functional")]
 public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 {
     private readonly SimRacingTestFactory _factory;

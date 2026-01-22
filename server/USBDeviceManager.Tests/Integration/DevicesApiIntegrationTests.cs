@@ -14,6 +14,7 @@ namespace USBDeviceManager.Tests.Integration;
 /// Integration tests for Devices API endpoints
 /// Tests full HTTP request/response cycle with database integration
 /// </summary>
+[Trait("Category","Integration")]
 public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 {
     private readonly SimRacingTestFactory _factory;

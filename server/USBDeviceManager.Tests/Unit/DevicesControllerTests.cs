@@ -14,6 +14,7 @@ namespace USBDeviceManager.Tests.Unit;
 /// Unit tests for DevicesController API endpoints
 /// Tests CRUD operations, validation, and error handling
 /// </summary>
+[Trait("Category","Unit")]
 public class DevicesControllerTests : IDisposable
 {
     private readonly SimRacingContext _context;

@@ -11,6 +11,7 @@ namespace USBDeviceManager.Tests.Unit;
 /// Unit tests for SimRacingContext database operations
 /// Tests entity relationships, constraints, and data integrity
 /// </summary>
+[Trait("Category","Unit")]
 public class SimRacingContextTests : IDisposable
 {
     private readonly SimRacingContext _context;
