@@ -1,0 +1,26 @@
+@page "/logs"
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<h3>Logs</h3>
+<p>Live logs and diagnostics (placeholder).</p>
+
+<button class="btn btn-secondary" @onclick="LoadRecent">Load Recent Server Log</button>
+
+<pre>@logText</pre>
+
+@code {
+    string logText = "";
+
+    async Task LoadRecent()
+    {
+        try
+        {
+            logText = await Http.GetStringAsync("api/logs/recent");
+        }
+        catch (Exception ex)
+        {
+            logText = "Error: " + ex.Message;
+        }
+    }
+}

@@ -1,0 +1,55 @@
+@using Microsoft.AspNetCore.Components
+@inject System.Net.Http.HttpClient Http
+
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Live Logs</h5>
+        <button class="btn btn-sm btn-outline-secondary" @onclick="Clear">Clear</button>
+    </div>
+    <div class="card-body" style="max-height:300px; overflow:auto; font-family: monospace; font-size: 0.9rem;">
+        <pre class="mb-0">@rendered</pre>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<string>? Logs { get; set; }
+
+    [Parameter]
+    public bool AutoScroll { get; set; } = false; // reserved for future JS scrolling
+
+    private string rendered => RenderLogs();
+
+    private string RenderLogs()
+    {
+        if (Logs == null || Logs.Count == 0) return string.Empty;
+        // Logs are expected newest-first; render as lines
+        lock (Logs)
+        {
+            return string.Join('\n', Logs);
+        }
+    }
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        if ((Logs == null || Logs.Count == 0) && Http != null) {
+            try {
+                var sample = await Http.GetFromJsonAsync<List<string>>("sample-data/logs.json");
+                if (sample != null && sample.Count > 0) {
+                    Logs = sample;
+                }
+            } catch {
+                // ignore if sample data not present
+            }
+        }
+    }
+
+    private void Clear()
+    {
+        if (Logs == null) return;
+        lock (Logs)
+        {
+            Logs.Clear();
+        }
+    }
+}

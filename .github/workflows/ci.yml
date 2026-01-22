@@ -7,11 +7,27 @@ on:
     branches: [ main, master ]
 
 jobs:
+  gui-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install GUI requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r gui/requirements.txt
+      - name: Run GUI tests
+        run: pytest -q gui/tests
+
   build-and-test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
+    needs: gui-tests
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,12 +57,22 @@ jobs:
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
 
+      - name: Run isolated AgentHeartbeat tests
+        run: |
+          if (Test-Path server/AgentHeartbeat.Tests) {
+            dotnet test server/AgentHeartbeat.Tests/AgentHeartbeat.Tests.csproj --configuration Debug --logger "trx;LogFileName=agentheartbeat-${{ matrix.os }}.trx"
+          } else {
+            echo 'No isolated AgentHeartbeat.Tests project found; skipping.'
+          }
+
       - name: Upload dotnet test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dotnet-tests-${{ matrix.os }}
-          path: '**/*.trx'
+          path: |
+            '**/*.trx'
+            server/AgentHeartbeat.Tests/**/TestResults/*.trx
 
       - name: Run sanitize-repo check (PowerShell script)
         shell: pwsh
@@ -57,11 +83,9 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          # prefer the project's CI helper when available
           if (Test-Path .\ci\run-tests.ps1) {
             .\ci\run-tests.ps1 -RunAgentTests -RunServerTests:$false -NonInteractive
           } elseif (Test-Path .\agent\SimRacingAgent.Tests) {
-            # fallback: invoke any Pester tests found under agent test folders
             Import-Module Pester -Force -MinimumVersion 5.0
             Invoke-Pester -Script @{ Path = '.\agent\SimRacingAgent.Tests'; OutputFormat = 'NUnitXml'; OutputFile = 'agent-pester-results.xml' }
             Write-Host 'Pester results: agent-pester-results.xml'

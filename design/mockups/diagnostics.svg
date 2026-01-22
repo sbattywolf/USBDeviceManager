@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .bg{fill:#f7f9fb}
+    .card{fill:#fff;stroke:#e6e9ef;rx:8}
+    .title{font:600 20px 'Inter',sans-serif;fill:#0b1622}
+    .muted{font:400 13px 'Inter',sans-serif;fill:#6b7280}
+    .btn{font:600 13px 'Inter',sans-serif;fill:#0b1622}
+    .mono{font:400 12px 'Courier New',monospace;fill:#e6e6e6}
+  </style>
+  <rect class="bg" width="1200" height="800"/>
+  <rect x="260" y="20" width="920" height="60" rx="8" class="card" />
+  <text x="280" y="58" class="title">Diagnostics</text>
+
+  <rect x="260" y="100" width="920" height="120" rx="8" class="card" />
+  <text x="280" y="132" class="muted">Quick checks: /health, /api/services/running, /hubs/monitoring/negotiate</text>
+
+  <!-- Buttons -->
+  <rect x="280" y="150" width="160" height="36" rx="6" fill="#0aa99d" opacity="0.09" />
+  <text x="304" y="174" class="btn">Check /health</text>
+  <rect x="452" y="150" width="220" height="36" rx="6" fill="#0aa99d" opacity="0.09" />
+  <text x="468" y="174" class="btn">Check /api/services/running</text>
+  <rect x="684" y="150" width="240" height="36" rx="6" fill="#0aa99d" opacity="0.09" />
+  <text x="700" y="174" class="btn">Test SignalR negotiate</text>
+
+  <!-- Diagnostics output -->
+  <rect x="280" y="240" width="920" height="480" rx="8" fill="#0b0b0b" />
+  <text x="294" y="268" class="mono">[17:20:10] GET /health -> 200 OK</text>
+  <text x="294" y="292" class="mono">[17:20:12] GET /api/services/running -> 200 OK ({{...}})</text>
+  <text x="294" y="316" class="mono" fill="#fca5a5">[17:20:15] GET /hubs/monitoring/negotiate -> 404 Not Found</text>
+  <text x="294" y="340" class="mono">[17:20:20] WebSocket: connection failed (CORS)</text>
+</svg>

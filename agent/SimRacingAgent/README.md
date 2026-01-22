@@ -205,6 +205,29 @@ Get-Content "./Logs/agent-$(Get-Date -Format 'yyyy-MM-dd').log" -Wait -Tail 20
 ## Contributing
 
 1. **Fork the repository**
+## Single-Instance Mutex
+The single-instance mutex ensures that only one instance of the SimRacingAgent can run at a time. This prevents conflicts and resource contention.
+
+## Agent Identity & Startup
+- **Agent unique name**: The agent derives a per-machine identity using the host name plus an agent GUID stored in the agent config. This is used when registering with the server and for log filenames.
+- **Single-instance enforcement**: The agent acquires an OS named mutex (Global\SimRacingAgent_<hostname>) at startup; a second instance exits with a non-zero code. The mutex is released on clean shutdown.
+- **CLI modes**: `-Start`, `-Stop`, `-Status`, `-Configure`, `-Debug`. Use `-NonInteractive` for CI/automation.
+- **Configuration file**: `Utils/agent-config.json` contains `AgentId`, `ServerUrl`, `ManagedSoftware`, and `TelemetryEnabled`.
+
+## CI / Tests
+- CI runs are defined in `.github/workflows/` and execute server `.NET` tests and the PowerShell master test runner on Windows. The CI helper script is `ci/run-tests.ps1` which will run agent tests when `RunAgentTests` is enabled.
+- To run the full agent test suite locally (recommended on Windows PowerShell):
+```powershell
+# from repository root
+.\.tools\debug_invoke_fulltests.ps1   # wrapper that calls the master TestRunner
+# or directly:
+# pwsh -NoProfile -ExecutionPolicy Bypass -File .\agent\SimRacingAgent.Tests\TestRunner.ps1
+```
+- If your CI runner needs Pester, ensure the job installs or imports Pester (the workflows include a Windows-only step that runs PowerShell tests).
+
+
+## Test Helpers
+Test helpers provide utility functions and classes to facilitate testing of the agent's components. They simplify the setup and execution of tests, making it easier to validate functionality.
 2. **Create feature branch**: `git checkout -b feature/new-feature`
 3. **Add tests for new functionality**
 4. **Run test suite**: `./SimRacingAgent.Tests/TestRunner.ps1`
