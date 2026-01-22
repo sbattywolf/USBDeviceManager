@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-public class AgentsE2ETests : IClassFixture<WebApplicationFactory<Program>>
+[Trait("Category","E2E")]
+    public class AgentsE2ETests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> factory;
 

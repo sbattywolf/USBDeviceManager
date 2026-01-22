@@ -2,9 +2,10 @@ using System.Diagnostics;
 using System.Net.Http.Json;
 using FluentAssertions;
 
-namespace USBDeviceManager.Tests.Functional;
-
-public class SmokeServerTests
+namespace USBDeviceManager.Tests.Functional
+{
+    [Trait("Category","Functional")]
+    public class SmokeServerTests
 {
     [Fact]
     public async Task RunServerAndSmokeEndpoints()
@@ -72,4 +73,5 @@ public class SmokeServerTests
             }
         }
     }
+}
 }

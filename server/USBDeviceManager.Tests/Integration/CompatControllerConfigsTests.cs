@@ -7,6 +7,7 @@ using USBDeviceManager.Tests.Fixtures;
 
 namespace USBDeviceManager.Tests.Integration;
 
+[Trait("Category","Integration")]
 public class CompatControllerConfigsTests : IClassFixture<SimRacingTestFactory>
 {
     private readonly SimRacingTestFactory _factory;

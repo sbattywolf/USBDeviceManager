@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace USBDeviceManager.Tests
 {
+    [Trait("Category","Unit")]
     public class AgentsControllerTests
     {
         private StatusService CreateStatusService(string contentRoot)

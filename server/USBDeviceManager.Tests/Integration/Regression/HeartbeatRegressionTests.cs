@@ -5,6 +5,7 @@ using USBDeviceManager.Tests.Fixtures;
 
 namespace USBDeviceManager.Tests.Integration.Regression;
 
+[Trait("Category","Integration")]
 public class HeartbeatRegressionTests : IClassFixture<SimRacingTestFactory>
 {
     private readonly SimRacingTestFactory _factory;
