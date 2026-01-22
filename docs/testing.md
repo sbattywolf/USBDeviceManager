@@ -1,12 +1,14 @@
 # Testing guide
 
-This document describes the test taxonomy, where tests live, how CI runs them, and how to run tests locally and with the orchestration scripts.
+This document describes the test taxonomy, where tests live, how CI runs them, and how to run tests locally and with the orchestration scripts. The section below consolidates the test strategy, CI mapping, and runbook in a single place for maintainers.
 
 ## Test taxonomy
 - Unit: fast, pure logic tests. Use `Trait("Category","Unit")`.
 - Integration: exercises real application stack (in-memory DB, TestServer). Use `Trait("Category","Integration")`.
 - Functional: higher-level server behaviors that exercise multiple components and scripts. Use `Trait("Category","Functional")`.
 - E2E: full end-to-end tests that involve the agent binary and real-ish environment. Use `Trait("Category","E2E")`.
+
+Note: we normalize on xUnit `Trait("Category","...")` for .NET tests and use the same `Category` string inside Pester test suites for agent tests. Search the repo for existing usages (`Trait("Category",`) — tests are already categorized but new tests should follow this convention.
 
 ## Where tests live (convention)
 - `server/*Tests` — main .NET test projects for server, integration and E2E.
@@ -18,6 +20,10 @@ This document describes the test taxonomy, where tests live, how CI runs them, a
 - `integration-tests` job (windows): starts server via `scripts/start-server-and-wait.ps1`, runs Integration tests (`--filter "Category=Integration"`), then runs `scripts/stop-test-environment.ps1`.
 - `e2e-windows` job: builds and runs Agent E2E tests on Windows; marked `continue-on-error: true` to avoid blocking PRs for flaky hardware-dependent tests.
 - Agent Pester tests (when present) run on Windows in CI via `ci/run-tests.ps1` or via Pester invocation in the workflow.
+
+CI artifacts and debugging
+- When running integration or build matrix jobs the workflow uploads `scripts/tmp/server.log`, `scripts/tmp/server.err.log`, and `scripts/tmp/ensure-stopped.log` so that flaky server startups and leftover handles are easier to diagnose.
+- The `scripts/ensure-server-stopped.ps1` script is invoked before build steps to try to clear any stray server processes that would prevent `dotnet build` from overwriting binaries (file lock errors). It logs actions to `scripts/tmp/ensure-stopped.log`.
 
 ## How to run locally
 
@@ -53,6 +59,8 @@ dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj
 - `scripts/stop-test-environment.ps1` — tear down server and test artifacts.
 - `scripts/poll-health.ps1` — helpful for CI to poll service readiness.
 
+Guidance: use these scripts as the canonical way to bring up test dependencies in CI and locally. Avoid ad-hoc background processes in tests; prefer orchestration + health polling to achieve deterministic test runs.
+
 ## Folder conventions and guidance
 - Keep test helpers in `test/Utilities` for reuse.
 - Prefer `*.Tests` suffix for test projects and place them near the code they test (server tests under `server/`, agent tests under `agent/`).
@@ -65,6 +73,10 @@ To simplify CI and reduce hardware dependency, we recommend adding small DI abst
 - `IShellRunner` — run shell scripts and capture output (used by tests that invoke orchestration scripts).
 - `IUsbDeviceProvider` — simulate USB device attach/detach for integration/E2E tests.
 
+Actionable refactors (short-term)
+- Add `IProcessLauncher` and `IShellRunner` adapters (we've added `ProcessLauncher` and `ShellRunner` implementations in Services/Platform). Register test-friendly fakes in `Program.cs` for CI runs so the orchestration scripts can be used from managed test fixtures.
+- Add `InMemoryUsbDeviceProvider` to allow most integration tests to run without physical USB hardware.
+
 Add these gradually behind feature flags/optional adapters so tests can use fakes in CI.
 
 ## Troubleshooting & tips
@@ -73,6 +85,7 @@ Add these gradually behind feature flags/optional adapters so tests can use fake
 
 ## Changelog
 - 2026-01-22: Initial testing guide added; documents taxonomy, CI mapping, and run steps.
+ - 2026-01-22: Hardened `scripts/ensure-server-stopped.ps1` and added CI artifact uploads for server logs; consolidated testing strategy and runbook.
 # Testing strategy and runbook
 
 This document defines the project's testing taxonomy, recommended runtimes, and example commands to run locally and in CI.
