@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AgentHeartbeat.Tests
 {
+    [Trait("Category","Unit")]
     public class AgentsControllerUnitTests
     {
         private StatusService CreateStatusService(string contentRoot)

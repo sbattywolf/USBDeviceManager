@@ -8,13 +8,14 @@ using USBDeviceManager.Models;
 using USBDeviceManager.Tests.Fixtures;
 using USBDeviceManager.Tests.Helpers;
 
-namespace USBDeviceManager.Tests.Integration;
-
-/// <summary>
-/// Integration tests for Devices API endpoints
-/// Tests full HTTP request/response cycle with database integration
-/// </summary>
-public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
+namespace USBDeviceManager.Tests.Integration
+{
+    [Trait("Category","Integration")]
+    /// <summary>
+    /// Integration tests for Devices API endpoints
+    /// Tests full HTTP request/response cycle with database integration
+    /// </summary>
+    public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
 {
     private readonly SimRacingTestFactory _factory;
     private readonly HttpClient _client;
@@ -442,4 +443,5 @@ public class DevicesApiIntegrationTests : IClassFixture<SimRacingTestFactory>
             devices.Should().NotBeNull();
         }
     }
+}
 }

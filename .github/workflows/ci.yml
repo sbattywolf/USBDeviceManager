@@ -53,9 +53,9 @@ jobs:
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
-      - name: Run dotnet tests (produce TRX)
+      - name: Run Unit tests (produce TRX)
         run: |
-          dotnet test USBDeviceManager.sln --configuration Debug --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
 
       - name: Run isolated AgentHeartbeat tests
         run: |
@@ -71,7 +71,8 @@ jobs:
         with:
           name: dotnet-tests-${{ matrix.os }}
           path: |
-            '**/*.trx'
+            '**/*dotnet-tests-${{ matrix.os }}.trx'
+            '**/*dotnet-tests.local.trx'
             server/AgentHeartbeat.Tests/**/TestResults/*.trx
 
       - name: Run sanitize-repo check (PowerShell script)
@@ -115,3 +116,70 @@ jobs:
             server/USBDeviceManager.Tests/Integration/logs/**
             agent/SimRacingAgent.Tests/Functional/logs/**
             agent/SimRacingAgent.Tests/logs/**
+  e2e-windows:
+    runs-on: windows-latest
+    needs: build-and-test
+    # Make this job non-blocking so PRs are not blocked by E2E flakes
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore USBDeviceManager.sln
+
+      - name: Build
+        run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
+
+      - name: Run Agent E2E tests (Windows)
+        run: |
+          dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Debug --logger "trx;LogFileName=AgentE2E.windows.trx"
+
+      - name: Upload E2E results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-e2e-windows
+          path: server/AgentE2E.Tests/**/TestResults/*.trx
+
+  integration-tests:
+    runs-on: windows-latest
+    needs: build-and-test
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Start server for Integration tests (PowerShell)
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path ./scripts/start-server-and-wait.ps1) { .\scripts\start-server-and-wait.ps1 -NonInteractive } else { Write-Host 'No orchestration script present, skipping server start.' }
+
+      - name: Run Integration tests
+        shell: pwsh
+        run: |
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Integration" --logger "trx;LogFileName=integration-${{ runner.os }}.trx"
+
+      - name: Stop test environment (PowerShell)
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path ./scripts/stop-test-environment.ps1) { .\scripts\stop-test-environment.ps1 } else { Write-Host 'No stop script present.' }
+
+      - name: Upload integration results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests-${{ runner.os }}
+          path: '**/*integration-${{ runner.os }}.trx'
