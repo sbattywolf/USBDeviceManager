@@ -15,8 +15,9 @@ Import-Module "$PSScriptRoot\..\..\shared\TestFramework.psm1" -Force
 
 # Import agent modules
 $AgentPath = "$PSScriptRoot\..\..\..\agent"
-Import-Module "$AgentPath\src\modules\ConfigManager.psm1" -Force
-Import-Module "$AgentPath\src\modules\AgentCore.psm1" -Force
+# ConfigManager and AgentCore live under src\core; import correct paths
+Import-Module "$AgentPath\src\core\ConfigManager.psm1" -Force
+Import-Module "$AgentPath\src\core\AgentCore.psm1" -Force
 Import-Module "$AgentPath\src\modules\USBMonitor.psm1" -Force
 Import-Module "$AgentPath\src\modules\ProcessManager.psm1" -Force
 
@@ -441,14 +442,17 @@ function Invoke-AgentIntegrationTests {
     }
 }
 
-# Export functions when run as module
-if ($MyInvocation.PSScriptRoot) {
-    Export-ModuleMember -Function @(
-        'Test-AgentHealthCheckWorkflow',
-        'Test-AgentMonitoringIntegration',
-        'Invoke-AgentIntegrationTests'
-    )
-}
+# Export functions when run as module; skip when executed as a plain script
+try {
+    if ($PSModuleInfo) {
+        Export-ModuleMember -Function @(
+            'Test-AgentHealthCheckWorkflow',
+            'Test-AgentMonitoringIntegration',
+            'Invoke-AgentIntegrationTests'
+        )
+    }
+    else { Write-Verbose 'Not in module context; skipping Export-ModuleMember.' }
+} catch { Write-Verbose "Export-ModuleMember skipped due to: $_" }
 
 
 

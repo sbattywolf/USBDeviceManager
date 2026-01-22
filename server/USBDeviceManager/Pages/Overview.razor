@@ -1,0 +1,26 @@
+@page "/overview"
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<h3>Overview</h3>
+<p>Dashboard overview and health checks.</p>
+
+<button class="btn btn-primary" @onclick="CheckHealth">Check API Health</button>
+<p>@healthResult</p>
+
+@code {
+    string healthResult = "Not checked";
+
+    async Task CheckHealth()
+    {
+        try
+        {
+            var r = await Http.GetFromJsonAsync<Dictionary<string,string>>("api/health");
+            healthResult = r != null && r.ContainsKey("status") ? r["status"] : "OK";
+        }
+        catch (Exception ex)
+        {
+            healthResult = ex.Message;
+        }
+    }
+}

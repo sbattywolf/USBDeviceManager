@@ -55,6 +55,24 @@ $Script:AgentInfo = @{
     )
 }
 
+# Single-instance enforcement: named mutex to ensure only one agent runs per host
+try {
+    $mutexName = "Global\SimRacingAgent_$($Script:AgentInfo.Hostname)"
+    $createdNew = $false
+    $Script:AgentMutex = New-Object System.Threading.Mutex($true, $mutexName, [ref]$createdNew)
+    if (-not $createdNew) {
+        Write-Output "Another SimRacingAgent instance is already running on this host. Exiting." | Out-String | Write-Host
+        Write-AgentError "Another SimRacingAgent instance is already running on this host. Exiting." -Source "Startup"
+        exit 2
+    }
+    else {
+        Write-AgentInfo "Acquired single-instance mutex: $mutexName" -Source "Startup"
+    }
+}
+catch {
+    Write-AgentWarning "Failed to acquire single-instance mutex: $($_.Exception.Message)" -Source "Startup"
+}
+
 # Import utility modules first
 try {
     Import-Module (Join-Path $UtilsPath "Logging.psm1") -Force -ErrorAction Stop
@@ -66,7 +84,7 @@ catch {
 }
 
 # Initialize logging with console output
-Set-AgentLogOutputs -Console $true -File $true -Dashboard $false
+Set-AgentLogOutput -Console $true -File $true -Dashboard $false
 Set-AgentLogLevel -Level $LogLevel
 
 Write-AgentInfo "Starting SimRacing Agent v$($Script:AgentInfo.Version)" -Source "Startup"
@@ -180,7 +198,7 @@ function Start-AgentServices {
 
         # Enable dashboard logging if connected
         if ($dashboardConnected) {
-            Set-AgentLogOutputs -Console $true -File $true -Dashboard $true
+            Set-AgentLogOutput -Console $true -File $true -Dashboard $true
         }
 
         Write-AgentInfo "All services started successfully" -Source "Services"
@@ -515,6 +533,19 @@ finally {
     # Cleanup
     Write-AgentInfo "Shutting down SimRacing Agent..." -Source "Shutdown"
     Stop-AgentServices
+
+    # Release single-instance mutex if acquired
+    if ($Script:AgentMutex) {
+        try {
+            $Script:AgentMutex.ReleaseMutex()
+            $Script:AgentMutex.Close()
+            Write-AgentInfo "Released single-instance mutex" -Source "Shutdown"
+        }
+        catch {
+            Write-AgentWarning "Failed to release mutex: $($_.Exception.Message)" -Source "Shutdown"
+        }
+    }
+
     Write-AgentInfo "SimRacing Agent stopped" -Source "Shutdown"
 }
 
