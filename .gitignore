@@ -2,6 +2,26 @@
 **/bin/
 **/obj/
 
+# Python virtualenv
+/.venv/
+
+# Python bytecode
+**/__pycache__/
+*.pyc
+
+# Test results and CI artifacts
+/test-results/
+*.trx
+
+# Artifacts folder (archived index is kept)
+/artifacts/
+!/artifacts/archive/
+!/artifacts/archive/index.txt
+
+# CI build caches
+/ci/**/obj/
+/ci/**/bin/
+
 # Dotnet temporary files
 *.user
 *.suo

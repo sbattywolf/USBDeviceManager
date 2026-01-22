@@ -213,6 +213,12 @@ public class MonitoringController : ControllerBase
     /// Get system health check.
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    [HttpGet("health")]
+    public IActionResult Health()
+    {
+        // Provide a lightweight health/compatibility endpoint expected by older clients.
+        return this.Ok(new { status = "healthy" });
+    }
 
 
     /// <summary>

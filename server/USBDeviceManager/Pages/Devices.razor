@@ -1,0 +1,109 @@
+@page "/devices"
+@using USBDeviceManager.Models
+@inject USBDeviceManager.Services.DashboardClient Dashboard
+@implements IDisposable
+
+<h3>Devices</h3>
+<p>List and control connected devices.</p>
+
+<button class="btn btn-secondary" @onclick="LoadDevices">Load Devices</button>
+
+@if (devices == null)
+{
+    <p><em>Not loaded</em></p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Device ID</th>
+                    <th>Status</th>
+                    <th>Last Seen</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in devices)
+                {
+                    <tr>
+                        <td>@d.Name</td>
+                        <td><code>@d.DeviceId</code></td>
+                        <td>
+                            <span class="badge @(d.IsEnabled ? "bg-success" : "bg-secondary")">@(d.IsEnabled ? "Enabled" : "Disabled")</span>
+                        </td>
+                        <td>@d.LastSeen.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>
+                            <button class="btn btn-sm @(d.IsEnabled ? "btn-warning" : "btn-success")" @onclick="() => ToggleDevice(d.Id, !d.IsEnabled)">@((d.IsEnabled) ? "Disable" : "Enable")</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    List<UsbDevice>? devices;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // ensure hub is running and subscribe updates
+        await Dashboard.StartHubAsync();
+        deviceUpdatedHandler = device =>
+        {
+            try
+            {
+                if (devices != null)
+                {
+                    var idx = devices.FindIndex(d => d.Id == device.Id);
+                    if (idx >= 0) devices[idx] = device;
+                    else devices.Insert(0, device);
+                }
+                else
+                {
+                    devices = new List<UsbDevice> { device };
+                }
+                InvokeAsync(StateHasChanged);
+            }
+            catch { }
+        };
+        Dashboard.DeviceUpdated += deviceUpdatedHandler;
+
+        await LoadDevices();
+    }
+
+    async Task LoadDevices()
+    {
+        try
+        {
+            devices = await Dashboard.GetDevicesAsync();
+        }
+        catch (Exception ex)
+        {
+            devices = new List<UsbDevice> { new UsbDevice { Name = "Error: " + ex.Message } };
+        }
+    }
+
+    async Task ToggleDevice(int id, bool enabled)
+    {
+        try
+        {
+            await Dashboard.ToggleDeviceAsync(id, enabled);
+            await LoadDevices();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"ToggleDevice error: {ex.Message}");
+        }
+    }
+
+    public void Dispose()
+    {
+        if (deviceUpdatedHandler != null) Dashboard.DeviceUpdated -= deviceUpdatedHandler;
+    }
+
+    private Action<UsbDevice>? deviceUpdatedHandler;
+}
