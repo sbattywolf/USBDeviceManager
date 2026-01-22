@@ -4,6 +4,9 @@ Date: 2025-12-23
 
 This file aggregates TODO mentions found in Markdown files across the repository.
 
+NOTE: Actionable tasks have been consolidated into `docs/TODOs-actionable.md`.
+Please keep ephemeral notes and research items in their original docs, and move concrete tasks into the actionable file.
+
 ## Found TODO entries
 
 - TODO-IMPLEMENTATION-GUIDE.md: "**TODO Highlight** - Track TODOs and FIXMEs" (section: Complete TODO List & Project Status)
@@ -20,9 +23,7 @@ If you need the exact line references or surrounding context, open these files:
 
 ## Recommended next steps (reorganization)
 
-1. Centralize actionable TODOs in a single file: `docs/TODOs-actionable.md`.
-   - Move only concrete, actionable items (tasks with owner/estimate) into that file.
-   - Mark each entry with **Priority** (P0 - P3), **Area** (server/agent/docs/tests), and **Owner** (if known).
+1. Action taken: `docs/TODOs-actionable.md` created (2026-01-19). Use that for scheduling and assignments.
 
 2. Keep ephemeral notes, ideas, and future-extension bullets in the original docs, but add a short pointer to the centralized TODO file.
 
@@ -49,9 +50,9 @@ There are multiple session summary files present (`SESSION_SUMMARY.md`, `SESSION
 
 ## Next actions I can take now (pick any):
 
-1. Create `docs/TODOs-actionable.md` and populate with actionable items (I can propose priorities).
-2. Run the full build and test suite, capture TRX and failing test list.
-3. Create a PR that consolidates session summaries into `docs/sessions/` and moves existing summaries there (draft).
+1. Run the full build and test suite, capture TRX and failing test list.
+2. Create a PR that consolidates session summaries into `docs/sessions/` and moves existing summaries there (draft).
+3. Start the `InputObject` rename and PyQt GUI adjustments (I can implement and run a quick smoke test).
 
 ---
 

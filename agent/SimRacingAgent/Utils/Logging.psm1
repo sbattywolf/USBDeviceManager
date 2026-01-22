@@ -32,6 +32,7 @@ class AgentLogger {
     }
 
     [void]InitializeLogPath() {
+        $fallbackLog = $null
         try {
             $logsDir = Join-Path $PSScriptRoot "..\Logs"
             if (-not (Test-Path $logsDir)) {
@@ -43,16 +44,16 @@ class AgentLogger {
         }
         catch {
             $this.LogPath = Join-Path $env:TEMP "SimRacingAgent.log"
+            # Ensure fallback log path is defined before attempting writes
+            $fallbackLog = Join-Path $env:TEMP "SimRacingAgent_fallback.log"
             try {
                 $msg = "Warning: Could not initialize standard log path, using temp: $($this.LogPath)"
-                $fallbackLog = Join-Path $env:TEMP "SimRacingAgent_fallback.log"
                 Add-Content -Path $fallbackLog -Value $msg -ErrorAction SilentlyContinue
             } catch {
                 try {
-                    $errMsg = "Logging fallback write failed: $($_.Exception.Message)"
-                    Add-Content -Path $fallbackLog -Value $errMsg -ErrorAction SilentlyContinue
+                    Add-Content -Path $fallbackLog -Value "Logging fallback write failed" -ErrorAction SilentlyContinue
                 } catch {
-                    Write-Output "Logging initialization failed and fallback write also failed: $($_.Exception.Message)"
+                    Write-Verbose "Logging initialization failed and fallback write also failed." -ErrorAction SilentlyContinue
                 }
             }
         }
@@ -110,10 +111,13 @@ class AgentLogger {
 
         }
         catch {
+            $ex = $_
             try {
                 $fallbackLog = Join-Path $env:TEMP "SimRacingAgent_fallback.log"
-                Add-Content -Path $fallbackLog -Value ("Logging error: $($_.Exception.Message)") -ErrorAction SilentlyContinue
-            } catch {}
+                Add-Content -Path $fallbackLog -Value ("Logging error: $($ex.Exception.Message)") -ErrorAction SilentlyContinue
+            } catch {
+                Write-Verbose "Logging error occurred and fallback write failed: $($ex.Exception.Message)" -ErrorAction SilentlyContinue
+            }
         }
     }
 
@@ -144,7 +148,8 @@ class AgentLogger {
             Add-Content -Path $this.LogPath -Value $Message -Encoding UTF8
         }
         catch {
-            # Silently fail file logging to avoid recursive errors
+            $err = $_
+            Write-Verbose ("WriteToFile failed: $($err.Exception.Message)") -ErrorAction SilentlyContinue
         }
     }
 
@@ -157,7 +162,8 @@ class AgentLogger {
             $this.LogBuffer.Enqueue($LogEntry)
         }
         catch {
-            # Silently fail buffer operations
+            $err = $_
+            Write-Verbose ("AddToBuffer failed: $($err.Exception.Message)") -ErrorAction SilentlyContinue
         }
     }
 
@@ -207,10 +213,23 @@ class AgentLogger {
     }
 }
 
-## Prefer module-scoped AgentLogger with fallback to global
-if (-not $Script:AgentLogger) { if ($Global:AgentLogger) { $Script:AgentLogger = $Global:AgentLogger } else { $Script:AgentLogger = [AgentLogger]::new() } }
+## Prefer module-scoped AgentLogger
+if (-not $Script:AgentLogger) { $Script:AgentLogger = [AgentLogger]::new() }
 
-# Primary logging function
+<#
+ .SYNOPSIS
+    Write a structured log entry to configured outputs.
+ .PARAMETER Message
+    The log message text.
+ .PARAMETER Level
+    Log level (Trace, Debug, Info, Warning, Error, Critical).
+ .PARAMETER Source
+    Optional source identifier for the message.
+ .PARAMETER Properties
+    Additional structured properties as a hashtable.
+ .EXAMPLE
+    Write-AgentLog -Message "Started" -Level Info -Source Startup
+#>
 function Write-AgentLog {
     param(
         [string]$Message,
@@ -226,64 +245,136 @@ function Write-AgentLog {
     }
 }
 
-# Convenience functions for different log levels
+<#
+ .SYNOPSIS
+    Write a Trace-level log message.
+ .PARAMETER Message
+    The log message text.
+#>
 function Write-AgentTrace {
     param([string]$Message, [string]$Source = "", [hashtable]$Properties = @{})
     Write-AgentLog -Message $Message -Level "Trace" -Source $Source -Properties $Properties
 }
 
+<#
+ .SYNOPSIS
+    Write a Debug-level log message.
+ .PARAMETER Message
+    The log message text.
+#>
 function Write-AgentDebug {
     param([string]$Message, [string]$Source = "", [hashtable]$Properties = @{})
     Write-AgentLog -Message $Message -Level "Debug" -Source $Source -Properties $Properties
 }
 
+<#
+ .SYNOPSIS
+    Write an Info-level log message.
+ .PARAMETER Message
+    The log message text.
+#>
 function Write-AgentInfo {
     param([string]$Message, [string]$Source = "", [hashtable]$Properties = @{})
     Write-AgentLog -Message $Message -Level "Info" -Source $Source -Properties $Properties
 }
 
+<#
+ .SYNOPSIS
+    Write a Warning-level log message.
+ .PARAMETER Message
+    The log message text.
+#>
 function Write-AgentWarning {
     param([string]$Message, [string]$Source = "", [hashtable]$Properties = @{})
     Write-AgentLog -Message $Message -Level "Warning" -Source $Source -Properties $Properties
 }
 
+<#
+ .SYNOPSIS
+    Write an Error-level log message.
+ .PARAMETER Message
+    The log message text.
+#>
 function Write-AgentError {
     param([string]$Message, [string]$Source = "", [hashtable]$Properties = @{})
     Write-AgentLog -Message $Message -Level "Error" -Source $Source -Properties $Properties
 }
 
+<#
+ .SYNOPSIS
+    Write a Critical-level log message.
+ .PARAMETER Message
+    The log message text.
+#>
 function Write-AgentCritical {
     param([string]$Message, [string]$Source = "", [hashtable]$Properties = @{})
     Write-AgentLog -Message $Message -Level "Critical" -Source $Source -Properties $Properties
 }
 
-# Logger configuration functions
+<#
+ .SYNOPSIS
+    Set the global log level for the agent logger.
+ .PARAMETER Level
+    The log level to set (Trace, Debug, Info, Warning, Error, Critical).
+#>
 function Set-AgentLogLevel {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param([string]$Level)
+
+    $action = "Set log level to $Level"
+    if (-not $PSCmdlet.ShouldProcess('AgentLogger', $action)) { return }
+
     if ($Script:AgentLogger) { $Script:AgentLogger.SetLogLevel($Level) }
 }
 
-function Set-AgentLogOutputs {
+<#
+ .SYNOPSIS
+    Configure which outputs the agent logger writes to.
+ .PARAMETER Console
+    Enable or disable console output.
+ .PARAMETER File
+    Enable or disable file output.
+ .PARAMETER Dashboard
+    Enable or disable dashboard buffering/output.
+#>
+function Set-AgentLogOutput {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [bool]$Console = $true,
         [bool]$File = $true,
         [bool]$Dashboard = $false
     )
 
+    $action = "Configure outputs: Console=$Console, File=$File, Dashboard=$Dashboard"
+    if (-not $PSCmdlet.ShouldProcess('AgentLogger', $action)) { return }
+
     if ($Script:AgentLogger) { $Script:AgentLogger.SetOutputs($Console, $File, $Dashboard) }
 }
 
+<#
+ .SYNOPSIS
+    Get the current status of the agent logger.
+#>
 function Get-AgentLogStatus {
     if ($Script:AgentLogger) { return $Script:AgentLogger.GetStatus() }
     return @{}
 }
 
+<#
+ .SYNOPSIS
+    Flush and return buffered log entries destined for the dashboard.
+#>
 function Get-AgentLogBuffer {
     if ($Script:AgentLogger) { return $Script:AgentLogger.FlushBuffer() }
     return @()
 }
 
-# Structured logging helpers
+<#
+ .SYNOPSIS
+    Write a structured event to the log.
+ .PARAMETER EventType
+    Short event type identifier.
+#>
 function Write-AgentEvent {
     param(
         [string]$EventType,
@@ -301,6 +392,12 @@ function Write-AgentEvent {
     Write-AgentLog -Message "Event: $EventType" -Level $Level -Source $Category -Properties $properties
 }
 
+<#
+ .SYNOPSIS
+    Write a metric measurement to the log.
+ .PARAMETER MetricName
+    The metric identifier.
+#>
 function Write-AgentMetric {
     param(
         [string]$MetricName,
@@ -320,6 +417,12 @@ function Write-AgentMetric {
     Write-AgentLog -Message "Metric: $MetricName = $Value $Unit" -Level "Debug" -Source "Metrics" -Properties $properties
 }
 
+<#
+ .SYNOPSIS
+    Log a performance timing measurement.
+ .PARAMETER Operation
+    Short operation name.
+#>
 function Write-AgentPerformance {
     param(
         [string]$Operation,
@@ -338,7 +441,12 @@ function Write-AgentPerformance {
     Write-AgentLog -Message "Performance: $Operation completed in $($Duration.TotalMilliseconds)ms" -Level "Debug" -Source "Performance" -Properties $properties
 }
 
-# Exception logging helper
+<#
+ .SYNOPSIS
+    Log an exception with structured details.
+ .PARAMETER Exception
+    The exception object to log.
+#>
 function Write-AgentException {
     param(
         [System.Exception]$Exception,
@@ -359,7 +467,7 @@ function Write-AgentException {
 }
 
 # Export module members
-Export-ModuleMember -Function Write-AgentLog, Write-AgentTrace, Write-AgentDebug, Write-AgentInfo, Write-AgentWarning, Write-AgentError, Write-AgentCritical, Set-AgentLogLevel, Set-AgentLogOutputs, Get-AgentLogStatus, Get-AgentLogBuffer, Write-AgentEvent, Write-AgentMetric, Write-AgentPerformance, Write-AgentException
+Export-ModuleMember -Function Write-AgentLog, Write-AgentTrace, Write-AgentDebug, Write-AgentInfo, Write-AgentWarning, Write-AgentError, Write-AgentCritical, Set-AgentLogLevel, Set-AgentLogOutput, Get-AgentLogStatus, Get-AgentLogBuffer, Write-AgentEvent, Write-AgentMetric, Write-AgentPerformance, Write-AgentException
 
 
 

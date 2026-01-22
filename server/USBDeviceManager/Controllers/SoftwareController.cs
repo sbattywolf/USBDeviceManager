@@ -165,6 +165,25 @@ public class SoftwareController : ControllerBase
             return this.BadRequest("Software is disabled");
         }
 
+        // Validate executable path exists before attempting to start.
+        if (string.IsNullOrWhiteSpace(software.ExecutablePath) || !System.IO.File.Exists(software.ExecutablePath))
+        {
+            this.logger.LogWarning("Executable path missing or not found for software {SoftwareName}: {Path}", software.Name, software.ExecutablePath);
+
+            var failedStatus = new SoftwareStatus
+            {
+                SoftwareId = id,
+                IsRunning = false,
+                Status = "Failed",
+                ErrorMessage = "Executable not found",
+                Timestamp = this.clock.UtcNow,
+            };
+
+            this.context.SoftwareStatuses.Add(failedStatus);
+            await this.context.SaveChangesAsync();
+
+            return this.BadRequest(new { error = "Executable not found", path = software.ExecutablePath });
+        }
         try
         {
             var startInfo = new ProcessStartInfo

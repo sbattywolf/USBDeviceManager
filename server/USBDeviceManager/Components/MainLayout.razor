@@ -1,0 +1,38 @@
+@inherits LayoutComponentBase
+<div class="app-shell">
+    <aside class="app-sidenav bg-light">
+        <div class="brand p-3">
+            <h5 class="m-0">USBDeviceManager</h5>
+        </div>
+        <nav class="nav flex-column p-2">
+            <a class="nav-link" href="/">Dashboard</a>
+            <a class="nav-link" href="/devices">Devices</a>
+            <a class="nav-link" href="/processes">Processes</a>
+            <a class="nav-link" href="/logs">Logs</a>
+            <a class="nav-link" href="/server-status">Server</a>
+            <a class="nav-link" href="/diagnostics">Diagnostics</a>
+            <a class="nav-link" href="/settings">Settings</a>
+            <a class="nav-link" href="/about">About</a>
+        </nav>
+    </aside>
+
+    <div class="app-main">
+        <header class="app-topbar d-flex align-items-center px-3">
+            <div class="flex-grow-1">
+                <h4 class="mb-0">@Title</h4>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="me-3 text-muted">Instance: local</div>
+                <div class="badge bg-success me-2">Connected</div>
+            </div>
+        </header>
+
+        <main class="p-3">
+            @Body
+        </main>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? Title { get; set; }
+}
