@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .bg{fill:#f7f9fb}
+    .card{fill:#fff;stroke:#e6e9ef;rx:8}
+    .title{font:600 20px 'Inter',sans-serif;fill:#0b1622}
+    .muted{font:400 13px 'Inter',sans-serif;fill:#6b7280}
+    .label{font:600 13px 'Inter',sans-serif;fill:#0b1622}
+  </style>
+  <rect class="bg" width="1200" height="800"/>
+  <rect x="260" y="20" width="920" height="60" rx="8" class="card" />
+  <text x="280" y="58" class="title">Settings</text>
+
+  <rect x="260" y="100" width="440" height="620" rx="8" class="card" />
+  <text x="280" y="132" class="muted">Network & Autostart</text>
+  <text x="280" y="170" class="label">Server Port</text>
+  <rect x="280" y="176" width="140" height="34" rx="6" fill="#fff" stroke="#e6e9ef" />
+  <text x="430" y="200" class="muted">Agent Port</text>
+
+  <rect x="720" y="100" width="440" height="320" rx="8" class="card" />
+  <text x="736" y="132" class="muted">Logging & Retention</text>
+  <rect x="736" y="160" width="360" height="36" rx="6" fill="#fff" stroke="#e6e9ef" />
+  <text x="736" y="208" class="muted">Retention days</text>
+
+  <rect x="720" y="440" width="440" height="280" rx="8" class="card" />
+  <text x="736" y="472" class="muted">Export / Import Config</text>
+</svg>

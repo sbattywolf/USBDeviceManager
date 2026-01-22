@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .bg { fill:#f4f7fb }
+    .card{ fill:#ffffff; stroke:#e6eef8; rx:10 }
+    .title{ font:700 20px 'Inter',sans-serif; fill:#062e2a }
+    .muted{ font:400 13px 'Inter',sans-serif; fill:#6b7280 }
+    .tablehead{ font:600 14px 'Inter',sans-serif; fill:#0b2a2a }
+    .btn{ font:600 12px 'Inter',sans-serif; fill:#0b2a2a }
+    .pill{ font:600 11px 'Inter',sans-serif; fill:#ffffff }
+  </style>
+  <defs>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#062e2a" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+  <rect class="bg" width="1200" height="800"/>
+  <rect x="260" y="20" width="920" height="60" rx="8" class="card" />
+  <text x="280" y="58" class="title">Devices</text>
+
+  <rect x="260" y="100" width="920" height="620" rx="10" class="card shadow" />
+  <text x="280" y="132" class="muted">Search • Filters • Add Device</text>
+
+  <!-- Table header -->
+  <g transform="translate(280,160)">
+    <rect x="0" y="0" width="860" height="40" fill="#fafcff" stroke="#eceff4" rx="6" />
+    <text x="12" y="26" class="tablehead">Device Name</text>
+    <text x="220" y="26" class="tablehead">Port</text>
+    <text x="320" y="26" class="tablehead">Vendor:Product</text>
+    <text x="520" y="26" class="tablehead">Status</text>
+    <text x="640" y="26" class="tablehead">Last Seen</text>
+    <text x="760" y="26" class="tablehead">Actions</text>
+  </g>
+
+  <!-- Sample rows -->
+  <g transform="translate(280,210)">
+    <rect x="0" y="0" width="860" height="56" rx="8" fill="#fff" stroke="#f1f4f8" filter="url(#sh)"/>
+    <text x="12" y="34" class="muted">Fanatec Wheel</text>
+    <text x="220" y="34" class="muted">USB1</text>
+    <text x="320" y="34" class="muted">0x1234:0xabcd</text>
+    <text x="520" y="34" class="muted">Connected</text>
+    <text x="640" y="34" class="muted">2m ago</text>
+    <rect x="740" y="12" width="80" height="28" rx="14" fill="#06b39a" />
+    <text x="756" y="32" class="pill">View</text>
+  </g>
+
+  <!-- Right-side detail drawer -->
+  <rect x="980" y="100" width="200" height="620" rx="8" class="card" />
+  <text x="996" y="132" class="title">Details</text>
+  <text x="996" y="158" class="muted">Select a device to see details</text>
+</svg>

@@ -186,6 +186,39 @@ function Test-AgentCore {
             if ($script:originalLockFile) { $Global:AgentLockFile = $script:originalLockFile }
         }
 
+        # Test 6: Single-instance enforcement via named mutex
+        Invoke-Test -Name "Agent single-instance prevents second process" -Category "AgentCore" -TestScript {
+            # Create a named mutex that simulates a running agent
+            $mutexName = "Global\SimRacingAgent_$($env:COMPUTERNAME)"
+            $created = $false
+            $ownerMutex = New-Object System.Threading.Mutex($true, $mutexName, [ref]$created)
+
+            try {
+                # Attempt to start a new agent process which should fail due to mutex
+                $agentScript = Join-Path $AgentPath 'SimRacingAgent\SimRacingAgent.ps1'
+
+                $psi = New-Object System.Diagnostics.ProcessStartInfo
+                $psi.FileName = 'powershell.exe'
+                $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $agentScript + '" -DashboardUrl "http://localhost:5000"'
+                $psi.UseShellExecute = $false
+                $psi.RedirectStandardOutput = $true
+                $psi.RedirectStandardError = $true
+                $psi.CreateNoWindow = $true
+
+                $proc = New-Object System.Diagnostics.Process
+                $proc.StartInfo = $psi
+                $proc.Start() | Out-Null
+                $proc.WaitForExit(5000) # Wait up to 5s
+
+                # When mutex is held, agent should exit non-zero
+                $exit = $proc.ExitCode
+                Assert-True -Condition ($exit -ne 0) -Message "Agent should exit with non-zero when mutex already exists (ExitCode: $exit)"
+            }
+            finally {
+                try { $ownerMutex.ReleaseMutex(); $ownerMutex.Close() } catch {}
+            }
+        }
+
     }
     finally {
         Clear-AllMocks
@@ -216,6 +249,7 @@ function Invoke-AgentCoreTests {
             $result = switch ($suite) {
                 "ConfigManager" { Test-AgentConfigManager }
                 "AgentCore" { Test-AgentCore }
+                "Extra" { Invoke-ExtraAgentTests }
                 default {
                     Write-Warning "Unknown agent test suite: $suite"
                     @{ Success = $false; Results = @{ Failed = 1; Passed = 0; Skipped = 0 } }

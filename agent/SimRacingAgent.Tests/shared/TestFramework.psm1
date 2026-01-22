@@ -154,6 +154,35 @@ function Assert-Equal { param($Expected, $Actual, $Message) if ($Expected -ne $A
 function Assert-PathExists { param([string]$Path, $Message) if (-not (Test-Path $Path)) { throw $Message } }
 function Assert-Contains { param($Collection, $Item, $Message) if ($Collection -is [string]) { if ($Collection -notlike "*${Item}*") { throw $Message } } else { if (-not ($Collection -contains $Item)) { throw $Message } } }
 
+function Clear-TestEnvironment {
+    [CmdletBinding()]
+    param()
+
+    try {
+        # Resolve workspace root without using Resolve-Path to avoid host parsing issues
+        $candidateRoot = Join-Path $PSScriptRoot '..\..\..'
+        if (Test-Path $candidateRoot) { $root = (Get-Item -LiteralPath $candidateRoot -ErrorAction SilentlyContinue).FullName } else { $root = $candidateRoot }
+        $tmpTrace = Join-Path $root '.tmp_test_trace.txt'
+        if (Test-Path $tmpTrace) { Remove-Item $tmpTrace -Force -ErrorAction SilentlyContinue }
+
+        $testResults = Join-Path $root 'TestResults'
+        if (Test-Path $testResults) { Remove-Item $testResults -Recurse -Force -ErrorAction SilentlyContinue }
+
+        $logs = Join-Path $root 'logs'
+        if (Test-Path $logs) { Get-ChildItem -Path $logs -File -ErrorAction SilentlyContinue | ForEach-Object { Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue } }
+
+        # Remove any temp USBDeviceManager debug files
+        $tmpUsbDir = Join-Path $env:TEMP 'USBDeviceManager'
+        if (Test-Path $tmpUsbDir) { Get-ChildItem -Path $tmpUsbDir -File -ErrorAction SilentlyContinue | ForEach-Object { Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue } }
+
+        return $true
+    }
+    catch {
+        Write-Warning "Clear-TestEnvironment failed: $($_.Exception.Message)"
+        return $false
+    }
+}
+
 Export-ModuleMember -Function *
 
 

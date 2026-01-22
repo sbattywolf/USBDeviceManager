@@ -1,21 +1,29 @@
 namespace USBDeviceManager.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using System.Text.Json.Serialization;
     using USBDeviceManager.Data;
     using USBDeviceManager.Models;
+    using Microsoft.AspNetCore.SignalR;
+    using USBDeviceManager.Hubs;
 
     [ApiController]
     [Route("api/logs")]
     public class LogsController : ControllerBase
     {
         private readonly SimRacingContext _ctx;
+        private readonly USBDeviceManager.Services.DashboardClient _dashboard;
+        private readonly IHubContext<MonitoringHub> _hub;
 
-        public LogsController(SimRacingContext ctx)
+        public LogsController(SimRacingContext ctx, USBDeviceManager.Services.DashboardClient dashboard, IHubContext<MonitoringHub> hub)
         {
             _ctx = ctx;
+            _dashboard = dashboard;
+            _hub = hub;
         }
 
         [HttpGet]
@@ -85,7 +93,54 @@ namespace USBDeviceManager.Controllers
             _ctx.DeviceStatuses.Add(status);
             await _ctx.SaveChangesAsync();
 
+            // Also update the in-memory dashboard recent logs and notify any UI subscribers.
+            try
+            {
+                var line = $"{DateTime.UtcNow:o} [{status.Status}] {device?.DeviceId ?? string.Empty} - {status.ErrorMessage}";
+
+                // Update the scoped DashboardClient for the current request (best-effort)
+                try
+                {
+                    _dashboard.PublishLogLine(line);
+                }
+                catch { }
+
+                // Broadcast to any SignalR clients in the 'dashboard' group so connected UIs receive the line.
+                try
+                {
+                    await _hub.Clients.Group("dashboard").SendAsync("LogLine", new { Line = line });
+                }
+                catch
+                {
+                    // best-effort only; do not fail the API call if broadcasting fails
+                }
+            }
+            catch
+            {
+                // best-effort only
+            }
+
             return Created(string.Empty, null);
+        }
+
+        [HttpGet("recent")]
+        public IActionResult GetRecent()
+        {
+            // Return the in-memory recent logs from the DashboardClient (newest-first)
+            var list = new List<string>();
+            try
+            {
+                lock (_dashboard.RecentLogs)
+                {
+                    list.AddRange(_dashboard.RecentLogs);
+                }
+            }
+            catch
+            {
+                // best-effort: return empty list on failure
+            }
+
+            return Ok(list);
         }
     }
 }

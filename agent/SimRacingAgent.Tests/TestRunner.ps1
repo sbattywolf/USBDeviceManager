@@ -11,28 +11,37 @@
 #>
 
 # Import shared test framework and modules (guarded)
+# Temporarily silence module import warnings (unapproved verb warnings)
+$__OLD_WARNING_PREFERENCE = $WarningPreference
+$WarningPreference = 'SilentlyContinue'
 $module = Join-Path $PSScriptRoot 'shared\TestFramework.psm1'
-if (Test-Path $module) { Import-Module $module -Force } else { Write-Warning "Missing module: $module" }
+if (Test-Path $module) {
+    Import-Module $module -Force -DisableNameChecking -WarningAction SilentlyContinue
+} else { Write-Warning "Missing module: $module" }
 
 # Import agent test modules (paths normalized to current layout)
 $m = Join-Path $PSScriptRoot 'Unit\AgentCoreTests.ps1'
-if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent unit tests: $m" }
+if (Test-Path $m) { Import-Module $m -Force -DisableNameChecking -WarningAction SilentlyContinue } else { Write-Warning "Missing agent unit tests: $m" }
 
 $m = Join-Path $PSScriptRoot 'Unit\AgentMonitoringTests.ps1'
-if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent monitoring tests: $m" }
+if (Test-Path $m) { Import-Module $m -Force -DisableNameChecking -WarningAction SilentlyContinue } else { Write-Warning "Missing agent monitoring tests: $m" }
 
 $m = Join-Path $PSScriptRoot 'Integration\AgentWorkflowTests.ps1'
-if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent integration tests: $m" }
+if (Test-Path $m) { Import-Module $m -Force -DisableNameChecking -WarningAction SilentlyContinue } else { Write-Warning "Missing agent integration tests: $m" }
 
 $m = Join-Path $PSScriptRoot 'Regression\AgentRegressionTests.ps1'
-if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing agent regression tests: $m" }
+if (Test-Path $m) { Import-Module $m -Force -DisableNameChecking -WarningAction SilentlyContinue } else { Write-Warning "Missing agent regression tests: $m" }
 
 # Import application test modules (if present)
 $m = Join-Path $PSScriptRoot 'application\api\ApplicationAPITests.ps1'
-if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing application API tests: $m" }
+if (Test-Path $m) { Import-Module $m -Force -DisableNameChecking -WarningAction SilentlyContinue } else { Write-Verbose "Skipping missing application API tests: $m" }
 
 $m = Join-Path $PSScriptRoot 'application\integration\ApplicationIntegrationTests.ps1'
-if (Test-Path $m) { Import-Module $m -Force } else { Write-Warning "Missing application integration tests: $m" }
+if (Test-Path $m) { Import-Module $m -Force -DisableNameChecking -WarningAction SilentlyContinue } else { Write-Verbose "Skipping missing application integration tests: $m" }
+
+# Restore warning preference
+$WarningPreference = $__OLD_WARNING_PREFERENCE
+Remove-Variable -Name __OLD_WARNING_PREFERENCE -ErrorAction SilentlyContinue
 
 # Helper: run external PowerShell script without blocking on streams
 function Invoke-ScriptWithCapture {
@@ -237,20 +246,21 @@ function Invoke-CompleteTestSuite {
                             Write-Output "Invoking integration runner: $integrationScript"
                             if (-not (Test-Path $integrationScript)) { Write-Warning "Integration script not found: $integrationScript"; continue }
 
-                            $psi = New-Object System.Diagnostics.ProcessStartInfo
-                            $psi.FileName = 'powershell.exe'
-                            $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $integrationScript + '"'
-                            $psi.UseShellExecute = $false
-                            $psi.RedirectStandardOutput = $true
-                            $psi.RedirectStandardError = $true
-                            $psi.CreateNoWindow = $true
+                            # Prefer invoking integration scripts directly so errors surface reliably in this host
+                            try {
+                                & powershell -NoProfile -ExecutionPolicy Bypass -File $integrationScript
+                                $exit = $LASTEXITCODE
+                            }
+                            catch {
+                                Write-Error "Integration runner threw an exception: $($_.Exception.Message)"
+                                $exit = 1
+                            }
 
-                            $result = Invoke-ScriptWithCapture -StartInfo $psi
-                            if ($result.StdOut) { Write-Output $result.StdOut }
-                            if ($result.StdErr) { Write-Error $result.StdErr }
-
-                            if ($result.ExitCode -ne 0) { Write-Error "Integration runner failed: $integrationScript"; $overallResults.OverallSuccess = $false }
+                            if ($exit -ne 0) { Write-Error "Integration runner failed: $integrationScript (Exit $exit)"; $overallResults.OverallSuccess = $false }
                         }
+
+                        $failedCount = 0
+                        if (-not $overallResults.OverallSuccess) { $failedCount = 1 }
 
                         $categoryResult = @{
                             Success = $overallResults.OverallSuccess
@@ -258,7 +268,7 @@ function Invoke-CompleteTestSuite {
                             Results = @()
                             Summary = @{
                                 Passed = 1
-                                Failed = (if ($overallResults.OverallSuccess) { 0 } else { 1 })
+                                Failed = $failedCount
                                 Skipped = 0
                             }
                         }
@@ -280,13 +290,17 @@ function Invoke-CompleteTestSuite {
                                 if ($result.StdOut) { Write-Output $result.StdOut }
                                 if ($result.StdErr) { Write-Error $result.StdErr }
 
+                                $passedCount = 0
+                                $failedCount = 0
+                                if ($result.ExitCode -eq 0) { $passedCount = 1 } else { $failedCount = 1 }
+
                                 $categoryResult = @{
                                     Success = ($result.ExitCode -eq 0)
                                     CategoryName = 'AgentFunctional'
                                     Results = @()
                                     Summary = @{
-                                        Passed = (if ($result.ExitCode -eq 0) { 1 } else { 0 })
-                                        Failed = (if ($result.ExitCode -ne 0) { 1 } else { 0 })
+                                        Passed = $passedCount
+                                        Failed = $failedCount
                                         Skipped = 0
                                     }
                                 }
@@ -320,13 +334,17 @@ function Invoke-CompleteTestSuite {
                                 if ($result.StdOut) { Write-Output $result.StdOut }
                                 if ($result.StdErr) { Write-Error $result.StdErr }
 
+                                $passedCount = 0
+                                $failedCount = 0
+                                if ($result.ExitCode -eq 0) { $passedCount = 1 } else { $failedCount = 1 }
+
                                 $categoryResult = @{
                                     Success = ($result.ExitCode -eq 0)
                                     CategoryName = 'AgentRegression'
                                     Results = @()
                                     Summary = @{
-                                        Passed = (if ($result.ExitCode -eq 0) { 1 } else { 0 })
-                                        Failed = (if ($result.ExitCode -ne 0) { 1 } else { 0 })
+                                        Passed = $passedCount
+                                        Failed = $failedCount
                                         Skipped = 0
                                     }
                                 }
@@ -679,14 +697,23 @@ function Invoke-CICDTestSuite {
     return Invoke-CompleteTestSuite -GenerateReport -ReportPath $ReportPath -StopOnFirstFailure
 }
 
-# Export all functions
-Export-ModuleMember -Function @(
-    'Invoke-CompleteTestSuite',
-    'Invoke-QuickAgentTests',
-    'Invoke-FullAgentTests',
-    'Invoke-ApplicationTests',
-    'Invoke-CICDTestSuite'
-)
+# Export all functions when running as a module; skip when executed as a plain script
+try {
+    if ($PSModuleInfo) {
+        Export-ModuleMember -Function @(
+            'Invoke-CompleteTestSuite',
+            'Invoke-QuickAgentTests',
+            'Invoke-FullAgentTests',
+            'Invoke-ApplicationTests',
+            'Invoke-CICDTestSuite'
+        )
+    }
+    else {
+        Write-Verbose 'Not in module context; skipping Export-ModuleMember.'
+    }
+} catch {
+    Write-Verbose "Export-ModuleMember skipped due to: $_"
+}
 
 
 
