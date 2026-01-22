@@ -7,6 +7,14 @@ This document describes the test taxonomy, where tests live, how CI runs them, a
 - Integration: exercises real application stack (in-memory DB, TestServer). Use `Trait("Category","Integration")`.
 - Functional: higher-level server behaviors that exercise multiple components and scripts. Use `Trait("Category","Functional")`.
 - E2E: full end-to-end tests that involve the agent binary and real-ish environment. Use `Trait("Category","E2E")`.
+- Smoke: short, system-level sanity checks that run quickly (optional, non-blocking).
+
+Canonical categories
+- Unit
+- Integration
+- Functional
+- E2E
+- Smoke
 
 Note: we normalize on xUnit `Trait("Category","...")` for .NET tests and use the same `Category` string inside Pester test suites for agent tests. Search the repo for existing usages (`Trait("Category",`) — tests are already categorized but new tests should follow this convention.
 
@@ -16,10 +24,31 @@ Note: we normalize on xUnit `Trait("Category","...")` for .NET tests and use the
 - `test/Utilities` — shared test helpers and fixtures (already present for HealthPoller).
 
 ## CI mapping (what runs where)
-- `build-and-test` job: runs Unit tests only (`dotnet test --filter "Category=Unit"`) on ubuntu/windows.
-- `integration-tests` job (windows): starts server via `scripts/start-server-and-wait.ps1`, runs Integration tests (`--filter "Category=Integration"`), then runs `scripts/stop-test-environment.ps1`.
-- `e2e-windows` job: builds and runs Agent E2E tests on Windows; marked `continue-on-error: true` to avoid blocking PRs for flaky hardware-dependent tests.
-- Agent Pester tests (when present) run on Windows in CI via `ci/run-tests.ps1` or via Pester invocation in the workflow.
+- `build-and-test` job: runs Unit tests only. Example:
+
+```powershell
+dotnet test USBDeviceManager.sln --filter "Category=Unit"
+```
+
+- `integration-tests` job (windows): starts server via `scripts/start-server-and-wait.ps1`, runs Integration tests, then runs `scripts/stop-test-environment.ps1`. Example:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-server-and-wait.ps1 -ProjectPath server/USBDeviceManager -Port 5000 -TimeoutSec 90
+dotnet test USBDeviceManager.sln --filter "Category=Integration"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-test-environment.ps1
+```
+
+- `e2e-windows` job: builds and runs Agent E2E tests on Windows; marked `continue-on-error: true` to avoid blocking PRs for flaky hardware-dependent tests. Example run (on self-hosted Windows):
+
+```powershell
+dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --filter "Category=E2E"
+```
+
+- Agent Pester tests (when present) run on Windows in CI via `ci/run-tests.ps1` or via Pester invocation in the workflow. Example:
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\ci\run-tests.ps1 -RunAgentTests -NonInteractive
+```
 
 CI artifacts and debugging
 - When running integration or build matrix jobs the workflow uploads `scripts/tmp/server.log`, `scripts/tmp/server.err.log`, and `scripts/tmp/ensure-stopped.log` so that flaky server startups and leftover handles are easier to diagnose.
