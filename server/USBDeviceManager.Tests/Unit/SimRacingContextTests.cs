@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using USBDeviceManager.Data;
 using USBDeviceManager.Tests.Helpers;
 
-namespace USBDeviceManager.Tests.Unit;
-
-/// <summary>
-/// Unit tests for SimRacingContext database operations
-/// Tests entity relationships, constraints, and data integrity
-/// </summary>
-public class SimRacingContextTests : IDisposable
+namespace USBDeviceManager.Tests.Unit
+{
+    /// <summary>
+    /// Unit tests for SimRacingContext database operations
+    /// Tests entity relationships, constraints, and data integrity
+    /// </summary>
+    [Trait("Category","Unit")]
+    public class SimRacingContextTests : IDisposable
 {
     private readonly SimRacingContext _context;
     private readonly DbConnection _connection;
@@ -332,4 +333,5 @@ public class SimRacingContextTests : IDisposable
         _connection?.Close();
         _connection?.Dispose();
     }
+}
 }
