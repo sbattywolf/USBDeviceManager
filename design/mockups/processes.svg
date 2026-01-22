@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .bg{fill:#f7f9fb}
+    .card{fill:#fff;stroke:#e6e9ef;rx:8}
+    .title{font:600 20px 'Inter',sans-serif;fill:#0b1622}
+    .muted{font:400 13px 'Inter',sans-serif;fill:#6b7280}
+  </style>
+  <rect class="bg" width="1200" height="800"/>
+  <rect x="260" y="20" width="920" height="60" rx="8" class="card" />
+  <text x="280" y="58" class="title">Processes</text>
+
+  <rect x="260" y="100" width="920" height="620" rx="8" class="card" />
+  <text x="280" y="132" class="muted">Running processes started by manager</text>
+
+  <!-- Sample list -->
+  <g transform="translate(280,170)">
+    <rect x="0" y="0" width="860" height="56" rx="6" fill="#fff" stroke="#f1f4f8" />
+    <text x="12" y="34" class="muted">USBDeviceManager.exe</text>
+    <text x="340" y="34" class="muted">PID: 13604</text>
+    <text x="520" y="34" class="muted">CPU: 1.2% • Mem: 42MB</text>
+    <rect x="740" y="12" width="80" height="28" rx="6" fill="#0aa99d" opacity="0.08"/>
+    <text x="756" y="32" class="muted">Logs</text>
+  </g>
+
+  <g transform="translate(280,230)">
+    <rect x="0" y="0" width="860" height="56" rx="6" fill="#fff" stroke="#f1f4f8" />
+    <text x="12" y="34" class="muted">SimRacingAgent.ps1</text>
+    <text x="340" y="34" class="muted">PID: 26312</text>
+    <text x="520" y="34" class="muted">CPU: 0.3% • Mem: 15MB</text>
+    <rect x="740" y="12" width="80" height="28" rx="6" fill="#0aa99d" opacity="0.08"/>
+    <text x="756" y="32" class="muted">Kill</text>
+  </g>
+</svg>

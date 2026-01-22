@@ -42,15 +42,13 @@ function Write-TestLog {
 function Resolve-WorkspacePath {
     param([string]$RelativePath)
     try {
-        $workspaceRoot = Resolve-Path -Path (Join-Path $PSScriptRoot '..\..\..') -ErrorAction SilentlyContinue
-        if ($workspaceRoot -is [array]) { $workspaceRoot = $workspaceRoot[0] }
-        if ($workspaceRoot) { $workspaceRoot = $workspaceRoot.Path } else { $workspaceRoot = (Join-Path $PSScriptRoot '..\..\..') }
+        # Prefer direct path checks to avoid host-specific Resolve-Path parsing issues
+        $workspaceRoot = Join-Path $PSScriptRoot '..\..\..'
+        if (Test-Path $workspaceRoot) { $workspaceRoot = (Get-Item -LiteralPath $workspaceRoot -ErrorAction SilentlyContinue).FullName } else { $workspaceRoot = (Join-Path $PSScriptRoot '..\..\..') }
 
         $candidate = Join-Path $workspaceRoot $RelativePath
-        $resolvedCandidate = Resolve-Path -Path $candidate -ErrorAction SilentlyContinue
-        if ($resolvedCandidate -is [array]) { $resolvedCandidate = $resolvedCandidate[0] }
-        if ($resolvedCandidate) { return $resolvedCandidate.Path }
-        if (Test-Path $RelativePath) { return (Resolve-Path $RelativePath).Path }
+        if (Test-Path $candidate) { return (Get-Item -LiteralPath $candidate -ErrorAction SilentlyContinue).FullName }
+        if (Test-Path $RelativePath) { return (Get-Item -LiteralPath $RelativePath -ErrorAction SilentlyContinue).FullName }
         return $null
     } catch { return $null }
 }
@@ -187,13 +185,12 @@ function Test-InteractiveMode {
         Start-Sleep -Seconds 3
 
         # Start agent with explicit output redirection to files so we can reliably capture logs
-        $resolved = Resolve-Path -Path (Join-Path $PSScriptRoot '..\..\..') -ErrorAction SilentlyContinue
-        if ($resolved -is [array]) { $resolved = $resolved[0] }
-        if ($resolved) { $workspaceRoot = $resolved.Path } else { $workspaceRoot = (Join-Path $PSScriptRoot '..\..\..') }
+        # Resolve workspace root robustly
+        $candidateRoot = Join-Path $PSScriptRoot '..\..\..'
+        if (Test-Path $candidateRoot) { $workspaceRoot = (Get-Item -LiteralPath $candidateRoot -ErrorAction SilentlyContinue).FullName } else { $workspaceRoot = $candidateRoot }
 
-        $fullAgentResolved = Resolve-Path -Path (Join-Path $workspaceRoot $TestConfig.AgentPath) -ErrorAction SilentlyContinue
-        if ($fullAgentResolved -is [array]) { $fullAgentResolved = $fullAgentResolved[0] }
-        if ($fullAgentResolved) { $fullAgentPath = $fullAgentResolved.Path } else { $fullAgentPath = (Join-Path $workspaceRoot $TestConfig.AgentPath) }
+        $fullAgentCandidate = Join-Path $workspaceRoot $TestConfig.AgentPath
+        if (Test-Path $fullAgentCandidate) { $fullAgentPath = (Get-Item -LiteralPath $fullAgentCandidate -ErrorAction SilentlyContinue).FullName } else { $fullAgentPath = $fullAgentCandidate }
         $outFile = Join-Path $logDir 'agent-interactive-out.txt'
         $errFile = Join-Path $logDir 'agent-interactive-err.txt'
 

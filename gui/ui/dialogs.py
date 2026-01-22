@@ -83,3 +83,42 @@ class EditDeviceDialog(QDialog):
             "minimize": self.minimize_check.isChecked()
         }
         self.accept()
+
+
+class JSONViewerDialog(QDialog):
+    def __init__(self, title: str, text: str, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(title or 'JSON Viewer')
+        self.setMinimumSize(600, 400)
+        layout = QVBoxLayout(self)
+        self.text = QTextEdit()
+        self.text.setReadOnly(True)
+        self.text.setPlainText(text or '')
+        layout.addWidget(self.text)
+        btn_layout = QHBoxLayout()
+        copy_btn = QPushButton('Copy')
+        copy_btn.clicked.connect(self.copy_text)
+        save_btn = QPushButton('Save...')
+        save_btn.clicked.connect(self.save_text)
+        close_btn = QPushButton('Close')
+        close_btn.clicked.connect(self.close)
+        btn_layout.addWidget(copy_btn)
+        btn_layout.addWidget(save_btn)
+        btn_layout.addStretch()
+        btn_layout.addWidget(close_btn)
+        layout.addLayout(btn_layout)
+
+    def copy_text(self):
+        from PyQt6.QtWidgets import QApplication
+        QApplication.clipboard().setText(self.text.toPlainText())
+        QMessageBox.information(self, 'Copied', 'JSON copied to clipboard.')
+
+    def save_text(self):
+        file_path, _ = QFileDialog.getSaveFileName(self, 'Save JSON', 'response.json', 'JSON Files (*.json);;All Files (*)')
+        if file_path:
+            try:
+                with open(file_path, 'w', encoding='utf-8') as fh:
+                    fh.write(self.text.toPlainText())
+                QMessageBox.information(self, 'Saved', f'Saved to {file_path}')
+            except Exception as e:
+                QMessageBox.critical(self, 'Error', f'Failed to save file: {e}')

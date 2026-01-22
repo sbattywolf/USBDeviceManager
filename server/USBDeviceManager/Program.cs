@@ -43,6 +43,9 @@ builder.Services.AddScoped<HttpClient>(sp =>
 // Add SignalR
 builder.Services.AddSignalR();
 
+// Dashboard client for UI pages (wraps HttpClient + SignalR)
+builder.Services.AddScoped<USBDeviceManager.Services.DashboardClient>();
+
 // Add API controllers with a simple validation filter for consistent errors
 builder.Services.AddControllers(options =>
 {
@@ -51,6 +54,9 @@ builder.Services.AddControllers(options =>
 
 // Add clock service for testable current time
 builder.Services.AddSingleton<IDateTime, SystemDateTime>();
+
+// Add Status service for server/agent port configuration and health checks
+builder.Services.AddSingleton<USBDeviceManager.Services.StatusService>();
 
 // Register adapters (stub implementations for development & tests)
 builder.Services.AddSingleton<IDeviceAdapter, DeviceAdapterStub>();
@@ -142,6 +148,21 @@ using (IServiceScope scope = app.Services.CreateScope())
 {
     SimRacingContext context = scope.ServiceProvider.GetRequiredService<SimRacingContext>();
     context.Database.EnsureCreated();
+}
+
+// Load status service and perform autostart if configured
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    var status = scope.ServiceProvider.GetRequiredService<StatusService>();
+    // run autostart synchronously at startup
+    try
+    {
+        status.StartAutostartServicesAsync().GetAwaiter().GetResult();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[DIAG] Autostart failed: {ex.Message}");
+    }
 }
 
 

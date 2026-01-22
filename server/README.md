@@ -51,3 +51,7 @@ server/
 ├── USBDeviceManager.Core/         # Core models and interfaces
 └── docker/                         # Docker configurations for deployment
 ```
+
+See the service-level documentation for AgentMode behaviors and administration in the repository docs:
+
+- [Agent modes and server policy](../../docs/agent-modes.md)

@@ -1,0 +1,23 @@
+:root{
+  --bg:#f4f7fb;
+  --surface:#ffffff;
+  --muted:#6b7280;
+  --primary:#06b39a;
+  --accent:#ffb86b;
+  --text:#062e2a;
+}
+body{ background:var(--bg); color:var(--text); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, 'Helvetica Neue', Arial }
+.app-shell{ display:flex; min-height:100vh }
+.app-sidenav{ width:220px; border-right:1px solid #e6eef8; background:linear-gradient(180deg,#ffffff, #fbfdff) }
+.app-main{ flex:1; display:flex; flex-direction:column }
+.app-topbar{ height:64px; border-bottom:1px solid #eef6f8; background:transparent }
+.app-topbar h4{ margin:0 }
+.nav-link{ color:var(--text); padding:10px 16px; border-radius:8px }
+.nav-link:hover{ background:#eef6f8; text-decoration:none }
+.card-surface{ background:var(--surface); border-radius:10px; box-shadow:0 6px 18px rgba(11,42,42,0.06); padding:16px }
+.kpi{ font-weight:800; font-size:28px }
+.muted{ color:var(--muted) }
+.pill{ padding:6px 12px; border-radius:999px; display:inline-block }
+
+/* Responsive */
+@media (max-width:900px){ .app-sidenav{ display:none } }
