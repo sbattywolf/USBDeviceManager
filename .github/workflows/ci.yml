@@ -69,6 +69,7 @@ jobs:
         run: dotnet restore USBDeviceManager.sln
 
       - name: Publish long-run test helper
+        shell: pwsh
         run: |
           if (Test-Path test-helpers/LongRunner) {
             dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
