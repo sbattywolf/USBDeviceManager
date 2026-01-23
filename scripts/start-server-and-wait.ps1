@@ -25,12 +25,14 @@ $outFile = Join-Path $tmpDir "server.log"
 $errFile = Join-Path $tmpDir "server.err.log"
 
 # Ensure log files exist so CI artifact upload can pick them up even if the
-# process exits quickly and Start-Process hasn't flushed output yet.
-New-Item -Path $outFile -ItemType File -Force | Out-Null
+# process exits quickly and Start-Process hasn't flushed output yet. If the
+# files are already present and locked by a running process, leave them alone.
+if (-not (Test-Path $outFile)) { New-Item -Path $outFile -ItemType File -Force | Out-Null }
 # For backward compatibility some scripts expect server.out.log; create a
 # placeholder that will be uploaded if present.
-New-Item -Path (Join-Path $tmpDir "server.out.log") -ItemType File -Force | Out-Null
-New-Item -Path $errFile -ItemType File -Force | Out-Null
+$outPlaceholder = Join-Path $tmpDir "server.out.log"
+if (-not (Test-Path $outPlaceholder)) { New-Item -Path $outPlaceholder -ItemType File -Force | Out-Null }
+if (-not (Test-Path $errFile)) { New-Item -Path $errFile -ItemType File -Force | Out-Null }
 
 try {
     $startArgs = $dotnetArgs
