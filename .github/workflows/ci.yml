@@ -780,6 +780,34 @@ jobs:
           path: artifacts/summaries/integration
         continue-on-error: true
 
+      - name: Download unit enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: unit-tests-enriched-report
+          path: artifacts/enriched/unit
+        continue-on-error: true
+
+      - name: Download e2e enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-enriched-report
+          path: artifacts/enriched/e2e
+        continue-on-error: true
+
+      - name: Download integration enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-enriched-report
+          path: artifacts/enriched/integration
+        continue-on-error: true
+
+      - name: Download tests enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: tests-enriched-report
+          path: artifacts/enriched/tests
+        continue-on-error: true
+
       - name: Aggregate summaries into final report
         id: aggregate
         shell: bash
@@ -817,6 +845,24 @@ jobs:
           gather e2e
           gather integration
 
+          # Append any per-analyzer enriched reports if present
+          if [ -f "artifacts/enriched/unit/unit-tests-enriched-report.txt" ]; then
+            echo "\n--- UNIT ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/unit/unit-tests-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/e2e/e2e-enriched-report.txt" ]; then
+            echo "\n--- E2E ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/e2e/e2e-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/integration/integration-enriched-report.txt" ]; then
+            echo "\n--- INTEGRATION ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/integration/integration-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/tests/tests-enriched-report.txt" ]; then
+            echo "\n--- TESTS ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/tests/tests-enriched-report.txt >> $out
+          fi
+
           echo "Wrote $out"
           echo "any_failed=$any_failed" >> $GITHUB_OUTPUT
 
@@ -852,6 +898,31 @@ jobs:
           body=$(python3 -c "import json,sys; print(json.dumps(open('final-report.txt',encoding='utf-8').read()))")
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"body\":$body}" "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" > /dev/null
           echo "Comment posted"
+
+      - name: Create check-run failure summary (on failures)
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const body = fs.existsSync('final-report.txt') ? fs.readFileSync('final-report.txt','utf8') : '';
+            const lines = body.split(/\r?\n/).slice(0,40).join('\n');
+            const text = `\`\`\`\n${lines}\n\`\`\``;
+            const output = {
+              title: 'CI Failure Summary',
+              summary: 'One or more test suites failed. See the full report artifact for details.',
+              text: text
+            };
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'CI Failure Summary',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'neutral',
+              output: output
+            });
 
       - name: Fail workflow if any tests failed
         if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
@@ -945,8 +1016,8 @@ jobs:
   log-check:
     name: Conditional Log Inspection
     runs-on: ubuntu-latest
-    needs: analyze-results
-    if: ${{ needs.analyze-results.outputs.tests_ok != 'true' }}
+    needs: [analyze-results, analyze-unit, analyze-e2e, analyze-integration]
+    if: ${{ needs.analyze-results.outputs.tests_ok != 'true' || needs.analyze-unit.outputs.tests_ok != 'true' || needs.analyze-e2e.outputs.tests_ok != 'true' || needs.analyze-integration.outputs.tests_ok != 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -971,4 +1042,6 @@ jobs:
           set -euo pipefail
           echo "Scanning downloaded logs for ERROR/Exception/Timeout entries"
           find artifacts -type f -name '*.log' -print -exec grep -nE "Exception|ERROR|Unhandled|Timeout|fail(ed)?" {} + || true
+          echo "Downloading any per-analyzer enriched reports (if present)"
+          find artifacts -type f -name '*-enriched-report*.txt' -print -exec sed -n '1,200p' {} + || true
           echo "Log inspection complete"
