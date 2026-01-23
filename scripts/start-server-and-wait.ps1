@@ -18,8 +18,8 @@ if ([string]::IsNullOrWhiteSpace($bindAddress)) { $bindAddress = '127.0.0.1' }
 $WriteHostMsg = "Starting server project: $ProjectPath on port $Port (binding: $bindAddress)"
 Write-Host $WriteHostMsg
 
-$args = "run --project `"$ProjectPath`" --urls http://$bindAddress:$Port"
-if ($NoBuild) { $args += ' --no-build' }
+$dotnetArgs = "run --project `"$ProjectPath`" --urls http://$($bindAddress):$Port"
+if ($NoBuild) { $dotnetArgs += ' --no-build' }
 
 $outFile = Join-Path $tmpDir "server.log"
 $errFile = Join-Path $tmpDir "server.err.log"
@@ -33,7 +33,7 @@ New-Item -Path (Join-Path $tmpDir "server.out.log") -ItemType File -Force | Out-
 New-Item -Path $errFile -ItemType File -Force | Out-Null
 
 try {
-    $startArgs = $args
+    $startArgs = $dotnetArgs
     Write-Host "Launching: dotnet $startArgs"
     $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
     Set-Content -Path (Join-Path $tmpDir "server.pid") -Value $proc.Id
@@ -61,7 +61,7 @@ if (-not $p) {
     exit 1
 }
 
-& "$scriptDir/poll-health.ps1" -Url "http://$bindAddress:$Port/health" -TimeoutSec $TimeoutSec
+& "$scriptDir/poll-health.ps1" -Url "http://$($bindAddress):$Port/health" -TimeoutSec $TimeoutSec
 
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Server did not become healthy within timeout ($TimeoutSec seconds). See server output."
@@ -73,5 +73,5 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Server healthy and ready: http://$bindAddress:$Port"
+Write-Host "Server healthy and ready: http://$($bindAddress):$Port"
 exit 0
