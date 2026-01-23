@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>USBDeviceManager-12345</UserSecretsId>
+    <!-- Explicit assembly name so the produced EXE is predictable in CI/artifacts -->
+    <AssemblyName>SMServer</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
