@@ -244,6 +244,76 @@ jobs:
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
 
+  unit-tests:
+    name: Unit Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    needs: build-and-test
+    env:
+      CI_BIND_ADDRESS: 127.0.0.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        shell: pwsh
+        run: |
+          $maxAttempts = 3
+          $baseDelay = 5
+          $success = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            Write-Host "dotnet restore attempt $i of $maxAttempts"
+            dotnet restore USBDeviceManager.sln --verbosity minimal
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+            if ($i -lt $maxAttempts) {
+              $delay = $baseDelay * [math]::Pow(2, $i - 1)
+              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
+              Start-Sleep -Seconds $delay
+            }
+          }
+          if (-not $success) {
+            Write-Error "dotnet restore failed after $maxAttempts attempts"
+            exit 1
+          }
+
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Run Unit tests (produce TRX)
+        run: |
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-unit-tests-${{ matrix.os }}
+          path: |
+            '**/*dotnet-unit-tests-${{ matrix.os }}.trx'
+            '**/*dotnet-tests.local.trx'
+            '**/TestResults/*.trx'
+            '**/*/TestResults/*.trx'
+
       - name: Run isolated AgentHeartbeat tests
         shell: pwsh
         run: |
@@ -319,7 +389,7 @@ jobs:
             scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
-    needs: tests
+    needs: [tests, unit-tests]
     # Make this job non-blocking so PRs are not blocked by E2E flakes
     continue-on-error: true
     steps:
@@ -364,7 +434,7 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: tests
+    needs: [tests, unit-tests]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Set TEST_PORT (Windows)
@@ -438,11 +508,25 @@ jobs:
           path: artifacts/tests/ubuntu
         continue-on-error: true
 
+      - name: Download unit test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu-latest
+          path: artifacts/unit/ubuntu
+        continue-on-error: true
+
       - name: Download dotnet test artifacts (Windows)
         uses: actions/download-artifact@v4
         with:
           name: dotnet-tests-windows-latest
           path: artifacts/tests/windows
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-windows-latest
+          path: artifacts/unit/windows
         continue-on-error: true
 
       - name: Download agent & integration artifacts (if present)
