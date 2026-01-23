@@ -2,10 +2,14 @@ name: E2E Self-Hosted Runner
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
 
 jobs:
   e2e-self-hosted:
     # Requires a self-hosted runner with Windows label and an 'e2e' label.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: [self-hosted, Windows, e2e]
     steps:
       - name: Checkout
