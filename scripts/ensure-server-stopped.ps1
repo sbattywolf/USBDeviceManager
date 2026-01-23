@@ -66,11 +66,19 @@ try {
         try {
             $cim = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue
             if ($cim) {
-                $matches = $cim | Where-Object { $_.CommandLine -and ($exeFragments | ForEach-Object { $_ -and ($_.CommandLine -match [regex]::Escape($_)) }) }
-                foreach ($m in $matches) {
-                    try { $p = Get-Process -Id $m.ProcessId -ErrorAction SilentlyContinue; if ($p) { $procs += $p } } catch { }
-                }
-            }
+                        # Match processes whose CommandLine contains any of the executable fragments.
+                        $matches = @()
+                        foreach ($procInfo in $cim) {
+                            $cmd = $procInfo.CommandLine
+                            if (-not $cmd) { continue }
+                            foreach ($frag in $exeFragments) {
+                                if ($cmd -match [regex]::Escape($frag)) { $matches += $procInfo; break }
+                            }
+                        }
+                        foreach ($m in $matches) {
+                            try { $p = Get-Process -Id $m.ProcessId -ErrorAction SilentlyContinue; if ($p) { $procs += $p } } catch { }
+                        }
+                    }
         } catch {
             # ignore
         }
