@@ -1,5 +1,6 @@
 using System.IO;
 using Bunit;
+using Microsoft.Extensions.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -30,10 +31,17 @@ namespace USBDeviceManager.Tests.Unit
             var env = new TestHostEnvironment { ContentRootPath = temp };
             var status = new StatusService(env);
             ctx.Services.AddSingleton(status);
+            // Register minimal supporting services for component rendering
+            // Fake HttpClient that returns 404 for backend calls
+            var fakeHttp = new USBDeviceManager.BlazorTests.TestHelpers.FakeHttpMessageHandler();
+            var httpClient = new System.Net.Http.HttpClient(fakeHttp) { BaseAddress = new System.Uri("http://localhost/") };
+            ctx.Services.AddSingleton<System.Net.Http.HttpClient>(httpClient);
+            // Test navigation manager
+            ctx.Services.AddSingleton<Microsoft.AspNetCore.Components.NavigationManager>(new USBDeviceManager.BlazorTests.TestHelpers.TestNavigationManager());
 
             var cut = ctx.RenderComponent<ServerStatus>();
 
-            cut.Markup.Should().Contain("Server &amp; Agent Status");
+            cut.Markup.Should().Contain("Server & Agent Status");
         }
     }
 }
