@@ -129,7 +129,7 @@ jobs:
         shell: pwsh
         run: |
           # Prefer published LongRunner helper if available
-          $helperDll = Join-Path $GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
+          $helperDll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
           if (Test-Path $helperDll) {
             "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
             Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
