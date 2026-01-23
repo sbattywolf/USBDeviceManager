@@ -14,7 +14,7 @@ Get-ChildItem -Path $tmpDir -Filter "*.pid" -ErrorAction SilentlyContinue | ForE
             Write-Host "Stopping process $pid (file: $($_.Name))"
             Stop-Process -Id $pid -Force
         } catch {
-            Write-Warning "Failed to stop process $pid: $_"
+            Write-Warning ('Failed to stop process {0}: {1}' -f $pid, $_)
         }
     } else {
         Write-Host "No running process for pid file: $($_.Name)"
