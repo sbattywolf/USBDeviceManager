@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main, master ]
 
+env:
+  CI_BIND_ADDRESS: 127.0.0.1
+
 jobs:
   gui-tests:
     runs-on: ubuntu-latest
@@ -264,9 +267,18 @@ jobs:
     needs: build-and-test
     # Make this job non-blocking so PRs are not blocked by E2E flakes
     continue-on-error: true
-    env:
-      CI_BIND_ADDRESS: 127.0.0.1
     steps:
+      - name: Set TEST_PORT (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback,0)
+          $listener.Start()
+          $port = ($listener.LocalEndpoint -as [System.Net.IPEndPoint]).Port
+          $listener.Stop()
+          "TEST_PORT=$port" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          Write-Host "Set TEST_PORT=$port"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -299,9 +311,18 @@ jobs:
     runs-on: windows-latest
     needs: build-and-test
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    env:
-      CI_BIND_ADDRESS: 127.0.0.1
     steps:
+      - name: Set TEST_PORT (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback,0)
+          $listener.Start()
+          $port = ($listener.LocalEndpoint -as [System.Net.IPEndPoint]).Port
+          $listener.Stop()
+          "TEST_PORT=$port" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          Write-Host "Set TEST_PORT=$port"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -314,7 +335,7 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          if (Test-Path ./scripts/start-server-and-wait.ps1) { .\scripts\start-server-and-wait.ps1 -NonInteractive } else { Write-Host 'No orchestration script present, skipping server start.' }
+          if (Test-Path ./scripts/start-server-and-wait.ps1) { .\scripts\start-server-and-wait.ps1 -NonInteractive -Port $Env:TEST_PORT } else { Write-Host 'No orchestration script present, skipping server start.' }
 
       - name: Run Integration tests
         shell: pwsh
