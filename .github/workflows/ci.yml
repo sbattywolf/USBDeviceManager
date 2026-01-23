@@ -44,6 +44,7 @@ jobs:
           xvfb-run -s "-screen 0 1280x1024x24" pytest -q gui/tests
 
   build-and-test:
+    name: Build (no tests)
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -105,16 +106,79 @@ jobs:
             Write-Host 'No long-run helper found; continuing without it.'
           }
 
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+  tests:
+    name: Run Tests and Upload Results
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    needs: [gui-tests, build-and-test]
+    env:
+      CI_BIND_ADDRESS: 127.0.0.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        shell: pwsh
+        run: |
+          $maxAttempts = 3
+          $baseDelay = 5
+          $success = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            Write-Host "dotnet restore attempt $i of $maxAttempts"
+            dotnet restore USBDeviceManager.sln --verbosity minimal
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+            if ($i -lt $maxAttempts) {
+              $delay = $baseDelay * [math]::Pow(2, $i - 1)
+              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
+              Start-Sleep -Seconds $delay
+            }
+          }
+          if (-not $success) {
+            Write-Error "dotnet restore failed after $maxAttempts attempts"
+            exit 1
+          }
+
+      - name: Publish long-run test helper
+        shell: pwsh
+        run: |
+          if (Test-Path test-helpers/LongRunner) {
+            dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
+            Write-Host 'Published LongRunner to ./artifacts/longrunner'
+          } else {
+            Write-Host 'No long-run helper found; continuing without it.'
+          }
+
       - name: Detect long-sleep command for ShellRunner tests
         run: |
           echo "Detecting long-sleep helper for ShellRunner tests"
-        # This step sets SHELLRUNNER_LONG_CMD via separate OS-specific steps below
 
       - name: Set SHELLRUNNER_LONG_CMD (Linux)
         if: runner.os == 'Linux' || runner.os == 'Ubuntu' || runner.os == 'ubuntu-latest'
         shell: bash
         run: |
-          # Prefer published LongRunner helper if available
           if [ -f ./artifacts/longrunner/LongRunner.dll ]; then
             echo "SHELLRUNNER_LONG_CMD=dotnet|./artifacts/longrunner/LongRunner.dll --duration=30" >> $GITHUB_ENV
             echo "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
@@ -122,7 +186,6 @@ jobs:
             echo "SHELLRUNNER_LONG_CMD=/bin/bash|-c \"sleep 30\"" >> $GITHUB_ENV
             echo "Set SHELLRUNNER_LONG_CMD for bash"
           elif command -v sleep >/dev/null 2>&1; then
-            # fallback to sh wrapper
             echo "SHELLRUNNER_LONG_CMD=/bin/sh|-c \"sleep 30\"" >> $GITHUB_ENV
             echo "Set SHELLRUNNER_LONG_CMD for sh"
           else
@@ -133,14 +196,12 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          # Prefer published LongRunner helper if available
           $helperDll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
           if (Test-Path $helperDll) {
             "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
             Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
           }
           else {
-            # Prefer Windows PowerShell Start-Sleep; fall back to PowerShell Core if needed
             if (Get-Command powershell -ErrorAction SilentlyContinue) {
               "SHELLRUNNER_LONG_CMD=powershell|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
               Write-Host "Set SHELLRUNNER_LONG_CMD for powershell"
@@ -157,14 +218,12 @@ jobs:
       - name: Enable in-process smoke server for CI (cross-platform)
         run: |
           echo "SMOKE_USE_TESTSERVER=1" >> $GITHUB_ENV
-        # keep this available for all matrix OSes so functional smoke tests use TestServer in CI
 
       - name: Ensure server stopped (optional auto-kill)
         shell: pwsh
         run: |
           if (Test-Path .\scripts\ensure-server-stopped.ps1) {
             Write-Host 'Running ensure-server-stopped.ps1 (respects AUTO_KILL env var).'
-            # Invoke as a fresh pwsh process via Start-Process to fully isolate parsing and argument binding
             $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue)?.Source ?? 'pwsh'
             $args = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File', "$PWD\scripts\ensure-server-stopped.ps1")
             $proc = Start-Process -FilePath $pwshPath -ArgumentList $args -NoNewWindow -PassThru -Wait
@@ -185,6 +244,76 @@ jobs:
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
 
+  unit-tests:
+    name: Unit Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    needs: build-and-test
+    env:
+      CI_BIND_ADDRESS: 127.0.0.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        shell: pwsh
+        run: |
+          $maxAttempts = 3
+          $baseDelay = 5
+          $success = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            Write-Host "dotnet restore attempt $i of $maxAttempts"
+            dotnet restore USBDeviceManager.sln --verbosity minimal
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+            if ($i -lt $maxAttempts) {
+              $delay = $baseDelay * [math]::Pow(2, $i - 1)
+              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
+              Start-Sleep -Seconds $delay
+            }
+          }
+          if (-not $success) {
+            Write-Error "dotnet restore failed after $maxAttempts attempts"
+            exit 1
+          }
+
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Run Unit tests (produce TRX)
+        run: |
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-unit-tests-${{ matrix.os }}
+          path: |
+            '**/*dotnet-unit-tests-${{ matrix.os }}.trx'
+            '**/*dotnet-tests.local.trx'
+            '**/TestResults/*.trx'
+            '**/*/TestResults/*.trx'
+
       - name: Run isolated AgentHeartbeat tests
         shell: pwsh
         run: |
@@ -200,15 +329,11 @@ jobs:
         with:
           name: dotnet-tests-${{ matrix.os }}
           path: |
-            # Directly named trx files created by dotnet test at repo root or project folders
             '**/*dotnet-tests-${{ matrix.os }}.trx'
             '**/*dotnet-tests.local.trx'
-            # Standard TestResults folders produced by dotnet test
             '**/TestResults/*.trx'
             '**/*/TestResults/*.trx'
-            # AgentHeartbeat isolated project test results
             server/AgentHeartbeat.Tests/**/TestResults/*.trx
-            # Any trx under server test projects
             server/**/TestResults/*.trx
 
       - name: Run sanitize-repo check (PowerShell script)
@@ -264,9 +389,8 @@ jobs:
             scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
-    needs: build-and-test
-    # Make this job non-blocking so PRs are not blocked by E2E flakes
-    continue-on-error: true
+    needs: [analyze-results, analyze-unit]
+    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' }}
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -309,8 +433,8 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: build-and-test
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: [analyze-results, analyze-unit]
+    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -364,3 +488,441 @@ jobs:
         with:
           name: integration-tests-${{ runner.os }}
           path: '**/*integration-${{ runner.os }}.trx'
+
+  analyze-results:
+    name: Analyze Test Results
+    runs-on: ubuntu-latest
+    needs: tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download dotnet test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-ubuntu-latest
+          path: artifacts/tests/ubuntu
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu-latest
+          path: artifacts/unit/ubuntu
+        continue-on-error: true
+
+      - name: Download dotnet test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-windows-latest
+          path: artifacts/tests/windows
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-windows-latest
+          path: artifacts/unit/windows
+        continue-on-error: true
+
+      - name: Download agent & integration artifacts (if present)
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-tests-windows
+          path: artifacts/agent
+        continue-on-error: true
+
+      - name: Generate test summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Searching for TRX files under $(pwd)"
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; setting outputs and exiting"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+            python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload test summary artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Run log analysis and enrich report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Failures detected, gathering logs and generating enriched report"
+          mkdir -p artifacts/logs
+          mapfile -t logs < <(find . -type f -name '*.log' || true)
+          echo "Found ${#logs[@]} log files"
+          echo "=== Enriched Test Report ===" > tests-enriched-report.txt
+          echo "See tests-summary.json for full summary." >> tests-enriched-report.txt
+          echo "\n--- Failures ---\n" >> tests-enriched-report.txt
+          cat tests-summary.txt >> tests-enriched-report.txt
+          echo "\n--- Log excerpts (prioritized) ---\n" >> tests-enriched-report.txt
+          for kw in Exception ERROR Timeout Assertion; do
+            echo "\n== $kw ==" >> tests-enriched-report.txt
+            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> tests-enriched-report.txt || true
+          done
+          echo "Wrote tests-enriched-report.txt"
+
+      - name: Upload enriched report (failures)
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-enriched-report
+          path: tests-enriched-report.txt
+
+  analyze-e2e:
+    name: Analyze E2E Results
+    runs-on: ubuntu-latest
+    needs: e2e-windows
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download E2E artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-e2e-windows
+          path: artifacts/e2e/windows
+        continue-on-error: true
+
+      - name: Generate E2E summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload E2E summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich E2E report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "E2E failures detected; generating enriched E2E report"
+          echo "=== E2E Enriched Report ===" > e2e-enriched-report.txt
+          cat tests-summary.txt >> e2e-enriched-report.txt
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+
+      - name: Upload E2E enriched report
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-enriched-report
+          path: e2e-enriched-report.txt
+
+  analyze-integration:
+    name: Analyze Integration Results
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download integration artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-tests-windows
+          path: artifacts/integration/windows
+        continue-on-error: true
+
+      - name: Generate integration summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload integration summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich integration report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Integration failures detected; generating enriched integration report"
+          echo "=== Integration Enriched Report ===" > integration-enriched-report.txt
+          cat tests-summary.txt >> integration-enriched-report.txt
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
+
+      - name: Upload integration enriched report
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-enriched-report
+          path: integration-enriched-report.txt
+
+  final-report:
+    name: CI Final Test Summary
+    runs-on: ubuntu-latest
+    needs: [analyze-unit, analyze-results, analyze-e2e, analyze-integration]
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download available summaries
+        uses: actions/download-artifact@v4
+        with:
+          name: tests-summary
+          path: artifacts/summaries/tests
+        continue-on-error: true
+
+      - name: Download unit summary
+        uses: actions/download-artifact@v4
+        with:
+          name: unit-tests-summary
+          path: artifacts/summaries/unit
+        continue-on-error: true
+
+      - name: Download e2e summary
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-tests-summary
+          path: artifacts/summaries/e2e
+        continue-on-error: true
+
+      - name: Download integration summary
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-tests-summary
+          path: artifacts/summaries/integration
+        continue-on-error: true
+
+      - name: Aggregate summaries into final report
+        id: aggregate
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=final-report.txt
+          echo "CI Final Test Summary" > $out
+          echo "Generated (UTC): $(date -u)" >> $out
+          any_failed=false
+
+          gather() {
+            type=$1
+            json="artifacts/summaries/${type}/tests-summary.json"
+            txt="artifacts/summaries/${type}/tests-summary.txt"
+            echo "\n--- ${type^^} ---\n" >> $out
+            if [ -f "$json" ]; then
+              python3 - <<PY >> $out
+import json,sys
+d=json.load(open('$json'))
+total=d.get('total','n/a')
+passed=d.get('passed','n/a')
+failed=d.get('failed',0)
+print(f"Total: {total}, Passed: {passed}, Failed: {failed}")
+PY
+              failed=$(python3 -c "import json;print(int(json.load(open('$json')).get('failed',0)))")
+              if [ "$failed" -gt 0 ]; then any_failed=true; fi
+              if [ -f "$txt" ]; then
+                echo "\nSummary details:" >> $out
+                sed -n '1,200p' "$txt" >> $out
+              fi
+            else
+              echo "(no ${type} summary)" >> $out
+            fi
+          }
+
+          gather unit
+          gather tests
+          gather e2e
+          gather integration
+
+          echo "Wrote $out"
+          echo "any_failed=$any_failed" >> $GITHUB_OUTPUT
+
+      - name: Upload final report
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-test-report
+          path: final-report.txt
+
+      - name: Post final report as PR comment (on failures)
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' && github.event.pull_request != null }}
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          echo "Posting final report to PR #${PR_NUMBER}"
+          body=$(python3 - <<PY
+import json
+print(json.dumps(open('final-report.txt').read()))
+PY
+)
+          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"body\":$body}" "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" > /dev/null
+          echo "Comment posted"
+
+  analyze-unit:
+    name: Analyze Unit Test Results
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download unit test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu-latest
+          path: artifacts/unit/ubuntu
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-windows-latest
+          path: artifacts/unit/windows
+        continue-on-error: true
+
+      - name: Generate unit test summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Searching for TRX files under $(pwd)"
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; setting outputs and exiting"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload unit test summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Run unit log analysis and enrich report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Unit failures detected, gathering logs and generating enriched report"
+          mkdir -p artifacts/logs
+          mapfile -t logs < <(find . -type f -name '*.log' || true)
+          echo "Found ${#logs[@]} log files"
+          echo "=== Unit Tests Enriched Report ===" > unit-tests-enriched-report.txt
+          echo "See tests-summary.json for full summary." >> unit-tests-enriched-report.txt
+          echo "\n--- Failures ---\n" >> unit-tests-enriched-report.txt
+          cat tests-summary.txt >> unit-tests-enriched-report.txt
+          echo "\n--- Log excerpts (prioritized) ---\n" >> unit-tests-enriched-report.txt
+          for kw in Exception ERROR Timeout Assertion; do
+            echo "\n== $kw ==" >> unit-tests-enriched-report.txt
+            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> unit-tests-enriched-report.txt || true
+          done
+          echo "Wrote unit-tests-enriched-report.txt"
+
+      - name: Upload unit enriched report (failures)
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests-enriched-report
+          path: unit-tests-enriched-report.txt
+
+  log-check:
+    name: Conditional Log Inspection
+    runs-on: ubuntu-latest
+    needs: analyze-results
+    if: ${{ needs.analyze-results.outputs.tests_ok != 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download server logs (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: server-log-Windows
+          path: artifacts/logs/windows
+        continue-on-error: true
+
+      - name: Download server logs (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: server-log-ubuntu-latest
+          path: artifacts/logs/ubuntu
+        continue-on-error: true
+
+      - name: Quick log scan for exceptions and errors
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Scanning downloaded logs for ERROR/Exception/Timeout entries"
+          find artifacts -type f -name '*.log' -print -exec grep -nE "Exception|ERROR|Unhandled|Timeout|fail(ed)?" {} + || true
+          echo "Log inspection complete"
