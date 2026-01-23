@@ -105,9 +105,16 @@ jobs:
         with:
           name: dotnet-tests-${{ matrix.os }}
           path: |
+            # Directly named trx files created by dotnet test at repo root or project folders
             '**/*dotnet-tests-${{ matrix.os }}.trx'
             '**/*dotnet-tests.local.trx'
+            # Standard TestResults folders produced by dotnet test
+            '**/TestResults/*.trx'
+            '**/*/TestResults/*.trx'
+            # AgentHeartbeat isolated project test results
             server/AgentHeartbeat.Tests/**/TestResults/*.trx
+            # Any trx under server test projects
+            server/**/TestResults/*.trx
 
       - name: Run sanitize-repo check (PowerShell script)
         shell: pwsh
