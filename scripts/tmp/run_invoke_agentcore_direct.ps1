@@ -22,7 +22,7 @@ try {
     } else { $createdExportStub = $false }
 
     # Ensure AdapterStubs functions are available as global functions (tests expect unqualified calls)
-    $adapterPath = 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1'
+    $adapterPath = (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1')
     if (Test-Path $adapterPath) {
         try { Import-Module $adapterPath -Force -ErrorAction SilentlyContinue } catch {}
         $needed = @('Get-DefaultConfiguration','Test-Configuration','Save-Configuration','Load-Configuration','Export-Configuration','Test-AgentRunning','Set-AgentLock','Clear-AgentLock','Write-AgentLog','Get-AgentStatus')
@@ -33,7 +33,7 @@ try {
         try { if (Get-Command -Name Get-DefaultConfiguration -ErrorAction SilentlyContinue) { Write-Host 'Diagnostic: Get-DefaultConfiguration FOUND' } else { Write-Host 'Diagnostic: Get-DefaultConfiguration MISSING' } } catch {}
     }
 
-    try { . 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/Unit/AgentCoreTests.ps1' -ErrorAction Stop ; Write-Host 'Dot-sourced AgentCoreTests OK' } catch { Write-Host 'Dot-source failed:' $_.Exception.Message }
+    try { . (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\Unit\AgentCoreTests.ps1') -ErrorAction Stop ; Write-Host 'Dot-sourced AgentCoreTests OK' } catch { Write-Host 'Dot-source failed:' $_.Exception.Message }
 } finally {
     if ($createdStub) { Remove-Item -Path Function:\Import-Module -ErrorAction SilentlyContinue }
     if ($createdExportStub) { Remove-Item -Path Function:\Export-ModuleMember -ErrorAction SilentlyContinue }

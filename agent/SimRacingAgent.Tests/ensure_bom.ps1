@@ -1,4 +1,4 @@
-$p = 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/TestRunner.ps1'
+$p = (Join-Path $PSScriptRoot 'TestRunner.ps1')
 $b = [IO.File]::ReadAllBytes($p)
 if ($b.Length -ge 3 -and $b[0] -eq 0xEF -and $b[1] -eq 0xBB -and $b[2] -eq 0xBF) {
     Write-Output 'BOM present; no change'
