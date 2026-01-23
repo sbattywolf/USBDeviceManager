@@ -799,14 +799,8 @@ jobs:
             txt="artifacts/summaries/${type}/tests-summary.txt"
             echo "\n--- ${type^^} ---\n" >> $out
             if [ -f "$json" ]; then
-              python3 - <<PY >> $out
-import json,sys
-d=json.load(open('$json'))
-total=d.get('total','n/a')
-passed=d.get('passed','n/a')
-failed=d.get('failed',0)
-print(f"Total: {total}, Passed: {passed}, Failed: {failed}")
-PY
+              # Use a small helper to print summary to avoid YAML parser problems
+              python3 scripts/print-summary.py "$json" >> $out
               failed=$(python3 -c "import json;print(int(json.load(open('$json')).get('failed',0)))")
               if [ "$failed" -gt 0 ]; then any_failed=true; fi
               if [ -f "$txt" ]; then
@@ -855,11 +849,7 @@ PY
         run: |
           set -euo pipefail
           echo "Posting final report to PR #${PR_NUMBER}"
-          body=$(python3 - <<PY
-import json
-print(json.dumps(open('final-report.txt').read()))
-PY
-)
+          body=$(python3 -c "import json,sys; print(json.dumps(open('final-report.txt',encoding='utf-8').read()))")
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"body\":$body}" "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" > /dev/null
           echo "Comment posted"
 
