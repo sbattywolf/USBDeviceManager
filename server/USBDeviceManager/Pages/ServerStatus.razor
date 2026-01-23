@@ -234,11 +234,22 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        serverPort = Status.ServerPort;
-        agentPort = Status.AgentPort;
-        var cfg = Status.GetConfig();
-        autostartServer = cfg.AutostartServer;
-        autostartAgent = cfg.AutostartAgent;
+        if (Status != null)
+        {
+            serverPort = Status.ServerPort;
+            agentPort = Status.AgentPort;
+            var cfg = Status.GetConfig();
+            autostartServer = cfg?.AutostartServer ?? false;
+            autostartAgent = cfg?.AutostartAgent ?? false;
+        }
+        else
+        {
+            serverPort = 0;
+            agentPort = 0;
+            autostartServer = false;
+            autostartAgent = false;
+        }
+
         await RefreshSuggestions();
         await RefreshLiveStatus();
     }

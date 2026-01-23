@@ -12,8 +12,9 @@
   </PropertyGroup>
 
   <!-- Analyzer packages for non-test projects only -->
-  <ItemGroup Condition=" '$([System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' != 'True' ">
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
+    <ItemGroup Condition=" '$( [System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' != 'True' ">
+    <!-- Bump StyleCop.Analyzers to a pre-release that contains fixes for record declarations (if available) -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Generate XML documentation for non-test projects so doc analyzers run -->

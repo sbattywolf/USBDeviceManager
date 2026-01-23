@@ -6,7 +6,11 @@ if (Test-Path $real) {
     Write-Warning "Config wrapper: real module not found at $real"
 }
 
-Export-ModuleMember -Function * -ErrorAction SilentlyContinue
+try {
+    Export-ModuleMember -Function * -ErrorAction Stop
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}
 
 
 

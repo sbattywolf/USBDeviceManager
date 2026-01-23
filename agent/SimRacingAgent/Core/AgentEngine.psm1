@@ -171,8 +171,11 @@ function Get-AgentEngineStatus {
     return @{ IsRunning = $false }
 }
 
-# Export module members
-Export-ModuleMember -Function Start-AgentEngine, Stop-AgentEngine, Get-AgentEngineStatus
+try {
+    Export-ModuleMember -Function Start-AgentEngine, Stop-AgentEngine, Get-AgentEngineStatus -ErrorAction Stop
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}
 
 
 
