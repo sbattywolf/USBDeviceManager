@@ -68,6 +68,44 @@ jobs:
       - name: Restore NuGet
         run: dotnet restore USBDeviceManager.sln
 
+      - name: Detect long-sleep command for ShellRunner tests
+        run: |
+          echo "Detecting long-sleep helper for ShellRunner tests"
+        # This step sets SHELLRUNNER_LONG_CMD via separate OS-specific steps below
+
+      - name: Set SHELLRUNNER_LONG_CMD (Linux)
+        if: runner.os == 'Linux' || runner.os == 'Ubuntu' || runner.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          # Prefer /bin/bash -c "sleep 30"
+          if [ -x /bin/bash ] && /bin/bash -c "sleep 0" >/dev/null 2>&1; then
+            echo "SHELLRUNNER_LONG_CMD=/bin/bash|-c \"sleep 30\"" >> $GITHUB_ENV
+            echo "Set SHELLRUNNER_LONG_CMD for bash"
+          elif command -v sleep >/dev/null 2>&1; then
+            # fallback to sh wrapper
+            echo "SHELLRUNNER_LONG_CMD=/bin/sh|-c \"sleep 30\"" >> $GITHUB_ENV
+            echo "Set SHELLRUNNER_LONG_CMD for sh"
+          else
+            echo "No sleep command detected; leaving SHELLRUNNER_LONG_CMD unset"
+          fi
+
+      - name: Set SHELLRUNNER_LONG_CMD (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Prefer Windows PowerShell Start-Sleep; fall back to PowerShell Core if needed
+          if (Get-Command powershell -ErrorAction SilentlyContinue) {
+            "SHELLRUNNER_LONG_CMD=powershell|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+            Write-Host "Set SHELLRUNNER_LONG_CMD for powershell"
+          }
+          elseif (Get-Command pwsh -ErrorAction SilentlyContinue) {
+            "SHELLRUNNER_LONG_CMD=pwsh|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+            Write-Host "Set SHELLRUNNER_LONG_CMD for pwsh"
+          }
+          else {
+            Write-Host "No PowerShell found; leaving SHELLRUNNER_LONG_CMD unset"
+          }
+
       - name: Ensure server stopped (optional auto-kill)
         shell: pwsh
         run: |

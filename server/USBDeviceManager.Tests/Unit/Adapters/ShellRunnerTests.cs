@@ -12,13 +12,36 @@ namespace USBDeviceManager.Tests.Unit.Adapters
     {
         private static (string file, string args, string longFile, string longArgs) ResolveCommands()
         {
+            // Allow CI to override the long-running command via environment variable
+            // Format: SHELLRUNNER_LONG_CMD = "file|args"
+            var overrideCmd = Environment.GetEnvironmentVariable("SHELLRUNNER_LONG_CMD");
+            if (!string.IsNullOrWhiteSpace(overrideCmd))
+            {
+                var parts = overrideCmd.Split(new[] { '|' }, 2);
+                if (parts.Length == 2)
+                {
+                    var longFile = parts[0];
+                    var longArgs = parts[1];
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        return ("cmd.exe", "/c echo HelloShell", longFile, longArgs);
+                    }
+                    else
+                    {
+                        return ("/bin/echo", "HelloShell", longFile, longArgs);
+                    }
+                }
+            }
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return ("cmd.exe", "/c echo HelloShell", "ping", "-n 30 127.0.0.1");
+                // Default for Windows: PowerShell Start-Sleep
+                return ("cmd.exe", "/c echo HelloShell", "powershell", "-Command Start-Sleep -Seconds 30");
             }
             else
             {
-                return ("/bin/echo", "HelloShell", "/bin/sleep", "30");
+                // Default for Unix: bash sleep
+                return ("/bin/echo", "HelloShell", "/bin/bash", "-c \"sleep 30\"");
             }
         }
 
