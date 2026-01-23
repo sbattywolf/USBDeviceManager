@@ -159,9 +159,11 @@ jobs:
         run: |
           if (Test-Path .\scripts\ensure-server-stopped.ps1) {
             Write-Host 'Running ensure-server-stopped.ps1 (respects AUTO_KILL env var).'
-            # Invoke as a fresh pwsh process to isolate parameter parsing and avoid accidental binding issues
-            pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PWD\scripts\ensure-server-stopped.ps1"
-            $rc = $LASTEXITCODE
+            # Invoke as a fresh pwsh process via Start-Process to fully isolate parsing and argument binding
+            $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue)?.Source ?? 'pwsh'
+            $args = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File', "$PWD\scripts\ensure-server-stopped.ps1")
+            $proc = Start-Process -FilePath $pwshPath -ArgumentList $args -NoNewWindow -PassThru -Wait
+            $rc = $proc.ExitCode
             if ($rc -eq 2) {
               Write-Host "ensure-server-stopped returned 2 (AUTO_KILL=false and process present). Continuing as configured."
             } elseif ($rc -ne 0) {
