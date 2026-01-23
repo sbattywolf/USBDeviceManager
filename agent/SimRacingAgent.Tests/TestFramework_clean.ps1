@@ -24,8 +24,8 @@ function Invoke-Test {
         Write-Host "[FAIL] $Category - $Name : $($_.Exception.Message)" -ForegroundColor Red
         try {
             $tracePath = Join-Path $PSScriptRoot '..\..\..\.tmp_test_trace.txt'
-            $keys = if ($Global:MockFunctions) { $Global:MockFunctions.Keys -join ',' } else { '<none>' }
-            $orders = if ($Global:MockOrders) { ($Global:MockOrders.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join ',' } else { '<none>' }
+            try { $keys = if ($Global:MockFunctions) { $Global:MockFunctions.Keys -join ',' } else { '<none>' } } catch { $keys = '<none>' }
+            try { $orders = if ($Global:MockOrders) { ($Global:MockOrders.GetEnumerator() | ForEach-Object { "${($_.Key)}=${($_.Value)}" }) -join ',' } else { '<none>' } } catch { $orders = '<none>' }
             "$((Get-Date).ToString('o')) FAILURE $Category - $Name MockKeys=$keys MockOrders=$orders Error=$($_.Exception.Message)" | Out-File -FilePath $tracePath -Append -Encoding utf8
         } catch {}
     } finally {

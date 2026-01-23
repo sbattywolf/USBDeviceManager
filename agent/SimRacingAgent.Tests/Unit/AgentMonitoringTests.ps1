@@ -51,8 +51,11 @@ function Test-AgentUSBMonitoring {
             try {
                 $dump = @()
                 $dump += "Timestamp: $(Get-Date -Format o)"
-                $dump += "MockKeys: $($Global:MockFunctions.Keys -join ',')"
-                $dump += "MockOrders: $($Global:MockOrders.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } -join ',')"
+                # Precompute joined values to avoid parser ambiguity with -join inside subexpressions
+                try { $mockKeys = if ($Global:MockFunctions) { $Global:MockFunctions.Keys -join ',' } else { '<none>' } } catch { $mockKeys = '<none>' }
+                try { $mockOrders = if ($Global:MockOrders) { ($Global:MockOrders.GetEnumerator() | ForEach-Object { "${($_.Key)}=${($_.Value)}" }) -join ',' } else { '<none>' } } catch { $mockOrders = '<none>' }
+                $dump += "MockKeys: $mockKeys"
+                $dump += "MockOrders: $mockOrders"
                 $dump += "DevicesCount: $($devices.Count)"
                 if ($devices.Count -gt 0) { $devices | ForEach-Object { $dump += "Device: $($_.DeviceID) | $($_.Description)" } }
                 $tmpRoot = Join-Path $env:TEMP 'USBDeviceManager'

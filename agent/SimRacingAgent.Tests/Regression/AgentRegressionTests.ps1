@@ -473,7 +473,8 @@ function Test-AgentCompatibilityRegression {
                 # Debug: show what was received for triage
                 try {
                     Write-Host "DEBUG: ConvertTo-ConfigV2 received V1Config = $($V1Config | ConvertTo-Json -Depth 5)"
-                    Write-Host "DEBUG: ConvertTo-ConfigV2 lookup keys = $($lookup.Keys -join ',')"
+                    try { $lookupKeys = if ($lookup) { $lookup.Keys -join ',' } else { '<none>' } } catch { $lookupKeys = '<none>' }
+                    Write-Host "DEBUG: ConvertTo-ConfigV2 lookup keys = $lookupKeys"
                     foreach ($k in $lookup.Keys) {
                         try {
                             $v = $lookup[$k]
@@ -505,6 +506,7 @@ function Test-AgentCompatibilityRegression {
                 # Normalize log level into a string before building return object
                 $normalizedLog = $logLevel -as [string]
                 if ([string]::IsNullOrWhiteSpace($normalizedLog)) { $normalizedLog = 'info' }
+                $normalizedLog = (Get-Culture).TextInfo.ToTitleCase($normalizedLog)
 
                 return @{
                     "AgentSettings" = @{
@@ -516,7 +518,7 @@ function Test-AgentCompatibilityRegression {
                         "ProcessMonitoringEnabled" = $processMonitoring
                     }
                     "LoggingSettings" = @{
-                        "LogLevel" = (Get-Culture).TextInfo.ToTitleCase((if ([string]::IsNullOrWhiteSpace(($logLevel -as [string]))) { 'info' } else { ($logLevel -as [string]) }))
+                        "LogLevel" = $normalizedLog
                     }
                 }
             }
