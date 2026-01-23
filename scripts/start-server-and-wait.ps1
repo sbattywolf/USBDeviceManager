@@ -17,6 +17,11 @@ if ($NoBuild) { $args += ' --no-build' }
 $outFile = Join-Path $tmpDir "server.out.log"
 $errFile = Join-Path $tmpDir "server.err.log"
 
+# Ensure log files exist so CI artifact upload can pick them up even if the
+# process exits quickly and Start-Process hasn't flushed output yet.
+New-Item -Path $outFile -ItemType File -Force | Out-Null
+New-Item -Path $errFile -ItemType File -Force | Out-Null
+
 try {
     $startArgs = $args
     Write-Host "Launching: dotnet $startArgs"
@@ -28,6 +33,21 @@ try {
     Write-Host "Attempting to capture any available output files..."
     if (Test-Path $outFile) { Write-Host "Server stdout (partial):"; Get-Content $outFile -Tail 200 }
     if (Test-Path $errFile) { Write-Host "Server stderr (partial):"; Get-Content $errFile -Tail 200 }
+    exit 1
+}
+
+# Give the server a short moment; if it exits immediately capture output
+# early so diagnostics are available in CI artifacts.
+Start-Sleep -Seconds 3
+try {
+    $p = Get-Process -Id $proc.Id -ErrorAction SilentlyContinue
+} catch { $p = $null }
+if (-not $p) {
+    Write-Error "Server process $($proc.Id) terminated early; capturing logs."
+    $diagFile = Join-Path $tmpDir "start-server-diagnostics.log"
+    "Server process $($proc.Id) exited shortly after start" | Out-File -FilePath $diagFile -Encoding UTF8
+    if (Test-Path $outFile) { "--- server.out (tail 200) ---" | Out-File -FilePath $diagFile -Append; Get-Content $outFile -Tail 200 | Out-File -FilePath $diagFile -Append }
+    if (Test-Path $errFile) { "--- server.err (tail 200) ---" | Out-File -FilePath $diagFile -Append; Get-Content $errFile -Tail 200 | Out-File -FilePath $diagFile -Append }
     exit 1
 }
 
