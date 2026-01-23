@@ -949,9 +949,33 @@ function Register-EngineEvent {
             return Normalize-MockResult $r
         }
         Write-AgentLog -Message "Register-EngineEvent (stub) called for $Name" -Level 'Debug' -Component 'AdapterStubs'
-        $entry = @{ Name = $Name; Handler = $Handler; RegisteredAt = (Get-Date).ToString('o') }
+        $id = ([guid]::NewGuid()).ToString()
+        $entry = @{ Id = $id; Name = $Name; Handler = $Handler; RegisteredAt = (Get-Date).ToString('o') }
+        if (-not $Global:RegisteredAgentEvents) { $Global:RegisteredAgentEvents = @() }
         $Global:RegisteredAgentEvents += $entry
-        return @{ Registered = $true; Name = $Name }
+        return @{ Id = $id; Registered = $true; Name = $Name }
+}
+
+function Unregister-EngineEvent {
+    param([string]$Name, [string]$EventId)
+    if ($Global:MockFunctions.ContainsKey('Unregister-EngineEvent')) {
+        $Global:MockCalls['Unregister-EngineEvent'] = ($Global:MockCalls['Unregister-EngineEvent'] -as [int]) + 1
+        $r = & $Global:MockFunctions['Unregister-EngineEvent'].GetNewClosure()
+        return Normalize-MockResult $r
+    }
+    Write-AgentLog -Message "Unregister-EngineEvent (stub) called for Name=$Name EventId=$EventId" -Level 'Debug' -Component 'AdapterStubs'
+    if (-not $Global:RegisteredAgentEvents) { return $false }
+    $before = $Global:RegisteredAgentEvents.Count
+    if ($EventId) {
+        $Global:RegisteredAgentEvents = $Global:RegisteredAgentEvents | Where-Object {
+            try { if ($_.Id) { -not ([string]$_.Id -eq [string]$EventId) } else { $true } } catch { $true }
+        }
+    } elseif ($Name) {
+        $Global:RegisteredAgentEvents = $Global:RegisteredAgentEvents | Where-Object { $_.Name -ne $Name }
+    }
+    $after = $Global:RegisteredAgentEvents.Count
+    if ($EventId -or $Name) { return $true }
+    return ($after -lt $before)
 }
 
 # Additional stubs for missing test helper cmdlets
@@ -1018,7 +1042,11 @@ function Get-RegisteredEventCount {
     return $Global:RegisteredAgentEvents.Count
 }
 
-Export-ModuleMember -Function Get-DefaultConfiguration, Test-AgentRunning, Set-AgentLock, Clear-AgentLock, Write-AgentLog, Test-Configuration, Save-Configuration, Load-Configuration, Export-Configuration, Get-AgentStatus, Invoke-HealthCheckWorkflow, Initialize-AgentWorkflow, Stop-AgentWorkflow, Get-CoordinatedMonitoringData, Initialize-MonitoringEvents, Get-AggregatedHealthScore, Get-MonitoringPerformanceMetrics, Sync-ComponentStates, Get-AgentHealthStatus, Import-AgentConfiguration, ConvertTo-ConfigV2, Register-MonitoringEvent, Unregister-MonitoringEvent, Register-EngineEvent, Process-MonitoringEvent, Get-AgentState, Test-AgentCompatibility, Test-WindowsCompatibility, Test-ModuleDependency, Get-RegisteredEventCount, Update-AgentConfiguration
+    try {
+    Export-ModuleMember -Function Get-DefaultConfiguration, Test-AgentRunning, Set-AgentLock, Clear-AgentLock, Write-AgentLog, Test-Configuration, Save-Configuration, Load-Configuration, Export-Configuration, Get-AgentStatus, Invoke-HealthCheckWorkflow, Initialize-AgentWorkflow, Stop-AgentWorkflow, Get-CoordinatedMonitoringData, Initialize-MonitoringEvents, Get-AggregatedHealthScore, Get-MonitoringPerformanceMetrics, Sync-ComponentStates, Get-AgentHealthStatus, Import-AgentConfiguration, ConvertTo-ConfigV2, Register-MonitoringEvent, Unregister-MonitoringEvent, Register-EngineEvent, Unregister-EngineEvent, Process-MonitoringEvent, Get-AgentState, Test-AgentCompatibility, Test-WindowsCompatibility, Test-ModuleDependency, Get-RegisteredEventCount, Update-AgentConfiguration -ErrorAction Stop
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}
 
 # Ensure exported adapter stub functions are available as global functions for dot-sourced tests
 try {
@@ -1028,7 +1056,7 @@ try {
         'Invoke-HealthCheckWorkflow','Initialize-AgentWorkflow','Stop-AgentWorkflow','Get-CoordinatedMonitoringData',
         'Initialize-MonitoringEvents','Get-AggregatedHealthScore','Get-MonitoringPerformanceMetrics','Sync-ComponentStates',
         'Get-AgentHealthStatus','Import-AgentConfiguration','ConvertTo-ConfigV2','Register-MonitoringEvent',
-        'Unregister-MonitoringEvent','Register-EngineEvent','Process-MonitoringEvent','Get-AgentState',
+        'Unregister-MonitoringEvent','Register-EngineEvent','Unregister-EngineEvent','Process-MonitoringEvent','Get-AgentState',
         'Update-AgentConfiguration',
         'Test-AgentCompatibility','Test-WindowsCompatibility','Test-ModuleDependency','Get-RegisteredEventCount'
     )
