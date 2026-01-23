@@ -14,12 +14,15 @@ Write-Host "Starting server project: $ProjectPath on port $Port"
 $args = "run --project `"$ProjectPath`" --urls http://localhost:$Port"
 if ($NoBuild) { $args += ' --no-build' }
 
-$outFile = Join-Path $tmpDir "server.out.log"
+$outFile = Join-Path $tmpDir "server.log"
 $errFile = Join-Path $tmpDir "server.err.log"
 
 # Ensure log files exist so CI artifact upload can pick them up even if the
 # process exits quickly and Start-Process hasn't flushed output yet.
 New-Item -Path $outFile -ItemType File -Force | Out-Null
+# For backward compatibility some scripts expect server.out.log; create a
+# placeholder that will be uploaded if present.
+New-Item -Path (Join-Path $tmpDir "server.out.log") -ItemType File -Force | Out-Null
 New-Item -Path $errFile -ItemType File -Force | Out-Null
 
 try {
