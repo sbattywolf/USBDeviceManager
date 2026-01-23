@@ -274,6 +274,9 @@ jobs:
       - name: Restore
         run: dotnet restore USBDeviceManager.sln
 
+      - name: Restore AgentE2E project
+        run: dotnet restore server/AgentE2E.Tests/AgentE2E.Tests.csproj
+
       - name: Build
         run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
 
