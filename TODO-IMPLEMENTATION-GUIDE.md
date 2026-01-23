@@ -1,6 +1,9 @@
-# USB Device Manager - Complete Implementation Guide
+# USB Device Manager - Complete Implementation Guide (MOVED)
 
-## 🎯 **VS Code Extensions Required for Full Server Implementation**
+This document has been archived and its actionable tasks consolidated into `docs/TODOs-actionable.md`.
+Full original content has been copied to `docs/archived-todos/TODO-IMPLEMENTATION-GUIDE.md` on 2026-01-19.
+
+Please use `docs/TODOs-actionable.md` for assignments and scheduling.
 
 ### **Core .NET Development**
 - **C# Dev Kit** (ms-dotnettools.csharpdotnet) - Essential for C# development
@@ -28,12 +31,6 @@
 - **Coverage Gutters** (ryanluker.vscode-coverage-gutters) - Code coverage visualization
 
 ### **Development Productivity**
-- **Auto Rename Tag** (formulahendry.auto-rename-tag) - HTML/Razor tag management
-- **Bracket Pair Colorizer** - Visual bracket matching
-- **GitLens** (eamodio.gitlens) - Advanced Git capabilities
-- **TODO Highlight** (wayou.vscode-todo-highlight) - Track TODOs and FIXMEs
-
----
 
 ## 📋 **Complete TODO List & Project Status**
 

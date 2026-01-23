@@ -42,6 +42,7 @@ namespace USBDeviceManager.Adapters
         /// </summary>
         /// <param name="device">Device to register (ignored).</param>
         /// <param name="cancellationToken">Cancellation token for the operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public Task RegisterDeviceAsync(UsbDevice device, CancellationToken cancellationToken = default)
         {
             // No-op stub for tests and CI environments.

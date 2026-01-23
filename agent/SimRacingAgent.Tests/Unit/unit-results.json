@@ -1,0 +1,106 @@
+﻿[
+    "Starting SimRacing Agent Core Unit Tests",
+    "=======================================",
+    "",
+    "Running agent test suite: ConfigManager",
+    "",
+    "Running agent test suite: AgentCore",
+    "",
+    "Agent Core Test Summary",
+    "======================",
+    "Total Passed:  0",
+    "Total Failed:  0",
+    "Total Skipped: 0",
+    "Overall Result: SUCCESS",
+    {
+        "Summary":  {
+                        "Skipped":  0,
+                        "Failed":  0,
+                        "Passed":  0
+                    },
+        "Success":  true,
+        "Results":  [
+                        "[PASS] ConfigManager - Get-DefaultConfiguration returns valid agent config",
+                        "[PASS] ConfigManager - Test-Configuration validates agent settings correctly",
+                        "[PASS] ConfigManager - Save-Configuration and Load-Configuration work for agent",
+                        "[PASS] ConfigManager - Configuration paths are agent-specific",
+                        "[PASS] ConfigManager - Export-Configuration uses agent naming",
+                        {
+                            "Summary":  {
+                                            "Skipped":  0,
+                                            "Failed":  0,
+                                            "Passed":  5
+                                        },
+                            "Success":  true,
+                            "Results":  [
+                                            {
+                                                "Category":  "ConfigManager",
+                                                "Name":  "Get-DefaultConfiguration returns valid agent config",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "ConfigManager",
+                                                "Name":  "Test-Configuration validates agent settings correctly",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "ConfigManager",
+                                                "Name":  "Save-Configuration and Load-Configuration work for agent",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "ConfigManager",
+                                                "Name":  "Configuration paths are agent-specific",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "ConfigManager",
+                                                "Name":  "Export-Configuration uses agent naming",
+                                                "Success":  true
+                                            }
+                                        ]
+                        },
+                        "[PASS] AgentCore - Test-AgentRunning detects agent instances correctly",
+                        "[PASS] AgentCore - Set-AgentLock creates lock file with correct data",
+                        "[2026-01-19 12:48:13] [Info] [Test] Test agent message",
+                        "[PASS] AgentCore - Write-AgentLog writes agent-specific logs",
+                        "[PASS] AgentCore - Get-AgentStatus provides comprehensive agent information",
+                        "[PASS] AgentCore - Clear-AgentLock removes lock file properly",
+                        {
+                            "Summary":  {
+                                            "Skipped":  0,
+                                            "Failed":  0,
+                                            "Passed":  5
+                                        },
+                            "Success":  true,
+                            "Results":  [
+                                            {
+                                                "Category":  "AgentCore",
+                                                "Name":  "Test-AgentRunning detects agent instances correctly",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "AgentCore",
+                                                "Name":  "Set-AgentLock creates lock file with correct data",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "AgentCore",
+                                                "Name":  "Write-AgentLog writes agent-specific logs",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "AgentCore",
+                                                "Name":  "Get-AgentStatus provides comprehensive agent information",
+                                                "Success":  true
+                                            },
+                                            {
+                                                "Category":  "AgentCore",
+                                                "Name":  "Clear-AgentLock removes lock file properly",
+                                                "Success":  true
+                                            }
+                                        ]
+                        }
+                    ]
+    }
+]

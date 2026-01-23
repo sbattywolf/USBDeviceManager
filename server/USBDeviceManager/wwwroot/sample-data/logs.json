@@ -1,0 +1,7 @@
+[
+  "[INFO] SampleLog - Starting simulated device scan",
+  "[DEBUG] SampleLog - Device 123 connected",
+  "[WARN] SampleLog - Device 456 reported flaky connection",
+  "[ERROR] SampleLog - Failed to initialize device 789",
+  "[INFO] SampleLog - Scan complete; 2 devices found"
+]

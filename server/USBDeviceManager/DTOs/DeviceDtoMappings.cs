@@ -6,8 +6,16 @@ namespace USBDeviceManager.DTOs
 {
     using USBDeviceManager.Models;
 
+    /// <summary>
+    /// Mapping helpers for device-related DTOs.
+    /// </summary>
     public static class DeviceDtoMappings
     {
+        /// <summary>
+        /// Maps a <see cref="DeviceCreateDto"/> to a <see cref="UsbDevice"/> model instance.
+        /// </summary>
+        /// <param name="dto">Source DTO.</param>
+        /// <returns>New <see cref="UsbDevice"/> instance populated from the DTO.</returns>
         public static UsbDevice ToModel(this DeviceCreateDto dto)
         {
             return new UsbDevice

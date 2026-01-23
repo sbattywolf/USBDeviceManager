@@ -52,7 +52,7 @@ The main entry point that orchestrates all modules and provides different operat
 
 **Modes:**
 - **Terminal Mode**: Interactive console interface
-- **Service Mode**: Background service (TODO: Future implementation)
+- **Service Mode**: Background service (Future implementation)
 - **Install Mode**: Runs the installer
 - **Uninstall Mode**: Runs the uninstaller
 

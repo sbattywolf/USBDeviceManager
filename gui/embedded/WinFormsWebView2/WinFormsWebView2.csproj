@@ -5,8 +5,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!-- Name GUI exe predictably for CI/artifacts -->
-    <AssemblyName>SMGui</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

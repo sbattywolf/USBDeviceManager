@@ -1,4 +1,4 @@
-# Device Monitor Module
+﻿# Device Monitor Module
 # Real-time USB device monitoring and health tracking
 
 using module ..\Utils\Logging.psm1
@@ -24,8 +24,10 @@ class DeviceMonitor {
         try {
             Write-AgentLog "Starting device monitoring (interval: ${IntervalSeconds}s)" -Level Info
 
-            # If tests have mocked Register-ObjectEvent or Get-WmiObject, avoid creating real timer/event handlers
-            if ($Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Register-ObjectEvent')) {
+            # Prefer script-scoped mock lookup (module-level initializer sets `$Script:MockFunctions`)
+            $mockFunctions = $Script:MockFunctions
+
+            if ($mockFunctions -and $mockFunctions.ContainsKey('Register-ObjectEvent')) {
                 # Perform one initial scan using mocks
                 $this.ScanDevices()
                 $this.IsMonitoring = $true
@@ -71,7 +73,7 @@ class DeviceMonitor {
                 $this.MonitoringTimer.Stop()
                 $this.MonitoringTimer.Dispose()
             }
-            
+
             $this.IsMonitoring = $false
             Write-AgentLog "Device monitoring stopped" -Level Info
         }
@@ -86,8 +88,9 @@ class DeviceMonitor {
 
             # If tests provided a mock for Get-WmiObject, use it to avoid reading real system devices
             $rawUsb = $null
-            if ($Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Get-WmiObject')) {
-                try { $rawUsb = & $Global:MockFunctions['Get-WmiObject'].GetNewClosure() -Class 'Win32_PnPEntity' } catch { $rawUsb = $null }
+            $mockFunctions = $Script:MockFunctions
+            if ($mockFunctions -and $mockFunctions.ContainsKey('Get-WmiObject')) {
+                try { $rawUsb = & $mockFunctions['Get-WmiObject'].GetNewClosure() -Class 'Win32_PnPEntity' } catch { $rawUsb = $null }
             }
 
             if (-not $rawUsb) {
@@ -136,7 +139,7 @@ class DeviceMonitor {
                     if ($deviceId) { $currentDevices[$deviceId] = $deviceInfo }
                 }
             }
-            
+
             # Check for new devices
             foreach ($deviceId in $currentDevices.Keys) {
                 if (-not $this.ConnectedDevices.ContainsKey($deviceId)) {
@@ -144,7 +147,7 @@ class DeviceMonitor {
                     $this.OnDeviceConnected($currentDevices[$deviceId])
                 }
             }
-            
+
             # Check for disconnected devices
             $disconnectedDevices = @()
             foreach ($deviceId in $this.ConnectedDevices.Keys) {
@@ -152,13 +155,13 @@ class DeviceMonitor {
                     $disconnectedDevices += $deviceId
                 }
             }
-            
+
             foreach ($deviceId in $disconnectedDevices) {
                 Write-AgentLog "Device disconnected: $($this.ConnectedDevices[$deviceId].Name)" -Level Info
                 $this.OnDeviceDisconnected($this.ConnectedDevices[$deviceId])
                 $this.ConnectedDevices.Remove($deviceId)
             }
-            
+
             # Update connected devices
             $this.ConnectedDevices = $currentDevices
         }
@@ -169,18 +172,18 @@ class DeviceMonitor {
 
     [bool]IsRacingDevice([Object]$device) {
         $racingKeywords = @(
-            "wheel", "pedal", "shifter", "racing", "thrustmaster", 
+            "wheel", "pedal", "shifter", "racing", "thrustmaster",
             "logitech", "fanatec", "simucube", "heusinkveld"
         )
-        
+
         $deviceText = "$($device.Name) $($device.Description)".ToLower()
-        
+
         foreach ($keyword in $racingKeywords) {
             if ($deviceText -like "*$keyword*") {
                 return $true
             }
         }
-        
+
         return $false
     }
 
@@ -192,12 +195,12 @@ class DeviceMonitor {
                 Device = $deviceInfo
                 Timestamp = Get-Date
             })
-            
+
             # Trigger automation if configured
             if (Get-Command "Invoke-DeviceAutomation" -ErrorAction SilentlyContinue) {
                 Invoke-DeviceAutomation -Event "Connected" -Device $deviceInfo
             }
-            
+
             Write-AgentLog "Device connected: $($deviceInfo.Name)" -Level Info
         }
         catch {
@@ -213,12 +216,12 @@ class DeviceMonitor {
                 Device = $deviceInfo
                 Timestamp = Get-Date
             })
-            
+
             # Trigger automation if configured
             if (Get-Command "Invoke-DeviceAutomation" -ErrorAction SilentlyContinue) {
                 Invoke-DeviceAutomation -Event "Disconnected" -Device $deviceInfo
             }
-            
+
             Write-AgentLog "Device disconnected: $($deviceInfo.Name)" -Level Info
         }
         catch {
@@ -250,62 +253,82 @@ class DeviceMonitor {
     }
 }
 
-# Module functions
+## Module-scoped DeviceMonitor instance with safe fallback to global for compatibility
+if (-not $Script:DeviceMonitor) {
+    $g = Get-Variable -Name DeviceMonitor -Scope Global -ErrorAction SilentlyContinue
+    if ($g) { $Script:DeviceMonitor = $g.Value } else { $Script:DeviceMonitor = $null }
+}
+
+if (-not $Script:MockFunctions) {
+    $g = Get-Variable -Name MockFunctions -Scope Global -ErrorAction SilentlyContinue
+    if ($g) { $Script:MockFunctions = $g.Value } else { $Script:MockFunctions = $null }
+}
+
 function Start-DeviceMonitoring {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [int]$IntervalSeconds = 5
     )
-    
+
     # If tests have mocked event registration or device enumeration, simulate a one-shot start to avoid timers
-    if ($Global:MockFunctions -and ($Global:MockFunctions.ContainsKey('Register-ObjectEvent') -or $Global:MockFunctions.ContainsKey('Get-USBDevices'))) {
-        if (-not $Global:DeviceMonitor) { $Global:DeviceMonitor = [DeviceMonitor]::new() }
-        try { $Global:DeviceMonitor.ScanDevices() } catch {}
-        $Global:DeviceMonitor.IsMonitoring = $true
+    $mockFunctions = $Script:MockFunctions
+    if ($mockFunctions -and ($mockFunctions.ContainsKey('Register-ObjectEvent') -or $mockFunctions.ContainsKey('Get-USBDevices'))) {
+        if (-not $Script:DeviceMonitor) { $Script:DeviceMonitor = [DeviceMonitor]::new() }
+        try { $Script:DeviceMonitor.ScanDevices() } catch { Write-AgentLog "DeviceMonitor startup scan failed: $_" -Level Warning }
+        $Script:DeviceMonitor.IsMonitoring = $true
         return
     }
 
-    if (-not $Global:DeviceMonitor) {
-        $Global:DeviceMonitor = [DeviceMonitor]::new()
+    if (-not $PSCmdlet.ShouldProcess('DeviceMonitor','Start')) { return }
+
+    if (-not $Script:DeviceMonitor) {
+        $Script:DeviceMonitor = [DeviceMonitor]::new()
     }
 
-    $Global:DeviceMonitor.Start($IntervalSeconds)
+    $Script:DeviceMonitor.Start($IntervalSeconds)
 }
 
 function Stop-DeviceMonitoring {
-    if ($Global:DeviceMonitor) {
-        $Global:DeviceMonitor.Stop()
-    }
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+
+    if (-not $Script:DeviceMonitor) { return }
+    if (-not $PSCmdlet.ShouldProcess('DeviceMonitor','Stop')) { return }
+    $Script:DeviceMonitor.Stop()
 }
 
 function Get-ConnectedDevices {
-    if ($Global:DeviceMonitor) {
-        return $Global:DeviceMonitor.GetConnectedDevices()
+    if ($Script:DeviceMonitor) {
+        return $Script:DeviceMonitor.GetConnectedDevices()
     }
     return @()
 }
 
 function Get-RacingDevices {
-    if ($Global:DeviceMonitor) {
-        return $Global:DeviceMonitor.GetRacingDevices()
+    if ($Script:DeviceMonitor) {
+        return $Script:DeviceMonitor.GetRacingDevices()
     }
     return @()
 }
 
 function Get-DeviceHistory {
     param([int]$Hours = 24)
-    
-    if ($Global:DeviceMonitor) {
-        return $Global:DeviceMonitor.GetDeviceHistory($Hours)
+
+    if ($Script:DeviceMonitor) {
+        return $Script:DeviceMonitor.GetDeviceHistory($Hours)
     }
     return @()
 }
 
 function Get-DeviceMonitoringStatus {
-    if ($Global:DeviceMonitor) {
-        return $Global:DeviceMonitor.GetStatus()
+    if ($Script:DeviceMonitor) {
+        return $Script:DeviceMonitor.GetStatus()
     }
     return @{ IsMonitoring = $false }
 }
 
 # Export module members
 Export-ModuleMember -Function *
+
+
+

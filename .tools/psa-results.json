@@ -1,0 +1,2160 @@
+﻿[
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\shared\\TestFramework.psm1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Core\\AgentEngine.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-AgentEngine\u0027 does not have a help comment.",
+                                "Line":  136,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Stop-AgentEngine\u0027 does not have a help comment.",
+                                "Line":  156,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-AgentEngineStatus\u0027 does not have a help comment.",
+                                "Line":  167,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-AgentEngine\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  142,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-AgentEngine\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  146,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Modules\\AutomationEngine.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Get-AutomationRules\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  507,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AutomationEngine\u0027.",
+                                "Line":  461,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AutomationEngine\u0027.",
+                                "Line":  461,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-AutomationEngine\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  472,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Modules\\DeviceMonitor.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Get-ConnectedDevices\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  300,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Get-RacingDevices\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  307,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Modules\\SoftwareManager.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Start-Software\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  357,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Stop-Software\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  363,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Restart-Software\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  369,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  337,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:SoftwareManager\u0027.",
+                                "Line":  326,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:SoftwareManager\u0027.",
+                                "Line":  326,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  327,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  327,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Services\\APIServer.psm1",
+        "Diagnostics":  [
+
+                        ],
+        "Error":  "Riferimento a un oggetto non impostato su un\u0027istanza di oggetto."
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Services\\DashboardClient.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Set-DashboardClientMocks\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  7,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Send-HealthMetrics\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  359,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Initialize-DashboardClient\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  317,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Services\\HealthMonitor.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Set-HealthMonitorMocks\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  465,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Get-CurrentHealthMetrics\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  550,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Update-HealthMetrics\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  566,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Update-HealthMetrics\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  566,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Tools\\Install-Agent.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Test-Prerequisites\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  76,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Stop-ExistingAgent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  225,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Stop-ExistingAgent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  229,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Install-Agent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  296,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Install-Agent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  300,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Register-Agent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  320,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Register-Agent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  345,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Register-Agent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  349,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Install-StartupScript\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  394,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Install-StartupScript\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  398,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Tools\\Uninstall-Agent.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Remove-InstallationFiles\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  161,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Remove-DataFiles\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  194,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Remove-RegistryEntries\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  230,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Remove-Shortcuts\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  270,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027WhatIf\u0027 has been declared but not used.",
+                                "Line":  22,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Stop-Agent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  153,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Stop-Agent\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  157,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-InstallationFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  173,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-InstallationFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  180,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-InstallationFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  186,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-InstallationFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  190,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-DataFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  210,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-DataFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  217,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-DataFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  222,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-DataFiles\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  226,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-RegistryEntries\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  262,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-RegistryEntries\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  266,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-Shortcuts\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  302,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Remove-Shortcuts\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  306,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Utils\\Configuration.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Initialize-Configuration\u0027 does not have a help comment.",
+                                "Line":  279,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-AgentConfiguration\u0027 does not have a help comment.",
+                                "Line":  293,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-AgentConfiguration\u0027 does not have a help comment.",
+                                "Line":  303,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Save-AgentConfiguration\u0027 does not have a help comment.",
+                                "Line":  315,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentConfiguration\u0027 does not have a help comment.",
+                                "Line":  323,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-ConfigurationSection\u0027 does not have a help comment.",
+                                "Line":  328,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-ConfigurationSection\u0027 does not have a help comment.",
+                                "Line":  335,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Reset-AgentConfiguration\u0027 does not have a help comment.",
+                                "Line":  347,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-ConfigurationStatus\u0027 does not have a help comment.",
+                                "Line":  351,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-ConfigurationExists\u0027 does not have a help comment.",
+                                "Line":  356,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-ConfigurationKeys\u0027 does not have a help comment.",
+                                "Line":  363,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-AgentInfo\u0027 does not have a help comment.",
+                                "Line":  371,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-DashboardConfig\u0027 does not have a help comment.",
+                                "Line":  375,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-LoggingConfig\u0027 does not have a help comment.",
+                                "Line":  379,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-DeviceConfig\u0027 does not have a help comment.",
+                                "Line":  383,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-SoftwareConfig\u0027 does not have a help comment.",
+                                "Line":  387,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-AutomationConfig\u0027 does not have a help comment.",
+                                "Line":  391,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-HealthConfig\u0027 does not have a help comment.",
+                                "Line":  395,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Test-ConfigurationExists\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  356,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Get-ConfigurationKeys\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  363,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Reset-AgentConfiguration\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  347,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Initialize-Configuration\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  285,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-AgentConfiguration\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  310,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Save-AgentConfiguration\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  318,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Save-AgentConfiguration\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  320,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-ConfigurationSection\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  342,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-ConfigurationSection\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  344,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:ConfigManager\u0027.",
+                                "Line":  276,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:ConfigManager\u0027.",
+                                "Line":  276,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:ConfigManager\u0027.",
+                                "Line":  289,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:ConfigManager\u0027.",
+                                "Line":  289,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Utils\\Logging.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "VariableNotLocal",
+                                "Severity":  3,
+                                "Message":  "La variabile non è assegnata nel metodo.",
+                                "Line":  53,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentLog\u0027 does not have a help comment.",
+                                "Line":  214,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentTrace\u0027 does not have a help comment.",
+                                "Line":  230,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentDebug\u0027 does not have a help comment.",
+                                "Line":  235,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentInfo\u0027 does not have a help comment.",
+                                "Line":  240,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentWarning\u0027 does not have a help comment.",
+                                "Line":  245,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentError\u0027 does not have a help comment.",
+                                "Line":  250,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentCritical\u0027 does not have a help comment.",
+                                "Line":  255,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-AgentLogLevel\u0027 does not have a help comment.",
+                                "Line":  261,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-AgentLogOutputs\u0027 does not have a help comment.",
+                                "Line":  266,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-AgentLogStatus\u0027 does not have a help comment.",
+                                "Line":  276,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-AgentLogBuffer\u0027 does not have a help comment.",
+                                "Line":  281,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentEvent\u0027 does not have a help comment.",
+                                "Line":  287,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentMetric\u0027 does not have a help comment.",
+                                "Line":  304,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentPerformance\u0027 does not have a help comment.",
+                                "Line":  323,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentException\u0027 does not have a help comment.",
+                                "Line":  342,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Set-AgentLogOutputs\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  266,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Set-AgentLogLevel\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  261,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Set-AgentLogOutputs\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  266,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLogger\u0027.",
+                                "Line":  211,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLogger\u0027.",
+                                "Line":  211,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  116,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  146,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  159,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\SimRacingAgent.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Start-AgentServices\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  126,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Stop-AgentServices\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  196,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Show-RecentLogs\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  398,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Start-InteractiveMode\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  228,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingWriteHost",
+                                "Severity":  1,
+                                "Message":  "File \u0027SimRacingAgent.ps1\u0027 uses Console.\u0027Write\u0027. Using Console to write is not recommended because it may not work in all hosts or there may even be no hosts at all. Use Write-Output instead.",
+                                "Line":  243,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Functional\\run-functional-tests.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Integration\\Helpers\\test-dashboard-server.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Integration\\AgentWorkflowTests.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentHealthCheckWorkflow\u0027 does not have a help comment.",
+                                "Line":  23,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentMonitoringIntegration\u0027 does not have a help comment.",
+                                "Line":  195,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentIntegrationTests\u0027 does not have a help comment.",
+                                "Line":  378,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Invoke-AgentIntegrationTests\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  378,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentIntegrationTests\u0027 returns an object of type \u0027System.Collections.Hashtable\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  429,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Integration\\parse-integration-test.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Integration\\run-integration-tests.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Integration\\test-agent-integration-run-specific.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Integration\\test-agent-integration.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSAvoidUsingPositionalParameters",
+                                "Severity":  0,
+                                "Message":  "Cmdlet \u0027Join-Path\u0027 has positional parameter. Please use named parameters instead of positional parameters when calling a command.",
+                                "Line":  342,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingPositionalParameters",
+                                "Severity":  0,
+                                "Message":  "Cmdlet \u0027Join-Path\u0027 has positional parameter. Please use named parameters instead of positional parameters when calling a command.",
+                                "Line":  355,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseDeclaredVarsMoreThanAssignments",
+                                "Severity":  1,
+                                "Message":  "The variable \u0027color\u0027 is assigned but never used.",
+                                "Line":  31,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseDeclaredVarsMoreThanAssignments",
+                                "Severity":  1,
+                                "Message":  "The variable \u0027started\u0027 is assigned but never used.",
+                                "Line":  75,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027NoCleanup\u0027 has been declared but not used.",
+                                "Line":  5,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027TimeoutSeconds\u0027 has been declared but not used.",
+                                "Line":  6,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027Verbose\u0027 has been declared but not used.",
+                                "Line":  7,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Start-TestProcess\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  53,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:TestLogFile\u0027.",
+                                "Line":  15,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:TestLogFile\u0027.",
+                                "Line":  16,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:TestLogFile\u0027.",
+                                "Line":  17,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:TestLogFile\u0027.",
+                                "Line":  39,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  16,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  39,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  137,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  158,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  159,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  160,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  169,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  170,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  171,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  191,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  192,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  225,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  234,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  235,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  236,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  273,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  301,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  302,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  303,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  312,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  313,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  314,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  333,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  342,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  355,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  379,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  380,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  381,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Regression\\AgentRegressionTests.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentHeartbeatRegression\u0027 does not have a help comment.",
+                                "Line":  19,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentRegressionTests\u0027 does not have a help comment.",
+                                "Line":  89,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseDeclaredVarsMoreThanAssignments",
+                                "Severity":  1,
+                                "Message":  "The variable \u0027captured\u0027 is assigned but never used.",
+                                "Line":  64,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Import-ModuleIfExists\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  8,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Invoke-AgentRegressionTests\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  89,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027AgentId\u0027 has been declared but not used.",
+                                "Line":  27,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027AgentId\u0027 has been declared but not used.",
+                                "Line":  44,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentRegressionTests\u0027 returns an object of type \u0027System.Collections.Hashtable\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  113,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Regression\\run-heartbeat-debug.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Regression\\run-regression-tests.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Regression\\test-heartbeat-regression.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027AgentId\u0027 has been declared but not used.",
+                                "Line":  14,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027AgentId\u0027 has been declared but not used.",
+                                "Line":  24,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:LastHeartbeatPayload\u0027.",
+                                "Line":  24,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:LastHeartbeatPayload\u0027.",
+                                "Line":  26,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\shared\\AdapterStubs.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-DefaultConfiguration\u0027 does not have a help comment.",
+                                "Line":  19,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentRunning\u0027 does not have a help comment.",
+                                "Line":  59,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Set-AgentLock\u0027 does not have a help comment.",
+                                "Line":  78,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Clear-AgentLock\u0027 does not have a help comment.",
+                                "Line":  93,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Write-AgentLog\u0027 does not have a help comment.",
+                                "Line":  104,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-Configuration\u0027 does not have a help comment.",
+                                "Line":  144,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Save-Configuration\u0027 does not have a help comment.",
+                                "Line":  160,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Load-Configuration\u0027 does not have a help comment.",
+                                "Line":  175,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Export-Configuration\u0027 does not have a help comment.",
+                                "Line":  192,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Get-AgentStatus\u0027 does not have a help comment.",
+                                "Line":  199,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseDeclaredVarsMoreThanAssignments",
+                                "Severity":  1,
+                                "Message":  "The variable \u0027obj\u0027 is assigned but never used.",
+                                "Line":  184,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseApprovedVerbs",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Load-Configuration\u0027 uses an unapproved verb.",
+                                "Line":  175,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Set-AgentLock\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  78,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  62,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  63,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  63,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  64,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  76,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  76,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  82,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  95,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLogger\u0027.",
+                                "Line":  128,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLogger\u0027.",
+                                "Line":  128,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLogger\u0027.",
+                                "Line":  129,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  34,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  124,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  129,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  141,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  178,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\shared\\TestFramework.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Clear-AllMocks\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  84,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Assert-PathExists\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  154,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Assert-Contains\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  155,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:TestSession\u0027.",
+                                "Line":  4,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:TestSession\u0027.",
+                                "Line":  4,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  5,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  5,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  6,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  6,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockTimestamps\u0027.",
+                                "Line":  7,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockTimestamps\u0027.",
+                                "Line":  7,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockOrders\u0027.",
+                                "Line":  8,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockOrders\u0027.",
+                                "Line":  8,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCounter\u0027.",
+                                "Line":  9,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCounter\u0027.",
+                                "Line":  9,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  16,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  42,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  50,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027ParameterFilter\u0027 has been declared but not used.",
+                                "Line":  114,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Unit\\AgentCoreTests.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Invoke-AgentCoreTests\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  198,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentCoreTests\u0027 returns an object of type \u0027System.Collections.Hashtable\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  249,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  114,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  115,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  127,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  177,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  178,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:AgentLockFile\u0027.",
+                                "Line":  186,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentConfigManager\u0027 does not have a help comment.",
+                                "Line":  20,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentCore\u0027 does not have a help comment.",
+                                "Line":  91,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentCoreTests\u0027 does not have a help comment.",
+                                "Line":  198,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Unit\\AgentMonitoringTests.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentUSBMonitoring\u0027 does not have a help comment.",
+                                "Line":  20,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Test-AgentProcessManager\u0027 does not have a help comment.",
+                                "Line":  143,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSProvideCommentHelp",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentMonitoringTests\u0027 does not have a help comment.",
+                                "Line":  269,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Invoke-AgentMonitoringTests\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  269,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Invoke-AgentMonitoringTests\u0027 returns an object of type \u0027System.Collections.Hashtable\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  320,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  52,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockOrders\u0027.",
+                                "Line":  53,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  60,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Unit\\run-unit-tests.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Validation\\quick-validation.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseUsingScopeModifierInNewRunspaces",
+                                "Severity":  1,
+                                "Message":  "The variable \u0027$AgentPath\u0027 is not declared within this ScriptBlock, and is missing the \u0027Using:\u0027 scope modifier.",
+                                "Line":  11,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseUsingScopeModifierInNewRunspaces",
+                                "Severity":  1,
+                                "Message":  "The variable \u0027$AgentPath\u0027 is not declared within this ScriptBlock, and is missing the \u0027Using:\u0027 scope modifier.",
+                                "Line":  12,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\parse-testrunner.ps1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\TestRunner.ps1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseDeclaredVarsMoreThanAssignments",
+                                "Severity":  1,
+                                "Message":  "The variable \u0027statusClass\u0027 is assigned but never used.",
+                                "Line":  592,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Merge-TestResults\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  470,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Invoke-QuickAgentTests\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  621,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Invoke-FullAgentTests\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  632,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Invoke-ApplicationTests\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  643,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027Parallel\u0027 has been declared but not used.",
+                                "Line":  117,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSReviewUnusedParameter",
+                                "Severity":  1,
+                                "Message":  "The parameter \u0027ShowVerbose\u0027 has been declared but not used.",
+                                "Line":  118,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  60,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidUsingEmptyCatchBlock",
+                                "Severity":  1,
+                                "Message":  "Empty catch block is used. Please use Write-Error or throw statements in catch blocks.",
+                                "Line":  61,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\src\\core\\AgentCore.psm1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\src\\core\\ConfigManager.psm1",
+        "Diagnostics":  null,
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\src\\modules\\ProcessManager.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Set-ProcessManagerMocks\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  9,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Get-ProcessMetrics\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  111,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-ManagedProcess\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  79,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-ManagedProcess\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  81,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-ManagedProcess\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  95,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-ManagedProcess\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  100,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseOutputTypeCorrectly",
+                                "Severity":  0,
+                                "Message":  "The cmdlet \u0027Start-ManagedProcess\u0027 returns an object of type \u0027System.Boolean\u0027 but this type is not declared in the OutputType attribute.",
+                                "Line":  107,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseApprovedVerbs",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Calculate-ProcessHealth\u0027 uses an unapproved verb.",
+                                "Line":  163,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  6,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  6,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  7,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  7,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  42,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  42,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  43,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  43,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  75,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  75,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  76,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  76,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  114,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockFunctions\u0027.",
+                                "Line":  114,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  115,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSAvoidGlobalVars",
+                                "Severity":  1,
+                                "Message":  "Found global variable \u0027Global:MockCalls\u0027.",
+                                "Line":  115,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Set-ProcessManagerMocks\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  9,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Set-ProcessManagerMockCallCount\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  27,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\src\\modules\\USBMonitor.psm1",
+        "Diagnostics":  [
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Set-USBMonitorMocks\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  5,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseSingularNouns",
+                                "Severity":  1,
+                                "Message":  "The cmdlet \u0027Get-USBDevices\u0027 uses a plural noun. A singular noun should be used instead.",
+                                "Line":  33,
+                                "Column":  null
+                            },
+                            {
+                                "RuleName":  "PSUseShouldProcessForStateChangingFunctions",
+                                "Severity":  1,
+                                "Message":  "Function \u0027Set-USBMonitorMocks\u0027 has verb that could change system state. Therefore, the function has to support \u0027ShouldProcess\u0027.",
+                                "Line":  5,
+                                "Column":  null
+                            }
+                        ],
+        "Error":  null
+    }
+]

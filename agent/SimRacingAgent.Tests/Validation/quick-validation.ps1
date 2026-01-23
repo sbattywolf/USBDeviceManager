@@ -1,10 +1,10 @@
-# Quick Agent Validation Script
+﻿# Quick Agent Validation Script
 # Tests health alert suppression and basic functionality
 
 param([int]$TestDurationSeconds = 20)
 
-Write-Host "=== SimRacing Agent Quick Validation ===" -ForegroundColor Yellow
-Write-Host "Testing for $TestDurationSeconds seconds..." -ForegroundColor Gray
+Write-Output "=== SimRacing Agent Quick Validation ==="
+Write-Output "Testing for $TestDurationSeconds seconds..."
 
 # Start agent in background and capture output
 $agentJob = Start-Job -ScriptBlock {
@@ -17,73 +17,76 @@ try {
     $healthAlertsFound = $false
     $agentStarted = $false
     $startTime = Get-Date
-    
+
     while ((Get-Date) -lt $startTime.AddSeconds($TestDurationSeconds)) {
         # Check job output
         $jobOutput = Receive-Job -Job $agentJob -Keep
         if ($jobOutput) {
             $outputText = $jobOutput -join "`n"
-            
+
             # Check for health alerts
             if ($outputText -match "CRITICAL HEALTH ALERT") {
                 $healthAlertsFound = $true
-                Write-Host "❌ CRITICAL HEALTH ALERT found!" -ForegroundColor Red
-                Write-Host $outputText -ForegroundColor Gray
+                Write-Error "❌ CRITICAL HEALTH ALERT found!"
+                Write-Output $outputText
                 break
             }
-            
+
             # Check if agent started
             if ($outputText -match "SimRacing Agent Interactive Mode") {
                 $agentStarted = $true
-                Write-Host "✅ Agent started successfully" -ForegroundColor Green
+                Write-Output "✅ Agent started successfully"
             }
         }
-        
+
         Start-Sleep -Seconds 2
     }
-    
+
     # Final validation
-    Write-Host "`n=== VALIDATION RESULTS ===" -ForegroundColor Yellow
-    
+    Write-Output "`n=== VALIDATION RESULTS ==="
+
     if (-not $healthAlertsFound) {
-        Write-Host "✅ HEALTH ALERTS SUPPRESSED: No critical health alerts detected" -ForegroundColor Green
+        Write-Output "✅ HEALTH ALERTS SUPPRESSED: No critical health alerts detected"
     } else {
-        Write-Host "❌ HEALTH ALERTS PRESENT: Critical health alerts still showing" -ForegroundColor Red
+        Write-Error "❌ HEALTH ALERTS PRESENT: Critical health alerts still showing"
     }
-    
+
     if ($agentStarted) {
-        Write-Host "✅ AGENT STARTUP: Interactive mode reached successfully" -ForegroundColor Green
+        Write-Output "✅ AGENT STARTUP: Interactive mode reached successfully"
     } else {
-        Write-Host "❌ AGENT STARTUP: Failed to reach interactive mode" -ForegroundColor Red
+        Write-Error "❌ AGENT STARTUP: Failed to reach interactive mode"
     }
-    
+
     # Check configuration
     $config = Get-Content "agent\SimRacingAgent\Utils\agent-config.json" | ConvertFrom-Json
     $healthMonitoringEnabled = $config.HealthMonitoring.Enabled
-    
+
     if ($healthMonitoringEnabled -eq $false) {
-        Write-Host "✅ CONFIGURATION: Health monitoring properly disabled" -ForegroundColor Green
+        Write-Output "✅ CONFIGURATION: Health monitoring properly disabled"
     } else {
-        Write-Host "❌ CONFIGURATION: Health monitoring still enabled" -ForegroundColor Red
+        Write-Error "❌ CONFIGURATION: Health monitoring still enabled"
     }
-    
+
     # Summary
     $allTestsPassed = (-not $healthAlertsFound) -and $agentStarted -and ($healthMonitoringEnabled -eq $false)
-    
-    Write-Host "`n=== SUMMARY ===" -ForegroundColor Yellow
+
+    Write-Output "`n=== SUMMARY ==="
     if ($allTestsPassed) {
-        Write-Host "🎉 ALL TESTS PASSED - Agent is working correctly!" -ForegroundColor Green
-        Write-Host "• Health alerts suppressed ✅" -ForegroundColor White
-        Write-Host "• Agent starts cleanly ✅" -ForegroundColor White
-        Write-Host "• Configuration updated ✅" -ForegroundColor White
+        Write-Output "🎉 ALL TESTS PASSED - Agent is working correctly!"
+        Write-Output "• Health alerts suppressed ✅"
+        Write-Output "• Agent starts cleanly ✅"
+        Write-Output "• Configuration updated ✅"
     } else {
-        Write-Host "⚠️ SOME ISSUES DETECTED - Check results above" -ForegroundColor Yellow
+        Write-Warning "⚠️ SOME ISSUES DETECTED - Check results above"
     }
 }
 finally {
     # Clean up
-    Write-Host "`nStopping agent..." -ForegroundColor Gray
+    Write-Output "`nStopping agent..."
     Stop-Job -Job $agentJob -PassThru | Remove-Job
 }
 
-Write-Host "`nValidation completed." -ForegroundColor Yellow
+Write-Output "`nValidation completed."
+
+
+

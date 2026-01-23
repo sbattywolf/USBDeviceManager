@@ -3,14 +3,24 @@
 // </copyright>
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text;
+using USBDeviceManager.Adapters;
 using USBDeviceManager.Components;
 using USBDeviceManager.Data;
 using USBDeviceManager.Hubs;
 using USBDeviceManager.Services;
-using USBDeviceManager.Adapters;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+// Increase host/Microsoft logging verbosity for diagnostics
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
+builder.Logging.AddFilter("Microsoft", LogLevel.Debug);
 
 // Add services to the container
 builder.Services.AddRazorComponents()
@@ -33,6 +43,9 @@ builder.Services.AddScoped<HttpClient>(sp =>
 // Add SignalR
 builder.Services.AddSignalR();
 
+// Dashboard client for UI pages (wraps HttpClient + SignalR)
+builder.Services.AddScoped<USBDeviceManager.Services.DashboardClient>();
+
 // Add API controllers with a simple validation filter for consistent errors
 builder.Services.AddControllers(options =>
 {
@@ -41,6 +54,9 @@ builder.Services.AddControllers(options =>
 
 // Add clock service for testable current time
 builder.Services.AddSingleton<IDateTime, SystemDateTime>();
+
+// Add Status service for server/agent port configuration and health checks
+builder.Services.AddSingleton<USBDeviceManager.Services.StatusService>();
 
 // Register adapters (stub implementations for development & tests)
 builder.Services.AddSingleton<IDeviceAdapter, DeviceAdapterStub>();
@@ -82,17 +98,22 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+// Explicitly set WebRootPath to ensure static files are found
+builder.Environment.WebRootPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline
+// Enable Swagger UI for local debugging regardless of environment
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "USB Device Manager API v1");
+    c.RoutePrefix = "swagger";
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "USB Device Manager API v1");
-        c.RoutePrefix = "swagger";
-    });
     app.UseDeveloperExceptionPage();
 }
 else
@@ -119,6 +140,14 @@ app.MapRazorComponents<App>()
 // Map SignalR hubs
 app.MapHub<MonitoringHub>("/hubs/monitoring");
 
+// Serve a tiny embedded favicon to avoid 404s from browsers
+app.MapGet("/favicon.png", () =>
+{
+    // 1x1 transparent PNG
+    var png = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=");
+    return Results.File(png, "image/png");
+});
+
 // Initialize database
 using (IServiceScope scope = app.Services.CreateScope())
 {
@@ -126,14 +155,86 @@ using (IServiceScope scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
+// Load status service and perform autostart if configured
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    var status = scope.ServiceProvider.GetRequiredService<StatusService>();
+    // run autostart synchronously at startup
+    try
+    {
+        status.StartAutostartServicesAsync().GetAwaiter().GetResult();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[DIAG] Autostart failed: {ex.Message}");
+    }
+}
+
+
+// Diagnostic logging for static files issue: write to diagnostics file
+Console.WriteLine($"[DIAG] ContentRootPath: {app.Environment.ContentRootPath}");
+Console.WriteLine($"[DIAG] WebRootPath: {app.Environment.WebRootPath}");
 Console.WriteLine("USB Device Manager Server starting...");
 Console.WriteLine("Dashboard: http://localhost:5000");
 Console.WriteLine("API Documentation: http://localhost:5000/swagger");
 Console.WriteLine("Press Ctrl+C to shut down.");
 
-app.Run();
+// Register lifetime events to capture shutdown diagnostics
+var lifetime = app.Lifetime;
+lifetime.ApplicationStarted.Register(() =>
+{
+    Console.WriteLine($"[DIAG] ApplicationStarted: {DateTime.UtcNow:o}");
+});
+
+lifetime.ApplicationStopping.Register(() =>
+{
+    Console.WriteLine($"[DIAG] ApplicationStopping: {DateTime.UtcNow:o}");
+    try
+    {
+        Console.WriteLine($"[DIAG] Environment.ExitCode = {Environment.ExitCode}");
+        Console.WriteLine($"[DIAG] Managed thread id: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+        Console.WriteLine("[DIAG] StackTrace:\n" + Environment.StackTrace);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[DIAG] Error capturing stopping diagnostics: {ex}");
+    }
+});
+
+lifetime.ApplicationStopped.Register(() =>
+{
+    Console.WriteLine($"[DIAG] ApplicationStopped: {DateTime.UtcNow:o}");
+});
+
+// Prevent accidental Ctrl+C from terminating the server during interactive debugging
+Console.CancelKeyPress += (sender, e) =>
+{
+    Console.WriteLine($"[DIAG] CancelKeyPress received at {DateTime.UtcNow:o}. Ignoring during debug session.");
+    e.Cancel = true; // prevent process termination
+};
+
+AppDomain.CurrentDomain.ProcessExit += (sender, e) =>
+{
+    Console.WriteLine($"[DIAG] ProcessExit event fired at {DateTime.UtcNow:o}. ExitCode={Environment.ExitCode}");
+};
+
+
+try
+{
+    app.Run();
+    Console.WriteLine("[DIAG] app.Run() exited normally.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[DIAG] Unhandled exception in app.Run(): {ex}");
+    throw;
+}
 
 // Expose Program class to WebApplicationFactory in tests
+
+/// <summary>
+/// Program entrypoint exposed as a partial class for test hosts (WebApplicationFactory).
+/// </summary>
 public partial class Program
 {
 }

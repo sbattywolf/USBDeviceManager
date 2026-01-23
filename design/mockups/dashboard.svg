@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .bg { fill: #f4f7fb }
+    .card { fill:#ffffff; stroke:#e6eef8; rx:10 }
+    .title { font: 700 22px/1.2 'Inter', sans-serif; fill:#0b2a2a }
+    .kpi { font: 800 30px/1 'Inter', sans-serif; fill:#062e2a }
+    .muted { font: 400 13px/1 'Inter', sans-serif; fill:#6b7280 }
+    .chip { font:600 12px 'Inter',sans-serif; fill:#ffffff }
+    .shadow { filter: url(#softShadow) }
+  </style>
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0%" stop-color="#06b39a" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#0aa99d" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#0b2a2a" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+  <rect class="bg" width="1200" height="800"/>
+  <!-- Left nav placeholder -->
+  <rect x="20" y="20" width="220" height="760" rx="10" fill="#0aa99d" opacity="0.08" />
+  <text x="36" y="56" class="title">USBDeviceManager</text>
+
+  <!-- Top bar -->
+  <rect x="260" y="20" width="920" height="60" rx="8" class="shadow" fill="url(#g1)" />
+  <text x="280" y="58" class="title" fill="#ffffff">Dashboard</text>
+  <text x="1040" y="58" class="muted" fill="#e6fffb">Auto-refresh • Search</text>
+
+  <!-- KPI cards -->
+  <g transform="translate(260,100)">
+    <rect x="0" y="0" width="260" height="110" rx="10" class="card shadow" />
+    <text x="16" y="28" class="muted">Server</text>
+    <text x="16" y="64" class="kpi">Listening</text>
+    <rect x="180" y="20" width="64" height="28" rx="14" fill="#06b39a" />
+    <text x="202" y="40" class="chip">Online</text>
+
+    <rect x="280" y="0" width="260" height="110" rx="10" class="card shadow" />
+    <text x="296" y="28" class="muted">Agent</text>
+    <text x="296" y="64" class="kpi">Connected</text>
+    <rect x="444" y="20" width="64" height="28" rx="14" fill="#ffb86b" />
+    <text x="456" y="40" class="chip">1 host</text>
+
+    <rect x="560" y="0" width="260" height="110" rx="10" class="card shadow" />
+    <text x="576" y="28" class="muted">Devices</text>
+    <text x="576" y="64" class="kpi">12</text>
+    <rect x="760" y="20" width="64" height="28" rx="14" fill="#0b7ff1" />
+    <text x="772" y="40" class="chip">New:2</text>
+
+    <rect x="840" y="0" width="260" height="110" rx="10" class="card shadow" />
+    <text x="856" y="28" class="muted">Processes</text>
+    <text x="856" y="64" class="kpi">3</text>
+    <rect x="1000" y="20" width="64" height="28" rx="14" fill="#6b7280" opacity="0.08" />
+    <text x="1012" y="40" class="chip">Stable</text>
+  </g>
+
+  <!-- Recent events -->
+  <rect x="260" y="230" width="620" height="500" rx="8" class="card" />
+  <text x="278" y="258" class="title">Recent Events</text>
+  <rect x="900" y="230" width="280" height="240" rx="8" class="card" />
+  <text x="916" y="258" class="title">Quick Actions</text>
+  <rect x="900" y="490" width="280" height="240" rx="8" class="card" />
+  <text x="916" y="518" class="title">Mini Chart</text>
+
+  <!-- Footer hint -->
+  <text x="260" y="760" class="muted">Click a KPI to explore Devices/Processes</text>
+</svg>

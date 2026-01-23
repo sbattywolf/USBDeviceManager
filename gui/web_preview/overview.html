@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Overview - Preview</title>
+  <style>body{font-family:Arial;margin:12px} .badge{color:#666;font-size:13px}</style>
+</head>
+<body>
+  <h1>Overview</h1>
+  <p class="badge">Devices: <strong id="devices">0</strong> | Software: <strong id="software">0</strong></p>
+  <h2>Endpoints</h2>
+  <ul>
+    <li><a href="/api/devices">/api/devices</a> — <span id="dev_ts">Last: -</span></li>
+    <li><a href="/api/software">/api/software</a> — <span id="sw_ts">Last: -</span></li>
+  </ul>
+  <h2>Recent Activity</h2>
+  <pre id="activity">(activity will appear here)</pre>
+
+  <script>
+    const API_BASE = 'http://127.0.0.1:5000';
+    async function refreshOverview(){
+      try{
+        const devResp = await fetch(API_BASE + '/api/devices');
+        const devJson = devResp.ok ? await devResp.json() : [];
+        const swResp = await fetch(API_BASE + '/api/software');
+        const swJson = swResp.ok ? await swResp.json() : [];
+
+        document.getElementById('devices').textContent = (devJson && devJson.length) || 0;
+        document.getElementById('software').textContent = (swJson && swJson.length) || 0;
+        const ts = new Date().toISOString().replace('T',' ').split('.')[0];
+        document.getElementById('dev_ts').textContent = 'Last: ' + ts;
+        document.getElementById('sw_ts').textContent = 'Last: ' + ts;
+
+        // activity: show simple JSON preview from latest responses
+        const activity = [];
+        activity.push('GET /api/devices -> ' + JSON.stringify(devJson, null, 2));
+        activity.push('GET /api/software -> ' + JSON.stringify(swJson, null, 2));
+        document.getElementById('activity').textContent = activity.join('\n\n');
+      }catch(e){
+        document.getElementById('activity').textContent = 'Failed to fetch API: ' + e;
+      }
+    }
+    refreshOverview();
+    setInterval(refreshOverview, 5000);
+  </script>
+</body>
+</html>
