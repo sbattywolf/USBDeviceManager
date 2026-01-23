@@ -36,6 +36,7 @@ jobs:
       - name: Run GUI tests (headless with Xvfb)
         env:
           PYTHONPATH: ${{ github.workspace }}
+          QT_QPA_PLATFORM: offscreen
         run: |
           xvfb-run -s "-screen 0 1280x1024x24" pytest -q gui/tests
 
