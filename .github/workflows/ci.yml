@@ -44,6 +44,7 @@ jobs:
           xvfb-run -s "-screen 0 1280x1024x24" pytest -q gui/tests
 
   build-and-test:
+    name: Build (no tests)
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -105,16 +106,79 @@ jobs:
             Write-Host 'No long-run helper found; continuing without it.'
           }
 
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+  tests:
+    name: Run Tests and Upload Results
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    needs: [gui-tests, build-and-test]
+    env:
+      CI_BIND_ADDRESS: 127.0.0.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        shell: pwsh
+        run: |
+          $maxAttempts = 3
+          $baseDelay = 5
+          $success = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            Write-Host "dotnet restore attempt $i of $maxAttempts"
+            dotnet restore USBDeviceManager.sln --verbosity minimal
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+            if ($i -lt $maxAttempts) {
+              $delay = $baseDelay * [math]::Pow(2, $i - 1)
+              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
+              Start-Sleep -Seconds $delay
+            }
+          }
+          if (-not $success) {
+            Write-Error "dotnet restore failed after $maxAttempts attempts"
+            exit 1
+          }
+
+      - name: Publish long-run test helper
+        shell: pwsh
+        run: |
+          if (Test-Path test-helpers/LongRunner) {
+            dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
+            Write-Host 'Published LongRunner to ./artifacts/longrunner'
+          } else {
+            Write-Host 'No long-run helper found; continuing without it.'
+          }
+
       - name: Detect long-sleep command for ShellRunner tests
         run: |
           echo "Detecting long-sleep helper for ShellRunner tests"
-        # This step sets SHELLRUNNER_LONG_CMD via separate OS-specific steps below
 
       - name: Set SHELLRUNNER_LONG_CMD (Linux)
         if: runner.os == 'Linux' || runner.os == 'Ubuntu' || runner.os == 'ubuntu-latest'
         shell: bash
         run: |
-          # Prefer published LongRunner helper if available
           if [ -f ./artifacts/longrunner/LongRunner.dll ]; then
             echo "SHELLRUNNER_LONG_CMD=dotnet|./artifacts/longrunner/LongRunner.dll --duration=30" >> $GITHUB_ENV
             echo "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
@@ -122,7 +186,6 @@ jobs:
             echo "SHELLRUNNER_LONG_CMD=/bin/bash|-c \"sleep 30\"" >> $GITHUB_ENV
             echo "Set SHELLRUNNER_LONG_CMD for bash"
           elif command -v sleep >/dev/null 2>&1; then
-            # fallback to sh wrapper
             echo "SHELLRUNNER_LONG_CMD=/bin/sh|-c \"sleep 30\"" >> $GITHUB_ENV
             echo "Set SHELLRUNNER_LONG_CMD for sh"
           else
@@ -133,14 +196,12 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          # Prefer published LongRunner helper if available
           $helperDll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
           if (Test-Path $helperDll) {
             "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
             Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
           }
           else {
-            # Prefer Windows PowerShell Start-Sleep; fall back to PowerShell Core if needed
             if (Get-Command powershell -ErrorAction SilentlyContinue) {
               "SHELLRUNNER_LONG_CMD=powershell|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
               Write-Host "Set SHELLRUNNER_LONG_CMD for powershell"
@@ -157,14 +218,12 @@ jobs:
       - name: Enable in-process smoke server for CI (cross-platform)
         run: |
           echo "SMOKE_USE_TESTSERVER=1" >> $GITHUB_ENV
-        # keep this available for all matrix OSes so functional smoke tests use TestServer in CI
 
       - name: Ensure server stopped (optional auto-kill)
         shell: pwsh
         run: |
           if (Test-Path .\scripts\ensure-server-stopped.ps1) {
             Write-Host 'Running ensure-server-stopped.ps1 (respects AUTO_KILL env var).'
-            # Invoke as a fresh pwsh process via Start-Process to fully isolate parsing and argument binding
             $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue)?.Source ?? 'pwsh'
             $args = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File', "$PWD\scripts\ensure-server-stopped.ps1")
             $proc = Start-Process -FilePath $pwshPath -ArgumentList $args -NoNewWindow -PassThru -Wait
@@ -200,15 +259,11 @@ jobs:
         with:
           name: dotnet-tests-${{ matrix.os }}
           path: |
-            # Directly named trx files created by dotnet test at repo root or project folders
             '**/*dotnet-tests-${{ matrix.os }}.trx'
             '**/*dotnet-tests.local.trx'
-            # Standard TestResults folders produced by dotnet test
             '**/TestResults/*.trx'
             '**/*/TestResults/*.trx'
-            # AgentHeartbeat isolated project test results
             server/AgentHeartbeat.Tests/**/TestResults/*.trx
-            # Any trx under server test projects
             server/**/TestResults/*.trx
 
       - name: Run sanitize-repo check (PowerShell script)
@@ -264,7 +319,7 @@ jobs:
             scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
-    needs: build-and-test
+    needs: tests
     # Make this job non-blocking so PRs are not blocked by E2E flakes
     continue-on-error: true
     steps:
@@ -309,7 +364,7 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: build-and-test
+    needs: tests
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Set TEST_PORT (Windows)
@@ -364,3 +419,86 @@ jobs:
         with:
           name: integration-tests-${{ runner.os }}
           path: '**/*integration-${{ runner.os }}.trx'
+
+  analyze-results:
+    name: Analyze Test Results
+    runs-on: ubuntu-latest
+    needs: tests
+    outputs:
+      tests_ok: ${{ steps.check.outputs.tests_ok }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download dotnet test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-ubuntu-latest
+          path: artifacts/tests/ubuntu
+        continue-on-error: true
+
+      - name: Download dotnet test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-windows-latest
+          path: artifacts/tests/windows
+        continue-on-error: true
+
+      - name: Gather all TRX files and evaluate
+        id: check
+        shell: bash
+        run: |
+          set -euo pipefail
+          failures=0
+          echo "Searching for TRX files under $(pwd)"
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; marking tests_ok=false"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          for f in "${files[@]}"; do
+            echo "Checking $f"
+            # extract failed count from <Counters ... failed="N"
+            failed=$(grep -oP 'failed="\K[0-9]+' "$f" || true)
+            if [ -z "$failed" ]; then failed=0; fi
+            echo "  failed=$failed"
+            failures=$((failures + failed))
+          done
+          echo "Total failed tests: $failures"
+          if [ "$failures" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+
+  log-check:
+    name: Conditional Log Inspection
+    runs-on: ubuntu-latest
+    needs: analyze-results
+    if: ${{ needs.analyze-results.outputs.tests_ok != 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download server logs (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: server-log-Windows
+          path: artifacts/logs/windows
+        continue-on-error: true
+
+      - name: Download server logs (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: server-log-ubuntu-latest
+          path: artifacts/logs/ubuntu
+        continue-on-error: true
+
+      - name: Quick log scan for exceptions and errors
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Scanning downloaded logs for ERROR/Exception/Timeout entries"
+          find artifacts -type f -name '*.log' -print -exec grep -nE "Exception|ERROR|Unhandled|Timeout|fail(ed)?" {} + || true
+          echo "Log inspection complete"
