@@ -56,6 +56,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -121,6 +126,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -256,6 +266,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -406,6 +421,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -449,6 +469,11 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -539,6 +564,9 @@ jobs:
         id: summary
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           echo "Searching for TRX files under $(pwd)"
           mapfile -t files < <(find . -type f -name '*.trx' || true)
@@ -615,6 +643,9 @@ jobs:
         id: summary
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           python3 scripts/ci-analyze.py
           failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
@@ -673,6 +704,9 @@ jobs:
         id: summary
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           python3 scripts/ci-analyze.py
           failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
@@ -750,6 +784,9 @@ jobs:
         id: aggregate
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           out=final-report.txt
           echo "CI Final Test Summary" > $out
