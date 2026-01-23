@@ -404,8 +404,8 @@ jobs:
             scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
-    needs: [analyze-results, analyze-unit]
-    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' }}
+    needs: unit-tests
+    if: always()
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -453,8 +453,8 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: [analyze-results, analyze-unit]
-    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    needs: unit-tests
+    if: always()
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -852,6 +852,12 @@ jobs:
           body=$(python3 -c "import json,sys; print(json.dumps(open('final-report.txt',encoding='utf-8').read()))")
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"body\":$body}" "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" > /dev/null
           echo "Comment posted"
+
+      - name: Fail workflow if any tests failed
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        run: |
+          echo "One or more test suites failed; marking workflow as failed"
+          exit 1
 
   analyze-unit:
     name: Analyze Unit Test Results
