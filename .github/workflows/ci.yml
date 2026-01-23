@@ -425,7 +425,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: tests
     outputs:
-      tests_ok: ${{ steps.check.outputs.tests_ok }}
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -444,33 +445,186 @@ jobs:
           path: artifacts/tests/windows
         continue-on-error: true
 
-      - name: Gather all TRX files and evaluate
-        id: check
+      - name: Download agent & integration artifacts (if present)
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-tests-windows
+          path: artifacts/agent
+        continue-on-error: true
+
+      - name: Generate test summary (parse TRX)
+        id: summary
         shell: bash
         run: |
           set -euo pipefail
-          failures=0
           echo "Searching for TRX files under $(pwd)"
           mapfile -t files < <(find . -type f -name '*.trx' || true)
           if [ ${#files[@]} -eq 0 ]; then
-            echo "No TRX files found; marking tests_ok=false"
+            echo "No TRX files found; setting outputs and exiting"
             echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
             exit 0
           fi
-          for f in "${files[@]}"; do
-            echo "Checking $f"
-            # extract failed count from <Counters ... failed="N"
-            failed=$(grep -oP 'failed="\K[0-9]+' "$f" || true)
-            if [ -z "$failed" ]; then failed=0; fi
-            echo "  failed=$failed"
-            failures=$((failures + failed))
-          done
-          echo "Total failed tests: $failures"
-          if [ "$failures" -eq 0 ]; then
+            python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
             echo "tests_ok=true" >> $GITHUB_OUTPUT
           else
             echo "tests_ok=false" >> $GITHUB_OUTPUT
           fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload test summary artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Run log analysis and enrich report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Failures detected, gathering logs and generating enriched report"
+          mkdir -p artifacts/logs
+          mapfile -t logs < <(find . -type f -name '*.log' || true)
+          echo "Found ${#logs[@]} log files"
+          echo "=== Enriched Test Report ===" > tests-enriched-report.txt
+          echo "See tests-summary.json for full summary." >> tests-enriched-report.txt
+          echo "\n--- Failures ---\n" >> tests-enriched-report.txt
+          cat tests-summary.txt >> tests-enriched-report.txt
+          echo "\n--- Log excerpts (prioritized) ---\n" >> tests-enriched-report.txt
+          for kw in Exception ERROR Timeout Assertion; do
+            echo "\n== $kw ==" >> tests-enriched-report.txt
+            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> tests-enriched-report.txt || true
+          done
+          echo "Wrote tests-enriched-report.txt"
+
+      - name: Upload enriched report (failures)
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-enriched-report
+          path: tests-enriched-report.txt
+
+  analyze-e2e:
+    name: Analyze E2E Results
+    runs-on: ubuntu-latest
+    needs: e2e-windows
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download E2E artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-e2e-windows
+          path: artifacts/e2e/windows
+        continue-on-error: true
+
+      - name: Generate E2E summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload E2E summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich E2E report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "E2E failures detected; generating enriched E2E report"
+          echo "=== E2E Enriched Report ===" > e2e-enriched-report.txt
+          cat tests-summary.txt >> e2e-enriched-report.txt
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+
+      - name: Upload E2E enriched report
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-enriched-report
+          path: e2e-enriched-report.txt
+
+  analyze-integration:
+    name: Analyze Integration Results
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download integration artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-tests-windows
+          path: artifacts/integration/windows
+        continue-on-error: true
+
+      - name: Generate integration summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload integration summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich integration report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Integration failures detected; generating enriched integration report"
+          echo "=== Integration Enriched Report ===" > integration-enriched-report.txt
+          cat tests-summary.txt >> integration-enriched-report.txt
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
+
+      - name: Upload integration enriched report
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-enriched-report
+          path: integration-enriched-report.txt
 
   log-check:
     name: Conditional Log Inspection
