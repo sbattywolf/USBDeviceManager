@@ -24,6 +24,14 @@ namespace USBDeviceManager.Services
             LoadConfig();
         }
 
+        // Convenience overload for tests that pass a content-root path string.
+        public StatusService(string contentRoot)
+        {
+            _contentRoot = contentRoot;
+            _configPath = Path.Combine(_contentRoot, "config", "service-config.json");
+            LoadConfig();
+        }
+
         public void SetPorts(int serverPort, int agentPort)
         {
             lock (_lock)
