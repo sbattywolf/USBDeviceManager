@@ -24,8 +24,8 @@ function Invoke-Test {
         Write-Host "[FAIL] $Category - $Name : $($_.Exception.Message)" -ForegroundColor Red
         try {
             $tracePath = Join-Path $PSScriptRoot '..\..\..\.tmp_test_trace.txt'
-            $keys = if ($Global:MockFunctions) { $Global:MockFunctions.Keys -join ',' } else { '<none>' }
-            $orders = if ($Global:MockOrders) { ($Global:MockOrders.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join ',' } else { '<none>' }
+            try { $keys = if ($Global:MockFunctions) { $Global:MockFunctions.Keys -join ',' } else { '<none>' } } catch { $keys = '<none>' }
+            try { $orders = if ($Global:MockOrders) { ($Global:MockOrders.GetEnumerator() | ForEach-Object { "${($_.Key)}=${($_.Value)}" }) -join ',' } else { '<none>' } } catch { $orders = '<none>' }
             "$((Get-Date).ToString('o')) FAILURE $Category - $Name MockKeys=$keys MockOrders=$orders Error=$($_.Exception.Message)" | Out-File -FilePath $tracePath -Append -Encoding utf8
         } catch {}
     } finally {
@@ -35,6 +35,29 @@ function Invoke-Test {
 }
 
 function Complete-TestSession { return @{ Success = $Global:TestSession.Success; Results = $Global:TestSession.Results; Summary = $Global:TestSession.Summary } }
+
+# Resilient cleanup wrapper called by TestRunner to ensure test environment is cleaned
+function Clear-TestEnvironment {
+    param()
+    try {
+        # Clear any registered mocks
+        try { if (Get-Command -Name Clear-AllMocks -ErrorAction SilentlyContinue) { Clear-AllMocks } } catch {}
+
+        # Optionally remove transient files created by tests
+        try {
+            $tracePath = Join-Path $PSScriptRoot '..\..\..\.tmp_test_trace.txt'
+            if (Test-Path $tracePath) { Remove-Item -Path $tracePath -Force -ErrorAction SilentlyContinue }
+        } catch {}
+
+        # Reset session object if present
+        try { $Global:TestSession = $null } catch {}
+
+        return $true
+    } catch {
+        Write-Verbose "Clear-TestEnvironment encountered an error: $($_.Exception.Message)"
+        return $false
+    }
+}
 
 function Clear-AllMocks {
     try {
@@ -96,7 +119,7 @@ function Assert-PathExists { param([string]$Path,$Message) if (-not (Test-Path $
 function Assert-Contains { param($Collection,$Item,$Message) if ($Collection -is [string]) { if ($Collection -notlike "*${Item}*") { throw $Message } } else { if (-not ($Collection -contains $Item)) { throw $Message } } }
 
 # Expose helpers to global function table for dot-sourced test scripts
-$globalFuncs = @('Start-TestSession','Invoke-Test','Complete-TestSession','Clear-AllMocks','New-Mock','Remove-Mock','Assert-MockCalled','Assert-NotNull','Assert-True','Assert-False','Assert-Equal','Assert-PathExists','Assert-Contains')
+$globalFuncs = @('Start-TestSession','Invoke-Test','Complete-TestSession','Clear-TestEnvironment','Clear-AllMocks','New-Mock','Remove-Mock','Assert-MockCalled','Assert-NotNull','Assert-True','Assert-False','Assert-Equal','Assert-PathExists','Assert-Contains')
 foreach ($n in $globalFuncs) { try { $cmd = Get-Command -Name $n -ErrorAction SilentlyContinue ; if ($cmd -and $cmd.ScriptBlock) { New-Item -Path ("Function:\Global\{0}" -f $n) -Value $cmd.ScriptBlock -Force | Out-Null } } catch {} }
 
 # Best-effort import of AdapterStubs if present
