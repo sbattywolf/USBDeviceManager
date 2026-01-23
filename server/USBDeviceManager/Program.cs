@@ -62,6 +62,11 @@ builder.Services.AddSingleton<USBDeviceManager.Services.StatusService>();
 builder.Services.AddSingleton<IDeviceAdapter, DeviceAdapterStub>();
 builder.Services.AddSingleton<ISoftwareAdapter, SoftwareAdapterStub>();
 
+// Register platform/test adapters for OS interactions and USB device simulation
+builder.Services.AddSingleton<USBDeviceManager.Services.Abstractions.IProcessLauncher, USBDeviceManager.Services.Platform.ProcessLauncher>();
+builder.Services.AddSingleton<USBDeviceManager.Services.Abstractions.IShellRunner, USBDeviceManager.Services.Platform.ShellRunner>();
+builder.Services.AddSingleton<USBDeviceManager.Services.Abstractions.IUsbDeviceProvider, USBDeviceManager.Services.Usb.InMemoryUsbDeviceProvider>();
+
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
