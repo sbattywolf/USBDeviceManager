@@ -152,7 +152,24 @@ app.MapGet("/favicon.png", () =>
 using (IServiceScope scope = app.Services.CreateScope())
 {
     SimRacingContext context = scope.ServiceProvider.GetRequiredService<SimRacingContext>();
-    context.Database.EnsureCreated();
+    try
+    {
+        context.Database.EnsureCreated();
+    }
+    catch (Microsoft.Data.Sqlite.SqliteException ex)
+    {
+        // SQLite may throw if DDL was executed concurrently or intermittently; if the error
+        // indicates the table already exists, treat as benign and continue. Other Sqlite
+        // errors should still surface.
+        if (ex.Message != null && ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+        {
+            Console.WriteLine("[DIAG] Database ensure-created encountered existing table; continuing.");
+        }
+        else
+        {
+            throw;
+        }
+    }
 }
 
 // Load status service and perform autostart if configured
