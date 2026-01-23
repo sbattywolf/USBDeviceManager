@@ -1,4 +1,4 @@
-. 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/TestRunner.ps1'
+. (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\TestRunner.ps1') | Out-Null
 Write-Host 'Discovered invokers:'
 Get-Command -Name 'Invoke-*Tests' -CommandType Function -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.Name }
 Write-Host '--- Running Invoke-AgentCoreTests ---'
