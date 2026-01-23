@@ -1,5 +1,5 @@
-Import-Module "E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1" -Force
-$temp = "E:/Workspaces/Git/SimRacing/USBDeviceManager/scripts/tmp/legacy_test_config.json"
+Import-Module (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1') -Force
+$temp = (Join-Path $PSScriptRoot 'legacy_test_config.json')
 $legacy = @{
     'AgentSettings' = @{ 'Name' = 'SimRacingAgent'; 'Version'='1.0.0' }
     'MonitoringSettings' = @{ 'USBPollingInterval' = 30; 'ProcessMonitoringEnabled' = $true }

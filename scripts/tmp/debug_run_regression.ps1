@@ -1,7 +1,7 @@
 # Debug runner to execute Agent regression tests in-process
-Import-Module "E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/shared/TestFramework.psm1" -Force
-Import-Module "E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1" -Force
-. "E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/Regression/AgentRegressionTests.ps1"
+Import-Module (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\shared\TestFramework.psm1') -Force
+Import-Module (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1') -Force
+. (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1') | Out-Null
 
 Write-Host "Invoking Test-AgentCoreRegression()"
 $result = Test-AgentCoreRegression

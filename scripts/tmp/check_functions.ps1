@@ -1,5 +1,5 @@
 try {
-    . 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/shared/TestFramework.psm1'
+    . (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\shared\TestFramework.psm1')
     Write-Host 'Sourced ok'
 } catch {
     Write-Host 'Sourcing failed:'
@@ -14,7 +14,7 @@ foreach ($name in $names) {
 }
 
     # Ensure AdapterStubs is imported in this session (diagnostic)
-    $adapter = 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1'
+    $adapter = (Join-Path $PSScriptRoot '..\..\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1')
     try { Import-Module $adapter -Force -ErrorAction Stop ; Write-Host "Imported adapter module for diagnostic" } catch { Write-Host "Import-Module adapter failed: $($_.Exception.Message)" }
 
     $names = @('Write-AgentLog','Set-AgentLock','Clear-AgentLock','Get-DefaultConfiguration','Import-AgentConfiguration')
