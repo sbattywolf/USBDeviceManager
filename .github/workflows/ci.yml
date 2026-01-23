@@ -159,7 +159,8 @@ jobs:
         run: |
           if (Test-Path .\scripts\ensure-server-stopped.ps1) {
             Write-Host 'Running ensure-server-stopped.ps1 (respects AUTO_KILL env var).'
-            & .\scripts\ensure-server-stopped.ps1
+            # Invoke via explicit path to avoid accidental parameter binding when run inside templated scripts
+            & "$PWD\scripts\ensure-server-stopped.ps1"
             $rc = $LASTEXITCODE
             if ($rc -eq 2) {
               Write-Host "ensure-server-stopped returned 2 (AUTO_KILL=false and process present). Continuing as configured."
