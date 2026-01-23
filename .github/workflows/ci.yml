@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main, master ]
 
+env:
+  CI_BIND_ADDRESS: 127.0.0.1
+
 jobs:
   gui-tests:
     runs-on: ubuntu-latest
@@ -46,6 +49,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     needs: gui-tests
+    env:
+      CI_BIND_ADDRESS: 127.0.0.1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -129,7 +134,7 @@ jobs:
         shell: pwsh
         run: |
           # Prefer published LongRunner helper if available
-          $helperDll = Join-Path $GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
+          $helperDll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
           if (Test-Path $helperDll) {
             "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
             Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
@@ -159,8 +164,11 @@ jobs:
         run: |
           if (Test-Path .\scripts\ensure-server-stopped.ps1) {
             Write-Host 'Running ensure-server-stopped.ps1 (respects AUTO_KILL env var).'
-            & .\scripts\ensure-server-stopped.ps1
-            $rc = $LASTEXITCODE
+            # Invoke as a fresh pwsh process via Start-Process to fully isolate parsing and argument binding
+            $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue)?.Source ?? 'pwsh'
+            $args = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File', "$PWD\scripts\ensure-server-stopped.ps1")
+            $proc = Start-Process -FilePath $pwshPath -ArgumentList $args -NoNewWindow -PassThru -Wait
+            $rc = $proc.ExitCode
             if ($rc -eq 2) {
               Write-Host "ensure-server-stopped returned 2 (AUTO_KILL=false and process present). Continuing as configured."
             } elseif ($rc -ne 0) {
@@ -260,6 +268,17 @@ jobs:
     # Make this job non-blocking so PRs are not blocked by E2E flakes
     continue-on-error: true
     steps:
+      - name: Set TEST_PORT (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback,0)
+          $listener.Start()
+          $port = ($listener.LocalEndpoint -as [System.Net.IPEndPoint]).Port
+          $listener.Stop()
+          "TEST_PORT=$port" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          Write-Host "Set TEST_PORT=$port"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -270,6 +289,9 @@ jobs:
 
       - name: Restore
         run: dotnet restore USBDeviceManager.sln
+
+      - name: Restore AgentE2E project
+        run: dotnet restore server/AgentE2E.Tests/AgentE2E.Tests.csproj
 
       - name: Build
         run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
@@ -290,6 +312,17 @@ jobs:
     needs: build-and-test
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     steps:
+      - name: Set TEST_PORT (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback,0)
+          $listener.Start()
+          $port = ($listener.LocalEndpoint -as [System.Net.IPEndPoint]).Port
+          $listener.Stop()
+          "TEST_PORT=$port" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          Write-Host "Set TEST_PORT=$port"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -302,7 +335,7 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          if (Test-Path ./scripts/start-server-and-wait.ps1) { .\scripts\start-server-and-wait.ps1 -NonInteractive } else { Write-Host 'No orchestration script present, skipping server start.' }
+          if (Test-Path ./scripts/start-server-and-wait.ps1) { .\scripts\start-server-and-wait.ps1 -NonInteractive -Port $Env:TEST_PORT } else { Write-Host 'No orchestration script present, skipping server start.' }
 
       - name: Run Integration tests
         shell: pwsh
