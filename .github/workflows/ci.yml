@@ -709,6 +709,89 @@ jobs:
           name: integration-enriched-report
           path: integration-enriched-report.txt
 
+  analyze-unit:
+    name: Analyze Unit Test Results
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download unit test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu-latest
+          path: artifacts/unit/ubuntu
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-windows-latest
+          path: artifacts/unit/windows
+        continue-on-error: true
+
+      - name: Generate unit test summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Searching for TRX files under $(pwd)"
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; setting outputs and exiting"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload unit test summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Run unit log analysis and enrich report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Unit failures detected, gathering logs and generating enriched report"
+          mkdir -p artifacts/logs
+          mapfile -t logs < <(find . -type f -name '*.log' || true)
+          echo "Found ${#logs[@]} log files"
+          echo "=== Unit Tests Enriched Report ===" > unit-tests-enriched-report.txt
+          echo "See tests-summary.json for full summary." >> unit-tests-enriched-report.txt
+          echo "\n--- Failures ---\n" >> unit-tests-enriched-report.txt
+          cat tests-summary.txt >> unit-tests-enriched-report.txt
+          echo "\n--- Log excerpts (prioritized) ---\n" >> unit-tests-enriched-report.txt
+          for kw in Exception ERROR Timeout Assertion; do
+            echo "\n== $kw ==" >> unit-tests-enriched-report.txt
+            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> unit-tests-enriched-report.txt || true
+          done
+          echo "Wrote unit-tests-enriched-report.txt"
+
+      - name: Upload unit enriched report (failures)
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests-enriched-report
+          path: unit-tests-enriched-report.txt
+
   log-check:
     name: Conditional Log Inspection
     runs-on: ubuntu-latest
