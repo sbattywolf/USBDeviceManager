@@ -17,8 +17,14 @@ jobs:
           python-version: '3.11'
       - name: Install system GUI dependencies
         run: |
+          set -e
           sudo apt-get update
-          sudo apt-get install -y libegl1 libgl1-mesa-glx xvfb libx11-6 libxrender1 libxext6
+          # Install Mesa/EGL/GL packages commonly required by headless PyQt/OpenGL users
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            libegl1-mesa libgl1-mesa-dri libgl1-mesa-glx libgbm1 xvfb \
+            libx11-6 libxrender1 libxext6 libxcb1 libxkbcommon0 \
+            ca-certificates
+          sudo apt-get clean
 
       - name: Install GUI requirements
         run: |
