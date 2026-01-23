@@ -19,12 +19,14 @@ jobs:
         run: |
           set -e
           sudo apt-get update
-          # Install Mesa/EGL/GL packages commonly required by headless PyQt/OpenGL users
+          # Install Mesa/GL packages commonly required by headless PyQt/OpenGL users.
+          # Relax package list to use packages available on newer Ubuntu runners,
+          # and include `mesa-utils` as a fallback.
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            libegl1-mesa libgl1-mesa-dri libgl1-mesa-glx libgbm1 xvfb \
+            libgl1-mesa-dri libgbm1 xvfb mesa-utils \
             libx11-6 libxrender1 libxext6 libxcb1 libxkbcommon0 \
-            ca-certificates
-          sudo apt-get clean
+            ca-certificates || true
+          sudo apt-get clean || true
 
       - name: Install GUI requirements
         run: |
@@ -32,6 +34,9 @@ jobs:
           pip install -r gui/requirements.txt
 
       - name: Run GUI tests (headless with Xvfb)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          QT_QPA_PLATFORM: offscreen
         run: |
           xvfb-run -s "-screen 0 1280x1024x24" pytest -q gui/tests
 
