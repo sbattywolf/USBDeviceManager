@@ -826,6 +826,19 @@ PY
           echo "Wrote $out"
           echo "any_failed=$any_failed" >> $GITHUB_OUTPUT
 
+      - name: Generate HTML final report
+        shell: bash
+        run: |
+          set -euo pipefail
+          # renderer will search recursively under artifacts/summaries
+          python3 scripts/generate-final-report-html.py --src artifacts/summaries --out final-report.html || python3 scripts/generate-final-report-html.py --out final-report.html
+
+      - name: Upload final report HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-test-report-html
+          path: final-report.html
+
       - name: Upload final report
         uses: actions/upload-artifact@v4
         with:
