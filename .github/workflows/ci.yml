@@ -92,11 +92,12 @@ jobs:
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
 
       - name: Run isolated AgentHeartbeat tests
+        shell: pwsh
         run: |
           if (Test-Path server/AgentHeartbeat.Tests) {
             dotnet test server/AgentHeartbeat.Tests/AgentHeartbeat.Tests.csproj --configuration Debug --logger "trx;LogFileName=agentheartbeat-${{ matrix.os }}.trx"
           } else {
-            echo 'No isolated AgentHeartbeat.Tests project found; skipping.'
+            Write-Host 'No isolated AgentHeartbeat.Tests project found; skipping.'
           }
 
       - name: Upload dotnet test results
