@@ -16,13 +16,5 @@ namespace USBDeviceManager.Services
         /// </summary>
         DateTime UtcNow { get; }
     }
-
-    /// <summary>
-    /// Default implementation of <see cref="IDateTime"/> that uses <see cref="DateTime.UtcNow"/>.
-    /// </summary>
-    public class SystemDateTime : IDateTime
-    {
-        /// <inheritdoc />
-        public DateTime UtcNow => DateTime.UtcNow;
-    }
+    
 }
