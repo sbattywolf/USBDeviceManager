@@ -22,7 +22,18 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
         $attemptUrls += ($Url -replace '127.0.0.1','::1')
     }
 
+    # Expand attempts: for any URL that contains a plain '/health' path, also
+    # try the '/api/health' variant to be tolerant of callers using either.
+    $expanded = @()
     foreach ($u in $attemptUrls) {
+        $expanded += $u
+        if ($u -match '/health' -and $u -notmatch '/api/health') {
+            $apiVariant = $u -replace '/health','/api/health'
+            $expanded += $apiVariant
+        }
+    }
+
+    foreach ($u in $expanded) {
         try {
             $resp = Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
             if ($resp.StatusCode -eq 200) {
@@ -37,3 +48,4 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
 }
 Write-Error "Timeout waiting for health at $Url"
 exit 1
+
