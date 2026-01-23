@@ -94,7 +94,7 @@ try {
     }
 
     $pids = $procs | ForEach-Object { $_.Id }
-    "$((Get-Date).ToString('s')) - Found processes: $($pids -join ', ') - Names: $($procs | ForEach-Object { $_.ProcessName } -join ', ')" | Out-File -FilePath $log -Append
+    "$((Get-Date).ToString('s')) - Found processes: $($pids -join ', ') - Names: $(( $procs | ForEach-Object { $_.ProcessName } ) -join ', ')" | Out-File -FilePath $log -Append
 
     if ($env:AUTO_KILL -and $env:AUTO_KILL -eq 'false') {
         "$((Get-Date).ToString('s')) - AUTO_KILL=false; skipping kill" | Out-File -FilePath $log -Append
@@ -137,8 +137,8 @@ try {
         # ignore
     }
     if ($still -and $still.Count -gt 0) {
-        "$((Get-Date).ToString('s')) - Processes still running after stop attempts: $($still | ForEach-Object { $_.Id } -join ', ')" | Out-File -FilePath $log -Append
-        Write-Warning "Some server processes remain: $($still | ForEach-Object { $_.Id } -join ', ')"
+        "$((Get-Date).ToString('s')) - Processes still running after stop attempts: $(( $still | ForEach-Object { $_.Id } ) -join ', ')" | Out-File -FilePath $log -Append
+        Write-Warning "Some server processes remain: $(( $still | ForEach-Object { $_.Id } ) -join ', ')"
         exit 1
     }
 
