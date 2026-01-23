@@ -4,16 +4,22 @@
 
 namespace USBDeviceManager.DTOs
 {
+    /// <summary>
+    /// Request representing a device event (connected/disconnected) sent to compatibility endpoints.
+    /// </summary>
     public class DeviceEventRequest
     {
         /// <summary>
-        /// Request representing a device event (connected/disconnected) sent to compatibility endpoints.
+        /// Gets or sets the numeric device identifier for the event.
         /// </summary>
         public int DeviceId
         {
             get; set;
         }
 
-        public string EventType { get; set; } = string.Empty; // "connected" or "disconnected"
+        /// <summary>
+        /// Gets or sets the event type: "connected" or "disconnected".
+        /// </summary>
+        public string EventType { get; set; } = string.Empty;
     }
 }

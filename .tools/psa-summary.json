@@ -1,0 +1,107 @@
+﻿[
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Modules\\AutomationEngine.psm1",
+        "Count":  3,
+        "Rules":  "PSUseSingularNouns:1, PSAvoidGlobalVars:2"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Modules\\DeviceMonitor.psm1",
+        "Count":  11,
+        "Rules":  "PSUseSingularNouns:2, PSAvoidUsingEmptyCatchBlock:1, PSAvoidGlobalVars:8"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Modules\\SoftwareManager.psm1",
+        "Count":  8,
+        "Rules":  "PSUseShouldProcessForStateChangingFunctions:3, PSAvoidGlobalVars:4, PSAvoidUsingEmptyCatchBlock:1"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Services\\APIServer.psm1",
+        "Count":  15,
+        "Rules":  "EmptyCatchNotLast:1, PSReviewUnusedParameter:12, PSUseShouldProcessForStateChangingFunctions:1, PSAvoidGlobalVars:1"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Services\\DashboardClient.psm1",
+        "Count":  13,
+        "Rules":  "PSUseSingularNouns:1, PSAvoidGlobalVars:12"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Services\\HealthMonitor.psm1",
+        "Count":  12,
+        "Rules":  "PSUseSingularNouns:3, PSUseShouldProcessForStateChangingFunctions:3, PSAvoidGlobalVars:6"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Tools\\Uninstall-Agent.ps1",
+        "Count":  5,
+        "Rules":  "PSUseSingularNouns:4, PSReviewUnusedParameter:1"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Utils\\Configuration.psm1",
+        "Count":  7,
+        "Rules":  "PSUseSingularNouns:2, PSUseShouldProcessForStateChangingFunctions:1, PSAvoidGlobalVars:4"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\Utils\\Logging.psm1",
+        "Count":  9,
+        "Rules":  "VariableNotLocal:1, PSUseSingularNouns:1, PSUseShouldProcessForStateChangingFunctions:2, PSAvoidGlobalVars:2, PSAvoidUsingEmptyCatchBlock:3"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent\\SimRacingAgent.ps1",
+        "Count":  5,
+        "Rules":  "PSUseSingularNouns:3, PSAvoidUsingWriteHost:1, PSUseShouldProcessForStateChangingFunctions:1"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Integration\\test-agent-integration.ps1",
+        "Count":  38,
+        "Rules":  "PSUseDeclaredVarsMoreThanAssignments:2, PSReviewUnusedParameter:3, PSUseShouldProcessForStateChangingFunctions:1, PSAvoidGlobalVars:4, PSAvoidUsingEmptyCatchBlock:28"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Regression\\AgentRegressionTests.ps1",
+        "Count":  5,
+        "Rules":  "PSUseDeclaredVarsMoreThanAssignments:1, PSUseSingularNouns:2, PSReviewUnusedParameter:2"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Regression\\test-heartbeat-regression.ps1",
+        "Count":  4,
+        "Rules":  "PSReviewUnusedParameter:2, PSAvoidGlobalVars:2"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\shared\\AdapterStubs.psm1",
+        "Count":  19,
+        "Rules":  "PSUseDeclaredVarsMoreThanAssignments:1, PSUseApprovedVerbs:1, PSUseShouldProcessForStateChangingFunctions:1, PSAvoidGlobalVars:11, PSAvoidUsingEmptyCatchBlock:5"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\shared\\TestFramework.psm1",
+        "Count":  19,
+        "Rules":  "PSUseSingularNouns:3, PSReviewUnusedParameter:1, PSAvoidGlobalVars:12, PSAvoidUsingEmptyCatchBlock:3"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Unit\\AgentCoreTests.ps1",
+        "Count":  7,
+        "Rules":  "PSAvoidGlobalVars:6, PSUseSingularNouns:1"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Unit\\AgentMonitoringTests.ps1",
+        "Count":  4,
+        "Rules":  "PSUseSingularNouns:1, PSAvoidGlobalVars:2, PSAvoidUsingEmptyCatchBlock:1"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\Validation\\quick-validation.ps1",
+        "Count":  2,
+        "Rules":  "PSUseUsingScopeModifierInNewRunspaces:2"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\SimRacingAgent.Tests\\TestRunner.ps1",
+        "Count":  9,
+        "Rules":  "PSUseDeclaredVarsMoreThanAssignments:1, PSUseSingularNouns:4, PSReviewUnusedParameter:2, PSAvoidUsingEmptyCatchBlock:2"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\src\\modules\\ProcessManager.psm1",
+        "Count":  2,
+        "Rules":  "PSUseSingularNouns:1, PSUseApprovedVerbs:1"
+    },
+    {
+        "File":  "E:\\Workspaces\\Git\\SimRacing\\USBDeviceManager\\agent\\src\\modules\\USBMonitor.psm1",
+        "Count":  18,
+        "Rules":  "PSAvoidUsingWMICmdlet:1, PSUseSingularNouns:1, PSAvoidGlobalVars:12, PSAvoidUsingEmptyCatchBlock:4"
+    }
+]

@@ -131,6 +131,27 @@ Configuration is managed through the ConfigManager module with JSON-based storag
 - API server configuration
 - Logging preferences
 
+## Agent Identity and Modes
+
+### Agent identity
+- Each agent instance exposes a unique `AgentId` (GUID) used when registering and heartbeating to the server.
+- The agent also reports a `HostId` / `MachineId` (derived from machine-specific identifiers) so the server can enforce one-agent-per-PC rules.
+- The agent's persistent configuration lives in a JSON file under the agent directory (see `ConfigManager` module).
+
+### AgentMode
+- `External`: the agent runs standalone (default). It will attempt to connect to the configured server and register/heartbeat.
+- `Embedded`: the server may host an embedded agent as a child process. When an embedded agent is active the server rejects remote agent heartbeats to enforce a single active agent per host.
+- `Disabled`: agent functionality is disabled and the server will reject heartbeats/registrations.
+
+To change `AgentMode`:
+
+- Via Server UI: Open Dashboard → Settings → Agent and change `AgentMode` (recommended).
+- Via configuration: edit `server/config/service-config.json` (or `ServiceConfig` persisted path) and set `AgentMode` to `External`, `Embedded`, or `Disabled`.
+
+Notes:
+- If you need a remote agent to register on a host currently hosting an embedded agent, stop the embedded agent first via the Dashboard, then switch `AgentMode` to `External` and save.
+- The server responds with HTTP `409 Conflict` when rejecting a heartbeat due to an active embedded agent, and HTTP `403 Forbidden` when agent functionality is disabled.
+
 ## File Structure
 
 ```

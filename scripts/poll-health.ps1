@@ -1,29 +1,21 @@
 param(
-    [Parameter(Mandatory=$true)][string]$Url,
-    [int]$IntervalSec = 2,
+    [Parameter(Mandatory=$true)]
+    [string]$Url,
     [int]$TimeoutSec = 60
 )
 
 $start = Get-Date
-Write-Host "Polling health endpoint: $Url (timeout ${TimeoutSec}s, interval ${IntervalSec}s)"
-
+Write-Host "Polling health: $Url (timeout ${TimeoutSec}s)"
 while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
     try {
-        $resp = Invoke-WebRequest -UseBasicParsing -Uri $Url -Method Get -TimeoutSec 5 -ErrorAction Stop
+        $resp = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
         if ($resp.StatusCode -eq 200) {
-            Write-Host "Health check OK (200)"
+            Write-Host "Health OK: $Url"
             exit 0
         }
-        else {
-            Write-Host "Health check returned status $($resp.StatusCode); retrying..."
-        }
+    } catch {
+        Start-Sleep -Seconds 1
     }
-    catch {
-        Write-Host "Health check failed: $($_.Exception.Message); retrying..."
-    }
-
-    Start-Sleep -Seconds $IntervalSec
 }
-
-Write-Error "Health check did not return success within $TimeoutSec seconds"
+Write-Error "Timeout waiting for health at $Url"
 exit 1

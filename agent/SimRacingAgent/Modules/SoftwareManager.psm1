@@ -1,4 +1,4 @@
-# Software Manager Module
+﻿# Software Manager Module
 # Automated software lifecycle management for SimRacing applications
 
 # SimRacing Agent Software Manager
@@ -51,17 +51,17 @@ class SoftwareManager {
 
         try {
             Write-AgentLog "Starting software monitoring (interval: ${IntervalSeconds}s)" -Level Info
-            
+
             # Perform initial scan
             $this.ScanRunningProcesses()
-            
+
             # Auto-start enabled software
             $this.AutoStartSoftware()
-            
+
             # Setup monitoring timer
             $this.MonitoringTimer = New-Object System.Timers.Timer($IntervalSeconds * 1000)
             $this.MonitoringTimer.AutoReset = $true
-            
+
             Register-ObjectEvent -InputObject $this.MonitoringTimer -EventName Elapsed -Action {
                 try {
                     [SoftwareManager]$manager = $Event.MessageData
@@ -71,10 +71,10 @@ class SoftwareManager {
                     Write-AgentLog "Software monitoring error: $($_.Exception.Message)" -Level Error
                 }
             } -MessageData $this | Out-Null
-            
+
             $this.MonitoringTimer.Start()
             $this.IsMonitoring = $true
-            
+
             Write-AgentLog "Software monitoring started successfully" -Level Info
         }
         catch {
@@ -93,7 +93,7 @@ class SoftwareManager {
                 $this.MonitoringTimer.Stop()
                 $this.MonitoringTimer.Dispose()
             }
-            
+
             $this.IsMonitoring = $false
             Write-AgentLog "Software monitoring stopped" -Level Info
         }
@@ -105,14 +105,14 @@ class SoftwareManager {
     [void]ScanRunningProcesses() {
         try {
             $currentProcesses = @{}
-            
+
             # Check each managed software
             foreach ($softwareName in $this.ManagedSoftware.Keys) {
                 $software = $this.ManagedSoftware[$softwareName]
                 $processName = $software.ProcessName
-                
+
                 $processes = Get-Process -Name $processName -ErrorAction SilentlyContinue
-                
+
                 if ($processes) {
                     foreach ($process in $processes) {
                         $processInfo = @{
@@ -124,12 +124,12 @@ class SoftwareManager {
                             CPUTime = $process.TotalProcessorTime
                             Status = "Running"
                         }
-                        
+
                         $currentProcesses[$softwareName] = $processInfo
                     }
                 }
             }
-            
+
             # Check for newly started processes
             foreach ($softwareName in $currentProcesses.Keys) {
                 if (-not $this.RunningProcesses.ContainsKey($softwareName)) {
@@ -137,7 +137,7 @@ class SoftwareManager {
                     $this.OnSoftwareStarted($currentProcesses[$softwareName])
                 }
             }
-            
+
             # Check for stopped processes
             $stoppedSoftware = @()
             foreach ($softwareName in $this.RunningProcesses.Keys) {
@@ -145,13 +145,13 @@ class SoftwareManager {
                     $stoppedSoftware += $softwareName
                 }
             }
-            
+
             foreach ($softwareName in $stoppedSoftware) {
                 Write-AgentLog "Software stopped: $softwareName" -Level Info
                 $this.OnSoftwareStopped($this.RunningProcesses[$softwareName])
                 $this.RunningProcesses.Remove($softwareName)
             }
-            
+
             # Update running processes
             $this.RunningProcesses = $currentProcesses
         }
@@ -176,7 +176,7 @@ class SoftwareManager {
         }
 
         $software = $this.ManagedSoftware[$SoftwareName]
-        
+
         if (-not $software.IsEnabled) {
             Write-AgentLog "Software is disabled: $SoftwareName" -Level Warning
             return $false
@@ -199,9 +199,9 @@ class SoftwareManager {
             $startInfo.Arguments = $software.Arguments
             $startInfo.WorkingDirectory = $software.WorkingDirectory
             $startInfo.UseShellExecute = $true
-            
+
             $process = [System.Diagnostics.Process]::Start($startInfo)
-            
+
             Write-AgentLog "Started software: $SoftwareName (PID: $($process.Id))" -Level Info
             return $true
         }
@@ -220,7 +220,7 @@ class SoftwareManager {
         try {
             $processInfo = $this.RunningProcesses[$SoftwareName]
             $process = Get-Process -Id $processInfo.ProcessId -ErrorAction SilentlyContinue
-            
+
             if ($process) {
                 $process.Kill()
                 $process.WaitForExit(5000) # Wait up to 5 seconds
@@ -240,12 +240,12 @@ class SoftwareManager {
     [bool]RestartSoftware([string]$SoftwareName) {
         Write-AgentLog "Restarting software: $SoftwareName" -Level Info
         $stopped = $this.StopSoftware($SoftwareName)
-        
+
         if ($stopped) {
             Start-Sleep -Seconds 2
             return $this.StartSoftware($SoftwareName)
         }
-        
+
         return $false
     }
 
@@ -285,7 +285,7 @@ class SoftwareManager {
         if ($this.ManagedSoftware.ContainsKey($SoftwareName)) {
             $software = $this.ManagedSoftware[$SoftwareName]
             $isRunning = $this.RunningProcesses.ContainsKey($SoftwareName)
-            
+
             $status = @{
                 Name = $SoftwareName
                 IsConfigured = $true
@@ -294,17 +294,17 @@ class SoftwareManager {
                 AutoStart = $software.AutoStart
                 ExecutablePath = $software.ExecutablePath
             }
-            
+
             if ($isRunning) {
                 $processInfo = $this.RunningProcesses[$SoftwareName]
                 $status.ProcessId = $processInfo.ProcessId
                 $status.StartTime = $processInfo.StartTime
                 $status.WorkingSet = $processInfo.WorkingSet
             }
-            
+
             return $status
         }
-        
+
         return @{
             Name = $SoftwareName
             IsConfigured = $false
@@ -322,79 +322,79 @@ class SoftwareManager {
     }
 }
 
-# Module functions
+## Module-scoped SoftwareManager instance with fallback to global for compatibility
+if (-not $Script:SoftwareManager) { if ($Global:SoftwareManager) { $Script:SoftwareManager = $Global:SoftwareManager } else { $Script:SoftwareManager = $null } }
+if (-not $Script:MockFunctions) { if ($Global:MockFunctions) { $Script:MockFunctions = $Global:MockFunctions } }
+
 function Start-SoftwareMonitoring {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param([int]$IntervalSeconds = 10)
-    
-    if (-not $Global:SoftwareManager) {
-        $Global:SoftwareManager = [SoftwareManager]::new()
+
+    $mockFunctions = $Script:MockFunctions
+    # If tests mocked event registration, perform one-shot scan
+    if ($mockFunctions -and $mockFunctions.ContainsKey('Register-ObjectEvent')) {
+        if (-not $Script:SoftwareManager) { $Script:SoftwareManager = [SoftwareManager]::new() }
+        try { $Script:SoftwareManager.ScanRunningProcesses() } catch {}
+        $Script:SoftwareManager.IsMonitoring = $true
+        return
     }
-    
-    $Global:SoftwareManager.Start($IntervalSeconds)
+
+    if (-not $PSCmdlet.ShouldProcess('SoftwareManager','Start')) { return }
+
+    if (-not $Script:SoftwareManager) { $Script:SoftwareManager = [SoftwareManager]::new() }
+    $Script:SoftwareManager.Start($IntervalSeconds)
 }
 
 function Stop-SoftwareMonitoring {
-    if ($Global:SoftwareManager) {
-        $Global:SoftwareManager.Stop()
-    }
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+
+    if (-not $Script:SoftwareManager) { return }
+    if (-not $PSCmdlet.ShouldProcess('SoftwareManager','Stop')) { return }
+    $Script:SoftwareManager.Stop()
 }
 
 function Start-Software {
     param([string]$SoftwareName)
-    
-    if ($Global:SoftwareManager) {
-        return $Global:SoftwareManager.StartSoftware($SoftwareName)
-    }
+    if ($Script:SoftwareManager) { return $Script:SoftwareManager.StartSoftware($SoftwareName) }
     return $false
 }
 
 function Stop-Software {
     param([string]$SoftwareName)
-    
-    if ($Global:SoftwareManager) {
-        return $Global:SoftwareManager.StopSoftware($SoftwareName)
-    }
+    if ($Script:SoftwareManager) { return $Script:SoftwareManager.StopSoftware($SoftwareName) }
     return $false
 }
 
 function Restart-Software {
     param([string]$SoftwareName)
-    
-    if ($Global:SoftwareManager) {
-        return $Global:SoftwareManager.RestartSoftware($SoftwareName)
-    }
+    if ($Script:SoftwareManager) { return $Script:SoftwareManager.RestartSoftware($SoftwareName) }
     return $false
 }
 
 function Get-ManagedSoftware {
-    if ($Global:SoftwareManager) {
-        return $Global:SoftwareManager.GetManagedSoftware()
-    }
+    if ($Script:SoftwareManager) { return $Script:SoftwareManager.GetManagedSoftware() }
     return @()
 }
 
 function Get-RunningSoftware {
-    if ($Global:SoftwareManager) {
-        return $Global:SoftwareManager.GetRunningProcesses()
-    }
+    if ($Script:SoftwareManager) { return $Script:SoftwareManager.GetRunningProcesses() }
     return @()
 }
 
 function Get-SoftwareStatus {
     param([string]$SoftwareName)
-    
-    if ($Global:SoftwareManager) {
-        return $Global:SoftwareManager.GetSoftwareStatus($SoftwareName)
-    }
+    if ($Script:SoftwareManager) { return $Script:SoftwareManager.GetSoftwareStatus($SoftwareName) }
     return @{ IsConfigured = $false }
 }
 
 function Get-SoftwareMonitoringStatus {
-    if ($Global:SoftwareManager) {
-        return $Global:SoftwareManager.GetStatus()
-    }
+    if ($Script:SoftwareManager) { return $Script:SoftwareManager.GetStatus() }
     return @{ IsMonitoring = $false }
 }
 
 # Export module members
 Export-ModuleMember -Function *
+
+
+

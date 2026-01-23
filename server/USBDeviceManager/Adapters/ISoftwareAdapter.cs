@@ -35,6 +35,7 @@ namespace USBDeviceManager.Adapters
         /// </summary>
         /// <param name="software">The managed software to install.</param>
         /// <param name="cancellationToken">Cancellation token for the operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task InstallAsync(ManagedSoftware software, CancellationToken cancellationToken = default);
     }
 }

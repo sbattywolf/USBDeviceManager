@@ -1,4 +1,4 @@
-# SimRacing Agent Core Engine
+﻿# SimRacing Agent Core Engine
 # Main agent orchestration and lifecycle management
 
 using module ..\Utils\Logging.psm1
@@ -64,11 +64,11 @@ class AgentEngine {
             }
 
             Write-AgentInfo "Starting agent engine v$($this.Version)" -Source "AgentEngine"
-            
+
             # Start health timer
             $this.HealthTimer = New-Object System.Timers.Timer(30000) # 30 seconds
             $this.HealthTimer.AutoReset = $true
-            
+
             Register-ObjectEvent -InputObject $this.HealthTimer -EventName Elapsed -Action {
                 try {
                     [AgentEngine]$engine = $Event.MessageData
@@ -78,10 +78,10 @@ class AgentEngine {
                     Write-AgentError "Health check error: $($_.Exception.Message)" -Source "AgentEngine"
                 }
             } -MessageData $this | Out-Null
-            
+
             $this.HealthTimer.Start()
             $this.IsRunning = $true
-            
+
             Write-AgentInfo "Agent engine started successfully" -Source "AgentEngine"
             return $true
         }
@@ -98,12 +98,12 @@ class AgentEngine {
             }
 
             Write-AgentInfo "Stopping agent engine" -Source "AgentEngine"
-            
+
             if ($this.HealthTimer) {
                 $this.HealthTimer.Stop()
                 $this.HealthTimer.Dispose()
             }
-            
+
             $this.IsRunning = $false
             Write-AgentInfo "Agent engine stopped" -Source "AgentEngine"
         }
@@ -134,25 +134,45 @@ class AgentEngine {
 
 # Module functions
 function Start-AgentEngine {
-    if (-not $Global:AgentEngine) {
-        $Global:AgentEngine = [AgentEngine]::new()
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+
+    if ($Script:AgentEngineInstance -and $Script:AgentEngineInstance.IsRunning) {
+        Write-AgentWarning "Agent engine is already running" -Source "AgentEngine"
+        return $true
     }
-    
-    return $Global:AgentEngine.Start()
+
+    if (-not $PSCmdlet.ShouldProcess('AgentEngine', 'Start')) {
+        return $false
+    }
+
+    if (-not $Script:AgentEngineInstance) {
+        $Script:AgentEngineInstance = [AgentEngine]::new()
+    }
+
+    return $Script:AgentEngineInstance.Start()
 }
 
 function Stop-AgentEngine {
-    if ($Global:AgentEngine) {
-        $Global:AgentEngine.Stop()
-    }
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+
+    if (-not $Script:AgentEngineInstance) { return }
+
+    if (-not $PSCmdlet.ShouldProcess('AgentEngine', 'Stop')) { return }
+
+    $Script:AgentEngineInstance.Stop()
 }
 
 function Get-AgentEngineStatus {
-    if ($Global:AgentEngine) {
-        return $Global:AgentEngine.GetStatus()
+    if ($Script:AgentEngineInstance) {
+        return $Script:AgentEngineInstance.GetStatus()
     }
     return @{ IsRunning = $false }
 }
 
 # Export module members
 Export-ModuleMember -Function Start-AgentEngine, Stop-AgentEngine, Get-AgentEngineStatus
+
+
+

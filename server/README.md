@@ -29,7 +29,7 @@ A comprehensive monitoring and automation server for USB Device Manager with USB
 - HTTP API access
 - Intranet-only operation (no security)
 
-### **Future Extensions (TODO)**
+### **Future Extensions**
 - MQTT message broker integration
 - HomeAssistant plugin/addon
 - Android companion app
@@ -51,3 +51,7 @@ server/
 ├── USBDeviceManager.Core/         # Core models and interfaces
 └── docker/                         # Docker configurations for deployment
 ```
+
+See the service-level documentation for AgentMode behaviors and administration in the repository docs:
+
+- [Agent modes and server policy](../../docs/agent-modes.md)

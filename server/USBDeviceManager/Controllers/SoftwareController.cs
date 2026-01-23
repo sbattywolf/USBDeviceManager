@@ -19,22 +19,22 @@ using USBDeviceManager.Services;
 [Route("api/[controller]")]
 public class SoftwareController : ControllerBase
 {
-        private readonly SimRacingContext context;
-        private readonly ILogger<SoftwareController> logger;
-        private readonly IDateTime clock;
+    private readonly SimRacingContext context;
+    private readonly ILogger<SoftwareController> logger;
+    private readonly IDateTime clock;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoftwareController"/> class.
-        /// </summary>
-        /// <param name="context">Database context.</param>
-        /// <param name="logger">Logger instance.</param>
-        /// <param name="clock">Clock abstraction.</param>
-        public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock)
-        {
-            this.context = context;
-            this.logger = logger;
-            this.clock = clock;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SoftwareController"/> class.
+    /// </summary>
+    /// <param name="context">Database context.</param>
+    /// <param name="logger">Logger instance.</param>
+    /// <param name="clock">Clock abstraction.</param>
+    public SoftwareController(SimRacingContext context, ILogger<SoftwareController> logger, IDateTime clock)
+    {
+        this.context = context;
+        this.logger = logger;
+        this.clock = clock;
+    }
 
     /// <summary>
     /// Get all managed software.
@@ -165,6 +165,25 @@ public class SoftwareController : ControllerBase
             return this.BadRequest("Software is disabled");
         }
 
+        // Validate executable path exists before attempting to start.
+        if (string.IsNullOrWhiteSpace(software.ExecutablePath) || !System.IO.File.Exists(software.ExecutablePath))
+        {
+            this.logger.LogWarning("Executable path missing or not found for software {SoftwareName}: {Path}", software.Name, software.ExecutablePath);
+
+            var failedStatus = new SoftwareStatus
+            {
+                SoftwareId = id,
+                IsRunning = false,
+                Status = "Failed",
+                ErrorMessage = "Executable not found",
+                Timestamp = this.clock.UtcNow,
+            };
+
+            this.context.SoftwareStatuses.Add(failedStatus);
+            await this.context.SaveChangesAsync();
+
+            return this.BadRequest(new { error = "Executable not found", path = software.ExecutablePath });
+        }
         try
         {
             var startInfo = new ProcessStartInfo
@@ -311,6 +330,7 @@ public class SoftwareController : ControllerBase
     /// <summary>
     /// Get software status.
     /// </summary>
+    /// <param name="id">The id of the software.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("{id}/status")]
     public async Task<ActionResult<SoftwareStatus>> GetSoftwareStatus(int id)

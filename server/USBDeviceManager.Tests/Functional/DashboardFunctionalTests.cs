@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using USBDeviceManager.Models;
 using USBDeviceManager.Tests.Fixtures;
 
-namespace USBDeviceManager.Tests.Functional;
-
-/// <summary>
-/// Functional tests for complete SimRacing Dashboard workflows
-/// Tests end-to-end user scenarios and system integration
-/// </summary>
-[Trait("Category","Functional")]
-public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
+namespace USBDeviceManager.Tests.Functional
+{
+    /// <summary>
+    /// Functional tests for complete SimRacing Dashboard workflows
+    /// Tests end-to-end user scenarios and system integration
+    /// </summary>
+    [Trait("Category","Functional")]
+    public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
 {
     private readonly SimRacingTestFactory _factory;
     private readonly HttpClient _client;
@@ -482,4 +482,5 @@ public class DashboardFunctionalTests : IClassFixture<SimRacingTestFactory>
         executions.Should().OnlyContain(e => e.ExecutedAt >= DateTime.UtcNow.AddMinutes(-5));
         executions.Should().OnlyContain(e => e.Success == true);
     }
+}
 }
