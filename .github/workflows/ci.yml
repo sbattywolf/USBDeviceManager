@@ -389,9 +389,8 @@ jobs:
             scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
-    needs: [tests, unit-tests]
-    # Make this job non-blocking so PRs are not blocked by E2E flakes
-    continue-on-error: true
+    needs: analyze-results
+    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' }}
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -434,8 +433,8 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: [tests, unit-tests]
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: analyze-results
+    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
