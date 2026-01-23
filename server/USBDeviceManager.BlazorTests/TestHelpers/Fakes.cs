@@ -12,7 +12,7 @@ using USBDeviceManager.Services;
 
 namespace USBDeviceManager.BlazorTests.TestHelpers
 {
-    internal class FakeHttpMessageHandler : HttpMessageHandler
+    public class FakeHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -26,7 +26,7 @@ namespace USBDeviceManager.BlazorTests.TestHelpers
         }
     }
 
-    internal class FakeDashboardClient : DashboardClient, IAsyncDisposable
+    public class FakeDashboardClient : DashboardClient, IAsyncDisposable
     {
         public FakeDashboardClient(HttpClient http) : base(http)
         {
@@ -36,7 +36,7 @@ namespace USBDeviceManager.BlazorTests.TestHelpers
         public new ValueTask DisposeAsync() => ValueTask.CompletedTask;
     }
 
-    internal class TestNavigationManager : NavigationManager
+    public class TestNavigationManager : NavigationManager
     {
         public TestNavigationManager()
         {
