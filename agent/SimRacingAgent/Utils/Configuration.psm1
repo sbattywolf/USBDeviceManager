@@ -397,7 +397,11 @@ function Get-HealthConfig {
 }
 
 # Export module members
-Export-ModuleMember -Function Initialize-Configuration, Get-AgentConfiguration, Set-AgentConfiguration, Save-AgentConfiguration, Test-AgentConfiguration, Get-ConfigurationSection, Set-ConfigurationSection, Reset-AgentConfiguration, Get-ConfigurationStatus, Test-ConfigurationExists, Get-ConfigurationKeys, Get-AgentInfo, Get-DashboardConfig, Get-LoggingConfig, Get-DeviceConfig, Get-SoftwareConfig, Get-AutomationConfig, Get-HealthConfig
+try {
+    Export-ModuleMember -Function Initialize-Configuration, Get-AgentConfiguration, Set-AgentConfiguration, Save-AgentConfiguration, Test-AgentConfiguration, Get-ConfigurationSection, Set-ConfigurationSection, Reset-AgentConfiguration, Get-ConfigurationStatus, Test-ConfigurationExists, Get-ConfigurationKeys, Get-AgentInfo, Get-DashboardConfig, Get-LoggingConfig, Get-DeviceConfig, Get-SoftwareConfig, Get-AutomationConfig, Get-HealthConfig -ErrorAction Stop
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}
 
 
 

@@ -571,7 +571,11 @@ function Update-HealthMetrics {
 }
 
 # Export module members
-Export-ModuleMember -Function *
+try {
+    Export-ModuleMember -Function * -ErrorAction Stop
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}
 
 
 

@@ -959,10 +959,14 @@ function Test-IntranetIP {
 }
 
 # Export functions
-Export-ModuleMember -Function @(
-    'Start-APIServer',
-    'Stop-APIServer'
-)
+try {
+    Export-ModuleMember -Function @(
+        'Start-APIServer',
+        'Stop-APIServer'
+    ) -ErrorAction Stop
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}
 
 
 
