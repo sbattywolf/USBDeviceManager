@@ -9,9 +9,16 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $tmpDir = Join-Path $scriptDir "tmp"
 New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
 
-Write-Host "Starting server project: $ProjectPath on port $Port"
+# Prefer explicit IPv4 loopback binding to avoid localhost IPv6/IPv4
+# resolution differences on CI runners. Can be overridden with env var
+# `CI_BIND_ADDRESS` if necessary.
+$bindAddress = $Env:CI_BIND_ADDRESS
+if ([string]::IsNullOrWhiteSpace($bindAddress)) { $bindAddress = '127.0.0.1' }
 
-$args = "run --project `"$ProjectPath`" --urls http://localhost:$Port"
+$WriteHostMsg = "Starting server project: $ProjectPath on port $Port (binding: $bindAddress)"
+Write-Host $WriteHostMsg
+
+$args = "run --project `"$ProjectPath`" --urls http://$bindAddress:$Port"
 if ($NoBuild) { $args += ' --no-build' }
 
 $outFile = Join-Path $tmpDir "server.log"
@@ -54,7 +61,7 @@ if (-not $p) {
     exit 1
 }
 
-& "$scriptDir/poll-health.ps1" -Url "http://localhost:$Port/health" -TimeoutSec $TimeoutSec
+& "$scriptDir/poll-health.ps1" -Url "http://$bindAddress:$Port/health" -TimeoutSec $TimeoutSec
 
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Server did not become healthy within timeout ($TimeoutSec seconds). See server output."
@@ -66,5 +73,5 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Server healthy and ready: http://localhost:$Port"
+Write-Host "Server healthy and ready: http://$bindAddress:$Port"
 exit 0
