@@ -1,0 +1,242 @@
+﻿**********************
+Inizio trascrizione Windows PowerShell
+Ora di inizio: 20260123090201
+Nome utente: LITTLE_BEAST\sbatt
+Esegui come utente: LITTLE_BEAST\sbatt
+Nome configurazione: 
+Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand JAB0AHIAYQBuAHMAIAA9ACAAIgBFADoALwBXAG8AcgBrAHMAcABhAGMAZQBzAC8ARwBpAHQALwBTAGkAbQBSAGEAYwBpAG4AZwAvAFUAUwBCAEQAZQB2AGkAYwBlAE0AYQBuAGEAZwBlAHIALwBhAGcAZQBuAHQALwBTAGkAbQBSAGEAYwBpAG4AZwBBAGcAZQBuAHQALgBUAGUAcwB0AHMALwByAHUAbgBfAHQAZQBzAHQAcwBfAHQAcgBhAG4AcwBjAHIAaQBwAHQAXwAkACgARwBlAHQALQBEAGEAdABlACAALQBGAG8AcgBtAGEAdAAgAHkAeQB5AHkATQBNAGQAZABfAEgASABtAG0AcwBzACkALgB0AHgAdAAiAA0ACgBTAHQAYQByAHQALQBUAHIAYQBuAHMAYwByAGkAcAB0ACAALQBQAGEAdABoACAAJAB0AHIAYQBuAHMAIAAtAEYAbwByAGMAZQANAAoAdAByAHkAIAB7AA0ACgAJACQAVgBlAHIAYgBvAHMAZQBQAHIAZQBmAGUAcgBlAG4AYwBlACAAPQAgACIAQwBvAG4AdABpAG4AdQBlACIADQAKAAkAJgAgACcARQA6AC8AVwBvAHIAawBzAHAAYQBjAGUAcwAvAEcAaQB0AC8AUwBpAG0AUgBhAGMAaQBuAGcALwBVAFMAQgBEAGUAdgBpAGMAZQBNAGEAbgBhAGcAZQByAC8AYQBnAGUAbgB0AC8AUwBpAG0AUgBhAGMAaQBuAGcAQQBnAGUAbgB0AC4AVABlAHMAdABzAC8AVABlAHMAdABSAHUAbgBuAGUAcgAuAHAAcwAxACcAIAAtAEcAZQBuAGUAcgBhAHQAZQBSAGUAcABvAHIAdAAgAC0AUgBlAHAAbwByAHQAUABhAHQAaAAgACcARQA6AC8AVwBvAHIAawBzAHAAYQBjAGUAcwAvAEcAaQB0AC8AUwBpAG0AUgBhAGMAaQBuAGcALwBVAFMAQgBEAGUAdgBpAGMAZQBNAGEAbgBhAGcAZQByAC8AcwBjAHIAaQBwAHQAcwAvAHQAbQBwAC8AcgBlAHAAbwByAHQAcwAnACAALQBWAGUAcgBiAG8AcwBlAA0ACgB9AA0ACgBmAGkAbgBhAGwAbAB5ACAAewANAAoACQBTAHQAbwBwAC0AVAByAGEAbgBzAGMAcgBpAHAAdAANAAoACQBXAHIAaQB0AGUALQBPAHUAdABwAHUAdAAgACIAVABSAEEATgBTAEMAUgBJAFAAVAA6ACQAdAByAGEAbgBzACIADQAKAH0A
+ID processo: 11796
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Trascrizione avviata. File di output: E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/run_tests_transcript_20260123_090201.txt
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1'.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1:108 car:9
++         } catch {}
++         ~
+Token '}' imprevisto nell'espressione o nell'istruzione.
+
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1:112 car:5
++     }
++     ~
+Token '}' imprevisto nell'espressione o nell'istruzione.
+
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1:138 car:1
++ }
++ ~
+Token '}' imprevisto nell'espressione o nell'istruzione.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : UnexpectedToken
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\shared\TestFramework.psm1:108 car:9
++         } catch {}
++         ~
+Token '}' imprevisto nell'espressione o nell'istruzione.
+
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\shared\TestFramework.psm1:112 car:5
++     }
++     ~
+Token '}' imprevisto nell'espressione o nell'istruzione.
+
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\shared\TestFramework.psm1:138 car:1
++ }
++ ~
+Token '}' imprevisto nell'espressione o nell'istruzione.
+    + CategoryInfo          : ParserError: (:) [], ParentC
+   ontainsErrorRecordException
+    + FullyQualifiedErrorId : UnexpectedToken
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1' specificato. Nessun 
+file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:14 car:1
++ Import-Module "$PSScriptRoot\shared\TestFramework.psm1" -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...tFramework.psm1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\shared\TestFramework.psm1' specificato. Nessun file di
+modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:14 car:1
++ Import-Module "$PSScriptRoot\shared\TestFramework.psm1"
+-Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...tFramework.psm1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\unit\AgentCoreTests.ps1' specificato. 
+Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:17 car:1
++ Import-Module "$PSScriptRoot\agent\unit\AgentCoreTests.ps1" -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...ntCoreTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\unit\AgentCoreTests.ps1' specificato. Nessun file
+di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:17 car:1
++ Import-Module
+"$PSScriptRoot\agent\unit\AgentCoreTests.ps1" -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...ntCoreTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\unit\AgentMonitoringTests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:18 car:1
++ Import-Module "$PSScriptRoot\agent\unit\AgentMonitoringTests.ps1" -Fo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...toringTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\unit\AgentMonitoringTests.ps1' specificato. Nessun
+file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:18 car:1
++ Import-Module
+"$PSScriptRoot\agent\unit\AgentMonitoringTests.ps1" -Fo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...toringTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\integration\AgentWorkflowTests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:19 car:1
++ Import-Module "$PSScriptRoot\agent\integration\AgentWorkflowTests.ps1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...rkflowTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\integration\AgentWorkflowTests.ps1' specificato.
+Nessun file di modulo valido trovato nelle directory dei
+moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:19 car:1
++ Import-Module
+"$PSScriptRoot\agent\integration\AgentWorkflowTests.ps1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...rkflowTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\regression\AgentRegressionTests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:20 car:1
++ Import-Module "$PSScriptRoot\agent\regression\AgentRegressionTests.ps ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...essionTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\regression\AgentRegressionTests.ps1' specificato.
+Nessun file di modulo valido trovato nelle directory dei
+moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:20 car:1
++ Import-Module
+"$PSScriptRoot\agent\regression\AgentRegressionTests.ps ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...essionTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\api\ApplicationAPITests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:23 car:1
++ Import-Module "$PSScriptRoot\application\api\ApplicationAPITests.ps1" ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...ionAPITests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\application\api\ApplicationAPITests.ps1' specificato.
+Nessun file di modulo valido trovato nelle directory dei
+moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:23 car:1
++ Import-Module
+"$PSScriptRoot\application\api\ApplicationAPITests.ps1" ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...ionAPITests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\
+application\integration\ApplicationIntegrationTests.ps1' specificato. Nessun file di modulo valido trovato nelle 
+directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:24 car:1
++ Import-Module "$PSScriptRoot\application\integration\ApplicationInteg ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...rationTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\application\integration\ApplicationIntegrationTests.ps1'
+specificato. Nessun file di modulo valido trovato nelle
+directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:24 car:1
++ Import-Module
+"$PSScriptRoot\application\integration\ApplicationInteg ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...rationTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+>> Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+**********************
+Fine trascrizione Windows PowerShell
+Ora di fine: 20260123090201
+**********************

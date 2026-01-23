@@ -1,0 +1,127 @@
+{
+    "Summary":  {
+                    "Skipped":  0,
+                    "TotalTests":  10,
+                    "Failed":  2,
+                    "Passed":  8
+                },
+    "TotalDuration":  {
+                          "Ticks":  7078085,
+                          "Days":  0,
+                          "Hours":  0,
+                          "Milliseconds":  707,
+                          "Minutes":  0,
+                          "Seconds":  0,
+                          "TotalDays":  8.1922280092592585E-06,
+                          "TotalHours":  0.0001966134722222222,
+                          "TotalMilliseconds":  707.8085,
+                          "TotalMinutes":  0.011796808333333334,
+                          "TotalSeconds":  0.7078085
+                      },
+    "TestCategories":  [
+                           {
+                               "Results":  [
+                                               true,
+                                               true,
+                                               true,
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  0,
+                                                                   "Passed":  5
+                                                               },
+                                                   "Success":  true,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Category":  "ConfigRegression",
+                                                                       "Name":  "Agent maintains backwards compatibility with existing config files",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Category":  "APIRegression",
+                                                                       "Name":  "Health check API maintains stable response format",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Category":  "PerformanceRegression",
+                                                                       "Name":  "Agent performance meets established benchmarks",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Category":  "EventRegression",
+                                                                       "Name":  "Agent event handling remains stable across scenarios",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Category":  "ErrorRegression",
+                                                                       "Name":  "Agent error handling maintains consistent behavior",
+                                                                       "Success":  true
+                                                                   }
+                                                               ]
+                                               },
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  2,
+                                                                   "Passed":  3
+                                                               },
+                                                   "Success":  false,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Category":  "CompatibilityRegression",
+                                                                       "Name":  "Agent functions correctly across PowerShell versions",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Category":  "CompatibilityRegression",
+                                                                       "Name":  "Agent supports expected Windows versions",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Category":  "CompatibilityRegression",
+                                                                       "Name":  "Agent module dependencies remain stable",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Error":  "Command Get-AgentStatus should include property Version",
+                                                                       "Category":  "CompatibilityRegression",
+                                                                       "Name":  "Agent CLI maintains backwards compatibility",
+                                                                       "Success":  false
+                                                                   },
+                                                                   {
+                                                                       "Error":  "Should migrate agent name (may include host suffix)",
+                                                                       "Category":  "CompatibilityRegression",
+                                                                       "Name":  "Agent handles configuration format migrations",
+                                                                       "Success":  false
+                                                                   }
+                                                               ]
+                                               }
+                                           ],
+                               "CategoryName":  "AgentRegression",
+                               "Summary":  {
+                                               "Skipped":  0,
+                                               "Failed":  2,
+                                               "Passed":  8
+                                           },
+                               "Success":  false,
+                               "StartTime":  "\/Date(1769161341823)\/",
+                               "EndTime":  "\/Date(1769161342501)\/",
+                               "Duration":  {
+                                                "Ticks":  6786343,
+                                                "Days":  0,
+                                                "Hours":  0,
+                                                "Milliseconds":  678,
+                                                "Minutes":  0,
+                                                "Seconds":  0,
+                                                "TotalDays":  7.8545636574074067E-06,
+                                                "TotalHours":  0.00018850952777777776,
+                                                "TotalMilliseconds":  678.6343,
+                                                "TotalMinutes":  0.011310571666666666,
+                                                "TotalSeconds":  0.6786343
+                                            }
+                           }
+                       ],
+    "StartTime":  "\/Date(1769161341806)\/",
+    "EndTime":  "\/Date(1769161342514)\/",
+    "OverallSuccess":  false
+}

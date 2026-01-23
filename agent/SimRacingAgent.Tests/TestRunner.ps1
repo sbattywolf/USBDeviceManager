@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 
 <#
 .SYNOPSIS
@@ -10,18 +10,36 @@
     reporting, filtering, and failure handling capabilities.
 #>
 
-# Import shared test framework and modules
-Import-Module "$PSScriptRoot\shared\TestFramework.psm1" -Force
+# Import shared test framework and test modules (guard missing files)
+$moduleRelativePaths = @(
+    'shared\TestFramework.psm1',
+    # Agent tests (folders under this repo use PascalCase directories)
+    'Unit\AgentCoreTests.ps1',
+    'Unit\AgentMonitoringTests.ps1',
+    'Integration\AgentWorkflowTests.ps1',
+    'Regression\AgentRegressionTests.ps1',
+    # Application tests (may be absent in some checkouts)
+    'application\api\ApplicationAPITests.ps1',
+    'application\integration\ApplicationIntegrationTests.ps1'
+)
 
-# Import agent test modules
-Import-Module "$PSScriptRoot\agent\unit\AgentCoreTests.ps1" -Force
-Import-Module "$PSScriptRoot\agent\unit\AgentMonitoringTests.ps1" -Force
-Import-Module "$PSScriptRoot\agent\integration\AgentWorkflowTests.ps1" -Force
-Import-Module "$PSScriptRoot\agent\regression\AgentRegressionTests.ps1" -Force
+# Dot-source regression tests explicitly so their functions are available in this session
+$regressionFull = Join-Path $PSScriptRoot 'Regression\AgentRegressionTests.ps1'
+if (Test-Path $regressionFull) { . $regressionFull }
 
-# Import application test modules
-Import-Module "$PSScriptRoot\application\api\ApplicationAPITests.ps1" -Force
-Import-Module "$PSScriptRoot\application\integration\ApplicationIntegrationTests.ps1" -Force
+foreach ($rel in $moduleRelativePaths) {
+    $full = Join-Path $PSScriptRoot $rel
+    if (Test-Path $full) {
+        Write-Verbose "Importing module $full"
+        try {
+            Import-Module $full -Force
+        } catch {
+            Write-Warning "Failed to import $full : $_"
+        }
+    } else {
+        Write-Verbose "Skipping missing module: $full"
+    }
+}
 
 function Invoke-CompleteTestSuite {
     <#
@@ -94,6 +112,11 @@ function Invoke-CompleteTestSuite {
         }
     }
     
+    # Emit debug info to stdout so CI capture can record parameters
+    Write-Output "DEBUG: Invoke-CompleteTestSuite started at $testStartTime"
+    if ($TestCategories) { Write-Output "DEBUG: TestCategories requested: $($TestCategories -join ',')" } else { Write-Output "DEBUG: No TestCategories specified; running default set." }
+    Write-Output "DEBUG: IncludePerformance=$IncludePerformance StopOnFirstFailure=$StopOnFirstFailure GenerateReport=$GenerateReport ReportPath=$ReportPath Parallel=$Parallel ShowVerbose=$ShowVerbose"
+
     Write-Host "SimRacing Complete Test Suite Execution" -ForegroundColor Cyan
     Write-Host "=======================================" -ForegroundColor Cyan
     Write-Host "Started at: $($testStartTime.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Gray
@@ -206,6 +229,7 @@ function Invoke-CompleteTestSuite {
             }
             catch {
                 Write-Error "Critical error in $category tests: $($_.Exception.Message)"
+                Write-Output "DEBUG: Category exception for ${category}: $($_.Exception | Out-String)"
                 $overallResults.OverallSuccess = $false
                 
                 if ($StopOnFirstFailure) {
@@ -237,13 +261,16 @@ function Invoke-CompleteTestSuite {
             
             try {
                 $reportTimestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+                Write-Output "DEBUG: Preparing reports; timestamp=$reportTimestamp; ReportPath=$ReportPath"
                 
                 # Generate XML report (JUnit format for CI/CD)
                 $xmlReportPath = Join-Path $ReportPath "TestResults_$reportTimestamp.xml"
+                Write-Output "DEBUG: Exporting JUnit XML to $xmlReportPath"
                 Export-JUnitTestReport -TestResults $overallResults -OutputPath $xmlReportPath
                 
                 # Generate HTML report (human-readable)
                 $htmlReportPath = Join-Path $ReportPath "TestResults_$reportTimestamp.html"
+                Write-Output "DEBUG: Exporting HTML report to $htmlReportPath"
                 Export-HTMLTestReport -TestResults $overallResults -OutputPath $htmlReportPath
                 
                 # Generate JSON report (machine-readable)
@@ -256,7 +283,8 @@ function Invoke-CompleteTestSuite {
                 Write-Host "  JSON: $jsonReportPath" -ForegroundColor Gray
             }
             catch {
-                Write-Warning "Failed to generate test reports: $($_.Exception.Message)"
+                Write-Error "Failed to generate test reports: $($_.Exception.Message)"
+                Write-Output "DEBUG: Report generation exception: $($_.Exception | Out-String)"
             }
             
             Write-Host ""
@@ -266,11 +294,11 @@ function Invoke-CompleteTestSuite {
         if ($IncludePerformance) {
             Write-Host "Performance Benchmark Summary" -ForegroundColor Cyan
             Write-Host "=============================" -ForegroundColor Cyan
-            Write-Host "Agent Memory Usage:    < 100MB" -ForegroundColor Gray
-            Write-Host "USB Query Time:        < 500ms" -ForegroundColor Gray
-            Write-Host "Health Check Time:     < 1000ms" -ForegroundColor Gray
-            Write-Host "API Response Time:     < 1000ms" -ForegroundColor Gray
-            Write-Host "Database Query Time:   < 200ms" -ForegroundColor Gray
+            Write-Host ("Agent Memory Usage:    $([char]60) 100MB") -ForegroundColor Gray
+            Write-Host ("USB Query Time:        $([char]60) 500ms") -ForegroundColor Gray
+            Write-Host ("Health Check Time:     $([char]60) 1000ms") -ForegroundColor Gray
+            Write-Host ("API Response Time:     $([char]60) 1000ms") -ForegroundColor Gray
+            Write-Host ("Database Query Time:   $([char]60) 200ms") -ForegroundColor Gray
             Write-Host ""
         }
         
@@ -282,7 +310,8 @@ function Invoke-CompleteTestSuite {
             Clear-TestEnvironment -ErrorAction SilentlyContinue
         }
         catch {
-            Write-Warning "Failed to cleanup test environment: $($_.Exception.Message)"
+            Write-Error "Failed to cleanup test environment: $($_.Exception.Message)"
+            Write-Output "DEBUG: Cleanup exception: $($_.Exception | Out-String)"
         }
     }
 }
@@ -325,34 +354,35 @@ function Export-JUnitTestReport {
         [object]$TestResults,
         [string]$OutputPath
     )
-    
-    $xml = @"
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="$($TestResults.Summary.TotalTests)" failures="$($TestResults.Summary.Failed)" skipped="$($TestResults.Summary.Skipped)" time="$($TestResults.TotalDuration.TotalSeconds)">
-"@
-    
+
+    $sb = New-Object System.Text.StringBuilder
+    [void]$sb.AppendLine('<?xml version="1.0" encoding="UTF-8"?>')
+    [void]$sb.AppendFormat('<testsuites tests="{0}" failures="{1}" skipped="{2}" time="{3}">', $TestResults.Summary.TotalTests, $TestResults.Summary.Failed, $TestResults.Summary.Skipped, $TestResults.TotalDuration.TotalSeconds)
+    [void]$sb.AppendLine()
+
     foreach ($category in $TestResults.TestCategories) {
-        $xml += @"
-  <testsuite name="$($category.CategoryName)" tests="$(($category.Summary.Passed + $category.Summary.Failed + $category.Summary.Skipped))" failures="$($category.Summary.Failed)" skipped="$($category.Summary.Skipped)" time="$($category.Duration.TotalSeconds)">
-"@
-        
-        # Add individual test results (simplified for this example)
+        $testCount = ($category.Summary.Passed + $category.Summary.Failed + $category.Summary.Skipped)
+        [void]$sb.AppendFormat('  <testsuite name="{0}" tests="{1}" failures="{2}" skipped="{3}" time="{4}">', $category.CategoryName, $testCount, $category.Summary.Failed, $category.Summary.Skipped, $category.Duration.TotalSeconds)
+        [void]$sb.AppendLine()
+
         for ($i = 1; $i -le $category.Summary.Passed; $i++) {
-            $xml += "    <testcase name=`"Test$i`" classname=`"$($category.CategoryName)`" time=`"0.1`"/>`n"
+            [void]$sb.AppendFormat('    <testcase name="{0}" classname="{1}" time="0.1"/>', ("Test$i"), $category.CategoryName)
+            [void]$sb.AppendLine()
         }
-        
+
         for ($i = 1; $i -le $category.Summary.Failed; $i++) {
-            $xml += "    <testcase name=`"FailedTest$i`" classname=`"$($category.CategoryName)`" time=`"0.1`">`n"
-            $xml += "      <failure message=`"Test failed`">Test assertion failed</failure>`n"
-            $xml += "    </testcase>`n"
+            [void]$sb.AppendFormat('    <testcase name="{0}" classname="{1}" time="0.1">', ("FailedTest$i"), $category.CategoryName)
+            [void]$sb.AppendLine()
+            [void]$sb.AppendLine('      <failure message="Test failed">Test assertion failed</failure>')
+            [void]$sb.AppendLine('    </testcase>')
         }
-        
-        $xml += "  </testsuite>`n"
+
+        [void]$sb.AppendLine('  </testsuite>')
     }
-    
-    $xml += "</testsuites>"
-    
-    $xml | Set-Content -Path $OutputPath
+
+    [void]$sb.AppendLine('</testsuites>')
+
+    $sb.ToString() | Set-Content -Path $OutputPath -Encoding UTF8
 }
 
 function Export-HTMLTestReport {
@@ -361,79 +391,57 @@ function Export-HTMLTestReport {
         [object]$TestResults,
         [string]$OutputPath
     )
-    
-    $html = @"
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SimRacing Test Results</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .header { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
-        .summary { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .success { color: green; }
-        .failure { color: red; }
-        .warning { color: orange; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .passed { background-color: #d4edda; }
-        .failed { background-color: #f8d7da; }
-        .skipped { background-color: #fff3cd; }
-    </style>
-</head>
-<body>
-    <h1 class="header">SimRacing Test Suite Results</h1>
-    
-    <div class="summary">
-        <h2>Overall Summary</h2>
-        <p><strong>Execution Time:</strong> $($TestResults.TotalDuration.ToString('hh\:mm\:ss\.fff'))</p>
-        <p><strong>Total Tests:</strong> $($TestResults.Summary.TotalTests)</p>
-        <p><strong>Status:</strong> <span class="$(if ($TestResults.OverallSuccess) { 'success' } else { 'failure' })">$(if ($TestResults.OverallSuccess) { 'SUCCESS' } else { 'FAILURE' })</span></p>
-        <p><strong>Success Rate:</strong> $([math]::Round(($TestResults.Summary.Passed / [math]::Max($TestResults.Summary.TotalTests, 1)) * 100, 2))%</p>
-    </div>
-    
-    <h2>Test Categories</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Duration</th>
-                <th>Passed</th>
-                <th>Failed</th>
-                <th>Skipped</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-"@
-    
+
+    $sb = New-Object System.Text.StringBuilder
+    [void]$sb.AppendLine('<!DOCTYPE html>')
+    [void]$sb.AppendLine('<html>')
+    [void]$sb.AppendLine('<head>')
+    [void]$sb.AppendLine('  <meta charset="utf-8"/>')
+    [void]$sb.AppendLine('  <title>SimRacing Test Results</title>')
+    [void]$sb.AppendLine('  <style>')
+    [void]$sb.AppendLine('    body { font-family: Arial, sans-serif; margin: 20px; }')
+    [void]$sb.AppendLine('    .header { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }')
+    [void]$sb.AppendLine('    .summary { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }')
+    [void]$sb.AppendLine('    table { border-collapse: collapse; width: 100%; margin: 20px 0; }')
+    [void]$sb.AppendLine('    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }')
+    [void]$sb.AppendLine('    th { background-color: #f2f2f2; }')
+    [void]$sb.AppendLine('  </style>')
+    [void]$sb.AppendLine('</head>')
+    [void]$sb.AppendLine('<body>')
+    [void]$sb.AppendLine('  <h1 class="header">SimRacing Test Suite Results</h1>')
+    [void]$sb.AppendLine('  <div class="summary">')
+    [void]$sb.AppendFormat('    <p><strong>Execution Time:</strong> {0}</p>', $TestResults.TotalDuration.ToString('hh\:mm\:ss\.fff'))
+    [void]$sb.AppendLine()
+    [void]$sb.AppendFormat('    <p><strong>Total Tests:</strong> {0}</p>', $TestResults.Summary.TotalTests)
+    [void]$sb.AppendLine()
+    $statusText = if ($TestResults.OverallSuccess) { 'SUCCESS' } else { 'FAILURE' }
+    [void]$sb.AppendFormat('    <p><strong>Status:</strong> {0}</p>', $statusText)
+    [void]$sb.AppendLine()
+    [void]$sb.AppendFormat('    <p><strong>Success Rate:</strong> {0}%</p>', [math]::Round(($TestResults.Summary.Passed / [math]::Max($TestResults.Summary.TotalTests, 1)) * 100, 2))
+    [void]$sb.AppendLine()
+    [void]$sb.AppendLine('  </div>')
+
+    [void]$sb.AppendLine('  <h2>Test Categories</h2>')
+    [void]$sb.AppendLine('  <table>')
+    [void]$sb.AppendLine('    <thead>')
+    [void]$sb.AppendLine('      <tr><th>Category</th><th>Duration</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Status</th></tr>')
+    [void]$sb.AppendLine('    </thead>')
+    [void]$sb.AppendLine('    <tbody>')
+
     foreach ($category in $TestResults.TestCategories) {
-        $statusClass = if ($category.Success) { "passed" } else { "failed" }
-        $html += @"
-            <tr class="$statusClass">
-                <td>$($category.CategoryName)</td>
-                <td>$($category.Duration.ToString('mm\:ss\.fff'))</td>
-                <td>$($category.Summary.Passed)</td>
-                <td>$($category.Summary.Failed)</td>
-                <td>$($category.Summary.Skipped)</td>
-                <td>$(if ($category.Success) { 'SUCCESS' } else { 'FAILURE' })</td>
-            </tr>
-"@
+        $statusText = if ($category.Success) { 'SUCCESS' } else { 'FAILURE' }
+        [void]$sb.AppendFormat('      <tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td></tr>', $category.CategoryName, $category.Duration.ToString('mm\:ss\.fff'), $category.Summary.Passed, $category.Summary.Failed, $category.Summary.Skipped, $statusText)
+        [void]$sb.AppendLine()
     }
-    
-    $html += @"
-        </tbody>
-    </table>
-    
-    <footer>
-        <p><small>Generated on $((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))</small></p>
-    </footer>
-</body>
-</html>
-"@
-    
-    $html | Set-Content -Path $OutputPath
+
+    [void]$sb.AppendLine('    </tbody>')
+    [void]$sb.AppendLine('  </table>')
+    [void]$sb.AppendFormat('  <footer><p><small>Generated on {0}</small></p></footer>', (Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))
+    [void]$sb.AppendLine()
+    [void]$sb.AppendLine('</body>')
+    [void]$sb.AppendLine('</html>')
+
+    $sb.ToString() | Set-Content -Path $OutputPath -Encoding UTF8
 }
 
 # Convenience functions for specific test scenarios
@@ -488,11 +496,15 @@ function Invoke-CICDTestSuite {
     return Invoke-CompleteTestSuite -GenerateReport -ReportPath $ReportPath -StopOnFirstFailure
 }
 
-# Export all functions
-Export-ModuleMember -Function @(
-    'Invoke-CompleteTestSuite',
-    'Invoke-QuickAgentTests',
-    'Invoke-FullAgentTests', 
-    'Invoke-ApplicationTests',
-    'Invoke-CICDTestSuite'
-)
+# Export all functions when running as a module; ignore when executed as a script
+try {
+    Export-ModuleMember -Function @(
+        'Invoke-CompleteTestSuite',
+        'Invoke-QuickAgentTests',
+        'Invoke-FullAgentTests', 
+        'Invoke-ApplicationTests',
+        'Invoke-CICDTestSuite'
+    )
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}

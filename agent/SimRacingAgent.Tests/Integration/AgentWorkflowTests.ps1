@@ -10,15 +10,17 @@
     agent state management across multiple components.
 #>
 
-# Import shared test framework
-Import-Module "$PSScriptRoot\..\..\shared\TestFramework.psm1" -Force
+# Import shared test framework (dot-source to expose helpers into this scope)
+# Ensure TestFramework helpers are available in this scope; import module or dot-source as fallback
+Import-Module "$PSScriptRoot\..\..\shared\TestFramework.psm1" -ErrorAction SilentlyContinue
+if (-not (Get-Command -Name Start-TestSession -ErrorAction SilentlyContinue)) { . "$PSScriptRoot\..\..\shared\TestFramework.psm1" }
 
 # Import agent modules
 $AgentPath = "$PSScriptRoot\..\..\..\agent"
-Import-Module "$AgentPath\src\modules\ConfigManager.psm1" -Force
-Import-Module "$AgentPath\src\modules\AgentCore.psm1" -Force
-Import-Module "$AgentPath\src\modules\USBMonitor.psm1" -Force
-Import-Module "$AgentPath\src\modules\ProcessManager.psm1" -Force
+Import-Module (Join-Path $AgentPath 'src\core\ConfigManager.psm1') -ErrorAction SilentlyContinue
+Import-Module (Join-Path $AgentPath 'src\core\AgentCore.psm1') -ErrorAction SilentlyContinue
+Import-Module (Join-Path $AgentPath 'src\modules\USBMonitor.psm1') -ErrorAction SilentlyContinue
+Import-Module (Join-Path $AgentPath 'src\modules\ProcessManager.psm1') -ErrorAction SilentlyContinue
 
 function Test-AgentHealthCheckWorkflow {
     [CmdletBinding()]
@@ -61,9 +63,9 @@ function Test-AgentHealthCheckWorkflow {
             $healthResult = Invoke-HealthCheckWorkflow
             
             Assert-NotNull -Value $healthResult -Message "Health check result should not be null"
-            Assert-True -Condition ($healthResult.ContainsKey('OverallHealth')) -Message "Should include overall health score"
-            Assert-True -Condition ($healthResult.ContainsKey('ComponentResults')) -Message "Should include component results"
-            Assert-True -Condition ($healthResult.ContainsKey('Timestamp')) -Message "Should include timestamp"
+            Assert-True -Condition ($healthResult -ne $null -and ($healthResult | Get-Member -Name 'OverallHealth' -ErrorAction SilentlyContinue)) -Message "Should include overall health score"
+            Assert-True -Condition ($healthResult -ne $null -and ($healthResult | Get-Member -Name 'ComponentResults' -ErrorAction SilentlyContinue)) -Message "Should include component results"
+            Assert-True -Condition ($healthResult -ne $null -and ($healthResult | Get-Member -Name 'Timestamp' -ErrorAction SilentlyContinue)) -Message "Should include timestamp"
             
             # Verify component integration
             Assert-MockCalled -CommandName "Get-USBHealthCheck" -Times 1 -Message "Should call USB health check"
@@ -145,7 +147,7 @@ function Test-AgentHealthCheckWorkflow {
             $healthResult = Invoke-HealthCheckWorkflow
             
             Assert-NotNull -Value $healthResult -Message "Should return result despite component failure"
-            Assert-True -Condition ($healthResult.ContainsKey('ComponentErrors')) -Message "Should report component errors"
+            Assert-True -Condition ($healthResult -ne $null -and ($healthResult | Get-Member -Name 'ComponentErrors' -ErrorAction SilentlyContinue)) -Message "Should report component errors"
             Assert-True -Condition ($healthResult.OverallHealth -lt 100) -Message "Overall health should reflect component failure"
             
             # Verify error logging
@@ -186,7 +188,7 @@ function Test-AgentHealthCheckWorkflow {
         
     }
     finally {
-        Clear-AllMocks
+        if (Get-Command -Name Clear-AllMocks -ErrorAction SilentlyContinue) { Clear-AllMocks }
     }
     
     return Complete-TestSession
@@ -295,7 +297,7 @@ function Test-AgentMonitoringIntegration {
             
             # Verify weighted calculation: (85*0.4 + 92*0.3 + 88*0.3) = 88.2
             $expectedScore = (85 * 0.4) + (92 * 0.3) + (88 * 0.3)
-            Assert-True -Condition (Math.Abs($aggregatedHealth.OverallScore - $expectedScore) -lt 1) -Message "Should calculate weighted health score correctly"
+            Assert-True -Condition ([math]::Abs($aggregatedHealth.OverallScore - $expectedScore) -lt 1) -Message "Should calculate weighted health score correctly"
             
             Assert-True -Condition ($aggregatedHealth.ContainsKey('CriticalIssues')) -Message "Should aggregate critical issues"
             Assert-Equal -Expected 1 -Actual $aggregatedHealth.CriticalIssues.Count -Message "Should include system critical issues"
@@ -368,7 +370,7 @@ function Test-AgentMonitoringIntegration {
         
     }
     finally {
-        Clear-AllMocks
+        if (Get-Command -Name Clear-AllMocks -ErrorAction SilentlyContinue) { Clear-AllMocks }
     }
     
     return Complete-TestSession
@@ -415,9 +417,9 @@ function Invoke-AgentIntegrationTests {
         }
         
         # Summary
-        $totalPassed = ($allResults | ForEach-Object { $_.Results.Passed } | Measure-Object -Sum).Sum
-        $totalFailed = ($allResults | ForEach-Object { $_.Results.Failed } | Measure-Object -Sum).Sum
-        $totalSkipped = ($allResults | ForEach-Object { $_.Results.Skipped } | Measure-Object -Sum).Sum
+        $totalPassed = ($allResults | ForEach-Object { $_.Summary.Passed } | Measure-Object -Sum).Sum
+        $totalFailed = ($allResults | ForEach-Object { $_.Summary.Failed } | Measure-Object -Sum).Sum
+        $totalSkipped = ($allResults | ForEach-Object { $_.Summary.Skipped } | Measure-Object -Sum).Sum
         
         Write-Host "Agent Integration Test Summary" -ForegroundColor Cyan
         Write-Host "==============================" -ForegroundColor Cyan
@@ -437,15 +439,17 @@ function Invoke-AgentIntegrationTests {
         }
     }
     finally {
-        Clear-AllMocks
+        if (Get-Command -Name Clear-AllMocks -ErrorAction SilentlyContinue) { Clear-AllMocks }
     }
 }
 
-# Export functions when run as module
-if ($MyInvocation.PSScriptRoot) {
+# Export functions when run as module (no-op when executed as a script)
+try {
     Export-ModuleMember -Function @(
         'Test-AgentHealthCheckWorkflow',
         'Test-AgentMonitoringIntegration',
         'Invoke-AgentIntegrationTests'
     )
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
 }

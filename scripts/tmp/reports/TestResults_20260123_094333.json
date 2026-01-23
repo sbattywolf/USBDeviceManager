@@ -1,0 +1,182 @@
+{
+    "Summary":  {
+                    "Skipped":  0,
+                    "TotalTests":  15,
+                    "Failed":  5,
+                    "Passed":  10
+                },
+    "TotalDuration":  {
+                          "Ticks":  3144615,
+                          "Days":  0,
+                          "Hours":  0,
+                          "Milliseconds":  314,
+                          "Minutes":  0,
+                          "Seconds":  0,
+                          "TotalDays":  3.6396006944444442E-06,
+                          "TotalHours":  8.735041666666666E-05,
+                          "TotalMilliseconds":  314.4615,
+                          "TotalMinutes":  0.005241025,
+                          "TotalSeconds":  0.3144615
+                      },
+    "TestCategories":  [
+                           {
+                               "Results":  [
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  5,
+                                                                   "Passed":  0
+                                                               },
+                                                   "Success":  false,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  5,
+                                                                                       "Passed":  0
+                                                                                   },
+                                                                       "Success":  false,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Error":  "Termine \u0027Get-DefaultConfiguration\u0027 non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l\u0027ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.",
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Get-DefaultConfiguration returns valid agent config",
+                                                                                           "Success":  false
+                                                                                       },
+                                                                                       {
+                                                                                           "Error":  "Termine \u0027Get-DefaultConfiguration\u0027 non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l\u0027ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.",
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Test-Configuration validates agent settings correctly",
+                                                                                           "Success":  false
+                                                                                       },
+                                                                                       {
+                                                                                           "Error":  "Termine \u0027Get-DefaultConfiguration\u0027 non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l\u0027ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.",
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Save-Configuration and Load-Configuration work for agent",
+                                                                                           "Success":  false
+                                                                                       },
+                                                                                       {
+                                                                                           "Error":  "Termine \u0027Get-DefaultConfiguration\u0027 non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l\u0027ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.",
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Configuration paths are agent-specific",
+                                                                                           "Success":  false
+                                                                                       },
+                                                                                       {
+                                                                                           "Error":  "Termine \u0027Get-DefaultConfiguration\u0027 non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l\u0027ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.",
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Export-Configuration uses agent naming",
+                                                                                           "Success":  false
+                                                                                       }
+                                                                                   ]
+                                                                   }
+                                                               ]
+                                               },
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  0,
+                                                                   "Passed":  10
+                                                               },
+                                                   "Success":  true,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Get-USBDevices returns device collection",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Get-USBHealthCheck calculates agent-specific metrics",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Initialize-USBMonitoring sets up agent monitoring",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "USB operations handle WMI failures gracefully",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "USB device filtering works for agent monitoring",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   },
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Get-ProcessHealthCheck provides agent process metrics",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Test-ManagedProcess validates agent process definitions",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Start-ManagedProcess handles agent process startup",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Get-ProcessMetrics provides agent-relevant metrics",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Calculate-ProcessHealth uses agent-specific scoring",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   }
+                                                               ]
+                                               }
+                                           ],
+                               "CategoryName":  "AgentUnit",
+                               "Summary":  {
+                                               "Skipped":  0,
+                                               "Failed":  5,
+                                               "Passed":  10
+                                           },
+                               "Success":  false,
+                               "StartTime":  "\/Date(1769157812782)\/",
+                               "EndTime":  "\/Date(1769157813061)\/",
+                               "Duration":  {
+                                                "Ticks":  2780849,
+                                                "Days":  0,
+                                                "Hours":  0,
+                                                "Milliseconds":  278,
+                                                "Minutes":  0,
+                                                "Seconds":  0,
+                                                "TotalDays":  3.2185752314814815E-06,
+                                                "TotalHours":  7.7245805555555553E-05,
+                                                "TotalMilliseconds":  278.0849,
+                                                "TotalMinutes":  0.0046347483333333333,
+                                                "TotalSeconds":  0.27808489999999997
+                                            }
+                           }
+                       ],
+    "StartTime":  "\/Date(1769157812760)\/",
+    "EndTime":  "\/Date(1769157813074)\/",
+    "OverallSuccess":  false
+}

@@ -1,0 +1,178 @@
+{
+    "Summary":  {
+                    "Skipped":  0,
+                    "TotalTests":  15,
+                    "Failed":  1,
+                    "Passed":  14
+                },
+    "TotalDuration":  {
+                          "Ticks":  3747384,
+                          "Days":  0,
+                          "Hours":  0,
+                          "Milliseconds":  374,
+                          "Minutes":  0,
+                          "Seconds":  0,
+                          "TotalDays":  4.33725E-06,
+                          "TotalHours":  0.000104094,
+                          "TotalMilliseconds":  374.7384,
+                          "TotalMinutes":  0.00624564,
+                          "TotalSeconds":  0.37473839999999997
+                      },
+    "TestCategories":  [
+                           {
+                               "Results":  [
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  0,
+                                                                   "Passed":  10
+                                                               },
+                                                   "Success":  true,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Get-DefaultConfiguration returns valid agent config",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Test-Configuration validates agent settings correctly",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Save-Configuration and Load-Configuration work for agent",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Configuration paths are agent-specific",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Export-Configuration uses agent naming",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   },
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Test-AgentRunning detects agent instances correctly",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Set-AgentLock creates lock file with correct data",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Write-AgentLog writes agent-specific logs",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Get-AgentStatus provides comprehensive agent information",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Clear-AgentLock removes lock file properly",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   }
+                                                               ]
+                                               },
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  1,
+                                                                   "Passed":  4
+                                                               },
+                                                   "Success":  false,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  1,
+                                                                                       "Passed":  4
+                                                                                   },
+                                                                       "Success":  false,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Get-USBDevices returns device collection",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Get-USBHealthCheck calculates agent-specific metrics",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Initialize-USBMonitoring sets up agent monitoring",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Error":  "Should return empty array when WMI fails (expected: 0, actual: )",
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "USB operations handle WMI failures gracefully",
+                                                                                           "Success":  false
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "USB device filtering works for agent monitoring",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   }
+                                                               ]
+                                               }
+                                           ],
+                               "CategoryName":  "AgentUnit",
+                               "Summary":  {
+                                               "Skipped":  0,
+                                               "Failed":  1,
+                                               "Passed":  14
+                                           },
+                               "Success":  false,
+                               "StartTime":  "\/Date(1769158762935)\/",
+                               "EndTime":  "\/Date(1769158763272)\/",
+                               "Duration":  {
+                                                "Ticks":  3362908,
+                                                "Days":  0,
+                                                "Hours":  0,
+                                                "Milliseconds":  336,
+                                                "Minutes":  0,
+                                                "Seconds":  0,
+                                                "TotalDays":  3.89225462962963E-06,
+                                                "TotalHours":  9.3414111111111113E-05,
+                                                "TotalMilliseconds":  336.2908,
+                                                "TotalMinutes":  0.0056048466666666664,
+                                                "TotalSeconds":  0.3362908
+                                            }
+                           }
+                       ],
+    "StartTime":  "\/Date(1769158762911)\/",
+    "EndTime":  "\/Date(1769158763286)\/",
+    "OverallSuccess":  false
+}

@@ -1,0 +1,275 @@
+{
+    "Summary":  {
+                    "Skipped":  0,
+                    "TotalTests":  25,
+                    "Failed":  2,
+                    "Passed":  23
+                },
+    "TotalDuration":  {
+                          "Ticks":  8344098,
+                          "Days":  0,
+                          "Hours":  0,
+                          "Milliseconds":  834,
+                          "Minutes":  0,
+                          "Seconds":  0,
+                          "TotalDays":  9.6575208333333328E-06,
+                          "TotalHours":  0.0002317805,
+                          "TotalMilliseconds":  834.4098,
+                          "TotalMinutes":  0.01390683,
+                          "TotalSeconds":  0.8344098
+                      },
+    "TestCategories":  [
+                           {
+                               "Results":  [
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  0,
+                                                                   "Passed":  10
+                                                               },
+                                                   "Success":  true,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Get-DefaultConfiguration returns valid agent config",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Test-Configuration validates agent settings correctly",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Save-Configuration and Load-Configuration work for agent",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Configuration paths are agent-specific",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ConfigManager",
+                                                                                           "Name":  "Export-Configuration uses agent naming",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   },
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Test-AgentRunning detects agent instances correctly",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Set-AgentLock creates lock file with correct data",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Write-AgentLog writes agent-specific logs",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Get-AgentStatus provides comprehensive agent information",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "AgentCore",
+                                                                                           "Name":  "Clear-AgentLock removes lock file properly",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   }
+                                                               ]
+                                               },
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  0,
+                                                                   "Passed":  10
+                                                               },
+                                                   "Success":  true,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Get-USBDevices returns device collection",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Get-USBHealthCheck calculates agent-specific metrics",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "Initialize-USBMonitoring sets up agent monitoring",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "USB operations handle WMI failures gracefully",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "USBMonitor",
+                                                                                           "Name":  "USB device filtering works for agent monitoring",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   },
+                                                                   {
+                                                                       "Summary":  {
+                                                                                       "Skipped":  0,
+                                                                                       "Failed":  0,
+                                                                                       "Passed":  5
+                                                                                   },
+                                                                       "Success":  true,
+                                                                       "Results":  [
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Get-ProcessHealthCheck provides agent process metrics",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Test-ManagedProcess validates agent process definitions",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Start-ManagedProcess handles agent process startup",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Get-ProcessMetrics provides agent-relevant metrics",
+                                                                                           "Success":  true
+                                                                                       },
+                                                                                       {
+                                                                                           "Category":  "ProcessManager",
+                                                                                           "Name":  "Calculate-ProcessHealth uses agent-specific scoring",
+                                                                                           "Success":  true
+                                                                                       }
+                                                                                   ]
+                                                                   }
+                                                               ]
+                                               }
+                                           ],
+                               "CategoryName":  "AgentUnit",
+                               "Summary":  {
+                                               "Skipped":  0,
+                                               "Failed":  0,
+                                               "Passed":  20
+                                           },
+                               "Success":  true,
+                               "StartTime":  "\/Date(1769158094188)\/",
+                               "EndTime":  "\/Date(1769158094594)\/",
+                               "Duration":  {
+                                                "Ticks":  4058387,
+                                                "Days":  0,
+                                                "Hours":  0,
+                                                "Milliseconds":  405,
+                                                "Minutes":  0,
+                                                "Seconds":  0,
+                                                "TotalDays":  4.6972071759259256E-06,
+                                                "TotalHours":  0.00011273297222222222,
+                                                "TotalMilliseconds":  405.8387,
+                                                "TotalMinutes":  0.0067639783333333335,
+                                                "TotalSeconds":  0.4058387
+                                            }
+                           },
+                           {
+                               "Results":  [
+                                               {
+                                                   "Summary":  {
+                                                                   "Skipped":  0,
+                                                                   "Failed":  2,
+                                                                   "Passed":  3
+                                                               },
+                                                   "Success":  false,
+                                                   "Results":  [
+                                                                   {
+                                                                       "Error":  "Chiamata al metodo non riuscita. [System.Int32] non contiene un metodo denominato \u0027ContainsKey\u0027.",
+                                                                       "Category":  "AgentWorkflow",
+                                                                       "Name":  "Agent health check workflow executes end-to-end",
+                                                                       "Success":  false
+                                                                   },
+                                                                   {
+                                                                       "Category":  "AgentWorkflow",
+                                                                       "Name":  "Agent initialization workflow sets up all components",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Category":  "AgentWorkflow",
+                                                                       "Name":  "Agent shutdown workflow cleanly stops all components",
+                                                                       "Success":  true
+                                                                   },
+                                                                   {
+                                                                       "Error":  "Impossibile chiamare un metodo su un\u0027espressione con valore null.",
+                                                                       "Category":  "AgentWorkflow",
+                                                                       "Name":  "Agent handles component failures gracefully",
+                                                                       "Success":  false
+                                                                   },
+                                                                   {
+                                                                       "Category":  "AgentWorkflow",
+                                                                       "Name":  "Agent handles configuration changes dynamically",
+                                                                       "Success":  true
+                                                                   }
+                                                               ]
+                                               }
+                                           ],
+                               "CategoryName":  "AgentIntegration",
+                               "Summary":  {
+                                               "Skipped":  0,
+                                               "Failed":  2,
+                                               "Passed":  3
+                                           },
+                               "Success":  false,
+                               "StartTime":  "\/Date(1769158094609)\/",
+                               "EndTime":  "\/Date(1769158094989)\/",
+                               "Duration":  {
+                                                "Ticks":  3797896,
+                                                "Days":  0,
+                                                "Hours":  0,
+                                                "Milliseconds":  379,
+                                                "Minutes":  0,
+                                                "Seconds":  0,
+                                                "TotalDays":  4.3957129629629624E-06,
+                                                "TotalHours":  0.00010549711111111111,
+                                                "TotalMilliseconds":  379.7896,
+                                                "TotalMinutes":  0.0063298266666666665,
+                                                "TotalSeconds":  0.3797896
+                                            }
+                           }
+                       ],
+    "StartTime":  "\/Date(1769158094163)\/",
+    "EndTime":  "\/Date(1769158094997)\/",
+    "OverallSuccess":  false
+}
