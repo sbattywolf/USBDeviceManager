@@ -68,6 +68,15 @@ jobs:
       - name: Restore NuGet
         run: dotnet restore USBDeviceManager.sln
 
+      - name: Publish long-run test helper
+        run: |
+          if (Test-Path test-helpers/LongRunner) {
+            dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
+            Write-Host 'Published LongRunner to ./artifacts/longrunner'
+          } else {
+            Write-Host 'No long-run helper found; continuing without it.'
+          }
+
       - name: Detect long-sleep command for ShellRunner tests
         run: |
           echo "Detecting long-sleep helper for ShellRunner tests"
@@ -77,8 +86,11 @@ jobs:
         if: runner.os == 'Linux' || runner.os == 'Ubuntu' || runner.os == 'ubuntu-latest'
         shell: bash
         run: |
-          # Prefer /bin/bash -c "sleep 30"
-          if [ -x /bin/bash ] && /bin/bash -c "sleep 0" >/dev/null 2>&1; then
+          # Prefer published LongRunner helper if available
+          if [ -f ./artifacts/longrunner/LongRunner.dll ]; then
+            echo "SHELLRUNNER_LONG_CMD=dotnet|./artifacts/longrunner/LongRunner.dll --duration=30" >> $GITHUB_ENV
+            echo "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
+          elif [ -x /bin/bash ] && /bin/bash -c "sleep 0" >/dev/null 2>&1; then
             echo "SHELLRUNNER_LONG_CMD=/bin/bash|-c \"sleep 30\"" >> $GITHUB_ENV
             echo "Set SHELLRUNNER_LONG_CMD for bash"
           elif command -v sleep >/dev/null 2>&1; then
@@ -93,18 +105,31 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          # Prefer Windows PowerShell Start-Sleep; fall back to PowerShell Core if needed
-          if (Get-Command powershell -ErrorAction SilentlyContinue) {
-            "SHELLRUNNER_LONG_CMD=powershell|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
-            Write-Host "Set SHELLRUNNER_LONG_CMD for powershell"
-          }
-          elseif (Get-Command pwsh -ErrorAction SilentlyContinue) {
-            "SHELLRUNNER_LONG_CMD=pwsh|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
-            Write-Host "Set SHELLRUNNER_LONG_CMD for pwsh"
+          # Prefer published LongRunner helper if available
+          $helperDll = Join-Path $GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
+          if (Test-Path $helperDll) {
+            "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+            Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
           }
           else {
-            Write-Host "No PowerShell found; leaving SHELLRUNNER_LONG_CMD unset"
+            # Prefer Windows PowerShell Start-Sleep; fall back to PowerShell Core if needed
+            if (Get-Command powershell -ErrorAction SilentlyContinue) {
+              "SHELLRUNNER_LONG_CMD=powershell|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+              Write-Host "Set SHELLRUNNER_LONG_CMD for powershell"
+            }
+            elseif (Get-Command pwsh -ErrorAction SilentlyContinue) {
+              "SHELLRUNNER_LONG_CMD=pwsh|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+              Write-Host "Set SHELLRUNNER_LONG_CMD for pwsh"
+            }
+            else {
+              Write-Host "No PowerShell found; leaving SHELLRUNNER_LONG_CMD unset"
+            }
           }
+
+      - name: Enable in-process smoke server for CI (cross-platform)
+        run: |
+          echo "SMOKE_USE_TESTSERVER=1" >> $GITHUB_ENV
+        # keep this available for all matrix OSes so functional smoke tests use TestServer in CI
 
       - name: Ensure server stopped (optional auto-kill)
         shell: pwsh
