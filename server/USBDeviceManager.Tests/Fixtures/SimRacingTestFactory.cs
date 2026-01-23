@@ -1,6 +1,7 @@
 using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -277,22 +278,51 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     {
         if (disposing)
         {
-            // Remove the temporary DB file. Do not access Services here because the
-            // underlying ServiceProvider may already be disposed by the base.
+            // Best-effort: clear any SQLite connection pools so underlying file
+            // handles are released before we attempt to delete the DB file.
             try
             {
+                try
+                {
+                    SqliteConnection.ClearAllPools();
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"SimRacingTestFactory: ClearAllPools() failed: {ex}");
+                }
+
                 if (!string.IsNullOrEmpty(_dbFilePath) && File.Exists(_dbFilePath))
                 {
-                    File.Delete(_dbFilePath);
+                    const int maxAttempts = 5;
+                    int delayMs = 200;
+                    for (int attempt = 1; attempt <= maxAttempts; attempt++)
+                    {
+                        try
+                        {
+                            File.Delete(_dbFilePath);
+                            break; // success
+                        }
+                        catch (IOException ioEx) when (attempt < maxAttempts)
+                        {
+                            Console.Error.WriteLine($"SimRacingTestFactory: delete attempt {attempt} failed: {ioEx.Message}. Retrying in {delayMs}ms.");
+                            Thread.Sleep(delayMs);
+                            delayMs *= 2;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB on dispose '{_dbFilePath}': {ex}");
+                            break;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB on dispose '{_dbFilePath}': {ex}");
+                Console.Error.WriteLine($"SimRacingTestFactory: unexpected error during dispose cleanup: {ex}");
             }
-            // nothing extra to dispose here beyond file cleanup
         }
 
+        // Ensure base disposal runs to release other test host resources.
         base.Dispose(disposing);
     }
 }

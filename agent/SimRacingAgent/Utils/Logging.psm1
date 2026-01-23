@@ -467,7 +467,11 @@ function Write-AgentException {
 }
 
 # Export module members
-Export-ModuleMember -Function Write-AgentLog, Write-AgentTrace, Write-AgentDebug, Write-AgentInfo, Write-AgentWarning, Write-AgentError, Write-AgentCritical, Set-AgentLogLevel, Set-AgentLogOutput, Get-AgentLogStatus, Get-AgentLogBuffer, Write-AgentEvent, Write-AgentMetric, Write-AgentPerformance, Write-AgentException
+try {
+    Export-ModuleMember -Function Write-AgentLog, Write-AgentTrace, Write-AgentDebug, Write-AgentInfo, Write-AgentWarning, Write-AgentError, Write-AgentCritical, Set-AgentLogLevel, Set-AgentLogOutput, Get-AgentLogStatus, Get-AgentLogBuffer, Write-AgentEvent, Write-AgentMetric, Write-AgentPerformance, Write-AgentException -ErrorAction Stop
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+}
 
 
 

@@ -40,7 +40,7 @@
             <div class="card text-white bg-primary">
                 <div class="card-body">
                     <h5 class="card-title">Connected Devices</h5>
-                    <h2 class="card-text">@dashboardData?.deviceSummary?.connectedDevices / @dashboardData?.deviceSummary?.totalDevices</h2>
+                    <h2 class="card-text">@(Convert.ToString(dashboardData?.deviceSummary?.connectedDevices)) / @(Convert.ToString(dashboardData?.deviceSummary?.totalDevices))</h2>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
             <div class="card text-white bg-success">
                 <div class="card-body">
                     <h5 class="card-title">Running Software</h5>
-                    <h2 class="card-text">@dashboardData?.softwareSummary?.runningSoftware / @dashboardData?.softwareSummary?.totalSoftware</h2>
+                    <h2 class="card-text">@(Convert.ToString(dashboardData?.softwareSummary?.runningSoftware)) / @(Convert.ToString(dashboardData?.softwareSummary?.totalSoftware))</h2>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
             <div class="card text-white bg-info">
                 <div class="card-body">
                     <h5 class="card-title">Active Rules</h5>
-                    <h2 class="card-text">@dashboardData?.systemStatus?.ActiveRules</h2>
+                    <h2 class="card-text">@(Convert.ToString(dashboardData?.systemStatus?.ActiveRules))</h2>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
             <div class="card text-white bg-warning">
                 <div class="card-body">
                     <h5 class="card-title">CPU Usage</h5>
-                    <h2 class="card-text">@($"{dashboardData?.systemStatus?.CpuUsage:F1}")%</h2>
+                    <h2 class="card-text">@(Convert.ToString(dashboardData?.systemStatus?.CpuUsage))%</h2>
                 </div>
             </div>
         </div>

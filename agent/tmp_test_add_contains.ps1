@@ -1,4 +1,11 @@
-Import-Module 'e:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1' -Force
+$ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$modulePath = Join-Path $ScriptRoot 'SimRacingAgent.Tests\shared\AdapterStubs.psm1'
+if (Test-Path $modulePath) {
+	Import-Module $modulePath -Force -ErrorAction SilentlyContinue
+} else {
+	Write-Host "DEBUG: AdapterStubs not found at $modulePath" -ForegroundColor Yellow
+}
+
 $o = [PSCustomObject]@{A=1}
 Add-ContainsKeyMethod $o
 Write-Host "Members count: $($o.PSObject.Members.Match('ContainsKey').Count)"

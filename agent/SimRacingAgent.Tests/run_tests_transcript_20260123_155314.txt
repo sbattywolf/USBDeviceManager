@@ -1,13 +1,25 @@
+ï»¿**********************
+Inizio trascrizione Windows PowerShell
+Ora di inizio: 20260123155314
+Nome utente: LITTLE_BEAST\sbatt
+Esegui come utente: LITTLE_BEAST\sbatt
+Nome configurazione: 
+Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\.__run_wrapper.ps1
+ID processo: 24164
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
 Trascrizione avviata. File di output: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\run_tests_transcript_20260123_155314.txt
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\shared\TestFramework.p
-sm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
-hared\TestFramework.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
-hared\AdapterStubs.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\shared\TestFramework.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
 DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
@@ -24,8 +36,7 @@ DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
 DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
-DETTAGLIATO: Esportazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
 DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
@@ -50,27 +61,16 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'AdapterStubs' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'AdapterStubs' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'AdapterStubs' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'AdapterStubs' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -126,8 +126,7 @@ DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Esportazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
@@ -150,8 +149,7 @@ DETTAGLIATO: Esportazione della funzione 'Unregister-EngineEvent'.
 DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
 DETTAGLIATO: Esportazione della funzione 'Update-AgentConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Esportazione della funzione 
-'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Global\Get-DefaultConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
 DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
 DETTAGLIATO: Importazione della funzione 'Assert-False'.
@@ -171,105 +169,48 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
-DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
-DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
-DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
-DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
-DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
-DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
-DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
-DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
-DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
-DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Importazione della funzione 
-'Global\Get-DefaultConfiguration'.
-DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
-DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
-DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
-DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -307,8 +248,7 @@ DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Esportazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Esportazione della funzione 'Global\Assert-Contains'.
 DETTAGLIATO: Esportazione della funzione 'Global\Assert-Equal'.
@@ -320,8 +260,7 @@ DETTAGLIATO: Esportazione della funzione 'Global\Assert-True'.
 DETTAGLIATO: Esportazione della funzione 'Global\Clear-AllMocks'.
 DETTAGLIATO: Esportazione della funzione 'Global\Clear-TestEnvironment'.
 DETTAGLIATO: Esportazione della funzione 'Global\Complete-TestSession'.
-DETTAGLIATO: Esportazione della funzione 
-'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Global\Get-DefaultConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Global\Invoke-Test'.
 DETTAGLIATO: Esportazione della funzione 'Global\New-Mock'.
 DETTAGLIATO: Esportazione della funzione 'Global\Remove-Mock'.
@@ -370,105 +309,48 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
-DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
-DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
-DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
-DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
-DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
-DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
-DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
-DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
-DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
-DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Importazione della funzione 
-'Global\Get-DefaultConfiguration'.
-DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
-DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
-DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
-DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -487,48 +369,8 @@ DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\ConfigManager
-.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\C
-onfiguration.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
-ogging.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
-ogging.psm1'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
-DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
-DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
-DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
-DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
-DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\ConfigManager.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\Configuration.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Initialize-Configuration'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Set-AgentConfiguration'.
@@ -601,30 +443,8 @@ DETTAGLIATO: Importazione della funzione 'Set-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Set-ConfigurationSection'.
 DETTAGLIATO: Importazione della funzione 'Test-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\AgentCore.psm
-1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Core\Ag
-entEngine.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
-ogging.psm1'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\AgentCore.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Core\AgentEngine.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Start-AgentEngine'.
 DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentEngineStatus'.
@@ -637,30 +457,8 @@ DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
 DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
 DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\USBMonitor
-.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Modules
-\DeviceMonitor.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
-ogging.psm1'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\USBMonitor.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Modules\DeviceMonitor.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
 DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
@@ -751,30 +549,8 @@ DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\ProcessMan
-ager.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Modules
-\SoftwareManager.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
-ogging.psm1'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\ProcessManager.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Modules\SoftwareManager.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
 DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
@@ -852,15 +628,8 @@ DETTAGLIATO: Esportazione della funzione 'Test-ManagedProcess'.
 DETTAGLIATO: Esportazione della funzione 'Start-ManagedProcess'.
 DETTAGLIATO: Esportazione della funzione 'Get-ProcessMetrics'.
 DETTAGLIATO: Esportazione della funzione 'Calculate-ProcessHealth'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
-'ProcessManager' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Verbi
- alternativi suggeriti "Measure".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 'ProcessManager' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Measure".
 DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
@@ -890,16 +659,11 @@ DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un modulo.
-DETTAGLIATO: Importing module 
-E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\sh
-ared\TestFramework.psm1
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
-hared\TestFramework.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
-hared\AdapterStubs.psm1'.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
 DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
@@ -916,8 +680,7 @@ DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
 DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
-DETTAGLIATO: Esportazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
 DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
@@ -942,27 +705,16 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'AdapterStubs' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'AdapterStubs' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'AdapterStubs' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'AdapterStubs' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -1004,8 +756,7 @@ DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Esportazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
@@ -1047,29 +798,18 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -1088,15 +828,9 @@ DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Importing module 
-E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Un
-it\AgentCoreTests.ps1
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
-nit\AgentCoreTests.ps1'.
-DETTAGLIATO: Dot-sourcing del file script 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
-nit\AgentCoreTests.ps1'.
+DETTAGLIATO: Importing module E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Unit\AgentCoreTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Unit\AgentCoreTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Unit\AgentCoreTests.ps1'.
 DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
 DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
 DETTAGLIATO: Importazione della funzione 'Assert-False'.
@@ -1116,105 +850,48 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
-DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
-DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
-DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
-DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
-DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
-DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
-DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
-DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
-DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
-DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Importazione della funzione 
-'Global\Get-DefaultConfiguration'.
-DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
-DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
-DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
-DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -1237,49 +914,22 @@ DETTAGLIATO: Rimozione della funzione "Get-AgentConfiguration" importata.
 DETTAGLIATO: Rimozione della funzione "Get-AgentInfo" importata.
 DETTAGLIATO: Rimozione della funzione "Get-AutomationConfig" importata.
 DETTAGLIATO: Rimozione della funzione "Get-ConfigurationKeys" importata.
-DETTAGLIATO: Rimozione della funzione "Get-ConfigurationSection" 
-importata.
+DETTAGLIATO: Rimozione della funzione "Get-ConfigurationSection" importata.
 DETTAGLIATO: Rimozione della funzione "Get-ConfigurationStatus" importata.
 DETTAGLIATO: Rimozione della funzione "Get-DashboardConfig" importata.
 DETTAGLIATO: Rimozione della funzione "Get-DeviceConfig" importata.
 DETTAGLIATO: Rimozione della funzione "Get-HealthConfig" importata.
 DETTAGLIATO: Rimozione della funzione "Get-LoggingConfig" importata.
 DETTAGLIATO: Rimozione della funzione "Get-SoftwareConfig" importata.
-DETTAGLIATO: Rimozione della funzione "Initialize-Configuration" 
-importata.
-DETTAGLIATO: Rimozione della funzione "Reset-AgentConfiguration" 
-importata.
+DETTAGLIATO: Rimozione della funzione "Initialize-Configuration" importata.
+DETTAGLIATO: Rimozione della funzione "Reset-AgentConfiguration" importata.
 DETTAGLIATO: Rimozione della funzione "Save-AgentConfiguration" importata.
 DETTAGLIATO: Rimozione della funzione "Set-AgentConfiguration" importata.
-DETTAGLIATO: Rimozione della funzione "Set-ConfigurationSection" 
-importata.
+DETTAGLIATO: Rimozione della funzione "Set-ConfigurationSection" importata.
 DETTAGLIATO: Rimozione della funzione "Test-AgentConfiguration" importata.
-DETTAGLIATO: Rimozione della funzione "Test-ConfigurationExists" 
-importata.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\ConfigManager
-.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\C
-onfiguration.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
-ogging.psm1'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Rimozione della funzione "Test-ConfigurationExists" importata.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\ConfigManager.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\Configuration.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Initialize-Configuration'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentConfiguration'.
 DETTAGLIATO: Esportazione della funzione 'Set-AgentConfiguration'.
@@ -1355,30 +1005,8 @@ DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
 DETTAGLIATO: Rimozione della funzione "Get-AgentEngineStatus" importata.
 DETTAGLIATO: Rimozione della funzione "Start-AgentEngine" importata.
 DETTAGLIATO: Rimozione della funzione "Stop-AgentEngine" importata.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\AgentCore.psm
-1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Core\Ag
-entEngine.psm1'.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
-ogging.psm1'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
-DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
-DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
-DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\AgentCore.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Core\AgentEngine.psm1'.
 DETTAGLIATO: Esportazione della funzione 'Start-AgentEngine'.
 DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
 DETTAGLIATO: Esportazione della funzione 'Get-AgentEngineStatus'.
@@ -1391,18 +1019,11 @@ DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
 DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
 DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
-DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
- cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un 
-modulo.
-DETTAGLIATO: Importing module 
-E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Un
-it\AgentMonitoringTests.ps1
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
-nit\AgentMonitoringTests.ps1'.
-DETTAGLIATO: Dot-sourcing del file script 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
-nit\AgentMonitoringTests.ps1'.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Unit\AgentMonitoringTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Unit\AgentMonitoringTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Unit\AgentMonitoringTests.ps1'.
 DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
 DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
 DETTAGLIATO: Importazione della funzione 'Assert-False'.
@@ -1422,105 +1043,48 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
-DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
-DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
-DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
-DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
-DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
-DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
-DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
-DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
-DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
-DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Importazione della funzione 
-'Global\Get-DefaultConfiguration'.
-DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
-DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
-DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
-DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -1541,18 +1105,14 @@ DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
 DETTAGLIATO: Rimozione della funzione "Get-ConnectedDevices" importata.
 DETTAGLIATO: Rimozione della funzione "Get-DeviceHistory" importata.
-DETTAGLIATO: Rimozione della funzione "Get-DeviceMonitoringStatus" 
-importata.
+DETTAGLIATO: Rimozione della funzione "Get-DeviceMonitoringStatus" importata.
 DETTAGLIATO: Rimozione della funzione "Get-RacingDevices" importata.
 DETTAGLIATO: Rimozione della funzione "Get-USBDevices" importata.
 DETTAGLIATO: Rimozione della funzione "Get-USBHealthCheck" importata.
-DETTAGLIATO: Rimozione della funzione "Initialize-USBMonitoring" 
-importata.
+DETTAGLIATO: Rimozione della funzione "Initialize-USBMonitoring" importata.
 DETTAGLIATO: Rimozione della funzione "Start-DeviceMonitoring" importata.
 DETTAGLIATO: Rimozione della funzione "Stop-DeviceMonitoring" importata.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\USBMonitor
-.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\USBMonitor.psm1'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-ConnectedDevices'.
@@ -1627,20 +1187,16 @@ DETTAGLIATO: Rimozione della funzione "Get-ManagedSoftware" importata.
 DETTAGLIATO: Rimozione della funzione "Get-ProcessHealthCheck" importata.
 DETTAGLIATO: Rimozione della funzione "Get-ProcessMetrics" importata.
 DETTAGLIATO: Rimozione della funzione "Get-RunningSoftware" importata.
-DETTAGLIATO: Rimozione della funzione "Get-SoftwareMonitoringStatus" 
-importata.
+DETTAGLIATO: Rimozione della funzione "Get-SoftwareMonitoringStatus" importata.
 DETTAGLIATO: Rimozione della funzione "Get-SoftwareStatus" importata.
 DETTAGLIATO: Rimozione della funzione "Restart-Software" importata.
 DETTAGLIATO: Rimozione della funzione "Start-ManagedProcess" importata.
 DETTAGLIATO: Rimozione della funzione "Start-Software" importata.
-DETTAGLIATO: Rimozione della funzione "Start-SoftwareMonitoring" 
-importata.
+DETTAGLIATO: Rimozione della funzione "Start-SoftwareMonitoring" importata.
 DETTAGLIATO: Rimozione della funzione "Stop-Software" importata.
 DETTAGLIATO: Rimozione della funzione "Stop-SoftwareMonitoring" importata.
 DETTAGLIATO: Rimozione della funzione "Test-ManagedProcess" importata.
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\ProcessMan
-ager.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\ProcessManager.psm1'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-ManagedSoftware'.
@@ -1694,15 +1250,8 @@ DETTAGLIATO: Esportazione della funzione 'Test-ManagedProcess'.
 DETTAGLIATO: Esportazione della funzione 'Start-ManagedProcess'.
 DETTAGLIATO: Esportazione della funzione 'Get-ProcessMetrics'.
 DETTAGLIATO: Esportazione della funzione 'Calculate-ProcessHealth'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
-'ProcessManager' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Verbi
- alternativi suggeriti "Measure".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 'ProcessManager' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Measure".
 DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
@@ -1732,18 +1281,11 @@ DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
-DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
- cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un 
-modulo.
-DETTAGLIATO: Importing module 
-E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\In
-tegration\AgentWorkflowTests.ps1
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\I
-ntegration\AgentWorkflowTests.ps1'.
-DETTAGLIATO: Dot-sourcing del file script 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\I
-ntegration\AgentWorkflowTests.ps1'.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Integration\AgentWorkflowTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Integration\AgentWorkflowTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Integration\AgentWorkflowTests.ps1'.
 DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
 DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
 DETTAGLIATO: Importazione della funzione 'Assert-False'.
@@ -1763,105 +1305,48 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
-DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
-DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
-DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
-DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
-DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
-DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
-DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
-DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
-DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
-DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Importazione della funzione 
-'Global\Get-DefaultConfiguration'.
-DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
-DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
-DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
-DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -1925,15 +1410,8 @@ DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
-'ProcessManager' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Verbi
- alternativi suggeriti "Measure".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 'ProcessManager' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Measure".
 DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
@@ -1963,18 +1441,11 @@ DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
-DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
- cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un 
-modulo.
-DETTAGLIATO: Importing module 
-E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Re
-gression\AgentRegressionTests.ps1
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\R
-egression\AgentRegressionTests.ps1'.
-DETTAGLIATO: Dot-sourcing del file script 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\R
-egression\AgentRegressionTests.ps1'.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1'.
 DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
 DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
 DETTAGLIATO: Importazione della funzione 'Assert-False'.
@@ -1994,105 +1465,48 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
-DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
-DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Š
- stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
-DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
-DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
-DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
-DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
-DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
- Š stato importato, tuttavia potrebbe risultare difficile individuarlo 
-poich‚ il relativo nome non include un verbo approvato. Per un elenco dei 
-verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
-DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
-DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
-DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Importazione della funzione 
-'Global\Get-DefaultConfiguration'.
-DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
-DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
-DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Per un elenco dei verbi 
-approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
-DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -2156,15 +1570,8 @@ DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
-'ProcessManager' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Verbi
- alternativi suggeriti "Measure".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 'ProcessManager' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Measure".
 DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
 DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
@@ -2194,16 +1601,11 @@ DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un modulo.
-DETTAGLIATO: Importing module 
-E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\ap
-plication\api\ApplicationAPITests.ps1
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
-pplication\api\ApplicationAPITests.ps1'.
-DETTAGLIATO: Dot-sourcing del file script 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
-pplication\api\ApplicationAPITests.ps1'.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\api\ApplicationAPITests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\api\ApplicationAPITests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\api\ApplicationAPITests.ps1'.
 DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
 DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
 DETTAGLIATO: Importazione della funzione 'Assert-False'.
@@ -2223,29 +1625,18 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -2264,16 +1655,11 @@ DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un modulo.
-DETTAGLIATO: Importing module 
-E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\ap
-plication\integration\ApplicationIntegrationTests.ps1
-DETTAGLIATO: Caricamento del modulo dal percorso 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
-pplication\integration\ApplicationIntegrationTests.ps1'.
-DETTAGLIATO: Dot-sourcing del file script 
-'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
-pplication\integration\ApplicationIntegrationTests.ps1'.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\integration\ApplicationIntegrationTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\integration\ApplicationIntegrationTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\integration\ApplicationIntegrationTests.ps1'.
 DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
 DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
 DETTAGLIATO: Importazione della funzione 'Assert-False'.
@@ -2293,29 +1679,18 @@ DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
 DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
 DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
 DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
-DETTAGLIATO: Importazione della funzione 
-'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
 DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
 DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
 DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
 DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
-AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
-includono verbi non approvati che possono renderli meno individuabili. Per
- trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
-Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
-verbi approvati, digitare Get-Verb.
-DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Š 
-stato importato, tuttavia potrebbe risultare difficile individuarlo poich‚
- il relativo nome non include un verbo approvato. Verbi alternativi 
-suggeriti "Import".
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
 DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
 DETTAGLIATO: Importazione della funzione 'New-Mock'.
-DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
-'TestFramework' Š stato importato, tuttavia potrebbe risultare difficile 
-individuarlo poich‚ il relativo nome non include un verbo approvato. Per 
-un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' Ã¨ stato importato, tuttavia potrebbe risultare difficile individuarlo poichÃ© il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
 DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
@@ -2334,10 +1709,10 @@ DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
 DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
 DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
 DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un modulo.
-DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
- cmdlet Export-ModuleMember pu• essere chiamato solo dall'interno di un 
-modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
 DEBUG: Invoke-CompleteTestSuite started at 01/23/2026 15:53:16
 DEBUG: No TestCategories specified; running default set.
 DEBUG: IncludePerformance=False StopOnFirstFailure=True GenerateReport=True ReportPath=E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports Parallel=False ShowVerbose=False
@@ -2346,11 +1721,11 @@ SimRacing Complete Test Suite Execution
 Started at: 2026-01-23 15:53:16
 
 Test Categories to Execute:
-  V AgentUnit
-  V AgentIntegration
-  V AgentRegression
-  V ApplicationAPI
-  V ApplicationIntegration
+  âœ“ AgentUnit
+  âœ“ AgentIntegration
+  âœ“ AgentRegression
+  âœ“ ApplicationAPI
+  âœ“ ApplicationIntegration
 
 Test reports will be saved to: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports
 
@@ -2384,11 +1759,17 @@ Starting SimRacing Agent Monitoring Unit Tests
 =============================================
 
 Running agent monitoring test suite: USBMonitoring
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
 [PASS] USBMonitor - Get-USBDevices returns device collection
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
 [PASS] USBMonitor - Get-USBHealthCheck calculates agent-specific metrics
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
 [PASS] USBMonitor - Initialize-USBMonitoring sets up agent monitoring
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+>> Errore fatale (): "WMI service unavailable"
 DEBUG: WMI/Get-WmiObject mock failed: WMI service unavailable. Surface ServiceUnavailable error.
 [PASS] USBMonitor - USB operations handle WMI failures gracefully
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
 [PASS] USBMonitor - USB device filtering works for agent monitoring
 
 Running agent monitoring test suite: ProcessManager
@@ -2425,7 +1806,7 @@ DEBUG: Get-USBHealthCheck returned type=System.Object[] value=[
     {
         "value":  "\/Date(1769179996738)\/",
         "DisplayHint":  2,
-        "DateTime":  "venerd 23 gennaio 2026 15:53:16"
+        "DateTime":  "venerdÃ¬ 23 gennaio 2026 15:53:16"
     },
     100,
     5,
@@ -2434,7 +1815,7 @@ DEBUG: Get-USBHealthCheck returned type=System.Object[] value=[
         "Timestamp":  {
                           "value":  "\/Date(1769179996738)\/",
                           "DisplayHint":  2,
-                          "DateTime":  "venerd 23 gennaio 2026 15:53:16"
+                          "DateTime":  "venerdÃ¬ 23 gennaio 2026 15:53:16"
                       },
         "OverallHealth":  100,
         "DeviceCount":  5
@@ -2445,7 +1826,7 @@ DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
     {
         "value":  "\/Date(1769179996763)\/",
         "DisplayHint":  2,
-        "DateTime":  "venerd 23 gennaio 2026 15:53:16"
+        "DateTime":  "venerdÃ¬ 23 gennaio 2026 15:53:16"
     },
     3,
     95,
@@ -2455,7 +1836,7 @@ DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
         "Timestamp":  {
                           "value":  "\/Date(1769179996763)\/",
                           "DisplayHint":  2,
-                          "DateTime":  "venerd 23 gennaio 2026 15:53:16"
+                          "DateTime":  "venerdÃ¬ 23 gennaio 2026 15:53:16"
                       },
         "HealthyProcesses":  3,
         "OverallHealth":  95,
@@ -2474,7 +1855,7 @@ DEBUG: Returning health result type=System.Management.Automation.PSCustomObject 
                                                 "Timestamp":  {
                                                                   "value":  "\/Date(1769179996738)\/",
                                                                   "DisplayHint":  2,
-                                                                  "DateTime":  "venerd 23 gennaio 2026 15:53:16"
+                                                                  "DateTime":  "venerdÃ¬ 23 gennaio 2026 15:53:16"
                                                               },
                                                 "OverallHealth":  100,
                                                 "DeviceCount":  5
@@ -2486,7 +1867,7 @@ DEBUG: Returning health result type=System.Management.Automation.PSCustomObject 
                                                 "Timestamp":  {
                                                                   "value":  "\/Date(1769179996763)\/",
                                                                   "DisplayHint":  2,
-                                                                  "DateTime":  "venerd 23 gennaio 2026 15:53:16"
+                                                                  "DateTime":  "venerdÃ¬ 23 gennaio 2026 15:53:16"
                                                               },
                                                 "HealthyProcesses":  3,
                                                 "OverallHealth":  95,
@@ -2511,6 +1892,8 @@ DEBUG: Returning health result type=System.Management.Automation.PSCustomObject 
 [2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Save-AgentConfiguration returned type: System.Boolean
 [2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Stop-AgentLogging returned type: System.Boolean
 [PASS] AgentWorkflow - Agent shutdown workflow cleanly stops all components
+PS>Errore fatale (): "USB monitoring service unavailable"
+PS>Errore fatale (): "USB monitoring service unavailable"
 DEBUG: Get-USBHealthCheck returned: <null>
 DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
     2,
@@ -2544,6 +1927,7 @@ DEBUG: Returning health result type=System.Management.Automation.PSCustomObject 
                         ]
 }
 [PASS] AgentWorkflow - Agent handles component failures gracefully
+PS>Errore fatale (Set-AgentConfiguration): "Impossibile trovare un parametro corrispondente al nome 'Config'."
 [2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Restart-USBMonitoring returned type: System.Boolean
 [2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Stop-ProcessMonitoring returned type: System.Boolean
 [2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Set-LoggingLevel returned type: System.Boolean
@@ -2597,8 +1981,11 @@ DEBUG: Import-AgentConfiguration found MonitoringSettings.USBPollingInterval=30
 DEBUG: LoadedConfig.MonitoringSettings.USBPollingInterval = [30] (type: System.Int32)
 [PASS] ConfigRegression - Agent maintains backwards compatibility with existing config files
 [2026-01-23 15:53:17] [Debug] [AdapterStubs] Get-AgentHealthStatus (stub) called
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
 [PASS] APIRegression - Health check API maintains stable response format
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
 [2026-01-23 15:53:17] [Debug] [AdapterStubs] Get-AgentHealthStatus (stub) called
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
 [PASS] PerformanceRegression - Agent performance meets established benchmarks
 [2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
 [2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
@@ -2621,7 +2008,10 @@ DEBUG: LoadedConfig.MonitoringSettings.USBPollingInterval = [30] (type: System.I
 [2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=56aedea4-952d-4a80-aefe-02e20340b44e
 [2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=dc82f55b-ec1f-42c5-b767-96c40cf97dec
 [PASS] EventRegression - Agent event handling remains stable across scenarios
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+>> Errore fatale (): "The RPC server is unavailable"
 DEBUG: WMI/Get-WmiObject mock failed: The RPC server is unavailable. Surface ServiceUnavailable error.
+PS>Errore fatale (): "The RPC server is unavailable"
 DEBUG-CATCH: caught exception type=System.Management.Automation.ErrorRecord Category=ResourceUnavailable
 DEBUG-CATCH-DUMP: Exception full dump:
 The RPC server is unavailable
@@ -2660,12 +2050,9 @@ ScriptStackTrace      : in Get-USBDevices, E:\Workspaces\Git\SimRacing\USB
                         eviceManager\agent\SimRacingAgent.Tests\.__run_wra
                         pper.ps1: riga 6
 PipelineIterationInfo : {}
-
-
-
-
 [2026-01-23 15:53:17] [Debug] [AdapterStubs] Import-AgentConfiguration (stub) called with path=test.json
 DEBUG: Import-AgentConfiguration Test-Path native returned=False
+PS>Errore fatale (): "Access denied"
 [PASS] ErrorRegression - Agent error handling maintains consistent behavior
 
 Running agent regression test suite: CompatibilityRegression
@@ -2746,16 +2133,16 @@ Reports generated:
   JSON: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports\TestResults_20260123_155317.json
 
 
-Name                           Value                                      
-----                           -----                                      
-Summary                        {Skipped, TotalTests, Failed, Passed}      
-TotalDuration                  00:00:01.5374480                           
+Name                           Value
+----                           -----
+Summary                        {Skipped, TotalTests, Failed, Passed}
+TotalDuration                  00:00:01.5374480
 TestCategories                 {System.Collections.Hashtable, System.Co...
-StartTime                      23/01/2026 15:53:16                        
-EndTime                        23/01/2026 15:53:17                        
-OverallSuccess                 True                                       
+StartTime                      23/01/2026 15:53:16
+EndTime                        23/01/2026 15:53:17
+OverallSuccess                 True
 True
-Trascrizione arrestata. File di output: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\run_tests_transcript_20260123_155314.txt
-TRANSCRIPT:
-
-
+**********************
+Fine trascrizione Windows PowerShell
+Ora di fine: 20260123155317
+**********************
