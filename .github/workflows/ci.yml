@@ -15,12 +15,19 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - name: Install system GUI dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1-mesa-glx xvfb libx11-6 libxrender1 libxext6
+
       - name: Install GUI requirements
         run: |
           python -m pip install --upgrade pip
           pip install -r gui/requirements.txt
-      - name: Run GUI tests
-        run: pytest -q gui/tests
+
+      - name: Run GUI tests (headless with Xvfb)
+        run: |
+          xvfb-run -s "-screen 0 1280x1024x24" pytest -q gui/tests
 
   build-and-test:
     runs-on: ${{ matrix.os }}
