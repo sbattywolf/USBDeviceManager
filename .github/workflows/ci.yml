@@ -389,8 +389,8 @@ jobs:
             scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
-    needs: analyze-results
-    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' }}
+    needs: [analyze-results, analyze-unit]
+    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' }}
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -433,8 +433,8 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: analyze-results
-    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    needs: [analyze-results, analyze-unit]
+    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -708,6 +708,110 @@ jobs:
         with:
           name: integration-enriched-report
           path: integration-enriched-report.txt
+
+  final-report:
+    name: CI Final Test Summary
+    runs-on: ubuntu-latest
+    needs: [analyze-unit, analyze-results, analyze-e2e, analyze-integration]
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download available summaries
+        uses: actions/download-artifact@v4
+        with:
+          name: tests-summary
+          path: artifacts/summaries/tests
+        continue-on-error: true
+
+      - name: Download unit summary
+        uses: actions/download-artifact@v4
+        with:
+          name: unit-tests-summary
+          path: artifacts/summaries/unit
+        continue-on-error: true
+
+      - name: Download e2e summary
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-tests-summary
+          path: artifacts/summaries/e2e
+        continue-on-error: true
+
+      - name: Download integration summary
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-tests-summary
+          path: artifacts/summaries/integration
+        continue-on-error: true
+
+      - name: Aggregate summaries into final report
+        id: aggregate
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=final-report.txt
+          echo "CI Final Test Summary" > $out
+          echo "Generated (UTC): $(date -u)" >> $out
+          any_failed=false
+
+          gather() {
+            type=$1
+            json="artifacts/summaries/${type}/tests-summary.json"
+            txt="artifacts/summaries/${type}/tests-summary.txt"
+            echo "\n--- ${type^^} ---\n" >> $out
+            if [ -f "$json" ]; then
+              python3 - <<PY >> $out
+import json,sys
+d=json.load(open('$json'))
+total=d.get('total','n/a')
+passed=d.get('passed','n/a')
+failed=d.get('failed',0)
+print(f"Total: {total}, Passed: {passed}, Failed: {failed}")
+PY
+              failed=$(python3 -c "import json;print(int(json.load(open('$json')).get('failed',0)))")
+              if [ "$failed" -gt 0 ]; then any_failed=true; fi
+              if [ -f "$txt" ]; then
+                echo "\nSummary details:" >> $out
+                sed -n '1,200p' "$txt" >> $out
+              fi
+            else
+              echo "(no ${type} summary)" >> $out
+            fi
+          }
+
+          gather unit
+          gather tests
+          gather e2e
+          gather integration
+
+          echo "Wrote $out"
+          echo "any_failed=$any_failed" >> $GITHUB_OUTPUT
+
+      - name: Upload final report
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-test-report
+          path: final-report.txt
+
+      - name: Post final report as PR comment (on failures)
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' && github.event.pull_request != null }}
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          echo "Posting final report to PR #${PR_NUMBER}"
+          body=$(python3 - <<PY
+import json
+print(json.dumps(open('final-report.txt').read()))
+PY
+)
+          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"body\":$body}" "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" > /dev/null
+          echo "Comment posted"
 
   analyze-unit:
     name: Analyze Unit Test Results
