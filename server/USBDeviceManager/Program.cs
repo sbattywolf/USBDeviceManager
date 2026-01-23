@@ -152,22 +152,36 @@ app.MapGet("/favicon.png", () =>
 using (IServiceScope scope = app.Services.CreateScope())
 {
     SimRacingContext context = scope.ServiceProvider.GetRequiredService<SimRacingContext>();
-    try
+    // Retry EnsureCreated a few times to tolerate transient Sqlite races (concurrent DDL, locks)
+    const int maxEnsureAttempts = 3;
+    int attempt = 0;
+    while (true)
     {
-        context.Database.EnsureCreated();
-    }
-    catch (Microsoft.Data.Sqlite.SqliteException ex)
-    {
-        // SQLite may throw if DDL was executed concurrently or intermittently; if the error
-        // indicates the table already exists, treat as benign and continue. Other Sqlite
-        // errors should still surface.
-        if (ex.Message != null && ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+        attempt++;
+        try
         {
-            Console.WriteLine("[DIAG] Database ensure-created encountered existing table; continuing.");
+            context.Database.EnsureCreated();
+            break;
         }
-        else
+        catch (Microsoft.Data.Sqlite.SqliteException ex)
         {
-            throw;
+            // Treat "already exists" as benign; on other transient errors (locked) retry a few times.
+            var msg = ex.Message ?? string.Empty;
+            if (msg.IndexOf("already exists", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                Console.WriteLine("[DIAG] Database ensure-created encountered existing table; continuing.");
+                break;
+            }
+
+            if (attempt >= maxEnsureAttempts)
+            {
+                Console.WriteLine($"[DIAG] EnsureCreated failed after {attempt} attempts: {ex.Message}");
+                throw;
+            }
+
+            // Log and back off before retrying
+            Console.WriteLine($"[DIAG] EnsureCreated attempt {attempt} failed with SqliteException: {ex.Message}. Retrying...");
+            System.Threading.Thread.Sleep(100 * attempt);
         }
     }
 }
@@ -191,9 +205,13 @@ using (IServiceScope scope = app.Services.CreateScope())
 // Diagnostic logging for static files issue: write to diagnostics file
 Console.WriteLine($"[DIAG] ContentRootPath: {app.Environment.ContentRootPath}");
 Console.WriteLine($"[DIAG] WebRootPath: {app.Environment.WebRootPath}");
+// Use TEST_PORT environment variable when available for printed endpoints
+var printedPortEnv = Environment.GetEnvironmentVariable("TEST_PORT");
+int printedPort = 5000;
+if (!string.IsNullOrEmpty(printedPortEnv) && int.TryParse(printedPortEnv, out var p)) { printedPort = p; }
 Console.WriteLine("USB Device Manager Server starting...");
-Console.WriteLine("Dashboard: http://localhost:5000");
-Console.WriteLine("API Documentation: http://localhost:5000/swagger");
+Console.WriteLine($"Dashboard: http://localhost:{printedPort}");
+Console.WriteLine($"API Documentation: http://localhost:{printedPort}/swagger");
 Console.WriteLine("Press Ctrl+C to shut down.");
 
 // Register lifetime events to capture shutdown diagnostics

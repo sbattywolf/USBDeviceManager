@@ -17,7 +17,7 @@
   - TRX scan: no failed tests found in downloaded TRX files for that run.
 
 - **Remaining / follow-ups:**
-  - Validate stability over several CI runs (monitor for recurrence); remove temporary diagnostics once stable.
+  - Validate stability over several CI runs (monitor for recurrence); temporary diagnostics were removed and consolidated in `chore/cleanup-diagnostics`.
   - Ensure any E2E harness that assumed fixed port 5000 reads `TEST_PORT` env var.
   - Consider consolidating health endpoints in docs and tests to consistently use `/api/health`.
 

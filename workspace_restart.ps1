@@ -2,6 +2,10 @@
 Set-StrictMode -Version Latest
 $stopped = @()
 
+# Prefer CI-provided TEST_PORT, fallback to 5000 for local dev
+$port = $env:TEST_PORT
+if (-not $port) { $port = 5000 } else { $port = [int]$port }
+
 # Helper to stop a PID
 function TryStopPid([int]$pid, [string]$label) {
     try {
@@ -12,15 +16,15 @@ function TryStopPid([int]$pid, [string]$label) {
     }
 }
 
-# Stop processes listening on port 5000
+# Stop processes listening on configured port
 try {
-    $tcp = Get-NetTCPConnection -LocalPort 5000 -ErrorAction SilentlyContinue
+    $tcp = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue
     if ($tcp) {
         $pids = $tcp | Select-Object -ExpandProperty OwningProcess -Unique
         foreach ($pid in $pids) { TryStopPid -pid $pid -label 'listener' }
     }
 } catch {
-    $stopped += "Error checking port 5000: $($_.Exception.Message)"
+    $stopped += "Error checking port $port: $($_.Exception.Message)"
 }
 
 # Stop any powershell process running SimRacingAgent.ps1
@@ -51,13 +55,13 @@ try {
 Write-Output "=== Stop Summary ==="
 if ($stopped.Count -gt 0) { $stopped | ForEach-Object { Write-Output $_ } } else { Write-Output 'No matching processes were found to stop.' }
 
-# Confirm port 5000 freed
-$listen = Get-NetTCPConnection -LocalPort 5000 -ErrorAction SilentlyContinue
-if ($listen) { Write-Output ("Port 5000 still in use by: {0}" -f ($listen | Select-Object -ExpandProperty OwningProcess -Unique)) } else { Write-Output 'Port 5000 is free.' }
+# Confirm configured port freed
+$listen = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue
+if ($listen) { Write-Output ("Port $port still in use by: {0}" -f ($listen | Select-Object -ExpandProperty OwningProcess -Unique)) } else { Write-Output ("Port $port is free.") }
 
 # Start server, agent, GUI, and tail logs in separate windows
-Write-Output 'Starting server (dotnet run --project server/USBDeviceManager)...'
-Start-Process -FilePath 'dotnet' -ArgumentList @('run','--project','server/USBDeviceManager','--urls','http://localhost:5000') -WindowStyle Normal
+Write-Output "Starting server (dotnet run --project server/USBDeviceManager --urls http://localhost:$port)..."
+Start-Process -FilePath 'dotnet' -ArgumentList @('run','--project','server/USBDeviceManager','--urls',"http://localhost:$port") -WindowStyle Normal
 Start-Sleep -Seconds 3
 
 Write-Output 'Starting agent (SimRacingAgent.ps1)...'
