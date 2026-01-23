@@ -2,6 +2,12 @@
 **/bin/
 **/obj/
 
+# PowerShell test harness artifacts
+agent/SimRacingAgent.Tests/run_tests_transcript_*.txt
+
+# PowerShell test reports
+scripts/tmp/reports/
+
 # Dotnet temporary files
 *.user
 *.suo
