@@ -28,10 +28,7 @@ $errFile = Join-Path $tmpDir "server.err.log"
 # process exits quickly and Start-Process hasn't flushed output yet. If the
 # files are already present and locked by a running process, leave them alone.
 if (-not (Test-Path $outFile)) { New-Item -Path $outFile -ItemType File -Force | Out-Null }
-# For backward compatibility some scripts expect server.out.log; create a
-# placeholder that will be uploaded if present.
-$outPlaceholder = Join-Path $tmpDir "server.out.log"
-if (-not (Test-Path $outPlaceholder)) { New-Item -Path $outPlaceholder -ItemType File -Force | Out-Null }
+# Note: no placeholder files created here to avoid leaving temporary artifacts in CI.
 if (-not (Test-Path $errFile)) { New-Item -Path $errFile -ItemType File -Force | Out-Null }
 
 try {
@@ -55,23 +52,18 @@ try {
     $p = Get-Process -Id $proc.Id -ErrorAction SilentlyContinue
 } catch { $p = $null }
 if (-not $p) {
-    Write-Error "Server process $($proc.Id) terminated early; capturing logs."
-    $diagFile = Join-Path $tmpDir "start-server-diagnostics.log"
-    "Server process $($proc.Id) exited shortly after start" | Out-File -FilePath $diagFile -Encoding UTF8
-    if (Test-Path $outFile) { "--- server.out (tail 200) ---" | Out-File -FilePath $diagFile -Append; Get-Content $outFile -Tail 200 | Out-File -FilePath $diagFile -Append }
-    if (Test-Path $errFile) { "--- server.err (tail 200) ---" | Out-File -FilePath $diagFile -Append; Get-Content $errFile -Tail 200 | Out-File -FilePath $diagFile -Append }
+    Write-Error "Server process $($proc.Id) terminated early; printing available logs to console."
+    if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
+    if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
     exit 1
 }
 
-& "$scriptDir/poll-health.ps1" -Url "http://$($bindAddress):$Port/health" -TimeoutSec $TimeoutSec
+& "$scriptDir/poll-health.ps1" -Url "http://$($bindAddress):$Port/api/health" -TimeoutSec $TimeoutSec
 
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "Server did not become healthy within timeout ($TimeoutSec seconds). See server output."
-    $diagFile = Join-Path $tmpDir "start-server-diagnostics.log"
-    Write-Host "Writing diagnostics to $diagFile"
-    "Server failed to become healthy within $TimeoutSec seconds" | Out-File -FilePath $diagFile -Encoding UTF8
-    if (Test-Path $outFile) { "--- server.out (tail 200) ---" | Out-File -FilePath $diagFile -Append; Get-Content $outFile -Tail 200 | Out-File -FilePath $diagFile -Append }
-    if (Test-Path $errFile) { "--- server.err (tail 200) ---" | Out-File -FilePath $diagFile -Append; Get-Content $errFile -Tail 200 | Out-File -FilePath $diagFile -Append }
+    Write-Error "Server did not become healthy within timeout ($TimeoutSec seconds). Printing available logs to console."
+    if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
+    if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
     exit 1
 }
 
