@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="15" failures="5" skipped="0" time="0,314673">
+  <testsuite name="AgentUnit" tests="15" failures="5" skipped="0" time="0,2761457">
+    <testcase name="Test1" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test2" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test3" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test4" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test5" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test6" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test7" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test8" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test9" classname="AgentUnit" time="0.1"/>
+    <testcase name="Test10" classname="AgentUnit" time="0.1"/>
+    <testcase name="FailedTest1" classname="AgentUnit" time="0.1">
+      <failure message="Test failed">Test assertion failed</failure>
+    </testcase>
+    <testcase name="FailedTest2" classname="AgentUnit" time="0.1">
+      <failure message="Test failed">Test assertion failed</failure>
+    </testcase>
+    <testcase name="FailedTest3" classname="AgentUnit" time="0.1">
+      <failure message="Test failed">Test assertion failed</failure>
+    </testcase>
+    <testcase name="FailedTest4" classname="AgentUnit" time="0.1">
+      <failure message="Test failed">Test assertion failed</failure>
+    </testcase>
+    <testcase name="FailedTest5" classname="AgentUnit" time="0.1">
+      <failure message="Test failed">Test assertion failed</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
+

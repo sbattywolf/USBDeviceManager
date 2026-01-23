@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="10" failures="2" skipped="0" time="0,7078085">
+  <testsuite name="AgentRegression" tests="10" failures="2" skipped="0" time="0,6786343">
+    <testcase name="Test1" classname="AgentRegression" time="0.1"/>
+    <testcase name="Test2" classname="AgentRegression" time="0.1"/>
+    <testcase name="Test3" classname="AgentRegression" time="0.1"/>
+    <testcase name="Test4" classname="AgentRegression" time="0.1"/>
+    <testcase name="Test5" classname="AgentRegression" time="0.1"/>
+    <testcase name="Test6" classname="AgentRegression" time="0.1"/>
+    <testcase name="Test7" classname="AgentRegression" time="0.1"/>
+    <testcase name="Test8" classname="AgentRegression" time="0.1"/>
+    <testcase name="FailedTest1" classname="AgentRegression" time="0.1">
+      <failure message="Test failed">Test assertion failed</failure>
+    </testcase>
+    <testcase name="FailedTest2" classname="AgentRegression" time="0.1">
+      <failure message="Test failed">Test assertion failed</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
+

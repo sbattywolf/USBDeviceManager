@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite name="AgentCore" tests="10" failures="4">
+  <testcase classname="AgentCore" name="Get-DefaultConfiguration returns valid agent config"></testcase>
+  <testcase classname="AgentCore" name="Test-Configuration validates agent settings correctly"></testcase>
+  <testcase classname="AgentCore" name="Save-Configuration and Load-Configuration work for agent"></testcase>
+  <testcase classname="AgentCore" name="Configuration paths are agent-specific"></testcase>
+  <testcase classname="AgentCore" name="Export-Configuration uses agent naming"></testcase>
+  <testcase classname="AgentCore" name="Test-AgentRunning detects agent instances correctly"></testcase>
+  <testcase classname="AgentCore" name="Set-AgentLock creates lock file with correct data"></testcase>
+  <testcase classname="AgentCore" name="Write-AgentLog writes agent-specific logs"><failure message="Log file should be created"/></testcase>
+  <testcase classname="AgentCore" name="Get-AgentStatus provides comprehensive agent information"></testcase>
+  <testcase classname="AgentCore" name="Clear-AgentLock removes lock file properly"></testcase>
+</testsuite>
+<testsuite name="AgentIntegration" tests="10" failures="10">
+  <testcase classname="AgentIntegration" name="Agent health check workflow executes end-to-end"><failure message="Termine &apos;Invoke-HealthCheckWorkflow&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent initialization workflow sets up all components"><failure message="Termine &apos;Initialize-AgentWorkflow&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent shutdown workflow cleanly stops all components"><failure message="Termine &apos;Stop-AgentWorkflow&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent handles component failures gracefully"><failure message="Termine &apos;Invoke-HealthCheckWorkflow&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent handles configuration changes dynamically"><failure message="Impossibile trovare un parametro corrispondente al nome &apos;Verifiable&apos;."/></testcase>
+  <testcase classname="AgentIntegration" name="USB and Process monitors coordinate data collection"><failure message="Termine &apos;Get-CoordinatedMonitoringData&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent handles real-time monitoring events across components"><failure message="Termine &apos;Initialize-MonitoringEvents&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent aggregates health across all monitoring components"><failure message="Termine &apos;Get-AggregatedHealthScore&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent tracks performance across monitoring components"><failure message="Termine &apos;Get-MonitoringPerformanceMetrics&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent maintains consistent state across components"><failure message="Termine &apos;Sync-ComponentStates&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+</testsuite>
+<testsuite name="AgentMonitoring" tests="10" failures="0">
+  <testcase classname="AgentMonitoring" name="Get-USBDevices returns device collection"></testcase>
+  <testcase classname="AgentMonitoring" name="Get-USBHealthCheck calculates agent-specific metrics"></testcase>
+  <testcase classname="AgentMonitoring" name="Initialize-USBMonitoring sets up agent monitoring"></testcase>
+  <testcase classname="AgentMonitoring" name="USB operations handle WMI failures gracefully"></testcase>
+  <testcase classname="AgentMonitoring" name="USB device filtering works for agent monitoring"></testcase>
+  <testcase classname="AgentMonitoring" name="Get-ProcessHealthCheck provides agent process metrics"></testcase>
+  <testcase classname="AgentMonitoring" name="Test-ManagedProcess validates agent process definitions"></testcase>
+  <testcase classname="AgentMonitoring" name="Start-ManagedProcess handles agent process startup"></testcase>
+  <testcase classname="AgentMonitoring" name="Get-ProcessMetrics provides agent-relevant metrics"></testcase>
+  <testcase classname="AgentMonitoring" name="Calculate-ProcessHealth uses agent-specific scoring"></testcase>
+</testsuite>
+<testsuite name="AgentRegression" tests="10" failures="10">
+  <testcase classname="AgentRegression" name="Agent maintains backwards compatibility with existing config files"><failure message="Termine &apos;Import-AgentConfiguration&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentRegression" name="Health check API maintains stable response format"><failure message="Termine &apos;Get-AgentHealthStatus&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentRegression" name="Agent performance meets established benchmarks"><failure message="Termine &apos;Get-AgentHealthStatus&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentRegression" name="Agent event handling remains stable across scenarios"><failure message="Termine &apos;Register-MonitoringEvent&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentRegression" name="Agent error handling maintains consistent behavior"><failure message="Error should be categorized as ServiceUnavailable for USB service unavailable"/></testcase>
+  <testcase classname="AgentRegression" name="Agent functions correctly across PowerShell versions"><failure message="Termine &apos;Test-AgentCompatibility&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentRegression" name="Agent supports expected Windows versions"><failure message="Termine &apos;Test-WindowsCompatibility&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentRegression" name="Agent module dependencies remain stable"><failure message="Termine &apos;Test-ModuleDependency&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+  <testcase classname="AgentRegression" name="Agent CLI maintains backwards compatibility"><failure message="Command Get-AgentStatus should include property Status"/></testcase>
+  <testcase classname="AgentRegression" name="Agent handles configuration format migrations"><failure message="Termine &apos;ConvertTo-ConfigV2&apos; non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l&apos;ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare."/></testcase>
+</testsuite>
+</testsuites>
+

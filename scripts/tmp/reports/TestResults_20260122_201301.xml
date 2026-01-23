@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite name="AgentCore" tests="10" failures="4">
+  <testcase classname="AgentCore" name="Get-DefaultConfiguration returns valid agent config"></testcase>
+  <testcase classname="AgentCore" name="Test-Configuration validates agent settings correctly"></testcase>
+  <testcase classname="AgentCore" name="Save-Configuration and Load-Configuration work for agent"></testcase>
+  <testcase classname="AgentCore" name="Configuration paths are agent-specific"></testcase>
+  <testcase classname="AgentCore" name="Export-Configuration uses agent naming"></testcase>
+  <testcase classname="AgentCore" name="Test-AgentRunning detects agent instances correctly"></testcase>
+  <testcase classname="AgentCore" name="Set-AgentLock creates lock file with correct data"></testcase>
+  <testcase classname="AgentCore" name="Write-AgentLog writes agent-specific logs"><failure message="Log should contain test message"/></testcase>
+  <testcase classname="AgentCore" name="Get-AgentStatus provides comprehensive agent information"></testcase>
+  <testcase classname="AgentCore" name="Clear-AgentLock removes lock file properly"></testcase>
+</testsuite>
+<testsuite name="AgentIntegration" tests="10" failures="8">
+  <testcase classname="AgentIntegration" name="Agent health check workflow executes end-to-end"><failure message="Should include overall health score"/></testcase>
+  <testcase classname="AgentIntegration" name="Agent initialization workflow sets up all components"><failure message="Mock Initialize-AgentConfiguration was not called expected times. Should initialize configuration first"/></testcase>
+  <testcase classname="AgentIntegration" name="Agent shutdown workflow cleanly stops all components"><failure message="Mock Stop-USBMonitoring was not called expected times. Should stop USB monitoring"/></testcase>
+  <testcase classname="AgentIntegration" name="Agent handles component failures gracefully"><failure message="Impossibile chiamare un metodo su un&apos;espressione con valore null."/></testcase>
+  <testcase classname="AgentIntegration" name="Agent handles configuration changes dynamically"><failure message="Impossibile trovare un parametro corrispondente al nome &apos;Verifiable&apos;."/></testcase>
+  <testcase classname="AgentIntegration" name="USB and Process monitors coordinate data collection"></testcase>
+  <testcase classname="AgentIntegration" name="Agent handles real-time monitoring events across components"></testcase>
+  <testcase classname="AgentIntegration" name="Agent aggregates health across all monitoring components"><failure message="Overall score should be 0-100"/></testcase>
+  <testcase classname="AgentIntegration" name="Agent tracks performance across monitoring components"><failure message="Should include system metrics"/></testcase>
+  <testcase classname="AgentIntegration" name="Agent maintains consistent state across components"><failure message="Impossibile chiamare un metodo su un&apos;espressione con valore null."/></testcase>
+</testsuite>
+<testsuite name="AgentMonitoring" tests="10" failures="0">
+  <testcase classname="AgentMonitoring" name="Get-USBDevices returns device collection"></testcase>
+  <testcase classname="AgentMonitoring" name="Get-USBHealthCheck calculates agent-specific metrics"></testcase>
+  <testcase classname="AgentMonitoring" name="Initialize-USBMonitoring sets up agent monitoring"></testcase>
+  <testcase classname="AgentMonitoring" name="USB operations handle WMI failures gracefully"></testcase>
+  <testcase classname="AgentMonitoring" name="USB device filtering works for agent monitoring"></testcase>
+  <testcase classname="AgentMonitoring" name="Get-ProcessHealthCheck provides agent process metrics"></testcase>
+  <testcase classname="AgentMonitoring" name="Test-ManagedProcess validates agent process definitions"></testcase>
+  <testcase classname="AgentMonitoring" name="Start-ManagedProcess handles agent process startup"></testcase>
+  <testcase classname="AgentMonitoring" name="Get-ProcessMetrics provides agent-relevant metrics"></testcase>
+  <testcase classname="AgentMonitoring" name="Calculate-ProcessHealth uses agent-specific scoring"></testcase>
+</testsuite>
+<testsuite name="AgentRegression" tests="10" failures="4">
+  <testcase classname="AgentRegression" name="Agent maintains backwards compatibility with existing config files"><failure message="Should preserve agent name (expected: SimRacingAgent, actual: )"/></testcase>
+  <testcase classname="AgentRegression" name="Health check API maintains stable response format"></testcase>
+  <testcase classname="AgentRegression" name="Agent performance meets established benchmarks"></testcase>
+  <testcase classname="AgentRegression" name="Agent event handling remains stable across scenarios"></testcase>
+  <testcase classname="AgentRegression" name="Agent error handling maintains consistent behavior"><failure message="Error should be categorized as ServiceUnavailable for USB service unavailable"/></testcase>
+  <testcase classname="AgentRegression" name="Agent functions correctly across PowerShell versions"></testcase>
+  <testcase classname="AgentRegression" name="Agent supports expected Windows versions"></testcase>
+  <testcase classname="AgentRegression" name="Agent module dependencies remain stable"></testcase>
+  <testcase classname="AgentRegression" name="Agent CLI maintains backwards compatibility"><failure message="Command Get-AgentStatus should include property UpTime"/></testcase>
+  <testcase classname="AgentRegression" name="Agent handles configuration format migrations"><failure message="Should migrate agent name (expected: SimRacingAgent, actual: )"/></testcase>
+</testsuite>
+</testsuites>
+

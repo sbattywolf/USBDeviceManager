@@ -9,8 +9,10 @@
     Tests focus on agent monitoring capabilities without external system dependencies.
 #>
 
-# Import shared test framework
-Import-Module "$PSScriptRoot\..\..\shared\TestFramework.psm1" -Force
+# Import shared test framework (dot-source to expose helpers into this scope)
+# Ensure TestFramework helpers are available in this scope; import module or dot-source as fallback
+Import-Module "$PSScriptRoot\..\..\shared\TestFramework.psm1" -ErrorAction SilentlyContinue
+if (-not (Get-Command -Name Start-TestSession -ErrorAction SilentlyContinue)) { . "$PSScriptRoot\..\..\shared\TestFramework.psm1" }
 
 # Import agent monitoring modules
 $AgentPath = "$PSScriptRoot\..\..\..\agent"
@@ -134,7 +136,7 @@ function Test-AgentUSBMonitoring {
         
     }
     finally {
-        Clear-AllMocks
+           if (Get-Command -Name Clear-AllMocks -ErrorAction SilentlyContinue) { Clear-AllMocks }
     }
     
     return Complete-TestSession
@@ -259,7 +261,7 @@ function Test-AgentProcessManager {
         
     }
     finally {
-        Clear-AllMocks
+           if (Get-Command -Name Clear-AllMocks -ErrorAction SilentlyContinue) { Clear-AllMocks }
     }
     
     return Complete-TestSession
@@ -306,9 +308,9 @@ function Invoke-AgentMonitoringTests {
         }
         
         # Summary
-        $totalPassed = ($allResults | ForEach-Object { $_.Results.Passed } | Measure-Object -Sum).Sum
-        $totalFailed = ($allResults | ForEach-Object { $_.Results.Failed } | Measure-Object -Sum).Sum
-        $totalSkipped = ($allResults | ForEach-Object { $_.Results.Skipped } | Measure-Object -Sum).Sum
+        $totalPassed = ($allResults | ForEach-Object { $_.Summary.Passed } | Measure-Object -Sum).Sum
+        $totalFailed = ($allResults | ForEach-Object { $_.Summary.Failed } | Measure-Object -Sum).Sum
+        $totalSkipped = ($allResults | ForEach-Object { $_.Summary.Skipped } | Measure-Object -Sum).Sum
         
         Write-Host "Agent Monitoring Test Summary" -ForegroundColor Cyan
         Write-Host "============================" -ForegroundColor Cyan
@@ -328,16 +330,17 @@ function Invoke-AgentMonitoringTests {
         }
     }
     finally {
-        Clear-AllMocks
+           if (Get-Command -Name Clear-AllMocks -ErrorAction SilentlyContinue) { Clear-AllMocks }
     }
 }
 
-# Export functions when run as module
-# Only export when loaded as a module (inside module context `$PSModuleInfo` exists)
-if ($PSModuleInfo) {
+# Export functions when run as module (no-op when executed as a script)
+try {
     Export-ModuleMember -Function @(
         'Test-AgentUSBMonitoring',
         'Test-AgentProcessManager',
         'Invoke-AgentMonitoringTests'
     )
+} catch {
+    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
 }

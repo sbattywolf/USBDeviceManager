@@ -45,6 +45,14 @@ namespace USBDeviceManager.Services.Platform
             }))
             {
                 var exit = await tcs.Task.ConfigureAwait(false);
+
+                // If cancellation was requested, prefer propagating cancellation to the caller
+                // even if the process exited (race between kill and exited event).
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    throw new TaskCanceledException();
+                }
+
                 return new ShellResult(exit, stdOutBuilder.ToString(), stdErrBuilder.ToString());
             }
         }

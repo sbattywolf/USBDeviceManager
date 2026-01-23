@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite name="AgentCore" tests="0" failures="0">
+</testsuite>
+<testsuite name="AgentMonitoring" tests="0" failures="0">
+</testsuite>
+<testsuite name="AgentIntegration" tests="0" failures="0">
+</testsuite>
+<testsuite name="AgentRegression" tests="0" failures="0">
+</testsuite>
+</testsuites>
+

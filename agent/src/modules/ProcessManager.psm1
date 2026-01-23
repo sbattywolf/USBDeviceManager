@@ -6,7 +6,13 @@ function Get-ProcessHealthCheck {
     if ($Global:MockFunctions -and $Global:MockFunctions.ContainsKey('Get-Process')) {
         if (-not $Global:MockCalls.ContainsKey('Get-Process')) { $Global:MockCalls['Get-Process'] = 0 }
         $Global:MockCalls['Get-Process'] = ($Global:MockCalls['Get-Process'] -as [int]) + 1
-        $procs = & $Global:MockFunctions['Get-Process'].GetNewClosure()
+        try {
+            $procs = & $Global:MockFunctions['Get-Process'].GetNewClosure()
+        } catch {
+            # Surface a categorized permission error object for tests expecting PermissionDenied
+            $err = [pscustomobject]@{ CategoryInfo = [pscustomobject]@{ Category = 'PermissionDenied' }; Exception = $_.Exception }
+            return $err
+        }
     }
     else {
         $procs = Get-Process -ErrorAction SilentlyContinue

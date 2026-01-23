@@ -1,0 +1,363 @@
+Trascrizione avviata. File di output: E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/run_tests_transcript_20260123_112453.txt
+DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
+DEBUG: Global Get-DefaultConfiguration available: True
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un modulo.
+DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
+DEBUG: Global Get-DefaultConfiguration available: True
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un modulo.
+DEBUG: Invoke-CompleteTestSuite started at 01/23/2026 11:24:53
+DEBUG: No TestCategories specified; running default set.
+DEBUG: IncludePerformance=False StopOnFirstFailure=True GenerateReport=True ReportPath=E:/Workspaces/Git/SimRacing/USBDeviceManager/scripts/tmp/reports Parallel=False ShowVerbose=False
+SimRacing Complete Test Suite Execution
+=======================================
+Started at: 2026-01-23 11:24:53
+
+Test Categories to Execute:
+  V AgentUnit
+  V AgentIntegration
+  V AgentRegression
+  V ApplicationAPI
+  V ApplicationIntegration
+
+Test reports will be saved to: E:/Workspaces/Git/SimRacing/USBDeviceManager/scripts/tmp/reports
+
+Executing AgentUnit Tests...
+========================
+Starting SimRacing Agent Core Unit Tests
+=======================================
+
+Running agent test suite: ConfigManager
+[PASS] ConfigManager - Get-DefaultConfiguration returns valid agent config
+[PASS] ConfigManager - Test-Configuration validates agent settings correctly
+[PASS] ConfigManager - Save-Configuration and Load-Configuration work for agent
+[PASS] ConfigManager - Configuration paths are agent-specific
+[PASS] ConfigManager - Export-Configuration uses agent naming
+
+Running agent test suite: AgentCore
+[PASS] AgentCore - Test-AgentRunning detects agent instances correctly
+[PASS] AgentCore - Set-AgentLock creates lock file with correct data
+[2026-01-23 11:24:53] [Info] [Test] Test agent message
+[PASS] AgentCore - Write-AgentLog writes agent-specific logs
+[PASS] AgentCore - Get-AgentStatus provides comprehensive agent information
+[PASS] AgentCore - Clear-AgentLock removes lock file properly
+
+Agent Core Test Summary
+======================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+Starting SimRacing Agent Monitoring Unit Tests
+=============================================
+
+Running agent monitoring test suite: USBMonitoring
+[PASS] USBMonitor - Get-USBDevices returns device collection
+[PASS] USBMonitor - Get-USBHealthCheck calculates agent-specific metrics
+[PASS] USBMonitor - Initialize-USBMonitoring sets up agent monitoring
+DEBUG: WMI/Get-WmiObject mock failed: WMI service unavailable. Surface ServiceUnavailable error.
+[PASS] USBMonitor - USB operations handle WMI failures gracefully
+[PASS] USBMonitor - USB device filtering works for agent monitoring
+
+Running agent monitoring test suite: ProcessManager
+[PASS] ProcessManager - Get-ProcessHealthCheck provides agent process metrics
+[PASS] ProcessManager - Test-ManagedProcess validates agent process definitions
+[PASS] ProcessManager - Start-ManagedProcess handles agent process startup
+[PASS] ProcessManager - Get-ProcessMetrics provides agent-relevant metrics
+[PASS] ProcessManager - Calculate-ProcessHealth uses agent-specific scoring
+
+Agent Monitoring Test Summary
+============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentUnit Test Results:
+  Duration: 00:00.412
+  Passed:   20
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing AgentIntegration Tests...
+===============================
+Starting SimRacing Agent Integration Tests
+==========================================
+
+Running agent integration test suite: HealthCheckWorkflow
+DEBUG: Get-USBHealthCheck returned type=System.Object[] value=[
+    5,
+    {
+        "value":  "\/Date(1769163893994)\/",
+        "DisplayHint":  2,
+        "DateTime":  "venerdç 23 gennaio 2026 11:24:53"
+    },
+    100,
+    5,
+    {
+        "HealthyDevices":  5,
+        "Timestamp":  {
+                          "value":  "\/Date(1769163893994)\/",
+                          "DisplayHint":  2,
+                          "DateTime":  "venerdç 23 gennaio 2026 11:24:53"
+                      },
+        "OverallHealth":  100,
+        "DeviceCount":  5
+    }
+]
+DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
+    {
+        "value":  "\/Date(1769163894005)\/",
+        "DisplayHint":  2,
+        "DateTime":  "venerdç 23 gennaio 2026 11:24:54"
+    },
+    3,
+    95,
+    3,
+    157286400,
+    {
+        "Timestamp":  {
+                          "value":  "\/Date(1769163894005)\/",
+                          "DisplayHint":  2,
+                          "DateTime":  "venerdç 23 gennaio 2026 11:24:54"
+                      },
+        "HealthyProcesses":  3,
+        "OverallHealth":  95,
+        "ProcessCount":  3,
+        "MemoryUsage":  157286400
+    }
+]
+DEBUG: ComponentResult USB result type=System.Collections.Hashtable
+DEBUG: ComponentResult Process result type=System.Collections.Hashtable
+DEBUG: Returning health result type=System.Management.Automation.PSCustomObject payload={
+    "OverallHealth":  98,
+    "ComponentResults":  [
+                             {
+                                 "Result":  {
+                                                "HealthyDevices":  5,
+                                                "Timestamp":  {
+                                                                  "value":  "\/Date(1769163893994)\/",
+                                                                  "DisplayHint":  2,
+                                                                  "DateTime":  "venerdç 23 gennaio 2026 11:24:53"
+                                                              },
+                                                "OverallHealth":  100,
+                                                "DeviceCount":  5
+                                            },
+                                 "Name":  "USB"
+                             },
+                             {
+                                 "Result":  {
+                                                "Timestamp":  {
+                                                                  "value":  "\/Date(1769163894005)\/",
+                                                                  "DisplayHint":  2,
+                                                                  "DateTime":  "venerdç 23 gennaio 2026 11:24:54"
+                                                              },
+                                                "HealthyProcesses":  3,
+                                                "OverallHealth":  95,
+                                                "ProcessCount":  3,
+                                                "MemoryUsage":  157286400
+                                            },
+                                 "Name":  "Process"
+                             }
+                         ],
+    "Timestamp":  "2026-01-23T11:24:54.0217457+01:00"
+}
+[PASS] AgentWorkflow - Agent health check workflow executes end-to-end
+[PASS] AgentWorkflow - Agent initialization workflow sets up all components
+[PASS] AgentWorkflow - Agent shutdown workflow cleanly stops all components
+DEBUG: Get-USBHealthCheck returned: <null>
+DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
+    2,
+    90,
+    2,
+    {
+        "HealthyProcesses":  2,
+        "OverallHealth":  90,
+        "ProcessCount":  2
+    }
+]
+DEBUG: ComponentResult Process result type=System.Collections.Hashtable
+DEBUG: Returning health result type=System.Management.Automation.PSCustomObject payload={
+    "OverallHealth":  90,
+    "ComponentResults":  [
+                             {
+                                 "Result":  {
+                                                "HealthyProcesses":  2,
+                                                "OverallHealth":  90,
+                                                "ProcessCount":  2
+                                            },
+                                 "Name":  "Process"
+                             }
+                         ],
+    "Timestamp":  "2026-01-23T11:24:54.0611637+01:00",
+    "ComponentErrors":  [
+                            {
+                                "Error":  "USB monitoring service unavailable",
+                                "Name":  "USB"
+                            }
+                        ]
+}
+[PASS] AgentWorkflow - Agent handles component failures gracefully
+[2026-01-23 11:24:54.096] [Info] [ConfigManager] Configuration loaded from: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\agent-config.json
+[PASS] AgentWorkflow - Agent handles configuration changes dynamically
+
+Running agent integration test suite: MonitoringIntegration
+[PASS] MonitoringIntegration - USB and Process monitors coordinate data collection
+[PASS] MonitoringIntegration - Agent handles real-time monitoring events across components
+[PASS] MonitoringIntegration - Agent aggregates health across all monitoring components
+[PASS] MonitoringIntegration - Agent tracks performance across monitoring components
+[PASS] MonitoringIntegration - Agent maintains consistent state across components
+
+Agent Integration Test Summary
+==============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentIntegration Test Results:
+  Duration: 00:00.253
+  Passed:   10
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing AgentRegression Tests...
+==============================
+Starting SimRacing Agent Regression Tests
+=========================================
+
+Running agent regression test suite: CoreRegression
+DEBUG: Import-AgentConfiguration Test-Path via mock returned=True
+DEBUG: Import-AgentConfiguration invoked stored mock closure (args/no-args), raw type=System.String
+DEBUG: Import-AgentConfiguration parsed obj type=System.Management.Automation.PSCustomObject
+DEBUG: Import-AgentConfiguration found MonitoringSettings.USBPollingInterval=30
+DEBUG: LoadedConfig.MonitoringSettings.USBPollingInterval = [30] (type: System.Int32)
+[PASS] ConfigRegression - Agent maintains backwards compatibility with existing config files
+[PASS] APIRegression - Health check API maintains stable response format
+[PASS] PerformanceRegression - Agent performance meets established benchmarks
+[PASS] EventRegression - Agent event handling remains stable across scenarios
+DEBUG: WMI/Get-WmiObject mock failed: The RPC server is unavailable. Surface ServiceUnavailable error.
+DEBUG-CATCH: caught exception type=System.Management.Automation.ErrorRecord Category=ResourceUnavailable
+DEBUG-CATCH-DUMP: Exception full dump:
+The RPC server is unavailable
+
+
+PSMessageDetails      : 
+Exception             : System.Management.Automation.RuntimeException: The RPC 
+                        server is unavailable
+TargetObject          : 
+CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+FullyQualifiedErrorId : WMIServiceUnavailable
+ErrorDetails          : 
+InvocationInfo        : System.Management.Automation.InvocationInfo
+ScriptStackTrace      : in Get-USBDevices, E:\Workspaces\Git\SimRacing\USBDeviceM
+                        anager\agent\src\modules\USBMonitor.psm1: riga 65
+                        in <ScriptBlock>, E:\Workspaces\Git\SimRacing\USBDeviceMa
+                        nager\agent\SimRacingAgent.Tests\Regression\AgentRegressi
+                        onTests.ps1: riga 227
+                        in Invoke-Test, E:\Workspaces\Git\SimRacing\USBDeviceMana
+                        ger\agent\SimRacingAgent.Tests\shared\TestFramework.psm1:
+                         riga 16
+                        in Test-AgentCoreRegression, E:\Workspaces\Git\SimRacing\
+                        USBDeviceManager\agent\SimRacingAgent.Tests\Regression\Ag
+                        entRegressionTests.ps1: riga 197
+                        in Invoke-AgentRegressionTests, E:\Workspaces\Git\SimRaci
+                        ng\USBDeviceManager\agent\SimRacingAgent.Tests\Regression
+                        \AgentRegressionTests.ps1: riga 586
+                        in Invoke-CompleteTestSuite, E:\Workspaces\Git\SimRacing\
+                        USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps
+                        1: riga 172
+                        in Invoke-CICDTestSuite, E:\Workspaces\Git\SimRacing\USBD
+                        eviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1: 
+                        riga 496
+                        in <ScriptBlock>, <Nessun file>: riga 6
+PipelineIterationInfo : {}
+
+
+
+
+DEBUG: Import-AgentConfiguration Test-Path native returned=False
+[PASS] ErrorRegression - Agent error handling maintains consistent behavior
+
+Running agent regression test suite: CompatibilityRegression
+[PASS] CompatibilityRegression - Agent functions correctly across PowerShell versions
+[PASS] CompatibilityRegression - Agent supports expected Windows versions
+[PASS] CompatibilityRegression - Agent module dependencies remain stable
+[PASS] CompatibilityRegression - Agent CLI maintains backwards compatibility
+DEBUG: ConvertTo-ConfigV2 received V1Config = {
+    "usb_polling_interval":  30,
+    "log_level":  "info",
+    "agent_name":  "SimRacingAgent",
+    "process_monitoring":  true
+}
+DEBUG: ConvertTo-ConfigV2 lookup keys = agent_name,log_level,usb_polling_interval,process_monitoring
+DEBUG: lookup[agent_name] = SimRacingAgent (type: System.String)
+DEBUG: lookup[log_level] = info (type: System.String)
+DEBUG: lookup[usb_polling_interval] = 30 (type: System.Int32)
+DEBUG: lookup[process_monitoring] = True (type: System.Boolean)
+DEBUG: ConvertTo-ConfigV2 received V1Config = {
+    "usb_polling_interval":  30,
+    "log_level":  "info",
+    "agent_name":  "SimRacingAgent",
+    "process_monitoring":  true
+}
+DEBUG: ConvertTo-ConfigV2 lookup keys = agent_name,log_level,usb_polling_interval,process_monitoring
+DEBUG: lookup[agent_name] = SimRacingAgent (type: System.String)
+DEBUG: lookup[log_level] = info (type: System.String)
+DEBUG: lookup[usb_polling_interval] = 30 (type: System.Int32)
+DEBUG: lookup[process_monitoring] = True (type: System.Boolean)
+[FAIL] CompatibilityRegression - Agent handles configuration format migrations : Termine 'if' non riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script. Controllare l'ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.
+Stopping agent regression tests due to failure in CompatibilityRegression
+Agent Regression Test Summary
+=============================
+Total Passed:  9
+Total Failed:  1
+Total Skipped: 0
+Overall Result: FAILURE
+
+AgentRegression Test Results:
+  Duration: 00:00.589
+  Passed:   9
+  Failed:   1
+  Skipped:  0
+  Status:   FAILURE
+
+Stopping test execution due to failure in AgentRegression tests
+Overall Test Suite Results
+==========================
+Total Duration:    00:00:01.309
+Categories Run:    3
+Total Tests:       40
+Total Passed:      39
+Total Failed:      1
+Total Skipped:     0
+Success Rate:      97.5%
+Overall Status:    FAILURE
+
+Generating Test Reports...
+DEBUG: Preparing reports; timestamp=20260123_112454; ReportPath=E:/Workspaces/Git/SimRacing/USBDeviceManager/scripts/tmp/reports
+DEBUG: Exporting JUnit XML to E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\tmp\reports\TestResults_20260123_112454.xml
+DEBUG: Exporting HTML report to E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\tmp\reports\TestResults_20260123_112454.html
+Reports generated:
+  XML:  E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\tmp\reports\TestResults_20260123_112454.xml
+  HTML: E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\tmp\reports\TestResults_20260123_112454.html
+  JSON: E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\tmp\reports\TestResults_20260123_112454.json
+
+
+Name                           Value                                             
+----                           -----                                             
+Summary                        {Skipped, TotalTests, Failed, Passed}             
+TotalDuration                  00:00:01.3097338                                  
+TestCategories                 {System.Collections.Hashtable, System.Collectio...
+StartTime                      23/01/2026 11:24:53                               
+EndTime                        23/01/2026 11:24:54                               
+OverallSuccess                 False                                             
+DEBUG: Cleanup exception: Termine 'Clear-TestEnvironment' non riconosciuto come nome di cmdlet, funzione, 
+programma eseguibile o file script. Controllare l'ortografia del nome o 
+verificare che il percorso sia incluso e corretto, quindi riprovare.
+
+Trascrizione arrestata. File di output: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\run_tests_transcript_20260123_112453.txt
+TRANSCRIPT:E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/run_tests_transcript_20260123_112453.txt
+
+

@@ -1,0 +1,373 @@
+﻿**********************
+Inizio trascrizione Windows PowerShell
+Ora di inizio: 20260123090404
+Nome utente: LITTLE_BEAST\sbatt
+Esegui come utente: LITTLE_BEAST\sbatt
+Nome configurazione: 
+Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand JAB0AHIAYQBuAHMAIAA9ACAAIgBFADoALwBXAG8AcgBrAHMAcABhAGMAZQBzAC8ARwBpAHQALwBTAGkAbQBSAGEAYwBpAG4AZwAvAFUAUwBCAEQAZQB2AGkAYwBlAE0AYQBuAGEAZwBlAHIALwBhAGcAZQBuAHQALwBTAGkAbQBSAGEAYwBpAG4AZwBBAGcAZQBuAHQALgBUAGUAcwB0AHMALwByAHUAbgBfAHQAZQBzAHQAcwBfAHQAcgBhAG4AcwBjAHIAaQBwAHQAXwAkACgARwBlAHQALQBEAGEAdABlACAALQBGAG8AcgBtAGEAdAAgAHkAeQB5AHkATQBNAGQAZABfAEgASABtAG0AcwBzACkALgB0AHgAdAAiAA0ACgBTAHQAYQByAHQALQBUAHIAYQBuAHMAYwByAGkAcAB0ACAALQBQAGEAdABoACAAJAB0AHIAYQBuAHMAIAAtAEYAbwByAGMAZQANAAoAdAByAHkAIAB7AA0ACgAJACQAVgBlAHIAYgBvAHMAZQBQAHIAZQBmAGUAcgBlAG4AYwBlACAAPQAgACIAQwBvAG4AdABpAG4AdQBlACIADQAKAAkAJgAgACcARQA6AC8AVwBvAHIAawBzAHAAYQBjAGUAcwAvAEcAaQB0AC8AUwBpAG0AUgBhAGMAaQBuAGcALwBVAFMAQgBEAGUAdgBpAGMAZQBNAGEAbgBhAGcAZQByAC8AYQBnAGUAbgB0AC8AUwBpAG0AUgBhAGMAaQBuAGcAQQBnAGUAbgB0AC4AVABlAHMAdABzAC8AVABlAHMAdABSAHUAbgBuAGUAcgAuAHAAcwAxACcAIAAtAEcAZQBuAGUAcgBhAHQAZQBSAGUAcABvAHIAdAAgAC0AUgBlAHAAbwByAHQAUABhAHQAaAAgACcARQA6AC8AVwBvAHIAawBzAHAAYQBjAGUAcwAvAEcAaQB0AC8AUwBpAG0AUgBhAGMAaQBuAGcALwBVAFMAQgBEAGUAdgBpAGMAZQBNAGEAbgBhAGcAZQByAC8AcwBjAHIAaQBwAHQAcwAvAHQAbQBwAC8AcgBlAHAAbwByAHQAcwAnACAALQBWAGUAcgBiAG8AcwBlAA0ACgB9AA0ACgBmAGkAbgBhAGwAbAB5ACAAewANAAoACQBTAHQAbwBwAC0AVAByAGEAbgBzAGMAcgBpAHAAdAANAAoACQBXAHIAaQB0AGUALQBPAHUAdABwAHUAdAAgACIAVABSAEEATgBTAEMAUgBJAFAAVAA6ACQAdAByAGEAbgBzACIADQAKAH0A
+ID processo: 31656
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Trascrizione avviata. File di output: E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests/run_tests_transcript_20260123_090404.txt
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\TestFramework.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1'.
+DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Esportazione della funzione 'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Esportazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'AdapterStubs' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'AdapterStubs' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
+DETTAGLIATO: Esportazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Esportazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Esportazione della funzione 'New-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Esportazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Esportazione della funzione 'Assert-True'.
+DETTAGLIATO: Esportazione della funzione 'Assert-False'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Esportazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Esportazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Esportazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Esportazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Esportazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Esportazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Esportazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Verbi alternativi suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 'TestFramework' è stato importato, tuttavia potrebbe risultare difficile individuarlo poiché il relativo nome non include un verbo approvato. Per un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\unit\AgentCoreTests.ps1' specificato. 
+Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:17 car:1
++ Import-Module "$PSScriptRoot\agent\unit\AgentCoreTests.ps1" -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...ntCoreTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\unit\AgentCoreTests.ps1' specificato. Nessun file
+di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:17 car:1
++ Import-Module
+"$PSScriptRoot\agent\unit\AgentCoreTests.ps1" -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...ntCoreTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\unit\AgentMonitoringTests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:18 car:1
++ Import-Module "$PSScriptRoot\agent\unit\AgentMonitoringTests.ps1" -Fo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...toringTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\unit\AgentMonitoringTests.ps1' specificato. Nessun
+file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:18 car:1
++ Import-Module
+"$PSScriptRoot\agent\unit\AgentMonitoringTests.ps1" -Fo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...toringTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\integration\AgentWorkflowTests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:19 car:1
++ Import-Module "$PSScriptRoot\agent\integration\AgentWorkflowTests.ps1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...rkflowTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\integration\AgentWorkflowTests.ps1' specificato.
+Nessun file di modulo valido trovato nelle directory dei
+moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:19 car:1
++ Import-Module
+"$PSScriptRoot\agent\integration\AgentWorkflowTests.ps1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...rkflowTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\agent\regression\AgentRegressionTests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:20 car:1
++ Import-Module "$PSScriptRoot\agent\regression\AgentRegressionTests.ps ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...essionTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\agent\regression\AgentRegressionTests.ps1' specificato.
+Nessun file di modulo valido trovato nelle directory dei
+moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:20 car:1
++ Import-Module
+"$PSScriptRoot\agent\regression\AgentRegressionTests.ps ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...essionTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\application\api\ApplicationAPITests.ps1' 
+specificato. Nessun file di modulo valido trovato nelle directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:23 car:1
++ Import-Module "$PSScriptRoot\application\api\ApplicationAPITests.ps1" ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...ionAPITests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\application\api\ApplicationAPITests.ps1' specificato.
+Nessun file di modulo valido trovato nelle directory dei
+moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:23 car:1
++ Import-Module
+"$PSScriptRoot\application\api\ApplicationAPITests.ps1" ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...ionAPITests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+Import-Module : Impossibile caricare il modulo 'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\
+application\integration\ApplicationIntegrationTests.ps1' specificato. Nessun file di modulo valido trovato nelle 
+directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\TestRunner.ps1:24 car:1
++ Import-Module "$PSScriptRoot\application\integration\ApplicationInteg ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Workspaces\G...rationTests.ps1:String) [Import-Module], 
+FileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Microsoft.PowerShell.Commands.ImportModuleCommand
+Import-Module : Impossibile caricare il modulo 'E:\Workspac
+es\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Test
+s\application\integration\ApplicationIntegrationTests.ps1'
+specificato. Nessun file di modulo valido trovato nelle
+directory dei moduli.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRa
+cingAgent.Tests\TestRunner.ps1:24 car:1
++ Import-Module
+"$PSScriptRoot\application\integration\ApplicationInteg ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (E:\Wor
+   kspaces\G...rationTests.ps1:String) [Import-Module], F
+  ileNotFoundException
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Micro
+   soft.PowerShell.Commands.ImportModuleCommand
+
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+>> Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+**********************
+Fine trascrizione Windows PowerShell
+Ora di fine: 20260123090405
+**********************
