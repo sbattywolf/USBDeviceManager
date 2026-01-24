@@ -459,7 +459,9 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         if (disposing)
         {
             // Best-effort: clear any SQLite connection pools so underlying file
-            // handles are released before we attempt to delete the DB file.
+            // handles are released. Actual file deletion is attempted after
+            // the host is fully disposed (see below) to avoid races where
+            // background services still hold connections.
             try
             {
                 try
@@ -470,36 +472,10 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                 {
                     Console.Error.WriteLine($"SimRacingTestFactory: ClearAllPools() failed: {ex}");
                 }
-
-                if (!string.IsNullOrEmpty(_dbFilePath) && File.Exists(_dbFilePath))
-                {
-                    const int maxAttempts = 5;
-                    int delayMs = 200;
-                    for (int attempt = 1; attempt <= maxAttempts; attempt++)
-                    {
-                        try
-                        {
-                            File.Delete(_dbFilePath);
-                            break; // success
-                        }
-                        catch (IOException ioEx) when (attempt < maxAttempts)
-                        {
-                            Console.Error.WriteLine($"SimRacingTestFactory: delete attempt {attempt} failed: {ioEx.Message}. Retrying in {delayMs}ms.");
-                            Thread.Sleep(delayMs);
-                            delayMs *= 2;
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB on dispose '{_dbFilePath}': {ex}");
-                            break;
-                        }
-                    }
-                }
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"SimRacingTestFactory: unexpected error during dispose cleanup: {ex}");
-            }
         }
 
         // Restore Console output and dispose writer if we redirected it
@@ -532,7 +508,144 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             Console.Error.WriteLine($"SimRacingTestFactory: error restoring console output: {ex}");
         }
 
-        // Ensure base disposal runs to release other test host resources.
+        // Restore Console output and dispose writer if we redirected it
+        try
+        {
+            if (_consoleWriter != null)
+            {
+                try
+                {
+                    _consoleWriter.Flush();
+                }
+                catch { }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"SimRacingTestFactory: error flushing console writer: {ex}");
+        }
+
+        // Ensure base disposal runs to release other test host resources (stop the host,
+        // background services, and any outstanding DbContext instances). We perform
+        // file deletion after base.Dispose to minimize "file in use" races.
         base.Dispose(disposing);
-    }
-}
+
+        try
+        {
+            if (_consoleWriter != null)
+            {
+                try
+                {
+                    Console.SetOut(_originalOut ?? TextWriter.Null);
+                    Console.SetError(_originalErr ?? TextWriter.Null);
+                }
+                catch { }
+
+                try
+                {
+                    _consoleWriter.Dispose();
+                }
+                catch { }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"SimRacingTestFactory: error restoring console output: {ex}");
+        }
+
+        // After the host is stopped, attempt to delete the DB file with retries.
+        try
+        {
+            if (!string.IsNullOrEmpty(_dbFilePath) && File.Exists(_dbFilePath))
+            {
+                // Force finalizers and wait a short moment to allow handles to be released
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                Thread.Sleep(100);
+
+                const int maxAttempts = 6;
+                int delayMs = 200;
+                for (int attempt = 1; attempt <= maxAttempts; attempt++)
+                {
+                    try
+                    {
+                        File.Delete(_dbFilePath);
+                        break; // success
+                    }
+                    catch (IOException ioEx) when (attempt < maxAttempts)
+                    {
+                        Console.Error.WriteLine($"SimRacingTestFactory: delete attempt {attempt} failed: {ioEx.Message}. Retrying in {delayMs}ms.");
+                        Thread.Sleep(delayMs);
+                        delayMs = Math.Min(2000, delayMs * 2);
+                    }
+                    catch (Exception ex)
+                    {
+                            Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB on dispose '{_dbFilePath}': {ex}");
+                            try
+                            {
+                                var artifactsDir = Path.Combine(Directory.GetCurrentDirectory(), "TestResults", "artifacts");
+                                Directory.CreateDirectory(artifactsDir);
+                                var diagPath = Path.Combine(artifactsDir, _testDatabaseName + "-delete-diagnostics.txt");
+                                using var sw = new StreamWriter(new FileStream(diagPath, FileMode.Create, FileAccess.Write, FileShare.Read));
+                                sw.WriteLine($"Timestamp: {DateTime.UtcNow:O}");
+                                sw.WriteLine("Exception:");
+                                sw.WriteLine(ex.ToString());
+                                try
+                                {
+                                    sw.WriteLine("\nFile info:");
+                                    sw.WriteLine($"Exists: {File.Exists(_dbFilePath)}");
+                                    var fi = new FileInfo(_dbFilePath);
+                                    sw.WriteLine($"FullName: {fi.FullName}");
+                                    sw.WriteLine($"Length: {fi.Length}");
+                                    sw.WriteLine($"LastWriteUtc: {fi.LastWriteTimeUtc:O}");
+                                    sw.WriteLine($"Attributes: {fi.Attributes}");
+                                }
+                                catch (Exception fex)
+                                {
+                                    sw.WriteLine($"Failed to probe file info: {fex}");
+                                }
+                                try
+                                {
+                                    sw.WriteLine("\nProcess list (Id - Name):");
+                                    foreach (var p in System.Diagnostics.Process.GetProcesses().OrderBy(p=>p.Id))
+                                    {
+                                        try { sw.WriteLine($"{p.Id} - {p.ProcessName}"); } catch { }
+                                    }
+                                }
+                                catch (Exception pex)
+                                {
+                                    sw.WriteLine($"Failed to enumerate processes: {pex}");
+                                }
+                                try
+                                {
+                                    sw.WriteLine("\nAttempting to open DB file for read (shared):");
+                                    using var fs = new FileStream(_dbFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                                    var buf = new byte[4096];
+                                    int read = fs.Read(buf, 0, buf.Length);
+                                    sw.WriteLine($"Read {read} bytes from file (first 1KB hex):");
+                                    sw.WriteLine(BitConverter.ToString(buf, 0, Math.Min(read, 1024)));
+                                    // attempt to copy small sample for analysis
+                                    var samplePath = Path.Combine(artifactsDir, _testDatabaseName + "-db-sample.bin");
+                                    using var outFs = new FileStream(samplePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+                                    outFs.Write(buf, 0, read);
+                                    sw.WriteLine($"Wrote sample to {samplePath}");
+                                }
+                                catch (Exception openEx)
+                                {
+                                    sw.WriteLine($"Failed to open/read DB file: {openEx}");
+                                }
+                                sw.Flush();
+                            }
+                            catch (Exception diagEx)
+                            {
+                                Console.Error.WriteLine($"SimRacingTestFactory: failed to write delete diagnostics: {diagEx}");
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"SimRacingTestFactory: unexpected error during final dispose cleanup: {ex}");
+        }

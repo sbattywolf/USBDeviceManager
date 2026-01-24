@@ -131,6 +131,22 @@ jobs:
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
+      - name: On build failure: produce tests-summary placeholder
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/summaries/build-failure
+          echo '{' > tests-summary.json
+          echo '  "total": 0,' >> tests-summary.json
+          echo '  "passed": 0,' >> tests-summary.json
+          echo '  "failed": 0,' >> tests-summary.json
+          echo '  "skipped": 0,' >> tests-summary.json
+          echo '  "note": "Build failed; tests were not executed in this job. See job logs for build error details."' >> tests-summary.json
+          echo '}' >> tests-summary.json
+          cp tests-summary.json artifacts/summaries/build-failure/tests-summary.json || true
+          echo "Produced tests-summary placeholder due to build failure"
+
       - name: Build CI DB initializer helper
         if: always()
         run: |
@@ -146,7 +162,8 @@ jobs:
         run: |
           # Run the small helper that calls EF EnsureCreated to create sqlite schema before tests
           if [ -f scripts/ci-init-db/EnsureDb/EnsureDb.csproj ]; then
-            dotnet run -p scripts/ci-init-db/EnsureDb/EnsureDb.csproj -c Release --no-build || true
+            echo "Running EnsureDb; failures will fail the job"
+            dotnet run -p scripts/ci-init-db/EnsureDb/EnsureDb.csproj -c Release --no-build
           else
             echo "No EnsureDb helper present; skipping DB initialization"
           fi
@@ -157,6 +174,7 @@ jobs:
         run: |
           echo "Logging__LogLevel__Microsoft=Debug" >> $GITHUB_ENV
           echo "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" >> $GITHUB_ENV
+          echo "EF_SQL_LOG_FILE=scripts/tmp/ef.log" >> $GITHUB_ENV
 
       - name: Set EF Core logging env (Windows)
         if: runner.os == 'Windows'
@@ -164,6 +182,7 @@ jobs:
         run: |
           "Logging__LogLevel__Microsoft=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
           "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          "EF_SQL_LOG_FILE=scripts/tmp/ef.log" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
 
   tests:
     name: Run Tests and Upload Results
@@ -258,6 +277,25 @@ jobs:
             echo "No sleep command detected; leaving SHELLRUNNER_LONG_CMD unset"
           fi
 
+      - name: Assert LongRunner exists (Linux/Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f ./artifacts/longrunner/LongRunner.dll ]; then
+            echo "LongRunner dll present"
+            exit 0
+          fi
+          if [ -x /bin/bash ] || command -v sleep >/dev/null 2>&1; then
+            echo "System sleep available; LongRunner not required"
+            exit 0
+          fi
+          echo "No LongRunner and no system sleep detected — failing early"
+          mkdir -p artifacts/summaries/longrunner-missing
+          echo '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"Missing LongRunner helper; tests aborted"}' > tests-summary.json
+          cp tests-summary.json artifacts/summaries/longrunner-missing/tests-summary.json || true
+          exit 1
+
       - name: Set SHELLRUNNER_LONG_CMD (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
@@ -277,6 +315,22 @@ jobs:
           } else {
             Write-Host "No PowerShell found; leaving SHELLRUNNER_LONG_CMD unset"
           }
+
+      - name: Assert LongRunner exists (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exe = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/win-x64/LongRunner.exe'
+          $dll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
+          if (Test-Path $exe -PathType Leaf) { Write-Host 'LongRunner exe present'; exit 0 }
+          if (Test-Path $dll -PathType Leaf) { Write-Host 'LongRunner dll present'; exit 0 }
+          if (Get-Command Start-Sleep -ErrorAction SilentlyContinue) { Write-Host 'pwsh Start-Sleep available; LongRunner not required'; exit 0 }
+          New-Item -ItemType Directory -Force -Path artifacts/summaries/longrunner-missing | Out-Null
+          $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"Missing LongRunner helper on Windows; tests aborted"}'
+          $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+          Copy-Item tests-summary.json artifacts/summaries/longrunner-missing/tests-summary.json -Force -ErrorAction SilentlyContinue
+          Write-Error 'LongRunner missing; failing job'
+          exit 1
 
       - name: Enable in-process smoke server for CI (cross-platform)
         run: |
@@ -432,6 +486,36 @@ jobs:
         with:
           name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: tests-enriched-report.txt
+
+      - name: Verify EF SQL log (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          ef='scripts/tmp/ef.log'
+          if [ -f "$ef" ] && [ -s "$ef" ]; then
+            echo "EF SQL log present: $ef"
+          else
+            echo "EF SQL log missing or empty: $ef"
+            mkdir -p artifacts/summaries/ef-log-missing
+            echo '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"EF SQL log missing or empty: tests ran but EF_SQL_LOG_FILE not captured"}' > tests-summary.json
+            cp tests-summary.json artifacts/summaries/ef-log-missing/tests-summary.json || true
+          fi
+
+      - name: Verify EF SQL log (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ef = Join-Path $env:GITHUB_WORKSPACE 'scripts/tmp/ef.log'
+          if (Test-Path $ef -PathType Leaf -and (Get-Item $ef).Length -gt 0) {
+            Write-Host "EF SQL log present: $ef"
+          } else {
+            Write-Host "EF SQL log missing or empty: $ef"
+            New-Item -ItemType Directory -Force -Path artifacts/summaries/ef-log-missing | Out-Null
+            $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"EF SQL log missing or empty: tests ran but EF_SQL_LOG_FILE not captured"}'
+            $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+            Copy-Item tests-summary.json artifacts/summaries/ef-log-missing/tests-summary.json -Force -ErrorAction SilentlyContinue
+          }
 
       - name: Upload job logs
         if: always()
@@ -893,6 +977,30 @@ jobs:
         run: |
           if (Test-Path ./scripts/start-server-and-wait.ps1) { .\scripts\start-server-and-wait.ps1 -NonInteractive -Port $Env:TEST_PORT } else { Write-Host 'No orchestration script present, skipping server start.' }
 
+      - name: Wait for server health (PowerShell)
+        if: always()
+        shell: pwsh
+        run: |
+          $url = "http://127.0.0.1:$Env:TEST_PORT/api/health"
+          $timeout = 60
+          $end = (Get-Date).AddSeconds($timeout)
+          Write-Host "Polling $url up to $timeout seconds"
+          while ((Get-Date) -lt $end) {
+            try {
+              $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
+              if ($resp.StatusCode -eq 200) { Write-Host 'Server health OK'; exit 0 }
+            } catch {
+              Write-Host "Health check attempt failed: $($_.Exception.Message)"
+              Start-Sleep -Seconds 3
+            }
+          }
+          Write-Error "Server health check did not return 200 within $timeout seconds"
+          New-Item -ItemType Directory -Force -Path artifacts/summaries/integration-health-failure | Out-Null
+          $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"Server health check failed; integration tests skipped"}'
+          $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+          Copy-Item tests-summary.json artifacts/summaries/integration-health-failure/tests-summary.json -Force -ErrorAction SilentlyContinue
+          exit 1
+
       - name: Run Integration tests
         shell: pwsh
         run: |
@@ -903,6 +1011,34 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path ./scripts/stop-test-environment.ps1) { .\scripts\stop-test-environment.ps1 } else { Write-Host 'No stop script present.' }
+
+      - name: Verify server logs captured
+        if: always()
+        shell: pwsh
+        run: |
+          $out = 'scripts/tmp/server.log'
+          $err = 'scripts/tmp/server.err.log'
+          $missing = @()
+          if (-not (Test-Path $out)) { $missing += $out }
+          if (-not (Test-Path $err)) { $missing += $err }
+          if ($missing.Count -gt 0) {
+            Write-Error "Missing server log files: $($missing -join ', ')"
+            New-Item -ItemType Directory -Force -Path artifacts/summaries/server-log-missing | Out-Null
+            $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"Server log files missing after integration run"}'
+            $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+            Copy-Item tests-summary.json artifacts/summaries/server-log-missing/tests-summary.json -Force -ErrorAction SilentlyContinue
+            exit 1
+          }
+          # ensure files are non-empty
+          if ((Get-Item $out).Length -eq 0 -or (Get-Item $err).Length -eq 0) {
+            Write-Error "Server log files are empty: $out or $err"
+            New-Item -ItemType Directory -Force -Path artifacts/summaries/server-log-empty | Out-Null
+            $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"Server log files empty after integration run"}'
+            $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+            Copy-Item tests-summary.json artifacts/summaries/server-log-empty/tests-summary.json -Force -ErrorAction SilentlyContinue
+            exit 1
+          }
+          Write-Host 'Server logs present and non-empty.'
 
       - name: Upload server logs
         if: always()

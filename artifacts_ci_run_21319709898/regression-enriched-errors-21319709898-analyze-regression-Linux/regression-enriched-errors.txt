@@ -1,0 +1,400 @@
+./agent/tmp_test_add_contains.ps1:12:try { Write-Host "ContainsKey('A') => $($o.ContainsKey('A'))" } catch { Write-Host "ContainsKey failed: $($_.Exception.Message)" }
+./agent/tmp_test_add_member.ps1:4:try { Write-Host "Invoke: $($o.ContainsKey('A'))" } catch { Write-Host "Invoke failed: $($_.Exception.Message)" }
+./agent/SimRacingAgent.Tests/TestRunner.ps1:231:                Write-Error "Critical error in $category tests: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1:232:                Write-Output "DEBUG: Category exception for ${category}: $($_.Exception | Out-String)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1:286:                Write-Error "Failed to generate test reports: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1:287:                Write-Output "DEBUG: Report generation exception: $($_.Exception | Out-String)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1:313:            Write-Error "Failed to cleanup test environment: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1:314:            Write-Output "DEBUG: Cleanup exception: $($_.Exception | Out-String)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1:509:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:79:        catch [System.Net.HttpListenerException] {
+./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:80:            if ($_.Exception.ErrorCode -eq 995) { break }
+./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:83:            Write-Error "Request handling error: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:88:    Write-Error "Failed to start server: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Integration/AgentWorkflowTests.ps1:454:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Integration/run-integration-tests.ps1:10:    Write-Error "Integration tests failed: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration-run-specific.ps1:21:    Write-TestLog "Exception running InteractiveMode: $($_.Exception.Message)" "Error"
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration-run-specific.ps1:28:    Write-TestLog "Exception running DashboardConnectivity: $($_.Exception.Message)" "Error"
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:6:    [int]$TimeoutSeconds = 60,
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:101:        Write-TestLog (("Failed to start {0} process: {1}" -f $TestName, $_.Exception.Message)) "Error"
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:345:                if (-not $task.IsCompleted) { throw "Timeout waiting for dashboard response" }
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:359:                    $response = Invoke-WebRequest -Uri $uri -Method GET -UseBasicParsing -TimeoutSec 5
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:370:                    Write-TestLog "❌ Dashboard connectivity test failed (fallback): $($_.Exception.Message)" "Error"
+./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:376:            Write-TestLog "❌ Dashboard connectivity test failed: $($_.Exception.Message)" "Error"
+./agent/SimRacingAgent.Tests/Functional/run-functional-tests.ps1:20:    Write-Error "InteractiveMode test threw: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Functional/run-functional-tests.ps1:27:    Write-Error "HealthAlertSuppression test threw: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/application/integration/ApplicationIntegrationTests.ps1:51:    Write-Host "DEBUG: Export-ModuleMember skipped (not running inside module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/application/api/ApplicationAPITests.ps1:51:    Write-Host "DEBUG: Export-ModuleMember skipped (not running inside module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Unit/run-unit-tests.ps1:9:    Write-Error "Unit tests failed to run: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Unit/AgentCoreTests.ps1:274:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Unit/AgentMonitoringTests.ps1:348:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:26:    + CategoryInfo          : ObjectNotFound: (.\agent\SimRaci...essionTests.ps1:String) [], CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:27:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:36:   ring) [], CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:37:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:45:    + CategoryInfo          : ObjectNotFound: (Invoke-AgentRegressionTests:String) [], CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:46:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:55:   [], CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:56:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:64:    + CategoryInfo          : ObjectNotFound: (.\.tools\run-psa-per-file.ps1:String) [], CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:65:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:74:   ) [], CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:75:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:83:    + CategoryInfo          : ObjectNotFound: (.\.tools\psa-summary.ps1:String) [], CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:84:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:93:    CommandNotFoundException
+./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:94:    + FullyQualifiedErrorId : CommandNotFoundException
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:516:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:525:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:621:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:657:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:672:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:699:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:720:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:747:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:771:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:786:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:819:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:843:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:886:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1276:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1375:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1570:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1591:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1618:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1661:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1685:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1728:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1921:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:1959:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:2152:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:2190:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:2626:DEBUG-CATCH-DUMP: Exception full dump:
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:2631:Exception             : System.Management.Automation.RuntimeException: 
+./agent/SimRacingAgent.Tests/run_tests_startproc.out:2634:CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+./agent/SimRacingAgent.Tests/TestRunner.ps1.bak:208:                Write-Error "Critical error in $category tests: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1.bak:259:                Write-Warning "Failed to generate test reports: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/TestRunner.ps1.bak:285:            Write-Warning "Failed to cleanup test environment: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/run_tests_sanitized.ps1:17:            Write-Verbose "Failed to copy function $($fn): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/run_tests_sanitized.ps1:25:if (Test-Path $adapter) { try { . $adapter } catch { Write-Warning "Failed to dot-source AdapterStubs: $($_.Exception.Message)" } }
+./agent/SimRacingAgent.Tests/run_tests_sanitized.ps1:31:if (Test-Path $tf) { try { . $tf } catch { Write-Warning "Failed to dot-source TestFramework: $($_.Exception.Message)" } }
+./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:22:        $Global:TestSession.Results += @{ Name = $Name; Category = $Category; Success = $false; Error = $_.Exception.Message }
+./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:24:        Write-Host "[FAIL] $Category - $Name : $($_.Exception.Message)" -ForegroundColor Red
+./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:29:            "$((Get-Date).ToString('o')) FAILURE $Category - $Name MockKeys=$keys MockOrders=$orders Error=$($_.Exception.Message)" | Out-File -FilePath $tracePath -Append -Encoding utf8
+./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:78:if (Test-Path $adapter) { try { Import-Module $adapter -Force -ErrorAction SilentlyContinue ; Write-Host "DEBUG: AdapterStubs imported from $adapter" } catch { Write-Host "DEBUG: AdapterStubs import failed: $($_.Exception.Message)" -ForegroundColor Yellow } } else { Write-Host "DEBUG: AdapterStubs not found at $adapter" -ForegroundColor Yellow }
+./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:12:    # Test 1: simulate server 404 response for heartbeat
+./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:13:    Invoke-Test -Name "Standalone: heartbeat 404 handling" -Category "HeartbeatRegression" -TestScript {
+./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:14:        function Send-AgentHeartbeat { param($AgentId) return @{ Success = $false; StatusCode = 404; Error = 'NotFound' } }
+./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:17:        Assert-Equal -Expected 404 -Actual $r.StatusCode -Message "Should surface 404"
+./agent/SimRacingAgent.Tests/Regression/AgentRegressionTests.ps1:241:                            Write-Host "DEBUG-CATCH-DUMP: Exception full dump:" -ForegroundColor Yellow
+./agent/SimRacingAgent.Tests/Regression/AgentRegressionTests.ps1:256:                            try { $msg = ($_.Exception.Message -or $_.ToString()) } catch {}
+./agent/SimRacingAgent.Tests/Regression/AgentRegressionTests.ps1:654:        Write-Host "DEBUG: Export-ModuleMember skipped (not running inside module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:102:            } catch [System.IO.IOException] {
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:129:            try { Write-Host "DEBUG: Clear-AgentLock Remove-Item failed: $($_.Exception.Message)" } catch {}
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:258:        Write-AgentLog -Message "Invoke-Mockable: $CommandName threw: $($_.Exception.Message)" -Level 'Warn' -Component 'AdapterStubs'
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:376:            try { $usb = Invoke-Mockable -CommandName 'Get-USBHealthCheck' -Args @() } catch { $usb = $null; $componentErrors += @{ Name = 'USB'; Error = $_.Exception.Message } ; try { Invoke-Mockable -CommandName 'Write-AgentLog' -Args @("USB component error: $($_.Exception.Message)") } catch {} }
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:385:            try { $proc = Invoke-Mockable -CommandName 'Get-ProcessHealthCheck' -Args @() } catch { $proc = $null; $componentErrors += @{ Name = 'Process'; Error = $_.Exception.Message } ; try { Invoke-Mockable -CommandName 'Write-AgentLog' -Args @("Process component error: $($_.Exception.Message)") } catch {} }
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:395:        Write-AgentLog -Message "Invoke-HealthCheckWorkflow: component invocation error: $($_.Exception.Message)" -Level 'Warn' -Component 'AdapterStubs'
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:735:                            } catch { Write-Host "DEBUG: Import-AgentConfiguration native Get-Content threw: $($_.Exception.Message)" ; $raw = $null }
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:738:                        Write-Host "DEBUG: Import-AgentConfiguration Get-Content threw: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:743:                    $err = [pscustomobject]@{ CategoryInfo = [pscustomobject]@{ Category = 'ConfigurationError' }; Exception = $_.Exception }
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:744:                    Write-Host "DEBUG: Import-AgentConfiguration Get-Content threw: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:1048:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:22:        $Global:TestSession.Results += @{ Name = $Name; Category = $Category; Success = $false; Error = $_.Exception.Message }
+./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:24:        Write-Host "[FAIL] $Category - $Name : $($_.Exception.Message)" -ForegroundColor Red
+./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:29:            "$((Get-Date).ToString('o')) FAILURE $Category - $Name MockKeys=$keys MockOrders=$orders Error=$($_.Exception.Message)" | Out-File -FilePath $tracePath -Append -Encoding utf8
+./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:57:        Write-Verbose "Clear-TestEnvironment encountered an error: $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:127:if (Test-Path $adapter) { try { Import-Module $adapter -Force -ErrorAction SilentlyContinue ; Write-Host "DEBUG: AdapterStubs imported from $adapter" } catch { Write-Host "DEBUG: AdapterStubs import failed: $($_.Exception.Message)" -ForegroundColor Yellow } } else { Write-Host "DEBUG: AdapterStubs not found at $adapter" -ForegroundColor Yellow }
+./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:148:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent.Tests/full-agent-run-full-transcript.txt:347:DEBUG-CATCH-DUMP: Exception full dump:
+./agent/SimRacingAgent.Tests/full-agent-run-full-transcript.txt:352:Exception             : System.Management.Automation.RuntimeException: 
+./agent/SimRacingAgent.Tests/full-agent-run-full-transcript.txt:355:CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:470:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:497:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:518:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:545:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:562:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:595:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:619:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:655:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1130:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1151:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1178:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1217:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1241:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1277:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1406:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1437:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1566:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1597:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:2016:DEBUG-CATCH-DUMP: Exception full dump:
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:2021:Exception             : System.Management.Automation.RuntimeException: 
+./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:2024:CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+./agent/SimRacingAgent.Tests/full-agent-run-quick-exec-transcript.txt:3:Ora di inizio: 20260123140437
+./agent/SimRacingAgent.Tests/full-agent-run-quick-exec-transcript.txt:136:Ora di fine: 20260123140438
+./agent/probe_agent_status.ps1:13:try { Write-Host "ContainsKey('AgentRunning') => $($status.ContainsKey('AgentRunning'))" } catch { Write-Host "ContainsKey call failed: $($_.Exception.Message)" }
+./agent/shared/TestFramework.psm1:7:	Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/src/core/AgentCore.psm1:12:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/src/core/ConfigManager.psm1:12:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/src/modules/USBMonitor.psm1:41:                    Add-Content -Path $logPath -Value ("Get-WmiObject mock threw: $($_.Exception.Message)") -ErrorAction SilentlyContinue
+./agent/src/modules/USBMonitor.psm1:50:                        try { Write-Host "DEBUG: WMI/Get-WmiObject mock failed: $($_.Exception.Message). Surface ServiceUnavailable error." } catch {}
+./agent/src/modules/USBMonitor.psm1:58:                                $baseEx = New-Object System.Management.Automation.RuntimeException($_.Exception.Message)
+./agent/src/modules/USBMonitor.psm1:190:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/src/modules/USBMonitor.psm1.new:23:                    Add-Content -Path 'e:\Workspaces\Git\SimRacing\USBDeviceManager\.tmp_usb_log.txt' -Value ("Get-WmiObject mock threw: $($_.Exception.Message)") -ErrorAction SilentlyContinue
+./agent/src/modules/ProcessManager.psm1:13:            $err = [pscustomobject]@{ CategoryInfo = [pscustomobject]@{ Category = 'PermissionDenied' }; Exception = $_.Exception }
+./agent/src/modules/ProcessManager.psm1:60:        Add-Content -Path $procLog -Value ("Start-ManagedProcess exception: $($_.Exception.Message)") -ErrorAction SilentlyContinue
+./agent/src/modules/ProcessManager.psm1:123:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:64:            Write-AgentLog "Failed to load health configuration: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:91:                    Write-AgentLog "Health monitoring error: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:100:                        Write-AgentLog "Mock Register-ObjectEvent invocation failed: $($_.Exception.Message)" -Level Warning
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:113:            Write-AgentLog "Failed to start health monitoring: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:133:            Write-AgentLog "Error stopping health monitoring: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:163:            Write-AgentLog "Error collecting health metrics: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:202:            Write-AgentLog "Error getting system metrics: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:233:            Write-AgentLog "Error getting process metrics: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:265:            Write-AgentLog "Error getting network metrics: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:308:            Write-AgentLog "Error getting storage metrics: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:377:            Write-AgentLog "Error calculating health status: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:405:            Write-AgentLog "Error checking health alerts: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:421:                & $mockInvoke.GetNewClosure() -Uri $endpoint -Method PUT -Body $body -ContentType "application/json" -TimeoutSec 5
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:424:                Invoke-RestMethod -Uri $endpoint -Method PUT -Body $body -ContentType "application/json" -TimeoutSec 5
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:429:            Write-AgentLog "Failed to send metrics to dashboard: $($_.Exception.Message)" -Level Debug
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:492:            Write-AgentLog "Failed to mirror HealthMonitor mocks to global scope: $($_.Exception.Message)" -Level Debug
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:512:            Write-AgentLog "Failed to mirror HealthMonitor instance to global scope: $($_.Exception.Message)" -Level Debug
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:528:                try { $Script:HealthMonitor.CollectMetrics() } catch { Write-AgentLog "Initial CollectMetrics failed: $($_.Exception.Message)" -Level Warning }
+./agent/SimRacingAgent/Services/HealthMonitor.psm1:577:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Services/APIServer.psm1:10:if (-not $Script:AgentConfig) { $Script:AgentConfig = @{ API = @{ Port = 8080 }; USB = @{ Enabled = $true; HealthCheckInterval = 600 }; ProcessManager = @{ Enabled = $true; HealthCheckInterval = 120 }; AgentHealthCheck = @{ IdleTimeoutSeconds = 300 } } }
+./agent/SimRacingAgent/Services/APIServer.psm1:249:            return @{ StatusCode = 404; Data = @{ error = "Endpoint not found" } }
+./agent/SimRacingAgent/Services/APIServer.psm1:489:                return @{ StatusCode = 404; Data = @{ error = "Process not found" } }
+./agent/SimRacingAgent/Services/APIServer.psm1:671:                        agentIdle = $Script:AgentConfig.AgentHealthCheck.IdleTimeoutSeconds
+./agent/SimRacingAgent/Services/APIServer.psm1:918:        } catch { Write-Verbose "Response.OutputStream.Close failed: $($_.Exception.Message)" }
+./agent/SimRacingAgent/Services/APIServer.psm1:968:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Services/DashboardClient.psm1:30:            Write-AgentLog "Failed to mirror DashboardClient mocks to global scope: $($_.Exception.Message)" -Level Debug
+./agent/SimRacingAgent/Services/DashboardClient.psm1:49:    [int]$TimeoutSeconds
+./agent/SimRacingAgent/Services/DashboardClient.psm1:58:        $this.TimeoutSeconds = 30
+./agent/SimRacingAgent/Services/DashboardClient.psm1:68:                $response = & $mockInvoke.GetNewClosure() -Uri "$($this.BaseUrl)/api/health" -Method GET -Headers $this.Headers -TimeoutSec 5
+./agent/SimRacingAgent/Services/DashboardClient.psm1:71:                $response = Invoke-RestMethod -Uri "$($this.BaseUrl)/api/health" -Method GET -Headers $this.Headers -TimeoutSec 5
+./agent/SimRacingAgent/Services/DashboardClient.psm1:83:            Write-AgentLog "Failed to connect to dashboard: $($_.Exception.Message)" -Level Warning
+./agent/SimRacingAgent/Services/DashboardClient.psm1:95:                TimeoutSec = $this.TimeoutSeconds
+./agent/SimRacingAgent/Services/DashboardClient.psm1:124:                Write-AgentLog "[DEBUG] Heartbeat error: Status $($_.Exception.Response.StatusCode.value__) Message: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/DashboardClient.psm1:126:            Write-AgentLog "Dashboard API error ($Method $Endpoint): $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Services/DashboardClient.psm1:129:                Error = $_.Exception.Message
+./agent/SimRacingAgent/Services/DashboardClient.psm1:130:                StatusCode = if ($_.Exception.Response) { $_.Exception.Response.StatusCode.value__ } else { 0 }
+./agent/SimRacingAgent/Services/DashboardClient.psm1:300:            TimeoutSeconds = $this.TimeoutSeconds
+./agent/SimRacingAgent/Services/DashboardClient.psm1:328:        Write-AgentLog "Failed to mirror DashboardClient to global scope: $($_.Exception.Message)" -Level Debug
+./agent/SimRacingAgent/Services/DashboardClient.psm1:403:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Core/AgentEngine.psm1:37:            Write-AgentError "Failed to load configuration: $($_.Exception.Message)" -Source "AgentEngine"
+./agent/SimRacingAgent/Core/AgentEngine.psm1:78:                    Write-AgentError "Health check error: $($_.Exception.Message)" -Source "AgentEngine"
+./agent/SimRacingAgent/Core/AgentEngine.psm1:89:            Write-AgentError "Failed to start agent engine: $($_.Exception.Message)" -Source "AgentEngine"
+./agent/SimRacingAgent/Core/AgentEngine.psm1:111:            Write-AgentError "Error stopping agent engine: $($_.Exception.Message)" -Source "AgentEngine"
+./agent/SimRacingAgent/Core/AgentEngine.psm1:121:            Write-AgentError "Health check failed: $($_.Exception.Message)" -Source "AgentEngine"
+./agent/SimRacingAgent/Core/AgentEngine.psm1:177:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Utils/Logging.psm1:117:                Add-Content -Path $fallbackLog -Value ("Logging error: $($ex.Exception.Message)") -ErrorAction SilentlyContinue
+./agent/SimRacingAgent/Utils/Logging.psm1:119:                Write-Verbose "Logging error occurred and fallback write failed: $($ex.Exception.Message)" -ErrorAction SilentlyContinue
+./agent/SimRacingAgent/Utils/Logging.psm1:152:            Write-Verbose ("WriteToFile failed: $($err.Exception.Message)") -ErrorAction SilentlyContinue
+./agent/SimRacingAgent/Utils/Logging.psm1:166:            Write-Verbose ("AddToBuffer failed: $($err.Exception.Message)") -ErrorAction SilentlyContinue
+./agent/SimRacingAgent/Utils/Logging.psm1:447: .PARAMETER Exception
+./agent/SimRacingAgent/Utils/Logging.psm1:450:function Write-AgentException {
+./agent/SimRacingAgent/Utils/Logging.psm1:452:        [System.Exception]$Exception,
+./agent/SimRacingAgent/Utils/Logging.psm1:458:        ExceptionType = $Exception.GetType().FullName
+./agent/SimRacingAgent/Utils/Logging.psm1:459:        StackTrace = $Exception.StackTrace
+./agent/SimRacingAgent/Utils/Logging.psm1:460:        InnerException = if ($Exception.InnerException) { $Exception.InnerException.Message } else { $null }
+./agent/SimRacingAgent/Utils/Logging.psm1:462:        Type = "Exception"
+./agent/SimRacingAgent/Utils/Logging.psm1:465:    $message = if ($Context) { "$Context : $($Exception.Message)" } else { $Exception.Message }
+./agent/SimRacingAgent/Utils/Logging.psm1:466:    Write-AgentLog -Message $message -Level $Level -Source "Exception" -Properties $properties
+./agent/SimRacingAgent/Utils/Logging.psm1:471:    Export-ModuleMember -Function Write-AgentLog, Write-AgentTrace, Write-AgentDebug, Write-AgentInfo, Write-AgentWarning, Write-AgentError, Write-AgentCritical, Set-AgentLogLevel, Set-AgentLogOutput, Get-AgentLogStatus, Get-AgentLogBuffer, Write-AgentEvent, Write-AgentMetric, Write-AgentPerformance, Write-AgentException -ErrorAction Stop
+./agent/SimRacingAgent/Utils/Logging.psm1:473:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Utils/Configuration.psm1:42:            Write-AgentError "Failed to load configuration: $($_.Exception.Message)" -Source "ConfigManager"
+./agent/SimRacingAgent/Utils/Configuration.psm1:135:            Write-AgentError "Failed to create default configuration: $($_.Exception.Message)" -Source "ConfigManager"
+./agent/SimRacingAgent/Utils/Configuration.psm1:146:            Write-AgentError "Failed to save configuration: $($_.Exception.Message)" -Source "ConfigManager"
+./agent/SimRacingAgent/Utils/Configuration.psm1:167:            Write-AgentWarning "Error getting configuration value '$Path': $($_.Exception.Message)" -Source "ConfigManager"
+./agent/SimRacingAgent/Utils/Configuration.psm1:193:            Write-AgentError "Failed to set configuration value '$Path': $($_.Exception.Message)" -Source "ConfigManager"
+./agent/SimRacingAgent/Utils/Configuration.psm1:269:            Write-AgentError "Configuration validation error: $($_.Exception.Message)" -Source "ConfigManager"
+./agent/SimRacingAgent/Utils/Configuration.psm1:403:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/README.md:199:Select-String -Path "./Logs/*.log" -Pattern "ERROR|CRITICAL"
+./agent/SimRacingAgent/Tools/Install-Agent.ps1:71:        Write-InstallerLog "Action failed: $Description - $($_.Exception.Message)" -Level Warning
+./agent/SimRacingAgent/Tools/Install-Agent.ps1:192:            $response = Invoke-RestMethod -Uri "http://localhost:8080/status" -Method GET -TimeoutSec 5
+./agent/SimRacingAgent/Tools/Install-Agent.ps1:199:            Write-InstallerLog "Agent not responding via API: $($_.Exception.Message)" -Level Warning
+./agent/SimRacingAgent/Tools/Uninstall-Agent.ps1:61:        Write-UninstallerLog "Action failed: $Description - $($_.Exception.Message)" -Level Warning
+./agent/SimRacingAgent/Tools/Uninstall-Agent.ps1:109:            $response = Invoke-RestMethod -Uri "http://localhost:8080/status" -Method GET -TimeoutSec 5
+./agent/SimRacingAgent/Tools/Uninstall-Agent.ps1:115:            Write-UninstallerLog "Agent not responding via API: $($_.Exception.Message)" -Level Warning
+./agent/SimRacingAgent/Tools/Uninstall-Agent.ps1:138:                Write-UninstallerLog "Error inspecting/stopping process PID $($process.Id): $($_.Exception.Message)" -Level Warning
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:48:            Write-AgentLog "Error evaluating conditions for rule $($this.Name): $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:78:            Write-AgentLog "Error evaluating condition: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:115:            Write-AgentLog "Failed to execute rule $($this.Name): $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:190:            $result.Message = "Action failed: $($_.Exception.Message)"
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:227:            Write-AgentLog "Failed to load automation rules: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:266:                    Write-AgentLog "Schedule processing error: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:276:            Write-AgentLog "Failed to start automation engine: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:296:            Write-AgentLog "Error stopping automation engine: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:315:                        Write-AgentLog "Rule execution failed: $($rule.Name) - $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:321:            Write-AgentLog "Error processing trigger ${triggerType}: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:348:                Write-AgentLog "Error processing scheduled rule $($rule.Name): $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:407:                Write-AgentLog "Failed to execute rule $($rule.Name): $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/AutomationEngine.psm1:567:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Modules/DeviceMonitor.psm1:51:                    Write-AgentLog "Device monitoring error: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/DeviceMonitor.psm1:61:            Write-AgentLog "Failed to start device monitoring: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/DeviceMonitor.psm1:81:            Write-AgentLog "Error stopping device monitoring: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/DeviceMonitor.psm1:169:            Write-AgentLog "Error scanning devices: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/DeviceMonitor.psm1:207:            Write-AgentLog "Error handling device connection: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/DeviceMonitor.psm1:228:            Write-AgentLog "Error handling device disconnection: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/DeviceMonitor.psm1:334:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:42:            Write-AgentLog "Failed to load software configuration: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:71:                    Write-AgentLog "Software monitoring error: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:81:            Write-AgentLog "Failed to start software monitoring: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:101:            Write-AgentLog "Error stopping software monitoring: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:159:            Write-AgentLog "Error scanning processes: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:209:            Write-AgentLog "Failed to start software ${SoftwareName}: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:235:            Write-AgentLog "Failed to stop software ${SoftwareName}: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:260:            Write-AgentLog "Error handling software start: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:272:            Write-AgentLog "Error handling software stop: $($_.Exception.Message)" -Level Error
+./agent/SimRacingAgent/Modules/SoftwareManager.psm1:400:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./agent/SimRacingAgent/SimRacingAgent.ps1:73:    Write-AgentWarning "Failed to acquire single-instance mutex: $($_.Exception.Message)" -Source "Startup"
+./agent/SimRacingAgent/SimRacingAgent.ps1:82:    Write-AgentError "FATAL: Failed to load utility modules: $($_.Exception.Message)" -Source "Startup"
+./agent/SimRacingAgent/SimRacingAgent.ps1:138:        Write-AgentError "Failed to initialize agent: $($_.Exception.Message)" -Source "Init"
+./agent/SimRacingAgent/SimRacingAgent.ps1:139:        Write-AgentException -Exception $_.Exception -Context "Agent Initialization"
+./agent/SimRacingAgent/SimRacingAgent.ps1:208:        Write-AgentError "Failed to start services: $($_.Exception.Message)" -Source "Services"
+./agent/SimRacingAgent/SimRacingAgent.ps1:209:        Write-AgentException -Exception $_.Exception -Context "Service Startup"
+./agent/SimRacingAgent/SimRacingAgent.ps1:242:        Write-AgentError "Error stopping services: $($_.Exception.Message)" -Source "Shutdown"
+./agent/SimRacingAgent/SimRacingAgent.ps1:312:            Write-AgentError "Interactive mode error: $($_.Exception.Message)" -Source "Interactive"
+./agent/SimRacingAgent/SimRacingAgent.ps1:500:        Write-AgentWarning "Failed to send initial heartbeat: $($_.Exception.Message)" -Source "Main"
+./agent/SimRacingAgent/SimRacingAgent.ps1:516:                    Write-AgentDebug "Heartbeat failed: $($_.Exception.Message)" -Source "Heartbeat"
+./agent/SimRacingAgent/SimRacingAgent.ps1:529:    Write-AgentError "Fatal error: $($_.Exception.Message)" -Source "Main"
+./agent/SimRacingAgent/SimRacingAgent.ps1:530:    Write-AgentException -Exception $_.Exception -Context "Main Execution"
+./agent/SimRacingAgent/SimRacingAgent.ps1:545:            Write-AgentWarning "Failed to release mutex: $($_.Exception.Message)" -Source "Shutdown"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:1:./agent/tmp_test_add_contains.ps1:12:try { Write-Host "ContainsKey('A') => $($o.ContainsKey('A'))" } catch { Write-Host "ContainsKey failed: $($_.Exception.Message)" }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:2:./agent/tmp_test_add_member.ps1:4:try { Write-Host "Invoke: $($o.ContainsKey('A'))" } catch { Write-Host "Invoke failed: $($_.Exception.Message)" }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:3:./agent/SimRacingAgent.Tests/TestRunner.ps1:231:                Write-Error "Critical error in $category tests: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:4:./agent/SimRacingAgent.Tests/TestRunner.ps1:232:                Write-Output "DEBUG: Category exception for ${category}: $($_.Exception | Out-String)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:5:./agent/SimRacingAgent.Tests/TestRunner.ps1:286:                Write-Error "Failed to generate test reports: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:6:./agent/SimRacingAgent.Tests/TestRunner.ps1:287:                Write-Output "DEBUG: Report generation exception: $($_.Exception | Out-String)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:7:./agent/SimRacingAgent.Tests/TestRunner.ps1:313:            Write-Error "Failed to cleanup test environment: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:8:./agent/SimRacingAgent.Tests/TestRunner.ps1:314:            Write-Output "DEBUG: Cleanup exception: $($_.Exception | Out-String)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:9:./agent/SimRacingAgent.Tests/TestRunner.ps1:509:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:10:./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:79:        catch [System.Net.HttpListenerException] {
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:11:./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:80:            if ($_.Exception.ErrorCode -eq 995) { break }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:12:./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:83:            Write-Error "Request handling error: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:13:./agent/SimRacingAgent.Tests/Integration/Helpers/test-dashboard-server.ps1:88:    Write-Error "Failed to start server: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:14:./agent/SimRacingAgent.Tests/Integration/AgentWorkflowTests.ps1:454:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:15:./agent/SimRacingAgent.Tests/Integration/run-integration-tests.ps1:10:    Write-Error "Integration tests failed: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:16:./agent/SimRacingAgent.Tests/Integration/test-agent-integration-run-specific.ps1:21:    Write-TestLog "Exception running InteractiveMode: $($_.Exception.Message)" "Error"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:17:./agent/SimRacingAgent.Tests/Integration/test-agent-integration-run-specific.ps1:28:    Write-TestLog "Exception running DashboardConnectivity: $($_.Exception.Message)" "Error"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:18:./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:6:    [int]$TimeoutSeconds = 60,
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:19:./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:101:        Write-TestLog (("Failed to start {0} process: {1}" -f $TestName, $_.Exception.Message)) "Error"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:20:./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:345:                if (-not $task.IsCompleted) { throw "Timeout waiting for dashboard response" }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:21:./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:359:                    $response = Invoke-WebRequest -Uri $uri -Method GET -UseBasicParsing -TimeoutSec 5
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:22:./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:370:                    Write-TestLog "❌ Dashboard connectivity test failed (fallback): $($_.Exception.Message)" "Error"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:23:./agent/SimRacingAgent.Tests/Integration/test-agent-integration.ps1:376:            Write-TestLog "❌ Dashboard connectivity test failed: $($_.Exception.Message)" "Error"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:24:./agent/SimRacingAgent.Tests/Functional/run-functional-tests.ps1:20:    Write-Error "InteractiveMode test threw: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:25:./agent/SimRacingAgent.Tests/Functional/run-functional-tests.ps1:27:    Write-Error "HealthAlertSuppression test threw: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:26:./agent/SimRacingAgent.Tests/application/integration/ApplicationIntegrationTests.ps1:51:    Write-Host "DEBUG: Export-ModuleMember skipped (not running inside module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:27:./agent/SimRacingAgent.Tests/application/api/ApplicationAPITests.ps1:51:    Write-Host "DEBUG: Export-ModuleMember skipped (not running inside module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:28:./agent/SimRacingAgent.Tests/Unit/run-unit-tests.ps1:9:    Write-Error "Unit tests failed to run: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:29:./agent/SimRacingAgent.Tests/Unit/AgentCoreTests.ps1:274:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:30:./agent/SimRacingAgent.Tests/Unit/AgentMonitoringTests.ps1:348:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:31:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:26:    + CategoryInfo          : ObjectNotFound: (.\agent\SimRaci...essionTests.ps1:String) [], CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:32:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:27:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:33:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:36:   ring) [], CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:34:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:37:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:35:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:45:    + CategoryInfo          : ObjectNotFound: (Invoke-AgentRegressionTests:String) [], CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:36:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:46:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:37:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:55:   [], CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:38:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:56:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:39:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:64:    + CategoryInfo          : ObjectNotFound: (.\.tools\run-psa-per-file.ps1:String) [], CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:40:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:65:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:41:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:74:   ) [], CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:42:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:75:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:43:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:83:    + CategoryInfo          : ObjectNotFound: (.\.tools\psa-summary.ps1:String) [], CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:44:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:84:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:45:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:93:    CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:46:./agent/SimRacingAgent.Tests/Unit/.tools/full-run-transcript.txt:94:    + FullyQualifiedErrorId : CommandNotFoundException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:47:./agent/SimRacingAgent.Tests/run_tests_startproc.out:516:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:48:./agent/SimRacingAgent.Tests/run_tests_startproc.out:525:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:49:./agent/SimRacingAgent.Tests/run_tests_startproc.out:621:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:50:./agent/SimRacingAgent.Tests/run_tests_startproc.out:657:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:51:./agent/SimRacingAgent.Tests/run_tests_startproc.out:672:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:52:./agent/SimRacingAgent.Tests/run_tests_startproc.out:699:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:53:./agent/SimRacingAgent.Tests/run_tests_startproc.out:720:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:54:./agent/SimRacingAgent.Tests/run_tests_startproc.out:747:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:55:./agent/SimRacingAgent.Tests/run_tests_startproc.out:771:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:56:./agent/SimRacingAgent.Tests/run_tests_startproc.out:786:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:57:./agent/SimRacingAgent.Tests/run_tests_startproc.out:819:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:58:./agent/SimRacingAgent.Tests/run_tests_startproc.out:843:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:59:./agent/SimRacingAgent.Tests/run_tests_startproc.out:886:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:60:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1276:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:61:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1375:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:62:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1570:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:63:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1591:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:64:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1618:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:65:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1661:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:66:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1685:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:67:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1728:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:68:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1921:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:69:./agent/SimRacingAgent.Tests/run_tests_startproc.out:1959:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:70:./agent/SimRacingAgent.Tests/run_tests_startproc.out:2152:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:71:./agent/SimRacingAgent.Tests/run_tests_startproc.out:2190:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:72:./agent/SimRacingAgent.Tests/run_tests_startproc.out:2626:DEBUG-CATCH-DUMP: Exception full dump:
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:73:./agent/SimRacingAgent.Tests/run_tests_startproc.out:2631:Exception             : System.Management.Automation.RuntimeException: 
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:74:./agent/SimRacingAgent.Tests/run_tests_startproc.out:2634:CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:75:./agent/SimRacingAgent.Tests/TestRunner.ps1.bak:208:                Write-Error "Critical error in $category tests: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:76:./agent/SimRacingAgent.Tests/TestRunner.ps1.bak:259:                Write-Warning "Failed to generate test reports: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:77:./agent/SimRacingAgent.Tests/TestRunner.ps1.bak:285:            Write-Warning "Failed to cleanup test environment: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:78:./agent/SimRacingAgent.Tests/run_tests_sanitized.ps1:17:            Write-Verbose "Failed to copy function $($fn): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:79:./agent/SimRacingAgent.Tests/run_tests_sanitized.ps1:25:if (Test-Path $adapter) { try { . $adapter } catch { Write-Warning "Failed to dot-source AdapterStubs: $($_.Exception.Message)" } }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:80:./agent/SimRacingAgent.Tests/run_tests_sanitized.ps1:31:if (Test-Path $tf) { try { . $tf } catch { Write-Warning "Failed to dot-source TestFramework: $($_.Exception.Message)" } }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:81:./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:22:        $Global:TestSession.Results += @{ Name = $Name; Category = $Category; Success = $false; Error = $_.Exception.Message }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:82:./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:24:        Write-Host "[FAIL] $Category - $Name : $($_.Exception.Message)" -ForegroundColor Red
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:83:./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:29:            "$((Get-Date).ToString('o')) FAILURE $Category - $Name MockKeys=$keys MockOrders=$orders Error=$($_.Exception.Message)" | Out-File -FilePath $tracePath -Append -Encoding utf8
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:84:./agent/SimRacingAgent.Tests/TestFramework_clean.ps1:78:if (Test-Path $adapter) { try { Import-Module $adapter -Force -ErrorAction SilentlyContinue ; Write-Host "DEBUG: AdapterStubs imported from $adapter" } catch { Write-Host "DEBUG: AdapterStubs import failed: $($_.Exception.Message)" -ForegroundColor Yellow } } else { Write-Host "DEBUG: AdapterStubs not found at $adapter" -ForegroundColor Yellow }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:85:./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:12:    # Test 1: simulate server 404 response for heartbeat
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:86:./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:13:    Invoke-Test -Name "Standalone: heartbeat 404 handling" -Category "HeartbeatRegression" -TestScript {
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:87:./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:14:        function Send-AgentHeartbeat { param($AgentId) return @{ Success = $false; StatusCode = 404; Error = 'NotFound' } }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:88:./agent/SimRacingAgent.Tests/Regression/test-heartbeat-regression.ps1:17:        Assert-Equal -Expected 404 -Actual $r.StatusCode -Message "Should surface 404"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:89:./agent/SimRacingAgent.Tests/Regression/AgentRegressionTests.ps1:241:                            Write-Host "DEBUG-CATCH-DUMP: Exception full dump:" -ForegroundColor Yellow
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:90:./agent/SimRacingAgent.Tests/Regression/AgentRegressionTests.ps1:256:                            try { $msg = ($_.Exception.Message -or $_.ToString()) } catch {}
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:91:./agent/SimRacingAgent.Tests/Regression/AgentRegressionTests.ps1:654:        Write-Host "DEBUG: Export-ModuleMember skipped (not running inside module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:92:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:102:            } catch [System.IO.IOException] {
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:93:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:129:            try { Write-Host "DEBUG: Clear-AgentLock Remove-Item failed: $($_.Exception.Message)" } catch {}
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:94:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:258:        Write-AgentLog -Message "Invoke-Mockable: $CommandName threw: $($_.Exception.Message)" -Level 'Warn' -Component 'AdapterStubs'
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:95:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:376:            try { $usb = Invoke-Mockable -CommandName 'Get-USBHealthCheck' -Args @() } catch { $usb = $null; $componentErrors += @{ Name = 'USB'; Error = $_.Exception.Message } ; try { Invoke-Mockable -CommandName 'Write-AgentLog' -Args @("USB component error: $($_.Exception.Message)") } catch {} }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:96:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:385:            try { $proc = Invoke-Mockable -CommandName 'Get-ProcessHealthCheck' -Args @() } catch { $proc = $null; $componentErrors += @{ Name = 'Process'; Error = $_.Exception.Message } ; try { Invoke-Mockable -CommandName 'Write-AgentLog' -Args @("Process component error: $($_.Exception.Message)") } catch {} }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:97:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:395:        Write-AgentLog -Message "Invoke-HealthCheckWorkflow: component invocation error: $($_.Exception.Message)" -Level 'Warn' -Component 'AdapterStubs'
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:98:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:735:                            } catch { Write-Host "DEBUG: Import-AgentConfiguration native Get-Content threw: $($_.Exception.Message)" ; $raw = $null }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:99:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:738:                        Write-Host "DEBUG: Import-AgentConfiguration Get-Content threw: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:100:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:743:                    $err = [pscustomobject]@{ CategoryInfo = [pscustomobject]@{ Category = 'ConfigurationError' }; Exception = $_.Exception }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:101:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:744:                    Write-Host "DEBUG: Import-AgentConfiguration Get-Content threw: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:102:./agent/SimRacingAgent.Tests/shared/AdapterStubs.psm1:1048:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:103:./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:22:        $Global:TestSession.Results += @{ Name = $Name; Category = $Category; Success = $false; Error = $_.Exception.Message }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:104:./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:24:        Write-Host "[FAIL] $Category - $Name : $($_.Exception.Message)" -ForegroundColor Red
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:105:./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:29:            "$((Get-Date).ToString('o')) FAILURE $Category - $Name MockKeys=$keys MockOrders=$orders Error=$($_.Exception.Message)" | Out-File -FilePath $tracePath -Append -Encoding utf8
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:106:./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:57:        Write-Verbose "Clear-TestEnvironment encountered an error: $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:107:./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:127:if (Test-Path $adapter) { try { Import-Module $adapter -Force -ErrorAction SilentlyContinue ; Write-Host "DEBUG: AdapterStubs imported from $adapter" } catch { Write-Host "DEBUG: AdapterStubs import failed: $($_.Exception.Message)" -ForegroundColor Yellow } } else { Write-Host "DEBUG: AdapterStubs not found at $adapter" -ForegroundColor Yellow }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:108:./agent/SimRacingAgent.Tests/shared/TestFramework.psm1:148:    Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:109:./agent/SimRacingAgent.Tests/full-agent-run-full-transcript.txt:347:DEBUG-CATCH-DUMP: Exception full dump:
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:110:./agent/SimRacingAgent.Tests/full-agent-run-full-transcript.txt:352:Exception             : System.Management.Automation.RuntimeException: 
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:111:./agent/SimRacingAgent.Tests/full-agent-run-full-transcript.txt:355:CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:112:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:470:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:113:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:497:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:114:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:518:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:115:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:545:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:116:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:562:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:117:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:595:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:118:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:619:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:119:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:655:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:120:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1130:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:121:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1151:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:122:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1178:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:123:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1217:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:124:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1241:DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:125:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1277:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:126:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1406:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:127:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1437:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:128:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1566:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:129:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:1597:DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:130:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:2016:DEBUG-CATCH-DUMP: Exception full dump:
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:131:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:2021:Exception             : System.Management.Automation.RuntimeException: 
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:132:./agent/SimRacingAgent.Tests/run_tests_transcript_20260123_155314.txt:2024:CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:133:./agent/SimRacingAgent.Tests/full-agent-run-quick-exec-transcript.txt:3:Ora di inizio: 20260123140437
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:134:./agent/SimRacingAgent.Tests/full-agent-run-quick-exec-transcript.txt:136:Ora di fine: 20260123140438
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:135:./agent/probe_agent_status.ps1:13:try { Write-Host "ContainsKey('AgentRunning') => $($status.ContainsKey('AgentRunning'))" } catch { Write-Host "ContainsKey call failed: $($_.Exception.Message)" }
+./artifacts/enriched/21319709898-analyze-regression-Linux/regression-enriched-errors.txt:136:./agent/shared/TestFramework.psm1:7:	Write-Verbose "Export-ModuleMember skipped (not running inside a module): $($_.Exception.Message)"

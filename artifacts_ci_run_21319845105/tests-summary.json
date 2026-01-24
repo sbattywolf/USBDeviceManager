@@ -1,0 +1,33 @@
+{
+  "total": 1170,
+  "passed": 1170,
+  "failed": 0,
+  "files": [
+    "agent-e2e-windows\\TestResults\\AgentE2E.windows.trx",
+    "agent-tests-windows\\server\\AgentHeartbeat.Tests\\TestResults\\agentheartbeat-windows-latest.trx",
+    "agent-tests-windows\\server\\USBDeviceManager.Tests\\TestResults\\dotnet-unit-tests-windows-latest.trx",
+    "dotnet-tests-ubuntu-latest\\server\\AgentHeartbeat.Tests\\TestResults\\agentheartbeat-ubuntu-latest.trx",
+    "dotnet-tests-ubuntu-latest\\server\\USBDeviceManager.Tests\\TestResults\\dotnet-unit-tests-ubuntu-latest.trx",
+    "dotnet-tests-windows-latest\\server\\AgentHeartbeat.Tests\\TestResults\\agentheartbeat-windows-latest.trx",
+    "dotnet-tests-windows-latest\\server\\USBDeviceManager.Tests\\TestResults\\dotnet-unit-tests-windows-latest.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\$name.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\all-tests-compat.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\all-tests.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\dotnet-tests-local.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\dotnet-tests-ubuntu-latest.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\integration.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\SimRacingDashboard.Tests.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\unit.trx",
+    "job-logs-21319845105-tests-Linux\\artifacts\\trx\\USBDeviceManager.Tests.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\$name.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\all-tests-compat.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\all-tests.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\dotnet-tests-local.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\dotnet-tests-windows-latest.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\integration.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\SimRacingDashboard.Tests.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\unit.trx",
+    "job-logs-21319845105-tests-Windows\\artifacts\\trx\\USBDeviceManager.Tests.trx"
+  ],
+  "failures": []
+}
