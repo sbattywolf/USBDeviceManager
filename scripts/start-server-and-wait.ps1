@@ -2,7 +2,8 @@ param(
     [string]$ProjectPath = "server/USBDeviceManager",
     [int]$Port = 5000,
     [int]$TimeoutSec = 180,
-    [switch]$NoBuild
+    [switch]$NoBuild,
+    [string]$Configuration = 'Release'
 )
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -22,7 +23,7 @@ if ([string]::IsNullOrWhiteSpace($bindAddress)) { $bindAddress = '127.0.0.1' }
 $WriteHostMsg = "Starting server project: $ProjectPath on port $Port (binding: $bindAddress)"
 Write-Host $WriteHostMsg
 
-$dotnetArgs = "run --project `"$ProjectPath`" --urls http://$($bindAddress):$Port"
+$dotnetArgs = "run --project `"$ProjectPath`" --configuration $Configuration --urls http://$($bindAddress):$Port"
 if ($NoBuild) { $dotnetArgs += ' --no-build' }
 
 $outFile = Join-Path $tmpDir "server.log"
