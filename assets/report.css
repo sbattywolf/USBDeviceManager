@@ -1,0 +1,122 @@
+/* Modern Dashboard report styles */
+:root{
+  --bg:#f6f8fb; --card:#ffffff; --muted:#6b7280; --accent:#0ea5a4; --accent-2:#0369a1; --danger:#ef4444; --success:#16a34a; --shadow: 0 6px 18px rgba(16,24,40,0.06);
+}
+
+/* Style proposal: body.style-a only (style-b removed) */
+.body, body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#0f172a; margin:0}
+body.style-a{--accent:#0ea5a4;--accent-2:#0369a1;--bg:#f6f8fb;--card:#ffffff}
+
+/* make the page use full viewport height and flex layout */
+html, body {height:100%}
+.container{max-width:1100px;margin:12px auto;padding:10px;min-height:100vh;display:flex;flex-direction:column}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:8px 10px}
+.title{font-size:15px;font-weight:700}
+.meta{color:var(--muted);font-size:13px}
+.ribbon{display:flex;gap:12px;margin:8px 0}
+.card{background:var(--card);padding:8px 12px;border-radius:8px;box-shadow:var(--shadow);min-width:120px;min-height:56px;display:flex;flex-direction:column;justify-content:center}
+.kpi{font-size:16px;font-weight:700}
+.kpi-sub{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:16px;flex:1 1 auto;align-items:stretch}
+.panel{background:var(--card);padding:12px;border-radius:10px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:0}
+.fail-table{width:100%;border-collapse:collapse}
+.fail-table th,.fail-table td{padding:10px;border-bottom:1px solid #e6eef5;text-align:left;vertical-align:top}
+.fail-table th{background:#f3f6f9;font-size:13px;color:#334155}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px}
+.badge.ok{background:rgba(22,163,74,0.12);color:var(--success)}
+.badge.fail{background:rgba(239,68,68,0.12);color:var(--danger)}
+.badge.high{background:rgba(239,68,68,0.12);color:var(--danger)}
+.badge.medium{background:rgba(250,204,21,0.12);color:#a16207}
+.badge.low{background:rgba(15,23,42,0.06);color:#0f172a}
+.monospace{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;font-size:13px}
+details pre{white-space:pre-wrap;max-height:360px;overflow:auto;padding:10px;background:#0f172a0a;border-radius:6px}
+.filters{display:flex;flex-direction:column;gap:8px}
+.search{width:100%;padding:8px;border-radius:8px;border:1px solid #e6eef5}
+.small{font-size:12px;color:var(--muted)}
+.header{background:linear-gradient(90deg,var(--accent) 0%,var(--accent-2) 100%);color:#fff;border-radius:10px}
+.header .title{color:#fff}
+.header .meta{color:#fff}
+.header .session-sub{color:#ffffffcc}
+.footer{margin-top:18px;padding:12px;text-align:center;color:var(--muted);font-size:13px}
+/* failure table tweaks */
+.fail-table{width:100%;border-collapse:collapse}
+.fail-table th,.fail-table td{padding:12px;border-bottom:1px solid #e6eef5;text-align:left;vertical-align:top}
+.fail-table thead th{background:linear-gradient(180deg,#f8fafc,#f3f6f9);font-weight:700}
+.fail-row-high{background:rgba(239,68,68,0.03)}
+.fail-row-medium{background:rgba(250,204,21,0.02)}
+.fail-row-low{background:transparent}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.ribbon{flex-wrap:wrap}}
+
+/* Tabs */
+.tabs{margin-top:12px}
+.tab-buttons{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tab-buttons button{background:transparent;border:1px solid #e6eef5;padding:8px 12px;border-radius:8px;cursor:pointer}
+.tab-buttons button.active{background:#0369a1;color:#fff;border-color:#0369a1}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+.session-title{font-size:16px;font-weight:700;margin-bottom:6px;padding:10px;border-radius:8px;background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));backdrop-filter:blur(4px)}
+.session-sub{color:var(--muted);font-size:13px;margin-bottom:12px}
+
+/* subtle translucent band under tab content */
+.tab-content{padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));}
+
+/* Make all session/tab contents the same visual dimensions */
+/* let tab contents size based on available space; panels manage scrolling */
+.tab-content{display:flex;flex-direction:column;min-height:0;flex:1 1 auto}
+
+/* Make the failure table area scrollable so tab content height stays fixed */
+.tab-content .fail-table{display:block;flex:1 1 auto;overflow:auto;border:0;margin:0;padding:0}
+.tab-content .fail-table thead{display:table-header-group;width:100%}
+.tab-content .fail-table tbody{display:block;max-height:none;overflow:auto}
+.tab-content .fail-table tbody tr{display:table;width:100%;table-layout:fixed}
+.tab-content .fail-table th,.tab-content .fail-table td{white-space:normal}
+
+/* Ensure details area doesn't push layout too far */
+.tab-content details .monospace{max-height:220px;overflow:auto}
+
+/* Action icon buttons in the Actions column */
+.links .icon {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-right:8px;
+  padding:6px;
+  border-radius:6px;
+  text-decoration:none;
+  color:#fff;
+  background:#0f172a; /* high-contrast default */
+  font-size:14px;
+  line-height:1;
+  box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+}
+.links .icon svg{width:18px;height:18px}
+.links .icon:hover{filter:brightness(1.08)}
+.links .icon:focus{outline:3px solid rgba(2,132,199,0.24);outline-offset:2px}
+.no-links{color:var(--muted);font-style:italic}
+
+/* Summary table centering and layout */
+.summary-table{margin:10px auto;width:100%;max-width:980px;table-layout:fixed;border-collapse:collapse}
+.summary-table th,.summary-table td{padding:10px;border-bottom:1px solid #e6eef5;text-align:center}
+.summary-table thead th{background:linear-gradient(180deg,#f8fafc,#f3f6f9)}
+
+/* Fixed column widths and truncation for fail table */
+.fail-table{table-layout:fixed}
+.fail-table td.testcase{width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fail-table td.outcome{width:12%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.fail-table td.description{width:38%;overflow:hidden;}
+.fail-table td.links{width:10%;text-align:center}
+
+/* Multi-line clamp for description cell to avoid overlapping columns */
+.fail-table td.description .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;line-clamp:3}
+.fail-table td.description .clamp p{margin:0;font-size:13px;line-height:1.2;word-break:break-word}
+
+/* Ensure details summary remains compact */
+.fail-table details summary.small{cursor:pointer;color:var(--muted);font-size:12px}
+
+/* Sub-controls inside each main tab: sub-tabs and per-tab name-seg select */
+.sub-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sub-tab-buttons{display:flex;gap:8px}
+.sub-tab-buttons button{background:transparent;border:1px solid #e6eef5;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:13px}
+.sub-tab-buttons button.active{background:#0ea5a4;color:#fff;border-color:#0ea5a4}
+.sub-name-segs select{padding:6px;border-radius:6px;border:1px solid #e6eef5}

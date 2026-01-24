@@ -600,19 +600,33 @@ jobs:
         run: |
           set -euo pipefail
           echo "Failures detected, gathering logs and generating enriched report"
-          mkdir -p artifacts/logs
-          mapfile -t logs < <(find . -type f -name '*.log' || true)
-          echo "Found ${#logs[@]} log files"
+          mkdir -p artifacts/enriched/tests
           echo "=== Enriched Test Report ===" > tests-enriched-report.txt
           echo "See tests-summary.json for full summary." >> tests-enriched-report.txt
           echo "\n--- Failures ---\n" >> tests-enriched-report.txt
           cat tests-summary.txt >> tests-enriched-report.txt
-          echo "\n--- Log excerpts (prioritized) ---\n" >> tests-enriched-report.txt
-          for kw in Exception ERROR Timeout Assertion; do
-            echo "\n== $kw ==" >> tests-enriched-report.txt
-            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> tests-enriched-report.txt || true
-          done
-          echo "Wrote tests-enriched-report.txt"
+
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/tests/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "Message:" >> "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then
+                cp "$fileloc" "$outdir/" || true
+              fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            echo "jq not available; skipping per-failure folder creation" >> tests-enriched-report.txt
+          fi
+
+          echo "Wrote tests-enriched-report.txt and per-failure folders"
 
       - name: Upload enriched report (failures)
         if: steps.summary.outputs.failed_count != '0'
@@ -671,9 +685,25 @@ jobs:
         run: |
           set -euo pipefail
           echo "E2E failures detected; generating enriched E2E report"
+          mkdir -p artifacts/enriched/e2e
           echo "=== E2E Enriched Report ===" > e2e-enriched-report.txt
           cat tests-summary.txt >> e2e-enriched-report.txt
-          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/e2e/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+          fi
 
       - name: Upload E2E enriched report
         if: steps.summary.outputs.failed_count != '0'
@@ -732,9 +762,25 @@ jobs:
         run: |
           set -euo pipefail
           echo "Integration failures detected; generating enriched integration report"
+          mkdir -p artifacts/enriched/integration
           echo "=== Integration Enriched Report ===" > integration-enriched-report.txt
           cat tests-summary.txt >> integration-enriched-report.txt
-          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/integration/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
+          fi
 
       - name: Upload integration enriched report
         if: steps.summary.outputs.failed_count != '0'
@@ -746,6 +792,8 @@ jobs:
   final-report:
     name: CI Final Test Summary
     runs-on: ubuntu-latest
+    env:
+      HTML_COMMENT_MAX_CHARS: '60000'
     needs: [analyze-unit, analyze-results, analyze-e2e, analyze-integration]
     if: always()
     steps:
@@ -873,6 +921,28 @@ jobs:
           # renderer will search recursively under artifacts/summaries
           python3 scripts/generate-final-report-html.py --src artifacts/summaries --out final-report.html || python3 scripts/generate-final-report-html.py --out final-report.html
 
+      - name: Copy final report to stable artifacts/latest-report
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/latest-report
+          cp -f final-report.html artifacts/latest-report/final-report.html || true
+          # include any enriched folders so links in the HTML resolve when downloaded
+          if [ -d artifacts/enriched ]; then
+            rm -rf artifacts/latest-report/enriched || true
+            cp -r artifacts/enriched artifacts/latest-report/enriched || true
+          fi
+
+      - name: Upload latest report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-test-report
+          path: |
+            artifacts/latest-report/final-report.html
+            artifacts/latest-report/enriched/**
+
       - name: Upload final report HTML
         uses: actions/upload-artifact@v4
         with:
@@ -929,6 +999,98 @@ jobs:
         run: |
           echo "One or more test suites failed; marking workflow as failed"
           exit 1
+
+      - name: Prepare failure-report PR files
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha=$(echo "${GITHUB_SHA}" | cut -c1-7)
+          mkdir -p .github/ci-failures
+          outf=".github/ci-failures/ci-failure-${sha}.md"
+          echo "# CI Test Failures for ${GITHUB_SHA}" > "$outf"
+          echo "" >> "$outf"
+          echo 'Generated by CI. See the aggregated report attached.' >> "$outf"
+          echo "" >> "$outf"
+          echo '```' >> "$outf"
+          sed -n '1,400p' final-report.txt >> "$outf" || true
+          echo '```' >> "$outf"
+          # also attach the generated HTML report if present
+          if [ -f final-report.html ]; then
+            cp -f final-report.html ".github/ci-failures/final-report-${sha}.html" || true
+          fi
+
+      - name: Create PR with failure report
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "CI: test failures report (${GITHUB_SHA})"
+          branch: "ci/failures-${{ github.sha }}"
+          title: "CI: Test failures (${GITHUB_SHA})"
+          body: |
+            Automated PR containing the CI failure report generated by the workflow.
+
+            - Aggregated text report: `.github/ci-failures/ci-failure-${{ github.sha }}.md`
+            - HTML report (preview): `.github/ci-failures/final-report-${{ github.sha }}.html`
+
+            You can also download artifacts for this workflow run (includes `latest-test-report`) here:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Review the files in the PR to investigate failures.
+          labels: ci-failure
+
+      - name: Create gist of HTML report and comment on PR
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const fullSha = process.env.GITHUB_SHA || '';
+            const short = (fullSha || '').substring(0,7);
+            const htmlPath = `.github/ci-failures/final-report-${short}.html`;
+            try {
+              if (!fs.existsSync(htmlPath)) {
+                console.log('HTML report not found at', htmlPath);
+                return;
+              }
+              const content = fs.readFileSync(htmlPath, 'utf8');
+              const gist = await github.rest.gists.create({
+                files: { [`final-report-${short}.html`]: { content } },
+                public: false,
+                description: `CI final-report HTML for ${fullSha}`
+              });
+              console.log('Created gist', gist.data.html_url);
+
+              // find the PR by head branch
+              const head = `${owner}:ci/failures-${fullSha}`;
+              const prs = await github.rest.pulls.list({ owner, repo, head });
+              if (prs.data && prs.data.length > 0) {
+                const prNumber = prs.data[0].number;
+                // Post a short comment linking to the gist
+                const linkBody = `HTML final report attached as gist: ${gist.data.html_url}`;
+                await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: linkBody });
+                console.log('Link comment posted on PR', prNumber);
+
+                // Also post the HTML content as a comment (truncated if very large)
+                const MAX_CHARS = parseInt(process.env.HTML_COMMENT_MAX_CHARS || '60000', 10) || 60000;
+                let attachContent = content;
+                let truncated = false;
+                if (attachContent.length > MAX_CHARS) { attachContent = attachContent.slice(0, MAX_CHARS); truncated = true; }
+                const htmlComment = `HTML final report (raw):\n\n---\n\n` + '```html\n' + attachContent + (truncated ? '\n\n... (truncated)' : '') + '\n```';
+                await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: htmlComment });
+                console.log('HTML content posted as comment on PR', prNumber, truncated ? '(truncated)' : '');
+              } else {
+                console.log('PR not found for head', head);
+              }
+            } catch (e) {
+              console.log('Error creating gist or commenting:', e.message || e);
+            }
+        env:
+          GITHUB_SHA: ${{ github.sha }}
 
   analyze-unit:
     name: Analyze Unit Test Results
@@ -992,19 +1154,36 @@ jobs:
         run: |
           set -euo pipefail
           echo "Unit failures detected, gathering logs and generating enriched report"
-          mkdir -p artifacts/logs
-          mapfile -t logs < <(find . -type f -name '*.log' || true)
-          echo "Found ${#logs[@]} log files"
+          mkdir -p artifacts/enriched/unit
           echo "=== Unit Tests Enriched Report ===" > unit-tests-enriched-report.txt
           echo "See tests-summary.json for full summary." >> unit-tests-enriched-report.txt
           echo "\n--- Failures ---\n" >> unit-tests-enriched-report.txt
           cat tests-summary.txt >> unit-tests-enriched-report.txt
-          echo "\n--- Log excerpts (prioritized) ---\n" >> unit-tests-enriched-report.txt
-          for kw in Exception ERROR Timeout Assertion; do
-            echo "\n== $kw ==" >> unit-tests-enriched-report.txt
-            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> unit-tests-enriched-report.txt || true
-          done
-          echo "Wrote unit-tests-enriched-report.txt"
+
+          # Create per-failure folders with details and log excerpts
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/unit/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "Message:" >> "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              # copy trx if present
+              if [ -f "$fileloc" ]; then
+                cp "$fileloc" "$outdir/" || true
+              fi
+              # collect log excerpts nearby
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            echo "jq not available; skipping per-failure folder creation" >> unit-tests-enriched-report.txt
+          fi
+
+          echo "Wrote unit-tests-enriched-report.txt and per-failure folders"
 
       - name: Upload unit enriched report (failures)
         if: steps.summary.outputs.failed_count != '0'
