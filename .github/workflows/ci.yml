@@ -348,8 +348,19 @@ jobs:
             }
           } else {
             Write-Host "trx2html not available; copying .trx files to artifacts\trx for upload"
+            # Ensure we don't try to copy a file onto itself (causes failure)
+            $destDir = (Get-Item -Path "artifacts\trx").FullName
             Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
-              Copy-Item $_.FullName -Destination (Join-Path artifacts\trx $_.Name) -Force
+              $dest = Join-Path $destDir $_.Name
+              if ($_.FullName -ne $dest) {
+                try {
+                  Copy-Item $_.FullName -Destination $dest -Force -ErrorAction Stop
+                } catch {
+                  Write-Host "Failed copying $($_.FullName) -> $dest: $($_.Exception.Message)"
+                }
+              } else {
+                Write-Host "Skipping copy of $($_.FullName) - destination equals source"
+              }
             }
           }
 
