@@ -1,0 +1,33 @@
+Total: 5865
+Passed: 5855
+Failed: 10
+
+Failures:
+- USBDeviceManager.Tests.Integration.Regression.HeartbeatRegressionTests.Heartbeat_Post_WithLegacySchema_ShouldReturnOk (Failed): Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.NotFound {value: 404}. [file:artifacts\test-results\all-tests.trx]
+- USBDeviceManager.Tests.Functional.DashboardFunctionalTests.PerformanceUnderLoad_MultipleSimultaneousRequests_ShouldMaintainResponsiveness (Failed): Expected responses to contain only items matching r.IsSuccessStatusCode, but {StatusCode: 404, ReasonPhrase: 'Not Found', Version: 1.1, Content: System.Net.Http.StreamContent, Headers:
+{
+}, StatusCode: 404, ReasonPhrase: 'Not Found', Version: 1.1, Content: System.Net.Http.StreamContent, Headers:
+{
+}, StatusCode: 404, ReasonPhrase: 'Not Found', Version: 1.1, Content: System.Net.Http.StreamContent, Headers:
+{
+}, StatusCode: 404, ReasonPhrase: 'Not Found', Version: 1.1, Content: System.Net.Http.StreamContent, Headers:
+{
+}, StatusCode: 404, ReasonPhrase: 'Not Found', Version: 1.1, Content: System.Net.Http.StreamContent, Headers:
+{
+}} do(es) not match. [file:artifacts\test-results\all-tests.trx]
+- USBDeviceManager.Tests.Functional.DashboardFunctionalTests.SystemHealthMonitoring_ContinuousMonitoring_ShouldTrackSystemMetrics (Failed): Expected healthResponse.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.NotFound {value: 404}. [file:artifacts\test-results\all-tests.trx]
+- USBDeviceManager.Tests.Functional.DashboardFunctionalTests.ErrorHandlingAndRecovery_InvalidOperations_ShouldHandleGracefully (Failed): Expected healthResponse.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.NotFound {value: 404}. [file:artifacts\test-results\all-tests.trx]
+- USBDeviceManager.Tests.Unit.Adapters.ShellRunnerTests.RunAsync_Cancellation_TriggersTaskCanceled (Failed): Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.Threading.Tasks.TaskCanceledException) [file:scripts\tmp\server-all.trx]
+- USBDeviceManager.Tests.Unit.Adapters.ShellRunnerTests.RunAsync_Cancellation_TriggersTaskCanceled (Failed): Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.Threading.Tasks.TaskCanceledException) [file:scripts\tmp\shellrunner-fail.trx]
+- USBDeviceManager.Tests.Unit.Adapters.ShellRunnerTests.RunAsync_Cancellation_TriggersTaskCanceled (Failed): Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.Threading.Tasks.TaskCanceledException) [file:server\USBDeviceManager.Tests\TestResults\shellrunner-local-2.trx]
+- USBDeviceManager.Tests.Unit.Adapters.ShellRunnerTests.RunAsync_Cancellation_TriggersTaskCanceled (Failed): Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.Threading.Tasks.TaskCanceledException) [file:server\USBDeviceManager.Tests\TestResults\shellrunner-local-3.trx]
+- USBDeviceManager.Tests.Unit.Adapters.ShellRunnerTests.RunAsync_Cancellation_TriggersTaskCanceled (Failed): Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.Threading.Tasks.TaskCanceledException)
+Actual:   typeof(System.ComponentModel.Win32Exception)
+---- System.ComponentModel.Win32Exception : An error occurred trying to start process '.\artifacts\longrunner\win-x64\LongRunner.exe' with working directory 'E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\bin\Debug\net8.0'. Impossibile trovare il file specificato. [file:server\USBDeviceManager.Tests\TestResults\shellrunner-local-4.trx]
+- USBDeviceManager.Tests.Unit.Adapters.ShellRunnerTests.RunAsync_Cancellation_TriggersTaskCanceled (Failed): Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.Threading.Tasks.TaskCanceledException) [file:server\USBDeviceManager.Tests\TestResults\shellrunner-local.trx]
