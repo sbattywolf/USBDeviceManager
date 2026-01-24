@@ -78,6 +78,23 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         // local path under server/.../TestResults/artifacts so CI/local runs
         // preserve the DB for triage.
         var envDebugPath = Environment.GetEnvironmentVariable("SIMRACING_DEBUG_DBPATH");
+        // Defensive: if a Windows-style path (drive letter + colon or backslashes)
+        // is provided on a non-Windows OS, ignore it to avoid trying to open
+        // a non-native path (which can result in 'file is not a database').
+        if (!string.IsNullOrEmpty(envDebugPath) &&
+            !System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+        {
+            // Heuristic: Windows absolute path contains a drive letter and ':' or backslashes
+            if (envDebugPath.Length >= 2 && envDebugPath[1] == ':' || envDebugPath.Contains("\\"))
+            {
+                try
+                {
+                    Console.Error.WriteLine($"SimRacingTestFactory: ignoring SIMRACING_DEBUG_DBPATH='{envDebugPath}' on non-Windows OS");
+                    envDebugPath = null;
+                }
+                catch { envDebugPath = null; }
+            }
+        }
         var runRepro = Environment.GetEnvironmentVariable("RUN_DB_REPRO") == "1";
         if (!string.IsNullOrEmpty(envDebugPath))
         {
