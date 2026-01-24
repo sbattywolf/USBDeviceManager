@@ -1,8 +1,9 @@
+---
 name: CI
 
-on:
+"on":
   push:
-    branches: [ main, master, '**/chore/**', '**/feat/**' ]
+    branches: [main, master, '**/chore/**', '**/feat/**']
     # Avoid running CI for changes that only affect docs, artifacts, or non-code assets
     paths-ignore:
       - 'docs/**'
@@ -14,7 +15,7 @@ on:
       - 'logs/**'
       - '*.md'
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 env:
   CI_BIND_ADDRESS: 127.0.0.1
@@ -131,7 +132,7 @@ jobs:
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
-      - name: On build failure: produce tests-summary placeholder
+      - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
         shell: bash
         run: |
@@ -951,7 +952,7 @@ jobs:
           name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
           path: e2e-enriched-report.txt
 
-      # per-job E2E analysis removed; regression analysis handled by analyze-regression job
+  # per-job E2E analysis removed; regression analysis handled by analyze-regression job
 
   integration-tests:
     runs-on: windows-latest
@@ -986,7 +987,11 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          if (Test-Path ./scripts/start-server-and-wait.ps1) { .\scripts\start-server-and-wait.ps1 -NonInteractive -Port $Env:TEST_PORT } else { Write-Host 'No orchestration script present, skipping server start.' }
+          if (Test-Path ./scripts/start-server-and-wait.ps1) {
+            .\scripts\start-server-and-wait.ps1 -NonInteractive -Port $Env:TEST_PORT
+          } else {
+            Write-Host 'No orchestration script present, skipping server start.'
+          }
 
       - name: Wait for server health (PowerShell)
         if: always()
@@ -1580,11 +1585,26 @@ jobs:
               e2e-tests-summary* ) cp -r "$d"/* artifacts/summaries/e2e/ || true ;;
             esac
             # Enriched reports (different jobs may have suffixed names)
-            if ls "$d"/*integration-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/integration; cp "$d"/*integration-enriched-report.txt artifacts/enriched/integration/ || true; fi
-            if ls "$d"/*regression-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/regression; cp "$d"/*regression-enriched-report.txt artifacts/enriched/regression/ || true; fi
-            if ls "$d"/*unit-tests-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/unit; cp "$d"/*unit-tests-enriched-report.txt artifacts/enriched/unit/ || true; fi
-            if ls "$d"/*e2e-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/e2e; cp "$d"/*e2e-enriched-report.txt artifacts/enriched/e2e/ || true; fi
-            if ls "$d"/*tests-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/tests; cp "$d"/*tests-enriched-report.txt artifacts/enriched/tests/ || true; fi
+            if ls "$d"/*integration-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/integration
+              cp "$d"/*integration-enriched-report.txt artifacts/enriched/integration/ || true
+            fi
+            if ls "$d"/*regression-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/regression
+              cp "$d"/*regression-enriched-report.txt artifacts/enriched/regression/ || true
+            fi
+            if ls "$d"/*unit-tests-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/unit
+              cp "$d"/*unit-tests-enriched-report.txt artifacts/enriched/unit/ || true
+            fi
+            if ls "$d"/*e2e-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/e2e
+              cp "$d"/*e2e-enriched-report.txt artifacts/enriched/e2e/ || true
+            fi
+            if ls "$d"/*tests-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/tests
+              cp "$d"/*tests-enriched-report.txt artifacts/enriched/tests/ || true
+            fi
             # copy anything else for manual inspection
             cp -r "$d" artifacts/downloaded-raw/ || true
           done
