@@ -225,22 +225,26 @@ jobs:
             Write-Host "trx2html not available; copying .trx files to artifacts/trx for upload"
             Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
               $src = $_.FullName
-              $dest = Join-Path $PWD 'artifacts\trx' $_.Name
-              if (Test-Path $dest) {
-                try {
-                  $srcFull = (Get-Item -LiteralPath $src).FullName
-                  $destFull = (Get-Item -LiteralPath $dest).FullName
-                } catch {
-                  $srcFull = $src
-                  $destFull = $dest
-                }
-                if ($srcFull -eq $destFull) {
-                  Write-Host "Skipping copy: source equals destination for $src"
-                  return
-                }
+              $destDir = Join-Path $PWD 'artifacts\trx'
+              $dest = Join-Path $destDir $_.Name
+              # Resolve canonical provider paths when possible
+              try {
+                $srcFull = (Resolve-Path -LiteralPath $src -ErrorAction Stop).ProviderPath
+              } catch {
+                $srcFull = $src
               }
               try {
-                Copy-Item -Path $src -Destination $dest -Force
+                $destFull = (Resolve-Path -LiteralPath $dest -ErrorAction Stop).ProviderPath
+              } catch {
+                $destFull = $dest
+              }
+              # If source and destination are identical or source is already inside artifacts\trx, skip copying
+              if ($srcFull -eq $destFull -or $srcFull.StartsWith($destDir, [System.StringComparison]::OrdinalIgnoreCase)) {
+                Write-Host "Skipping copy: source already in artifacts/trx: $src"
+                continue
+              }
+              try {
+                Copy-Item -Path $src -Destination $dest -Force -ErrorAction Stop
               } catch {
                 Write-Warning "Failed copying $src to $dest : $($_.Exception.Message)"
               }
