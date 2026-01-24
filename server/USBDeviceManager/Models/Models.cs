@@ -88,7 +88,7 @@ public class DeviceStatus
     /// <summary>
     /// Gets or sets the related device identifier.
     /// </summary>
-    public int DeviceId
+    public int? DeviceId
     {
         get; set;
     }
@@ -96,7 +96,7 @@ public class DeviceStatus
     /// <summary>
     /// Gets or sets the related `UsbDevice` instance.
     /// </summary>
-    public UsbDevice Device { get; set; } = null!;
+    public UsbDevice? Device { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the device is currently connected.
