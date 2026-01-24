@@ -131,6 +131,40 @@ jobs:
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
+      - name: Build CI DB initializer helper
+        if: always()
+        run: |
+          if [ -f scripts/ci-init-db/EnsureDb/EnsureDb.csproj ]; then
+            dotnet build scripts/ci-init-db/EnsureDb/EnsureDb.csproj --configuration Release
+          else
+            echo "No EnsureDb helper present; skipping build"
+          fi
+
+      - name: Initialize database (EnsureCreated)
+        if: always()
+        shell: bash
+        run: |
+          # Run the small helper that calls EF EnsureCreated to create sqlite schema before tests
+          if [ -f scripts/ci-init-db/EnsureDb/EnsureDb.csproj ]; then
+            dotnet run -p scripts/ci-init-db/EnsureDb/EnsureDb.csproj -c Release --no-build || true
+          else
+            echo "No EnsureDb helper present; skipping DB initialization"
+          fi
+
+      - name: Set EF Core logging env (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        shell: bash
+        run: |
+          echo "Logging__LogLevel__Microsoft=Debug" >> $GITHUB_ENV
+          echo "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" >> $GITHUB_ENV
+
+      - name: Set EF Core logging env (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          "Logging__LogLevel__Microsoft=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+
   tests:
     name: Run Tests and Upload Results
     runs-on: ${{ matrix.os }}
