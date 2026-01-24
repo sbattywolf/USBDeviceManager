@@ -916,12 +916,97 @@ jobs:
           name: integration-enriched-report
           path: integration-enriched-report.txt
 
+  analyze-e2e:
+    name: Analyze E2E Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs: e2e-windows
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download E2E artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-e2e-windows
+          path: artifacts/e2e/windows
+        continue-on-error: true
+
+      - name: Generate E2E summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
+          set -euo pipefail
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; setting outputs and exiting"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload e2e test summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich e2e report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "E2E failures detected; generating enriched e2e report"
+          mkdir -p artifacts/enriched/e2e
+          echo "=== E2E Enriched Report ===" > e2e-enriched-report.txt
+          cat tests-summary.txt >> e2e-enriched-report.txt
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/e2e/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+          fi
+
+      - name: Upload e2e enriched report
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-enriched-report
+          path: e2e-enriched-report.txt
+
   final-report:
     name: CI Final Test Summary
     runs-on: ubuntu-latest
     env:
       HTML_COMMENT_MAX_CHARS: '60000'
-    needs: [analyze-unit, analyze-results, analyze-regression, analyze-integration]
+    needs: [analyze-unit, analyze-results, analyze-regression, analyze-integration, analyze-e2e]
     if: always()
     steps:
       - name: Checkout
@@ -955,6 +1040,13 @@ jobs:
           path: artifacts/summaries/integration
         continue-on-error: true
 
+      - name: Download e2e summary
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-tests-summary
+          path: artifacts/summaries/e2e
+        continue-on-error: true
+
       - name: Download unit enriched report
         uses: actions/download-artifact@v4
         with:
@@ -974,6 +1066,13 @@ jobs:
         with:
           name: integration-enriched-report
           path: artifacts/enriched/integration
+        continue-on-error: true
+
+      - name: Download e2e enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-enriched-report
+          path: artifacts/enriched/e2e
         continue-on-error: true
 
       - name: Download tests enriched report
@@ -1032,6 +1131,10 @@ jobs:
           if [ -f "artifacts/enriched/integration/integration-enriched-report.txt" ]; then
             echo "\n--- INTEGRATION ENRICHED REPORT ---\n" >> $out
             sed -n '1,400p' artifacts/enriched/integration/integration-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/e2e/e2e-enriched-report.txt" ]; then
+            echo "\n--- E2E ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/e2e/e2e-enriched-report.txt >> $out
           fi
           if [ -f "artifacts/enriched/tests/tests-enriched-report.txt" ]; then
             echo "\n--- TESTS ENRICHED REPORT ---\n" >> $out
@@ -1323,7 +1426,7 @@ jobs:
   log-check:
     name: Conditional Log Inspection
     runs-on: ubuntu-latest
-    needs: [analyze-results, analyze-unit, analyze-regression, analyze-integration]
+    needs: [analyze-results, analyze-unit, analyze-regression, analyze-integration, analyze-e2e]
     if: always()
     steps:
       - name: Checkout
