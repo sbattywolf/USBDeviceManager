@@ -77,11 +77,9 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Build server for Integration tests
-        shell: pwsh
-        run: |
-          Write-Host 'Building server/USBDeviceManager (Release) so --no-build later can use outputs'
-          dotnet build server/USBDeviceManager -c Release --no-restore
+      # NOTE: Build for integration tests must run after NuGet restore so
+      # the `project.assets.json` exists. The server build step is moved
+      # further below (after the Restore NuGet step).
 
       - name: Run Unit env-check (Windows)
         if: runner.os == 'Windows'
@@ -145,6 +143,12 @@ jobs:
             Write-Error "dotnet restore failed after $maxAttempts attempts"
             exit 1
           }
+
+      - name: Build server for Integration tests
+        shell: pwsh
+        run: |
+          Write-Host 'Building server/USBDeviceManager (Release) so --no-build later can use outputs'
+          dotnet build server/USBDeviceManager -c Release --no-restore
 
       - name: Publish long-run test helper
         shell: pwsh
