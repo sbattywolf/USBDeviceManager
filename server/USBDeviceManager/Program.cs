@@ -22,6 +22,19 @@ builder.Logging.AddConsole();
 builder.Logging.SetMinimumLevel(LogLevel.Debug);
 builder.Logging.AddFilter("Microsoft", LogLevel.Debug);
 
+// Optional file-based logger for CI: capture EF Core SQL when EF_SQL_LOG_FILE is set
+var efLogFile = Environment.GetEnvironmentVariable("EF_SQL_LOG_FILE");
+if (!string.IsNullOrEmpty(efLogFile))
+{
+    try
+    {
+        var dir = Path.GetDirectoryName(efLogFile) ?? "scripts/tmp";
+        Directory.CreateDirectory(dir);
+    }
+    catch { }
+    builder.Logging.AddProvider(new FileLoggerProvider(efLogFile));
+}
+
 // Add services to the container
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -272,4 +285,71 @@ catch (Exception ex)
 /// </summary>
 public partial class Program
 {
+}
+
+// Simple file logger provider to capture EF/SQL logs in CI runs.
+internal class FileLoggerProvider : ILoggerProvider
+{
+    private readonly string _path;
+    private readonly StreamWriter _writer;
+    private readonly object _lock = new object();
+
+    public FileLoggerProvider(string path)
+    {
+        _path = path;
+        // open in append mode, create directory earlier
+        _writer = new StreamWriter(new FileStream(_path, FileMode.Append, FileAccess.Write, FileShare.Read)) { AutoFlush = true };
+    }
+
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new FileLogger(categoryName, _writer, _lock);
+    }
+
+    public void Dispose()
+    {
+        try { _writer?.Dispose(); } catch { }
+    }
+
+    private class FileLogger : ILogger
+    {
+        private readonly string _category;
+        private readonly TextWriter _writer;
+        private readonly object _lock;
+
+        public FileLogger(string category, TextWriter writer, object sync)
+        {
+            _category = category;
+            _writer = writer;
+            _lock = sync;
+        }
+
+        public IDisposable BeginScope<TState>(TState state) => NullScope.Instance;
+
+        public bool IsEnabled(LogLevel logLevel) => true;
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+            try
+            {
+                var message = formatter(state, exception);
+                var line = $"[{DateTime.UtcNow:O}] {logLevel} {_category} {eventId.Id} - {message}";
+                lock (_lock)
+                {
+                    _writer.WriteLine(line);
+                    if (exception != null)
+                    {
+                        _writer.WriteLine(exception.ToString());
+                    }
+                }
+            }
+            catch { }
+        }
+    }
+
+    private class NullScope : IDisposable
+    {
+        public static NullScope Instance { get; } = new NullScope();
+        public void Dispose() { }
+    }
 }
