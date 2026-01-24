@@ -106,7 +106,7 @@ namespace USBDeviceManager.Controllers
             var status = new DeviceStatus
             {
                 Device = device,
-                DeviceId = device?.Id ?? 0,
+                DeviceId = device?.Id,
                 IsConnected = string.Equals(payload.EventType, "CONNECTED", System.StringComparison.OrdinalIgnoreCase),
                 Status = payload.EventType ?? string.Empty,
                 ErrorMessage = payload.Message,
