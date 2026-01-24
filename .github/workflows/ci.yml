@@ -291,14 +291,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm install -g trx2html || true
-          mkdir -p artifacts/trx-html
+          mkdir -p artifacts/trx-html artifacts/trx
           shopt -s globstar || true
-          for f in **/*.trx; do
-            if [ -f "$f" ]; then
-              trx2html "$f" -o "artifacts/trx-html/$(basename "$f").html" || true
-            fi
-          done
+          if command -v trx2html >/dev/null 2>&1; then
+            for f in **/*.trx; do
+              if [ -f "$f" ]; then
+                trx2html "$f" -o "artifacts/trx-html/$(basename "$f").html" || true
+              fi
+            done
+          else
+            echo "trx2html not available; copying .trx files to artifacts/trx for upload"
+            for f in **/*.trx; do
+              if [ -f "$f" ]; then
+                cp "$f" "artifacts/trx/$(basename "$f")"
+              fi
+            done
+          fi
 
       - name: Convert TRX to HTML (Windows)
         if: runner.os == 'Windows'
@@ -309,11 +317,17 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          npm install -g trx2html || true
-          New-Item -ItemType Directory -Force -Path artifacts\trx-html | Out-Null
-          Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
-            $out = Join-Path artifacts\trx-html ($_.Name + '.html')
-            trx2html $_.FullName -o $out || Write-Host "trx2html failed for $($_.FullName)"
+          New-Item -ItemType Directory -Force -Path artifacts\trx-html, artifacts\trx | Out-Null
+          if (Get-Command trx2html -ErrorAction SilentlyContinue) {
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              $out = Join-Path artifacts\trx-html ($_.Name + '.html')
+              trx2html $_.FullName -o $out || Write-Host "trx2html failed for $($_.FullName)"
+            }
+          } else {
+            Write-Host "trx2html not available; copying .trx files to artifacts\trx for upload"
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              Copy-Item $_.FullName -Destination (Join-Path artifacts\trx $_.Name) -Force
+            }
           }
 
       - name: Enrich tests logs (on failures/errors)
