@@ -77,7 +77,11 @@ try {
     Write-Host "Process Id: $($proc.Id)"
     Write-Host "Invocation: $($MyInvocation.Line)"
     Write-Host '--- env vars (selected) ---'
-    'CI_BIND_ADDRESS','TEST_PORT','GITHUB_RUN_ID' | ForEach-Object { Write-Host "$_ = $($Env:$_)" }
+        'CI_BIND_ADDRESS','TEST_PORT','GITHUB_RUN_ID' | ForEach-Object {
+            $name = $_
+            $val = [System.Environment]::GetEnvironmentVariable($name)
+            Write-Host ("{0} = {1}" -f $name, $val)
+        }
     if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
     if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
     exit 1
