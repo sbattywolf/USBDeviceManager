@@ -594,8 +594,17 @@ jobs:
         shell: pwsh
         run: |
           $ef = Join-Path $env:GITHUB_WORKSPACE 'scripts/tmp/ef.log'
-          if (Test-Path $ef -PathType Leaf -and (Get-Item $ef).Length -gt 0) {
-            Write-Host "EF SQL log present: $ef"
+          if (Test-Path $ef -PathType Leaf) {
+            $item = Get-Item -LiteralPath $ef -ErrorAction SilentlyContinue
+            if ($item -and $item.Length -gt 0) {
+              Write-Host "EF SQL log present: $ef"
+            } else {
+              Write-Host "EF SQL log missing or empty: $ef"
+              New-Item -ItemType Directory -Force -Path artifacts/summaries/ef-log-missing | Out-Null
+              $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"EF SQL log missing or empty: tests ran but EF_SQL_LOG_FILE not captured"}'
+              $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+              Copy-Item tests-summary.json artifacts/summaries/ef-log-missing/tests-summary.json -Force -ErrorAction SilentlyContinue
+            }
           } else {
             Write-Host "EF SQL log missing or empty: $ef"
             New-Item -ItemType Directory -Force -Path artifacts/summaries/ef-log-missing | Out-Null
