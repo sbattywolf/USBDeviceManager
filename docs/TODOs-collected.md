@@ -14,6 +14,8 @@ Please keep ephemeral notes and research items in their original docs, and move 
 - PR_BODY.md: follow-up TODO to consider history-scrub (`git filter-repo`)
 - agent/SimRacingAgent/Docs/README.md: "Service Mode: Background service (TODO: Future implementation)"
 
+- SESSION_SUMMARY.md: "TODO list updated in workspace." (completed-note migrated 2026-01-24)
+
 If you need the exact line references or surrounding context, open these files:
 
 - TODO-IMPLEMENTATION-GUIDE.md
