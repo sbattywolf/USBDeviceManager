@@ -169,35 +169,37 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         }
         catch { }
 
-        // Ensure the DB file exists so repro and CI artifacts can observe it
+        // Ensure the DB directory exists and avoid creating a zero-length file.
         try
         {
             var dir = Path.GetDirectoryName(_dbFilePath);
             if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
-            using (var fs = new FileStream(_dbFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
-            {
-                // write nothing; just ensure file exists and is accessible
-            }
 
-            // Create a minimal, valid SQLite DB so Program.Main/EF sees a usable file
+            // If a zero-length file exists (from previous runs), remove it so
+            // SQLite can create a valid database file when opening the
+            // connection below.
             try
             {
-                var connStr = $"Data Source={_dbFilePath};Cache=Shared";
-                using var conn = new SqliteConnection(connStr);
-                conn.Open();
-                using var cmd = conn.CreateCommand();
-                cmd.CommandText = "CREATE TABLE IF NOT EXISTS __repro_marker (id INTEGER PRIMARY KEY);";
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                if (File.Exists(_dbFilePath))
+                {
+                    var fi = new FileInfo(_dbFilePath);
+                    if (fi.Length == 0)
+                    {
+                        try { File.Delete(_dbFilePath); } catch { }
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"SimRacingTestFactory: failed to precreate SQLite DB '{_dbFilePath}': {ex}");
-            }
+            catch { }
+
+            // Avoid pre-creating schema marker tables here. Rely on EF's
+            // EnsureCreated() later to create the full schema. Pre-creating a
+            // minimal table can mask or produce invalid DB files on some
+            // environments and interferes with diagnostics when the DB is
+            // malformed; removing the precreate reduces corruption risk.
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"SimRacingTestFactory: failed to create DB file '{_dbFilePath}': {ex}");
+            Console.Error.WriteLine($"SimRacingTestFactory: failed to prepare DB file '{_dbFilePath}': {ex}");
         }
 
         // Defensive startup cleanup: remove old leftover SimRacingTest_*.db files.
@@ -602,6 +604,32 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     public async Task ResetDatabaseAsync()
     {
         using SimRacingContext context = GetDbContext();
+
+        // Ensure database schema exists (create if missing) before attempting
+        // to remove rows. Some test runs run against a fresh DB file and
+        // calling EnsureCreated avoids "no such table" SQLite errors.
+        await context.Database.EnsureCreatedAsync();
+
+        // Diagnostic: dump DB schema and recent rows to artifacts so we can
+        // triage cases where tables are missing. This is best-effort and
+        // should not prevent the reset from proceeding.
+        try
+        {
+            foreach (var artifactsDir in GetArtifactDirectories())
+            {
+                try
+                {
+                    Directory.CreateDirectory(artifactsDir);
+                    var dumpPath = Path.Combine(artifactsDir, _testDatabaseName + "-pre-reset-db-dump.json");
+                    DumpDatabaseSnapshot(dumpPath);
+                }
+                catch (Exception ex)
+                {
+                    try { Console.Error.WriteLine($"SimRacingTestFactory: failed to write pre-reset DB dump to '{artifactsDir}': {ex}"); } catch { }
+                }
+            }
+        }
+        catch { }
 
         // Clear all data
         context.RuleExecutions.RemoveRange(context.RuleExecutions);
