@@ -856,6 +856,40 @@ jobs:
           name: env-check-e2e
           path: env-check.json
 
+  env-check-e2e-linux:
+    name: E2E Environment Check (Linux)
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    outputs:
+      env_ok: ${{ steps.check.outputs.env_ok }}
+      reason: ${{ steps.check.outputs.reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run E2E env check (Linux)
+        id: check
+        shell: bash
+        run: |
+          if [ ! -f scripts/ci/env-check.sh ]; then
+            echo "env_ok=false" >> $GITHUB_OUTPUT
+            echo "reason=env-check-missing" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          chmod +x scripts/ci/env-check.sh
+          ./scripts/ci/env-check.sh env-check.json
+          # parse minimal fields
+          env_ok=$(jq -r '.env_ok' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['env_ok'])"))
+          reason=$(jq -r '.reason' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['reason'])"))
+          echo "env_ok=${env_ok}" >> $GITHUB_OUTPUT
+          echo "reason=${reason}" >> $GITHUB_OUTPUT
+
+      - name: Upload env-check artifact (Linux)
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-check-e2e-linux
+          path: env-check.json
+
       - name: Upload server logs (build matrix)
         if: always()
         uses: actions/upload-artifact@v4
@@ -1479,7 +1513,7 @@ jobs:
     name: Analyze E2E Results
     runs-on: ubuntu-latest
     if: always()
-    needs: [e2e-windows, env-check-e2e]
+    needs: [e2e-windows, env-check-e2e, env-check-e2e-linux]
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
       failed_count: ${{ steps.summary.outputs.failed_count }}
