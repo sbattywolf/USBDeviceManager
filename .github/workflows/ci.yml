@@ -56,6 +56,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -121,6 +126,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -257,6 +267,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -389,8 +404,8 @@ jobs:
             scripts/tmp/ensure-stopped.log
   e2e-windows:
     runs-on: windows-latest
-    needs: [analyze-results, analyze-unit]
-    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' }}
+    needs: unit-tests
+    if: always()
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -405,6 +420,11 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -433,8 +453,8 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: [analyze-results, analyze-unit]
-    if: ${{ needs.analyze-results.outputs.tests_ok == 'true' && needs.analyze-unit.outputs.tests_ok == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    needs: unit-tests
+    if: always()
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -449,6 +469,11 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -539,6 +564,9 @@ jobs:
         id: summary
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           echo "Searching for TRX files under $(pwd)"
           mapfile -t files < <(find . -type f -name '*.trx' || true)
@@ -572,19 +600,33 @@ jobs:
         run: |
           set -euo pipefail
           echo "Failures detected, gathering logs and generating enriched report"
-          mkdir -p artifacts/logs
-          mapfile -t logs < <(find . -type f -name '*.log' || true)
-          echo "Found ${#logs[@]} log files"
+          mkdir -p artifacts/enriched/tests
           echo "=== Enriched Test Report ===" > tests-enriched-report.txt
           echo "See tests-summary.json for full summary." >> tests-enriched-report.txt
           echo "\n--- Failures ---\n" >> tests-enriched-report.txt
           cat tests-summary.txt >> tests-enriched-report.txt
-          echo "\n--- Log excerpts (prioritized) ---\n" >> tests-enriched-report.txt
-          for kw in Exception ERROR Timeout Assertion; do
-            echo "\n== $kw ==" >> tests-enriched-report.txt
-            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> tests-enriched-report.txt || true
-          done
-          echo "Wrote tests-enriched-report.txt"
+
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/tests/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "Message:" >> "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then
+                cp "$fileloc" "$outdir/" || true
+              fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            echo "jq not available; skipping per-failure folder creation" >> tests-enriched-report.txt
+          fi
+
+          echo "Wrote tests-enriched-report.txt and per-failure folders"
 
       - name: Upload enriched report (failures)
         if: steps.summary.outputs.failed_count != '0'
@@ -615,6 +657,9 @@ jobs:
         id: summary
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           python3 scripts/ci-analyze.py
           failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
@@ -640,9 +685,25 @@ jobs:
         run: |
           set -euo pipefail
           echo "E2E failures detected; generating enriched E2E report"
+          mkdir -p artifacts/enriched/e2e
           echo "=== E2E Enriched Report ===" > e2e-enriched-report.txt
           cat tests-summary.txt >> e2e-enriched-report.txt
-          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/e2e/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+          fi
 
       - name: Upload E2E enriched report
         if: steps.summary.outputs.failed_count != '0'
@@ -673,6 +734,9 @@ jobs:
         id: summary
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           python3 scripts/ci-analyze.py
           failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
@@ -698,9 +762,25 @@ jobs:
         run: |
           set -euo pipefail
           echo "Integration failures detected; generating enriched integration report"
+          mkdir -p artifacts/enriched/integration
           echo "=== Integration Enriched Report ===" > integration-enriched-report.txt
           cat tests-summary.txt >> integration-enriched-report.txt
-          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/integration/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
+          fi
 
       - name: Upload integration enriched report
         if: steps.summary.outputs.failed_count != '0'
@@ -712,6 +792,8 @@ jobs:
   final-report:
     name: CI Final Test Summary
     runs-on: ubuntu-latest
+    env:
+      HTML_COMMENT_MAX_CHARS: '60000'
     needs: [analyze-unit, analyze-results, analyze-e2e, analyze-integration]
     if: always()
     steps:
@@ -746,10 +828,41 @@ jobs:
           path: artifacts/summaries/integration
         continue-on-error: true
 
+      - name: Download unit enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: unit-tests-enriched-report
+          path: artifacts/enriched/unit
+        continue-on-error: true
+
+      - name: Download e2e enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-enriched-report
+          path: artifacts/enriched/e2e
+        continue-on-error: true
+
+      - name: Download integration enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-enriched-report
+          path: artifacts/enriched/integration
+        continue-on-error: true
+
+      - name: Download tests enriched report
+        uses: actions/download-artifact@v4
+        with:
+          name: tests-enriched-report
+          path: artifacts/enriched/tests
+        continue-on-error: true
+
       - name: Aggregate summaries into final report
         id: aggregate
         shell: bash
         run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
           set -euo pipefail
           out=final-report.txt
           echo "CI Final Test Summary" > $out
@@ -762,14 +875,8 @@ jobs:
             txt="artifacts/summaries/${type}/tests-summary.txt"
             echo "\n--- ${type^^} ---\n" >> $out
             if [ -f "$json" ]; then
-              python3 - <<PY >> $out
-import json,sys
-d=json.load(open('$json'))
-total=d.get('total','n/a')
-passed=d.get('passed','n/a')
-failed=d.get('failed',0)
-print(f"Total: {total}, Passed: {passed}, Failed: {failed}")
-PY
+              # Use a small helper to print summary to avoid YAML parser problems
+              python3 scripts/print-summary.py "$json" >> $out
               failed=$(python3 -c "import json;print(int(json.load(open('$json')).get('failed',0)))")
               if [ "$failed" -gt 0 ]; then any_failed=true; fi
               if [ -f "$txt" ]; then
@@ -786,8 +893,61 @@ PY
           gather e2e
           gather integration
 
+          # Append any per-analyzer enriched reports if present
+          if [ -f "artifacts/enriched/unit/unit-tests-enriched-report.txt" ]; then
+            echo "\n--- UNIT ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/unit/unit-tests-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/e2e/e2e-enriched-report.txt" ]; then
+            echo "\n--- E2E ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/e2e/e2e-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/integration/integration-enriched-report.txt" ]; then
+            echo "\n--- INTEGRATION ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/integration/integration-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/tests/tests-enriched-report.txt" ]; then
+            echo "\n--- TESTS ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/tests/tests-enriched-report.txt >> $out
+          fi
+
           echo "Wrote $out"
           echo "any_failed=$any_failed" >> $GITHUB_OUTPUT
+
+      - name: Generate HTML final report
+        shell: bash
+        run: |
+          set -euo pipefail
+          # renderer will search recursively under artifacts/summaries
+          python3 scripts/generate-final-report-html.py --src artifacts/summaries --out final-report.html || python3 scripts/generate-final-report-html.py --out final-report.html
+
+      - name: Copy final report to stable artifacts/latest-report
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/latest-report
+          cp -f final-report.html artifacts/latest-report/final-report.html || true
+          # include any enriched folders so links in the HTML resolve when downloaded
+          if [ -d artifacts/enriched ]; then
+            rm -rf artifacts/latest-report/enriched || true
+            cp -r artifacts/enriched artifacts/latest-report/enriched || true
+          fi
+
+      - name: Upload latest report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-test-report
+          path: |
+            artifacts/latest-report/final-report.html
+            artifacts/latest-report/enriched/**
+
+      - name: Upload final report HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-test-report-html
+          path: final-report.html
 
       - name: Upload final report
         uses: actions/upload-artifact@v4
@@ -805,13 +965,132 @@ PY
         run: |
           set -euo pipefail
           echo "Posting final report to PR #${PR_NUMBER}"
-          body=$(python3 - <<PY
-import json
-print(json.dumps(open('final-report.txt').read()))
-PY
-)
+          body=$(python3 -c "import json,sys; print(json.dumps(open('final-report.txt',encoding='utf-8').read()))")
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"body\":$body}" "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" > /dev/null
           echo "Comment posted"
+
+      - name: Create check-run failure summary (on failures)
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const body = fs.existsSync('final-report.txt') ? fs.readFileSync('final-report.txt','utf8') : '';
+            const lines = body.split(/\r?\n/).slice(0,40).join('\n');
+            const text = `\`\`\`\n${lines}\n\`\`\``;
+            const output = {
+              title: 'CI Failure Summary',
+              summary: 'One or more test suites failed. See the full report artifact for details.',
+              text: text
+            };
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'CI Failure Summary',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'neutral',
+              output: output
+            });
+
+      - name: Fail workflow if any tests failed
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        run: |
+          echo "One or more test suites failed; marking workflow as failed"
+          exit 1
+
+      - name: Prepare failure-report PR files
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha=$(echo "${GITHUB_SHA}" | cut -c1-7)
+          mkdir -p .github/ci-failures
+          outf=".github/ci-failures/ci-failure-${sha}.md"
+          echo "# CI Test Failures for ${GITHUB_SHA}" > "$outf"
+          echo "" >> "$outf"
+          echo 'Generated by CI. See the aggregated report attached.' >> "$outf"
+          echo "" >> "$outf"
+          echo '```' >> "$outf"
+          sed -n '1,400p' final-report.txt >> "$outf" || true
+          echo '```' >> "$outf"
+          # also attach the generated HTML report if present
+          if [ -f final-report.html ]; then
+            cp -f final-report.html ".github/ci-failures/final-report-${sha}.html" || true
+          fi
+
+      - name: Create PR with failure report
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "CI: test failures report (${GITHUB_SHA})"
+          branch: "ci/failures-${{ github.sha }}"
+          title: "CI: Test failures (${GITHUB_SHA})"
+          body: |
+            Automated PR containing the CI failure report generated by the workflow.
+
+            - Aggregated text report: `.github/ci-failures/ci-failure-${{ github.sha }}.md`
+            - HTML report (preview): `.github/ci-failures/final-report-${{ github.sha }}.html`
+
+            You can also download artifacts for this workflow run (includes `latest-test-report`) here:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Review the files in the PR to investigate failures.
+          labels: ci-failure
+
+      - name: Create gist of HTML report and comment on PR
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const fullSha = process.env.GITHUB_SHA || '';
+            const short = (fullSha || '').substring(0,7);
+            const htmlPath = `.github/ci-failures/final-report-${short}.html`;
+            try {
+              if (!fs.existsSync(htmlPath)) {
+                console.log('HTML report not found at', htmlPath);
+                return;
+              }
+              const content = fs.readFileSync(htmlPath, 'utf8');
+              const gist = await github.rest.gists.create({
+                files: { [`final-report-${short}.html`]: { content } },
+                public: false,
+                description: `CI final-report HTML for ${fullSha}`
+              });
+              console.log('Created gist', gist.data.html_url);
+
+              // find the PR by head branch
+              const head = `${owner}:ci/failures-${fullSha}`;
+              const prs = await github.rest.pulls.list({ owner, repo, head });
+              if (prs.data && prs.data.length > 0) {
+                const prNumber = prs.data[0].number;
+                // Post a short comment linking to the gist
+                const linkBody = `HTML final report attached as gist: ${gist.data.html_url}`;
+                await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: linkBody });
+                console.log('Link comment posted on PR', prNumber);
+
+                // Also post the HTML content as a comment (truncated if very large)
+                const MAX_CHARS = parseInt(process.env.HTML_COMMENT_MAX_CHARS || '60000', 10) || 60000;
+                let attachContent = content;
+                let truncated = false;
+                if (attachContent.length > MAX_CHARS) { attachContent = attachContent.slice(0, MAX_CHARS); truncated = true; }
+                const htmlComment = `HTML final report (raw):\n\n---\n\n` + '```html\n' + attachContent + (truncated ? '\n\n... (truncated)' : '') + '\n```';
+                await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: htmlComment });
+                console.log('HTML content posted as comment on PR', prNumber, truncated ? '(truncated)' : '');
+              } else {
+                console.log('PR not found for head', head);
+              }
+            } catch (e) {
+              console.log('Error creating gist or commenting:', e.message || e);
+            }
+        env:
+          GITHUB_SHA: ${{ github.sha }}
 
   analyze-unit:
     name: Analyze Unit Test Results
@@ -875,19 +1154,36 @@ PY
         run: |
           set -euo pipefail
           echo "Unit failures detected, gathering logs and generating enriched report"
-          mkdir -p artifacts/logs
-          mapfile -t logs < <(find . -type f -name '*.log' || true)
-          echo "Found ${#logs[@]} log files"
+          mkdir -p artifacts/enriched/unit
           echo "=== Unit Tests Enriched Report ===" > unit-tests-enriched-report.txt
           echo "See tests-summary.json for full summary." >> unit-tests-enriched-report.txt
           echo "\n--- Failures ---\n" >> unit-tests-enriched-report.txt
           cat tests-summary.txt >> unit-tests-enriched-report.txt
-          echo "\n--- Log excerpts (prioritized) ---\n" >> unit-tests-enriched-report.txt
-          for kw in Exception ERROR Timeout Assertion; do
-            echo "\n== $kw ==" >> unit-tests-enriched-report.txt
-            grep -RIn --binary-files=text -E "$kw" . | sed -n '1,200p' >> unit-tests-enriched-report.txt || true
-          done
-          echo "Wrote unit-tests-enriched-report.txt"
+
+          # Create per-failure folders with details and log excerpts
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/unit/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "Message:" >> "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              # copy trx if present
+              if [ -f "$fileloc" ]; then
+                cp "$fileloc" "$outdir/" || true
+              fi
+              # collect log excerpts nearby
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            echo "jq not available; skipping per-failure folder creation" >> unit-tests-enriched-report.txt
+          fi
+
+          echo "Wrote unit-tests-enriched-report.txt and per-failure folders"
 
       - name: Upload unit enriched report (failures)
         if: steps.summary.outputs.failed_count != '0'
@@ -899,8 +1195,8 @@ PY
   log-check:
     name: Conditional Log Inspection
     runs-on: ubuntu-latest
-    needs: analyze-results
-    if: ${{ needs.analyze-results.outputs.tests_ok != 'true' }}
+    needs: [analyze-results, analyze-unit, analyze-e2e, analyze-integration]
+    if: ${{ needs.analyze-results.outputs.tests_ok != 'true' || needs.analyze-unit.outputs.tests_ok != 'true' || needs.analyze-e2e.outputs.tests_ok != 'true' || needs.analyze-integration.outputs.tests_ok != 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -925,4 +1221,6 @@ PY
           set -euo pipefail
           echo "Scanning downloaded logs for ERROR/Exception/Timeout entries"
           find artifacts -type f -name '*.log' -print -exec grep -nE "Exception|ERROR|Unhandled|Timeout|fail(ed)?" {} + || true
+          echo "Downloading any per-analyzer enriched reports (if present)"
+          find artifacts -type f -name '*-enriched-report*.txt' -print -exec sed -n '1,200p' {} + || true
           echo "Log inspection complete"

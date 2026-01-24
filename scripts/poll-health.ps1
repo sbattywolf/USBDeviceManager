@@ -1,12 +1,14 @@
 param(
     [Parameter(Mandatory=$true)]
     [string]$Url,
-    [int]$TimeoutSec = 60
+    [int]$TimeoutSec = 60,
+    [int]$PerAttemptTimeout = 5
 )
 
 $start = Get-Date
-Write-Host "Polling health: $Url (timeout ${TimeoutSec}s)"
+Write-Host "Polling health: $Url (overall timeout ${TimeoutSec}s, per-attempt timeout ${PerAttemptTimeout}s)"
 while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
+    $attempt = [int]((Get-Date) - $start).TotalSeconds + 1
     $attemptUrls = @($Url)
     # If the URL contains localhost or an IP loopback literal, also try
     # the common IPv4/IPv6 loopback variants to avoid binding differences
@@ -33,18 +35,28 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
         }
     }
 
+    $lastErr = $null
     foreach ($u in $expanded) {
         try {
-            $resp = Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
+            Write-Host "Trying: $u"
+            $resp = Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec $PerAttemptTimeout -ErrorAction Stop
             if ($resp.StatusCode -eq 200) {
                 Write-Host "Health OK: $u"
                 exit 0
+            } else {
+                Write-Host "Health returned $($resp.StatusCode) for $u"
             }
         } catch {
+            $lastErr = $_.Exception.Message
+            Write-Host "Health check failed for ${u}: $lastErr"
             # continue to next variant
         }
     }
-    Start-Sleep -Seconds 1
+
+    # Exponential backoff (cap at 8s) before next overall attempt
+    $sleepSeconds = [int][math]::Min(8, [math]::Pow(2, [int]($attempt - 1)))
+    Write-Host "Attempted variants; sleeping ${sleepSeconds}s before retry. (elapsed $([int](Get-Date - $start).TotalSeconds)s)"
+    Start-Sleep -Seconds $sleepSeconds
 }
 Write-Error "Timeout waiting for health at $Url"
 exit 1
