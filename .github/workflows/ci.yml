@@ -364,9 +364,28 @@ jobs:
             echo "No tests-summary.json present; skipping enrichment"
           fi
 
-      - name: Upload tests enriched report
+      - name: Upload tests enriched report (attempt 1)
+        id: upload_tests_enriched_1
         if: always()
         uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: tests-enriched-report.txt
+
+      - name: Upload tests enriched report (attempt 2)
+        id: upload_tests_enriched_2
+        if: steps.upload_tests_enriched_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: tests-enriched-report.txt
+
+      - name: Upload tests enriched report (attempt 3)
+        if: steps.upload_tests_enriched_1.outcome != 'success' && steps.upload_tests_enriched_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
           name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: tests-enriched-report.txt
@@ -517,9 +536,28 @@ jobs:
           else
             echo "No tests-summary.json present; skipping unit enrichment"
           fi
-      - name: Upload unit enriched report
+      - name: Upload unit enriched report (attempt 1)
+        id: upload_unit_enriched_1
         if: always()
         uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: unit-tests-enriched-report.txt
+
+      - name: Upload unit enriched report (attempt 2)
+        id: upload_unit_enriched_2
+        if: steps.upload_unit_enriched_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: unit-tests-enriched-report.txt
+
+      - name: Upload unit enriched report (attempt 3)
+        if: steps.upload_unit_enriched_1.outcome != 'success' && steps.upload_unit_enriched_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
           name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: unit-tests-enriched-report.txt
@@ -679,11 +717,30 @@ jobs:
             echo "No tests-summary.json present; skipping e2e enrichment"
           fi
 
-      - name: Upload e2e enriched report
+      - name: Upload e2e enriched report (attempt 1)
+        id: upload_e2e_enriched_1
         if: always()
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
-          name: e2e-enriched-report
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 2)
+        id: upload_e2e_enriched_2
+        if: steps.upload_e2e_enriched_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 3)
+        if: steps.upload_e2e_enriched_1.outcome != 'success' && steps.upload_e2e_enriched_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
           path: e2e-enriched-report.txt
 
       # per-job E2E analysis removed; regression analysis handled by analyze-regression job
@@ -773,11 +830,30 @@ jobs:
           else
             echo "No tests-summary.json present; skipping integration enrichment"
           fi
-      - name: Upload integration enriched report
+      - name: Upload integration enriched report (attempt 1)
+        id: upload_integration_enriched_1
         if: always()
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
-          name: integration-enriched-report
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: integration-enriched-report.txt
+
+      - name: Upload integration enriched report (attempt 2)
+        id: upload_integration_enriched_2
+        if: steps.upload_integration_enriched_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: integration-enriched-report.txt
+
+      - name: Upload integration enriched report (attempt 3)
+        if: steps.upload_integration_enriched_1.outcome != 'success' && steps.upload_integration_enriched_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
           path: integration-enriched-report.txt
 
   analyze-results:
@@ -899,7 +975,7 @@ jobs:
         if: steps.summary.outputs.failed_count != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: tests-enriched-report
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: tests-enriched-report.txt
 
   analyze-regression:
@@ -973,11 +1049,30 @@ jobs:
             grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> regression-enriched-report.txt || true
           fi
 
-      - name: Upload regression enriched report
+      - name: Upload regression enriched report (attempt 1)
+        id: upload_regression_enriched_1
         if: steps.summary.outputs.failed_count != '0'
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
-          name: regression-enriched-report
+          name: regression-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: regression-enriched-report.txt
+
+      - name: Upload regression enriched report (attempt 2)
+        id: upload_regression_enriched_2
+        if: steps.upload_regression_enriched_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: regression-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: regression-enriched-report.txt
+
+      - name: Upload regression enriched report (attempt 3)
+        if: steps.upload_regression_enriched_1.outcome != 'success' && steps.upload_regression_enriched_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: regression-enriched-report-${{ github.job }}-${{ runner.os }}
           path: regression-enriched-report.txt
 
   analyze-integration:
@@ -1051,11 +1146,30 @@ jobs:
             grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
           fi
 
-      - name: Upload integration enriched report
+      - name: Upload integration enriched report (attempt 1)
+        id: upload_integration_enriched_1b
         if: steps.summary.outputs.failed_count != '0'
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
-          name: integration-enriched-report
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: integration-enriched-report.txt
+
+      - name: Upload integration enriched report (attempt 2)
+        id: upload_integration_enriched_2b
+        if: steps.upload_integration_enriched_1b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: integration-enriched-report.txt
+
+      - name: Upload integration enriched report (attempt 3)
+        if: steps.upload_integration_enriched_1b.outcome != 'success' && steps.upload_integration_enriched_2b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
           path: integration-enriched-report.txt
 
   analyze-e2e:
@@ -1136,11 +1250,30 @@ jobs:
             grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
           fi
 
-      - name: Upload e2e enriched report
+      - name: Upload e2e enriched report (attempt 1)
+        id: upload_e2e_enriched_1b
         if: steps.summary.outputs.failed_count != '0'
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
-          name: e2e-enriched-report
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 2)
+        id: upload_e2e_enriched_2b
+        if: steps.upload_e2e_enriched_1b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 3)
+        if: steps.upload_e2e_enriched_1b.outcome != 'success' && steps.upload_e2e_enriched_2b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
           path: e2e-enriched-report.txt
 
   final-report:
@@ -1154,75 +1287,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download available summaries
+      - name: Download all artifacts for aggregation
         uses: actions/download-artifact@v4
         with:
-          name: tests-summary
-          path: artifacts/summaries/tests
+          path: artifacts/downloaded
         continue-on-error: true
 
-      - name: Download unit summary
-        uses: actions/download-artifact@v4
-        with:
-          name: unit-tests-summary
-          path: artifacts/summaries/unit
-        continue-on-error: true
-
-      - name: Download regression summary
-        uses: actions/download-artifact@v4
-        with:
-          name: regression-tests-summary
-          path: artifacts/summaries/regression
-        continue-on-error: true
-
-      - name: Download integration summary
-        uses: actions/download-artifact@v4
-        with:
-          name: integration-tests-summary
-          path: artifacts/summaries/integration
-        continue-on-error: true
-
-      - name: Download e2e summary
-        uses: actions/download-artifact@v4
-        with:
-          name: e2e-tests-summary
-          path: artifacts/summaries/e2e
-        continue-on-error: true
-
-      - name: Download unit enriched report
-        uses: actions/download-artifact@v4
-        with:
-          name: unit-tests-enriched-report
-          path: artifacts/enriched/unit
-        continue-on-error: true
-
-      - name: Download regression enriched report
-        uses: actions/download-artifact@v4
-        with:
-          name: regression-enriched-report
-          path: artifacts/enriched/regression
-        continue-on-error: true
-
-      - name: Download integration enriched report
-        uses: actions/download-artifact@v4
-        with:
-          name: integration-enriched-report
-          path: artifacts/enriched/integration
-        continue-on-error: true
-
-      - name: Download e2e enriched report
-        uses: actions/download-artifact@v4
-        with:
-          name: e2e-enriched-report
-          path: artifacts/enriched/e2e
-        continue-on-error: true
-
-      - name: Download tests enriched report
-        uses: actions/download-artifact@v4
-        with:
-          name: tests-enriched-report
-          path: artifacts/enriched/tests
-        continue-on-error: true
+      - name: Rehydrate downloaded artifacts into expected folders
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/summaries/unit artifacts/summaries/tests artifacts/summaries/e2e artifacts/summaries/integration \
+                   artifacts/enriched/unit artifacts/enriched/tests artifacts/enriched/e2e artifacts/enriched/integration artifacts/enriched/regression artifacts/downloaded-raw
+          for d in artifacts/downloaded/*; do
+            [ -d "$d" ] || continue
+            bn=$(basename "$d")
+            # Summaries
+            case "$bn" in
+              tests-summary* ) cp -r "$d"/* artifacts/summaries/tests/ || true ;;
+              unit-tests-summary* ) cp -r "$d"/* artifacts/summaries/unit/ || true ;;
+              regression-tests-summary* ) cp -r "$d"/* artifacts/summaries/regression/ || true ;;
+              integration-tests-summary* ) cp -r "$d"/* artifacts/summaries/integration/ || true ;;
+              e2e-tests-summary* ) cp -r "$d"/* artifacts/summaries/e2e/ || true ;;
+            esac
+            # Enriched reports (different jobs may have suffixed names)
+            if ls "$d"/*integration-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/integration; cp "$d"/*integration-enriched-report.txt artifacts/enriched/integration/ || true; fi
+            if ls "$d"/*regression-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/regression; cp "$d"/*regression-enriched-report.txt artifacts/enriched/regression/ || true; fi
+            if ls "$d"/*unit-tests-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/unit; cp "$d"/*unit-tests-enriched-report.txt artifacts/enriched/unit/ || true; fi
+            if ls "$d"/*e2e-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/e2e; cp "$d"/*e2e-enriched-report.txt artifacts/enriched/e2e/ || true; fi
+            if ls "$d"/*tests-enriched-report.txt >/dev/null 2>&1; then mkdir -p artifacts/enriched/tests; cp "$d"/*tests-enriched-report.txt artifacts/enriched/tests/ || true; fi
+            # copy anything else for manual inspection
+            cp -r "$d" artifacts/downloaded-raw/ || true
+          done
 
       - name: Aggregate summaries into final report
         id: aggregate
@@ -1356,15 +1452,23 @@ jobs:
               summary: 'One or more test suites failed. See the full report artifact for details.',
               text: text
             };
-            await github.rest.checks.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'CI Failure Summary',
-              head_sha: context.sha,
-              status: 'completed',
-              conclusion: 'neutral',
-              output: output
-            });
+            try {
+              await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'CI Failure Summary',
+                head_sha: context.sha,
+                status: 'completed',
+                conclusion: 'neutral',
+                output: output
+              });
+            } catch (err) {
+              if (err && err.status === 403) {
+                console.log('Skipping check-run creation: Resource not accessible by integration (403)');
+              } else {
+                throw err;
+              }
+            }
 
       - name: Fail workflow if any tests failed
         if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
@@ -1558,11 +1662,30 @@ jobs:
 
           echo "Wrote unit-tests-enriched-report.txt and per-failure folders"
 
-      - name: Upload unit enriched report (failures)
+      - name: Upload unit enriched report (failures) (attempt 1)
+        id: upload_unit_enriched_fail_1
         if: steps.summary.outputs.failed_count != '0'
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
-          name: unit-tests-enriched-report
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: unit-tests-enriched-report.txt
+
+      - name: Upload unit enriched report (failures) (attempt 2)
+        id: upload_unit_enriched_fail_2
+        if: steps.upload_unit_enriched_fail_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: unit-tests-enriched-report.txt
+
+      - name: Upload unit enriched report (failures) (attempt 3)
+        if: steps.upload_unit_enriched_fail_1.outcome != 'success' && steps.upload_unit_enriched_fail_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: unit-tests-enriched-report.txt
 
   log-check:
