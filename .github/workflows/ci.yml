@@ -529,6 +529,17 @@ jobs:
             scripts/tmp/**
             artifacts/trx/**
 
+      - name: Upload test DB artifacts (repo + runtime)
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: test-db-artifacts-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: |
+            server/USBDeviceManager.Tests/TestResults/artifacts/**
+            server/**/bin/**/TestResults/artifacts/**
+            server/**/TestResults/artifacts/**
+
       - name: Upload tests enriched report (attempt 3)
         if: steps.upload_tests_enriched_1.outcome != 'success' && steps.upload_tests_enriched_2.outcome != 'success'
         uses: actions/upload-artifact@v4
