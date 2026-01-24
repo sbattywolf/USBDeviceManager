@@ -221,12 +221,31 @@ jobs:
             "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
             Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
           }
-          else {
-            if (Get-Command powershell -ErrorAction SilentlyContinue) {
-              "SHELLRUNNER_LONG_CMD=powershell|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
-              Write-Host "Set SHELLRUNNER_LONG_CMD for powershell"
+          } else {
+            Write-Host "trx2html not available; copying .trx files to artifacts/trx for upload"
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              $src = $_.FullName
+              $dest = Join-Path $PWD 'artifacts\trx' $_.Name
+              if (Test-Path $dest) {
+                try {
+                  $srcFull = (Get-Item -LiteralPath $src).FullName
+                  $destFull = (Get-Item -LiteralPath $dest).FullName
+                } catch {
+                  $srcFull = $src
+                  $destFull = $dest
+                }
+                if ($srcFull -eq $destFull) {
+                  Write-Host "Skipping copy: source equals destination for $src"
+                  return
+                }
+              }
+              try {
+                Copy-Item -Path $src -Destination $dest -Force
+              } catch {
+                Write-Warning "Failed copying $src to $dest : $($_.Exception.Message)"
+              }
             }
-            elseif (Get-Command pwsh -ErrorAction SilentlyContinue) {
+          }
               "SHELLRUNNER_LONG_CMD=pwsh|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
               Write-Host "Set SHELLRUNNER_LONG_CMD for pwsh"
             }
