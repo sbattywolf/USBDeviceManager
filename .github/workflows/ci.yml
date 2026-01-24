@@ -899,6 +899,66 @@ jobs:
             scripts/tmp/server.log
             scripts/tmp/server.err.log
             scripts/tmp/ensure-stopped.log
+  env-check-regression:
+    name: Regression Environment Check (Windows)
+    runs-on: windows-latest
+    needs: unit-tests
+    outputs:
+      env_ok: ${{ steps.check.outputs.env_ok }}
+      reason: ${{ steps.check.outputs.reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Regression env check (Windows)
+        id: check
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .\scripts\ci\env-check.ps1)) { Write-Host 'No env-check script present; marking env_ok=false'; echo "env_ok=false" >> $env:GITHUB_OUTPUT; echo "reason=env-check-missing" >> $env:GITHUB_OUTPUT; exit 0 }
+          .\scripts\ci\env-check.ps1 -OutFile env-check.json
+          $j = Get-Content env-check.json -Raw | ConvertFrom-Json
+          echo ("env_ok={0}" -f $j.env_ok) >> $env:GITHUB_OUTPUT
+          $r = if ($j.reason) { ($j.reason -join ';') } else { '' }
+          echo ("reason={0}" -f $r) >> $env:GITHUB_OUTPUT
+
+      - name: Upload env-check artifact (regression)
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-check-regression
+          path: env-check.json
+
+  env-check-regression-linux:
+    name: Regression Environment Check (Linux)
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    outputs:
+      env_ok: ${{ steps.check.outputs.env_ok }}
+      reason: ${{ steps.check.outputs.reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Regression env check (Linux)
+        id: check
+        shell: bash
+        run: |
+          if [ ! -f scripts/ci/env-check.sh ]; then
+            echo "env_ok=false" >> $GITHUB_OUTPUT
+            echo "reason=env-check-missing" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          chmod +x scripts/ci/env-check.sh
+          ./scripts/ci/env-check.sh env-check.json
+          env_ok=$(jq -r '.env_ok' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['env_ok'])"))
+          reason=$(jq -r '.reason' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['reason'])"))
+          echo "env_ok=${env_ok}" >> $GITHUB_OUTPUT
+          echo "reason=${reason}" >> $GITHUB_OUTPUT
+
+      - name: Upload env-check artifact (regression-linux)
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-check-regression-linux
+          path: env-check.json
   e2e-windows:
     runs-on: windows-latest
     needs: [unit-tests, env-check-e2e]
@@ -1019,8 +1079,8 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: unit-tests
-    if: always()
+    needs: [unit-tests, env-check-regression]
+    if: needs.env-check-regression.outputs.env_ok == 'true'
     steps:
       - name: Set TEST_PORT (Windows)
         if: runner.os == 'Windows'
@@ -1328,7 +1388,7 @@ jobs:
     name: Analyze Regression Results
     runs-on: ubuntu-latest
     if: always()
-    needs: integration-tests
+    needs: [integration-tests, env-check-regression]
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
       failed_count: ${{ steps.summary.outputs.failed_count }}
