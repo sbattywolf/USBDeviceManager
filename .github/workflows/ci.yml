@@ -215,7 +215,7 @@ jobs:
           "EF_SQL_LOG_FILE=scripts/tmp/ef.log" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
 
   tests:
-    name: Run Tests and Upload Results
+    name: Tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
