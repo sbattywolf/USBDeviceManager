@@ -296,7 +296,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tests-enriched-report
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: tests-enriched-report.txt
 
   unit-tests:
@@ -389,7 +389,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: unit-tests-enriched-report
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: unit-tests-enriched-report.txt
       - name: Upload unit test results
         if: always()
