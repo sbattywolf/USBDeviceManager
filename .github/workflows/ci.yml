@@ -364,6 +364,26 @@ jobs:
             echo "No tests-summary.json present; skipping enrichment"
           fi
 
+      - name: Produce prefixed tests errors file
+        if: always()
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          # concise error snippet for faster triage
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/tests-enriched-errors.txt || true
+          # preserve legacy enriched report copy for correlation
+          if [ -f tests-enriched-report.txt ]; then cp tests-enriched-report.txt artifacts/enriched/$PREFIX/tests-enriched-report.txt || true; fi
+
+      - name: Upload tests enriched errors (prefixed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/tests-enriched-errors.txt
+
       - name: Upload tests enriched report (attempt 1)
         id: upload_tests_enriched_1
         if: always()
@@ -536,6 +556,24 @@ jobs:
           else
             echo "No tests-summary.json present; skipping unit enrichment"
           fi
+
+      - name: Produce prefixed unit errors file
+        if: always()
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/unit-tests-enriched-errors.txt || true
+          if [ -f unit-tests-enriched-report.txt ]; then cp unit-tests-enriched-report.txt artifacts/enriched/$PREFIX/unit-tests-enriched-report.txt || true; fi
+
+      - name: Upload unit enriched errors (prefixed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/unit-tests-enriched-errors.txt
       - name: Upload unit enriched report (attempt 1)
         id: upload_unit_enriched_1
         if: always()
@@ -717,6 +755,24 @@ jobs:
             echo "No tests-summary.json present; skipping e2e enrichment"
           fi
 
+      - name: Produce prefixed e2e errors file
+        if: always()
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/e2e-enriched-errors.txt || true
+          if [ -f e2e-enriched-report.txt ]; then cp e2e-enriched-report.txt artifacts/enriched/$PREFIX/e2e-enriched-report.txt || true; fi
+
+      - name: Upload e2e enriched errors (prefixed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/e2e-enriched-errors.txt
+
       - name: Upload e2e enriched report (attempt 1)
         id: upload_e2e_enriched_1
         if: always()
@@ -830,6 +886,24 @@ jobs:
           else
             echo "No tests-summary.json present; skipping integration enrichment"
           fi
+
+      - name: Produce prefixed integration errors file
+        if: always()
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/integration-enriched-errors.txt || true
+          if [ -f integration-enriched-report.txt ]; then cp integration-enriched-report.txt artifacts/enriched/$PREFIX/integration-enriched-report.txt || true; fi
+
+      - name: Upload integration enriched errors (prefixed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/integration-enriched-errors.txt
       - name: Upload integration enriched report (attempt 1)
         id: upload_integration_enriched_1
         if: always()
@@ -1048,32 +1122,23 @@ jobs:
           else
             grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> regression-enriched-report.txt || true
           fi
+      - name: Produce prefixed regression errors file
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/regression-enriched-errors.txt || true
+          if [ -f regression-enriched-report.txt ]; then cp regression-enriched-report.txt artifacts/enriched/$PREFIX/regression-enriched-report.txt || true; fi
 
-      - name: Upload regression enriched report (attempt 1)
-        id: upload_regression_enriched_1
+      - name: Upload regression enriched errors (prefixed)
         if: steps.summary.outputs.failed_count != '0'
         uses: actions/upload-artifact@v4
-        continue-on-error: true
         with:
-          name: regression-enriched-report-${{ github.job }}-${{ runner.os }}
-          path: regression-enriched-report.txt
-
-      - name: Upload regression enriched report (attempt 2)
-        id: upload_regression_enriched_2
-        if: steps.upload_regression_enriched_1.outcome != 'success'
-        uses: actions/upload-artifact@v4
-        continue-on-error: true
-        with:
-          name: regression-enriched-report-${{ github.job }}-${{ runner.os }}
-          path: regression-enriched-report.txt
-
-      - name: Upload regression enriched report (attempt 3)
-        if: steps.upload_regression_enriched_1.outcome != 'success' && steps.upload_regression_enriched_2.outcome != 'success'
-        uses: actions/upload-artifact@v4
-        continue-on-error: true
-        with:
-          name: regression-enriched-report-${{ github.job }}-${{ runner.os }}
-          path: regression-enriched-report.txt
+          name: regression-enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/regression-enriched-errors.txt
 
   analyze-integration:
     name: Analyze Integration Results
