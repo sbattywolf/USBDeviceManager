@@ -3,6 +3,16 @@ name: CI
 on:
   push:
     branches: [ main, master, '**/chore/**', '**/feat/**' ]
+    # Avoid running CI for changes that only affect docs, artifacts, or non-code assets
+    paths-ignore:
+      - 'docs/**'
+      - 'design/**'
+      - 'artifacts/**'
+      - 'publish/**'
+      - 'screenshots/**'
+      - 'test-results/**'
+      - 'logs/**'
+      - '*.md'
   pull_request:
     branches: [ main, master ]
 
