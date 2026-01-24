@@ -299,6 +299,20 @@ jobs:
           name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: tests-enriched-report.txt
 
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: pwsh
+        run: |
+          Write-Host "Running failure extractor for run $env:GITHUB_RUN_ID"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\extract-failures.ps1 -RunId $env:GITHUB_RUN_ID
+
+      - name: Upload extracted failure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-${{ github.run_id }}-${{ runner.os }}
+          path: artifacts/enriched/failures/${{ github.run_id }}
+
   unit-tests:
     name: Unit Tests
     runs-on: ${{ matrix.os }}

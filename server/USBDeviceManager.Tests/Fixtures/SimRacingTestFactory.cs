@@ -2,6 +2,8 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Collections.Generic;
+using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -18,6 +20,9 @@ namespace USBDeviceManager.Tests.Fixtures;
 /// </summary>
 public class SimRacingTestFactory : WebApplicationFactory<Program>
 {
+    private TextWriter? _originalOut;
+    private TextWriter? _originalErr;
+    private StreamWriter? _consoleWriter;
     private readonly string _testDatabaseName;
     private readonly string _dbFilePath;
     private readonly string _connectionString;
@@ -111,6 +116,24 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     /// </summary>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+            // Redirect Console output/errors to a test artifact file so CI uploads host logs
+            try
+            {
+                var artifactsDir = Path.Combine(Directory.GetCurrentDirectory(), "TestResults", "artifacts");
+                Directory.CreateDirectory(artifactsDir);
+                var consoleLogPath = Path.Combine(artifactsDir, _testDatabaseName + "-server-console.log");
+
+                _originalOut = Console.Out;
+                _originalErr = Console.Error;
+                _consoleWriter = new StreamWriter(new FileStream(consoleLogPath, FileMode.Append, FileAccess.Write, FileShare.Read)) { AutoFlush = true };
+                Console.SetOut(_consoleWriter);
+                Console.SetError(_consoleWriter);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"SimRacingTestFactory: failed to redirect console output: {ex}");
+            }
+
         builder.ConfigureServices(services =>
         {
             // Remove existing database context registration
@@ -130,12 +153,27 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                 options.EnableDetailedErrors();
             });
 
-            // Reduce logging noise in tests
+            // Reduce logging noise in tests but capture host logs to a file
             services.AddLogging(builder =>
             {
                 builder.ClearProviders();
+
+                // Ensure test artifacts folder exists and compute deterministic log path
+                try
+                {
+                    var artifactsDir = Path.Combine(Directory.GetCurrentDirectory(), "TestResults", "artifacts");
+                    Directory.CreateDirectory(artifactsDir);
+                    var logPath = Path.Combine(artifactsDir, _testDatabaseName + "-server.log");
+
+                    builder.AddProvider(new FileLoggerProvider(logPath));
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"SimRacingTestFactory: failed to configure file logger: {ex}");
+                }
+
                 builder.AddDebug();
-                builder.SetMinimumLevel(LogLevel.Warning);
+                builder.SetMinimumLevel(LogLevel.Debug);
             });
 
             // Build a temporary provider and initialize the database via DI to ensure
@@ -157,6 +195,77 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         builder.UseConfiguration(new ConfigurationBuilder()
             .AddJsonFile("appsettings.Testing.json")
             .Build());
+    }
+
+    // Simple file logger provider used only in test builds to capture WebHost logs
+    private class FileLoggerProvider : ILoggerProvider
+    {
+        private readonly StreamWriter _writer;
+        private readonly object _lock = new object();
+
+        public FileLoggerProvider(string path)
+        {
+            // Open file in append mode and keep it for the test lifetime
+            _writer = new StreamWriter(new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read))
+            {
+                AutoFlush = true
+            };
+        }
+
+        public ILogger CreateLogger(string categoryName)
+        {
+            return new FileLogger(_writer, _lock, categoryName);
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                _writer?.Dispose();
+            }
+            catch
+            {
+                // swallow
+            }
+        }
+    }
+
+    private class FileLogger : ILogger
+    {
+        private readonly StreamWriter _writer;
+        private readonly object _lock;
+        private readonly string _category;
+
+        public FileLogger(StreamWriter writer, object lck, string category)
+        {
+            _writer = writer;
+            _lock = lck;
+            _category = category;
+        }
+
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+        public bool IsEnabled(LogLevel logLevel) => true;
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        {
+            try
+            {
+                var message = formatter(state, exception);
+                lock (_lock)
+                {
+                    _writer.WriteLine($"[{DateTime.UtcNow:O}] [{logLevel}] {_category}: {message}");
+                    if (exception != null)
+                    {
+                        _writer.WriteLine(exception.ToString());
+                    }
+                }
+            }
+            catch
+            {
+                // Swallow to avoid affecting tests
+            }
+        }
     }
 
     /// <summary>
@@ -262,6 +371,77 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     }
 
     /// <summary>
+    /// Dump a lightweight snapshot of the SQLite database (schema + recent rows)
+    /// to the given output file path as JSON. Best-effort: failures are logged
+    /// to Console.Error but do not throw to avoid masking test results.
+    /// </summary>
+    public void DumpDatabaseSnapshot(string outFilePath)
+    {
+        try
+        {
+            using var conn = new SqliteConnection(_connectionString);
+            conn.Open();
+
+            var tables = new List<string>();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';";
+                using var r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    tables.Add(r.GetString(0));
+                }
+            }
+
+            var tablesData = new Dictionary<string, object>();
+
+            foreach (var t in tables)
+            {
+                var tableObj = new Dictionary<string, object>();
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT sql FROM sqlite_master WHERE type='table' AND name=@name;";
+                    cmd.Parameters.AddWithValue("@name", t);
+                    var createSql = cmd.ExecuteScalar()?.ToString() ?? string.Empty;
+                    tableObj["create"] = createSql;
+                }
+
+                // Capture up to 200 recent rows
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = $"SELECT * FROM \"{t}\" ORDER BY rowid DESC LIMIT 200;";
+                    using var rdr = cmd.ExecuteReader();
+                    var rows = new List<Dictionary<string, object>>();
+                    while (rdr.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+                        for (int i = 0; i < rdr.FieldCount; i++)
+                        {
+                            var name = rdr.GetName(i);
+                            var val = rdr.IsDBNull(i) ? null : rdr.GetValue(i);
+                            row[name] = val;
+                        }
+                        rows.Add(row);
+                    }
+
+                    tableObj["rows"] = rows;
+                }
+
+                tablesData[t] = tableObj;
+            }
+
+            var outObj = new { dumpedAt = DateTime.UtcNow, tables = tablesData };
+            var json = JsonSerializer.Serialize(outObj, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(outFilePath, json);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"SimRacingTestFactory: DumpDatabaseSnapshot failed: {ex}");
+        }
+    }
+
+    /// <summary>
     /// Create authenticated HTTP client for API testing
     /// </summary>
     public HttpClient CreateAuthenticatedClient()
@@ -320,6 +500,36 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             {
                 Console.Error.WriteLine($"SimRacingTestFactory: unexpected error during dispose cleanup: {ex}");
             }
+        }
+
+        // Restore Console output and dispose writer if we redirected it
+        try
+        {
+            if (_consoleWriter != null)
+            {
+                try
+                {
+                    _consoleWriter.Flush();
+                }
+                catch { }
+
+                try
+                {
+                    Console.SetOut(_originalOut ?? TextWriter.Null);
+                    Console.SetError(_originalErr ?? TextWriter.Null);
+                }
+                catch { }
+
+                try
+                {
+                    _consoleWriter.Dispose();
+                }
+                catch { }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"SimRacingTestFactory: error restoring console output: {ex}");
         }
 
         // Ensure base disposal runs to release other test host resources.
