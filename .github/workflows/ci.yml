@@ -254,6 +254,23 @@ jobs:
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
 
+      - name: Analyze tests results (per-matrix run)
+        if: always()
+        id: perjob-summary
+        shell: bash
+        run: |
+          # Ensure Python available
+          python3 --version || true
+          set -euo pipefail
+          # parse any TRX files produced in this job
+          python3 scripts/ci-analyze.py || true
+          # upload produced summaries for aggregation
+          if [ -f tests-summary.json ]; then
+            echo "Uploading per-job tests-summary artifacts"
+            mkdir -p artifacts/summaries/tests
+            cp tests-summary.json tests-summary.txt artifacts/summaries/tests/ || true
+          fi
+
   unit-tests:
     name: Unit Tests
     runs-on: ${{ matrix.os }}
@@ -318,6 +335,18 @@ jobs:
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
 
+      - name: Analyze unit test results (per-job)
+        if: always()
+        id: perunit-summary
+        shell: bash
+        run: |
+          python3 --version || true
+          set -euo pipefail
+          python3 scripts/ci-analyze.py || true
+          if [ -f tests-summary.json ]; then
+            mkdir -p artifacts/summaries/unit
+            cp tests-summary.json tests-summary.txt artifacts/summaries/unit/ || true
+          fi
       - name: Upload unit test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -451,6 +480,19 @@ jobs:
           name: agent-e2e-windows
           path: server/AgentE2E.Tests/**/TestResults/*.trx
 
+      - name: Analyze E2E results (per-job)
+        if: always()
+        id: per-e2e-summary
+        shell: bash
+        run: |
+          python3 --version || true
+          set -euo pipefail
+          python3 scripts/ci-analyze.py || true
+          if [ -f tests-summary.json ]; then
+            mkdir -p artifacts/summaries/e2e
+            cp tests-summary.json tests-summary.txt artifacts/summaries/e2e/ || true
+          fi
+
   integration-tests:
     runs-on: windows-latest
     needs: unit-tests
@@ -514,9 +556,23 @@ jobs:
           name: integration-tests-${{ runner.os }}
           path: '**/*integration-${{ runner.os }}.trx'
 
+      - name: Analyze integration results (per-job)
+        if: always()
+        id: per-integration-summary
+        shell: bash
+        run: |
+          python3 --version || true
+          set -euo pipefail
+          python3 scripts/ci-analyze.py || true
+          if [ -f tests-summary.json ]; then
+            mkdir -p artifacts/summaries/integration
+            cp tests-summary.json tests-summary.txt artifacts/summaries/integration/ || true
+          fi
+
   analyze-results:
     name: Analyze Test Results
     runs-on: ubuntu-latest
+    if: always()
     needs: tests
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
@@ -638,6 +694,7 @@ jobs:
   analyze-e2e:
     name: Analyze E2E Results
     runs-on: ubuntu-latest
+    if: always()
     needs: e2e-windows
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
@@ -715,6 +772,7 @@ jobs:
   analyze-integration:
     name: Analyze Integration Results
     runs-on: ubuntu-latest
+    if: always()
     needs: integration-tests
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
@@ -1095,6 +1153,7 @@ jobs:
   analyze-unit:
     name: Analyze Unit Test Results
     runs-on: ubuntu-latest
+    if: always()
     needs: unit-tests
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
