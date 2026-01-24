@@ -77,6 +77,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Build server for Integration tests
+        shell: pwsh
+        run: |
+          Write-Host 'Building server/USBDeviceManager (Release) so --no-build later can use outputs'
+          dotnet build server/USBDeviceManager -c Release --no-restore
+
       - name: Run Unit env-check (Windows)
         if: runner.os == 'Windows'
         id: unit-envcheck-windows
