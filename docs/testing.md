@@ -44,6 +44,17 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-test-environm
 dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --filter "Category=E2E"
 ```
 
+## Per-job analyzer & enrichment flow
+
+Each test job in CI must follow this canonical flow so diagnostics are consistently captured and aggregated:
+
+1. Run tests and emit TRX files.
+2. Run the test analyzer (`scripts/ci-analyze.py`) to produce `tests-summary.json` and `tests-summary.txt`.
+3. Run the enrichment helper (`scripts/enrich-summary.py`) when the summary indicates failures or parse errors; this creates a compact enriched report and per-failure folders under `artifacts/enriched/<type>/`.
+4. Upload the summary and enriched artifacts for final aggregation by the report generator.
+
+This per-job flow is executed for Unit, Integration, Functional, Regression/E2E and any other test type so the final report generator can deterministically gather summaries from `artifacts/summaries/*` and enrichment from `artifacts/enriched/*`.
+
 - Agent Pester tests (when present) run on Windows in CI via `ci/run-tests.ps1` or via Pester invocation in the workflow. Example:
 
 ```powershell

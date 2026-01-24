@@ -271,6 +271,24 @@ jobs:
             cp tests-summary.json tests-summary.txt artifacts/summaries/tests/ || true
           fi
 
+      - name: Enrich tests logs (on failures/errors)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f tests-summary.json ]; then
+            python3 scripts/enrich-summary.py --src tests-summary.json --out-dir artifacts/enriched/tests --report tests-enriched-report.txt || true
+          else
+            echo "No tests-summary.json present; skipping enrichment"
+          fi
+
+      - name: Upload tests enriched report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-enriched-report
+          path: tests-enriched-report.txt
+
   unit-tests:
     name: Unit Tests
     runs-on: ${{ matrix.os }}
@@ -347,6 +365,22 @@ jobs:
             mkdir -p artifacts/summaries/unit
             cp tests-summary.json tests-summary.txt artifacts/summaries/unit/ || true
           fi
+      - name: Enrich unit logs (on failures/errors)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f tests-summary.json ]; then
+            python3 scripts/enrich-summary.py --src tests-summary.json --out-dir artifacts/enriched/unit --report unit-tests-enriched-report.txt || true
+          else
+            echo "No tests-summary.json present; skipping unit enrichment"
+          fi
+      - name: Upload unit enriched report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests-enriched-report
+          path: unit-tests-enriched-report.txt
       - name: Upload unit test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -482,7 +516,6 @@ jobs:
 
       - name: Analyze E2E results (per-job)
         if: always()
-        id: per-e2e-summary
         shell: bash
         run: |
           python3 --version || true
@@ -492,6 +525,26 @@ jobs:
             mkdir -p artifacts/summaries/e2e
             cp tests-summary.json tests-summary.txt artifacts/summaries/e2e/ || true
           fi
+
+      - name: Enrich E2E logs (on failures/errors)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f tests-summary.json ]; then
+            python3 scripts/enrich-summary.py --src tests-summary.json --out-dir artifacts/enriched/e2e --report e2e-enriched-report.txt || true
+          else
+            echo "No tests-summary.json present; skipping e2e enrichment"
+          fi
+
+      - name: Upload e2e enriched report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-enriched-report
+          path: e2e-enriched-report.txt
+
+      # per-job E2E analysis removed; regression analysis handled by analyze-regression job
 
   integration-tests:
     runs-on: windows-latest
@@ -568,6 +621,22 @@ jobs:
             mkdir -p artifacts/summaries/integration
             cp tests-summary.json tests-summary.txt artifacts/summaries/integration/ || true
           fi
+      - name: Enrich integration logs (on failures/errors)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f tests-summary.json ]; then
+            python3 scripts/enrich-summary.py --src tests-summary.json --out-dir artifacts/enriched/integration --report integration-enriched-report.txt || true
+          else
+            echo "No tests-summary.json present; skipping integration enrichment"
+          fi
+      - name: Upload integration enriched report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-enriched-report
+          path: integration-enriched-report.txt
 
   analyze-results:
     name: Analyze Test Results
@@ -691,11 +760,11 @@ jobs:
           name: tests-enriched-report
           path: tests-enriched-report.txt
 
-  analyze-e2e:
-    name: Analyze E2E Results
+  analyze-regression:
+    name: Analyze Regression Results
     runs-on: ubuntu-latest
     if: always()
-    needs: e2e-windows
+    needs: integration-tests
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
       failed_count: ${{ steps.summary.outputs.failed_count }}
@@ -703,14 +772,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download E2E artifacts (Windows)
+      - name: Download integration artifacts (Windows)
         uses: actions/download-artifact@v4
         with:
-          name: agent-e2e-windows
-          path: artifacts/e2e/windows
+          name: integration-tests-windows
+          path: artifacts/regression/windows
         continue-on-error: true
 
-      - name: Generate E2E summary (parse TRX)
+      - name: Generate regression summary (parse TRX)
         id: summary
         shell: bash
         run: |
@@ -727,30 +796,30 @@ jobs:
           fi
           echo "failed_count=$failed" >> $GITHUB_OUTPUT
 
-      - name: Upload E2E summary
+      - name: Upload regression summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-tests-summary
+          name: regression-tests-summary
           path: |
             tests-summary.json
             tests-summary.txt
 
-      - name: Enrich E2E report (on failures)
+      - name: Enrich regression report (on failures)
         if: steps.summary.outputs.failed_count != '0'
         shell: bash
         run: |
           set -euo pipefail
-          echo "E2E failures detected; generating enriched E2E report"
-          mkdir -p artifacts/enriched/e2e
-          echo "=== E2E Enriched Report ===" > e2e-enriched-report.txt
-          cat tests-summary.txt >> e2e-enriched-report.txt
+          echo "Regression failures detected; generating enriched regression report"
+          mkdir -p artifacts/enriched/regression
+          echo "=== Regression Enriched Report ===" > regression-enriched-report.txt
+          cat tests-summary.txt >> regression-enriched-report.txt
           if command -v jq >/dev/null 2>&1; then
             jq -c '.failures[]' tests-summary.json | while read -r fail; do
               name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
               msg=$(echo "$fail" | jq -r '.message')
               fileloc=$(echo "$fail" | jq -r '.file')
-              outdir="artifacts/enriched/e2e/$name"
+              outdir="artifacts/enriched/regression/$name"
               mkdir -p "$outdir"
               echo "Name: $name" > "$outdir/details.txt"
               echo "$msg" >> "$outdir/details.txt"
@@ -759,15 +828,15 @@ jobs:
               grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
             done
           else
-            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> regression-enriched-report.txt || true
           fi
 
-      - name: Upload E2E enriched report
+      - name: Upload regression enriched report
         if: steps.summary.outputs.failed_count != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-enriched-report
-          path: e2e-enriched-report.txt
+          name: regression-enriched-report
+          path: regression-enriched-report.txt
 
   analyze-integration:
     name: Analyze Integration Results
@@ -852,7 +921,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HTML_COMMENT_MAX_CHARS: '60000'
-    needs: [analyze-unit, analyze-results, analyze-e2e, analyze-integration]
+    needs: [analyze-unit, analyze-results, analyze-regression, analyze-integration]
     if: always()
     steps:
       - name: Checkout
@@ -872,11 +941,11 @@ jobs:
           path: artifacts/summaries/unit
         continue-on-error: true
 
-      - name: Download e2e summary
+      - name: Download regression summary
         uses: actions/download-artifact@v4
         with:
-          name: e2e-tests-summary
-          path: artifacts/summaries/e2e
+          name: regression-tests-summary
+          path: artifacts/summaries/regression
         continue-on-error: true
 
       - name: Download integration summary
@@ -893,11 +962,11 @@ jobs:
           path: artifacts/enriched/unit
         continue-on-error: true
 
-      - name: Download e2e enriched report
+      - name: Download regression enriched report
         uses: actions/download-artifact@v4
         with:
-          name: e2e-enriched-report
-          path: artifacts/enriched/e2e
+          name: regression-enriched-report
+          path: artifacts/enriched/regression
         continue-on-error: true
 
       - name: Download integration enriched report
@@ -956,9 +1025,9 @@ jobs:
             echo "\n--- UNIT ENRICHED REPORT ---\n" >> $out
             sed -n '1,400p' artifacts/enriched/unit/unit-tests-enriched-report.txt >> $out
           fi
-          if [ -f "artifacts/enriched/e2e/e2e-enriched-report.txt" ]; then
-            echo "\n--- E2E ENRICHED REPORT ---\n" >> $out
-            sed -n '1,400p' artifacts/enriched/e2e/e2e-enriched-report.txt >> $out
+          if [ -f "artifacts/enriched/regression/regression-enriched-report.txt" ]; then
+            echo "\n--- REGRESSION ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/regression/regression-enriched-report.txt >> $out
           fi
           if [ -f "artifacts/enriched/integration/integration-enriched-report.txt" ]; then
             echo "\n--- INTEGRATION ENRICHED REPORT ---\n" >> $out
@@ -1254,8 +1323,8 @@ jobs:
   log-check:
     name: Conditional Log Inspection
     runs-on: ubuntu-latest
-    needs: [analyze-results, analyze-unit, analyze-e2e, analyze-integration]
-    if: ${{ needs.analyze-results.outputs.tests_ok != 'true' || needs.analyze-unit.outputs.tests_ok != 'true' || needs.analyze-e2e.outputs.tests_ok != 'true' || needs.analyze-integration.outputs.tests_ok != 'true' }}
+    needs: [analyze-results, analyze-unit, analyze-regression, analyze-integration]
+    if: always()
     steps:
       - name: Checkout
         uses: actions/checkout@v4
