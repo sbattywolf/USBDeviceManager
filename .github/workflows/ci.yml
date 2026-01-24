@@ -150,24 +150,25 @@ jobs:
 
       - name: Build CI DB initializer helper
         if: always()
+        shell: pwsh
         run: |
-          if [ -f scripts/ci-init-db/EnsureDb/EnsureDb.csproj ]; then
-            dotnet build scripts/ci-init-db/EnsureDb/EnsureDb.csproj --configuration Release
-          else
-            echo "No EnsureDb helper present; skipping build"
-          fi
+          if (Test-Path 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj') {
+            dotnet build 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj' --configuration Release
+          } else {
+            Write-Host 'No EnsureDb helper present; skipping build'
+          }
 
       - name: Initialize database (EnsureCreated)
         if: always()
-        shell: bash
+        shell: pwsh
         run: |
           # Run the small helper that calls EF EnsureCreated to create sqlite schema before tests
-          if [ -f scripts/ci-init-db/EnsureDb/EnsureDb.csproj ]; then
-            echo "Running EnsureDb; failures will fail the job"
-            dotnet run -p scripts/ci-init-db/EnsureDb/EnsureDb.csproj -c Release --no-build
-          else
-            echo "No EnsureDb helper present; skipping DB initialization"
-          fi
+          if (Test-Path 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj') {
+            Write-Host 'Running EnsureDb; failures will fail the job'
+            dotnet run -p 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj' -c Release --no-build
+          } else {
+            Write-Host 'No EnsureDb helper present; skipping DB initialization'
+          }
 
       - name: Set EF Core logging env (Linux/macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
