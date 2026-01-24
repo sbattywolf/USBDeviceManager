@@ -454,11 +454,22 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          npm install -g trx2html || true
-          New-Item -ItemType Directory -Force -Path artifacts\trx-html | Out-Null
-          Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
-            $out = Join-Path artifacts\trx-html ($_.Name + '.html')
-            trx2html $_.FullName -o $out || Write-Host "trx2html failed for $($_.FullName)"
+          # Do not attempt to install missing npm package (can 404); prefer a safe check
+          New-Item -ItemType Directory -Force -Path artifacts\trx-html, artifacts\trx | Out-Null
+          if (Get-Command trx2html -ErrorAction SilentlyContinue) {
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              $out = Join-Path artifacts\trx-html ($_.Name + '.html')
+              try {
+                trx2html $_.FullName -o $out
+              } catch {
+                Write-Host "trx2html failed for $($_.FullName): $($_.Exception.Message)"
+              }
+            }
+          } else {
+            Write-Host "trx2html not available; copying .trx files to artifacts\trx for upload"
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              Copy-Item $_.FullName -Destination (Join-Path artifacts\trx $_.Name) -Force
+            }
           }
 
       - name: Analyze unit test results (per-job)
