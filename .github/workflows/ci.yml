@@ -221,12 +221,35 @@ jobs:
             "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
             Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
           }
-          else {
-            if (Get-Command powershell -ErrorAction SilentlyContinue) {
-              "SHELLRUNNER_LONG_CMD=powershell|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
-              Write-Host "Set SHELLRUNNER_LONG_CMD for powershell"
+          } else {
+            Write-Host "trx2html not available; copying .trx files to artifacts/trx for upload"
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              $src = $_.FullName
+              $destDir = Join-Path $PWD 'artifacts\trx'
+              $dest = Join-Path $destDir $_.Name
+              # Resolve canonical provider paths when possible
+              try {
+                $srcFull = (Resolve-Path -LiteralPath $src -ErrorAction Stop).ProviderPath
+              } catch {
+                $srcFull = $src
+              }
+              try {
+                $destFull = (Resolve-Path -LiteralPath $dest -ErrorAction Stop).ProviderPath
+              } catch {
+                $destFull = $dest
+              }
+              # If source and destination are identical or source is already inside artifacts\trx, skip copying
+              if ($srcFull -eq $destFull -or $srcFull.StartsWith($destDir, [System.StringComparison]::OrdinalIgnoreCase)) {
+                Write-Host "Skipping copy: source already in artifacts/trx: $src"
+                continue
+              }
+              try {
+                Copy-Item -Path $src -Destination $dest -Force -ErrorAction Stop
+              } catch {
+                Write-Warning "Failed copying $src to $dest : $($_.Exception.Message)"
+              }
             }
-            elseif (Get-Command pwsh -ErrorAction SilentlyContinue) {
+          }
               "SHELLRUNNER_LONG_CMD=pwsh|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
               Write-Host "Set SHELLRUNNER_LONG_CMD for pwsh"
             }
