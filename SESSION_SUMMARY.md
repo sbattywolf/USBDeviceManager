@@ -16,7 +16,7 @@
 ## Completed
 - Located failed run and inspected summaries.
 - Analyzer/enriched artifacts reviewed and `final-report.html` verified.
-- TODO list updated in workspace.
+ - Analyzer/enriched artifacts reviewed and `final-report.html` verified.
 
 ## Remaining (priority)
 1. Create a zip of `artifacts/run-21301958085/all/` for sharing.
