@@ -281,6 +281,41 @@ jobs:
             cp tests-summary.json tests-summary.txt artifacts/summaries/tests/ || true
           fi
 
+      - name: Convert TRX to HTML (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Generate TRX HTML (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install -g trx2html || true
+          mkdir -p artifacts/trx-html
+          shopt -s globstar || true
+          for f in **/*.trx; do
+            if [ -f "$f" ]; then
+              trx2html "$f" -o "artifacts/trx-html/$(basename "$f").html" || true
+            fi
+          done
+
+      - name: Convert TRX to HTML (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Generate TRX HTML (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          npm install -g trx2html || true
+          New-Item -ItemType Directory -Force -Path artifacts\trx-html | Out-Null
+          Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+            $out = Join-Path artifacts\trx-html ($_.Name + '.html')
+            trx2html $_.FullName -o $out || Write-Host "trx2html failed for $($_.FullName)"
+          }
+
       - name: Enrich tests logs (on failures/errors)
         if: always()
         shell: bash
@@ -376,6 +411,41 @@ jobs:
       - name: Run Unit tests (produce TRX)
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
+
+      - name: Convert TRX to HTML (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Generate TRX HTML (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install -g trx2html || true
+          mkdir -p artifacts/trx-html
+          shopt -s globstar || true
+          for f in **/*.trx; do
+            if [ -f "$f" ]; then
+              trx2html "$f" -o "artifacts/trx-html/$(basename "$f").html" || true
+            fi
+          done
+
+      - name: Convert TRX to HTML (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Generate TRX HTML (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          npm install -g trx2html || true
+          New-Item -ItemType Directory -Force -Path artifacts\trx-html | Out-Null
+          Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+            $out = Join-Path artifacts\trx-html ($_.Name + '.html')
+            trx2html $_.FullName -o $out || Write-Host "trx2html failed for $($_.FullName)"
+          }
 
       - name: Analyze unit test results (per-job)
         if: always()
