@@ -114,11 +114,41 @@ namespace USBDeviceManager.Controllers
 
             _ctx.DeviceStatuses.Add(status);
 
-            // Final save of the status record. If this fails due to a FK or
-            // concurrency issue, allow the exception to propagate so CI can
-            // capture diagnostics; earlier we attempted a retry strategy but
-            // persisting the device first avoids the common race condition.
-            await _ctx.SaveChangesAsync();
+            // Final save of the status record. If this fails due to a FK
+            // constraint (possible race where device row wasn't present),
+            // attempt a single retry: reload the device and try saving again.
+            try
+            {
+                await _ctx.SaveChangesAsync();
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)
+            {
+                // Try to recover from foreign-key race by ensuring we have
+                // the canonical device entity and id, then retry once.
+                var existing = !string.IsNullOrWhiteSpace(payload?.DeviceId)
+                    ? _ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == payload.DeviceId)
+                    : null;
+
+                if (existing != null)
+                {
+                    status.Device = existing;
+                    status.DeviceId = existing.Id;
+                    try
+                    {
+                        await _ctx.SaveChangesAsync();
+                    }
+                    catch
+                    {
+                        // If retry fails, rethrow original exception to preserve diagnostics
+                        throw;
+                    }
+                }
+                else
+                {
+                    // No device row found to recover with; rethrow to allow diagnostics
+                    throw;
+                }
+            }
 
             // Also update the in-memory dashboard recent logs and notify any UI subscribers.
             try
