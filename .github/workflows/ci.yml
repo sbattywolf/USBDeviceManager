@@ -115,8 +115,15 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path test-helpers/LongRunner) {
-            dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
-            Write-Host 'Published LongRunner to ./artifacts/longrunner'
+            if ($env:RUNNER_OS -and $env:RUNNER_OS -ieq 'Windows') {
+              # Produce a self-contained Windows exe under artifacts/longrunner/win-x64
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -r win-x64 --self-contained true -o ./artifacts/longrunner/win-x64
+              Write-Host 'Published LongRunner (win-x64 exe) to ./artifacts/longrunner/win-x64'
+            } else {
+              # Default: publish portable dll for non-Windows runners
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
+              Write-Host 'Published LongRunner (dll) to ./artifacts/longrunner'
+            }
           } else {
             Write-Host 'No long-run helper found; continuing without it.'
           }
@@ -185,8 +192,13 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path test-helpers/LongRunner) {
-            dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
-            Write-Host 'Published LongRunner to ./artifacts/longrunner'
+            if ($env:RUNNER_OS -and $env:RUNNER_OS -ieq 'Windows') {
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -r win-x64 --self-contained true -o ./artifacts/longrunner/win-x64
+              Write-Host 'Published LongRunner (win-x64 exe) to ./artifacts/longrunner/win-x64'
+            } else {
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
+              Write-Host 'Published LongRunner (dll) to ./artifacts/longrunner'
+            }
           } else {
             Write-Host 'No long-run helper found; continuing without it.'
           }
@@ -216,8 +228,13 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          $exeCandidate = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/win-x64/LongRunner.exe'
           $helperDll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
-          if (Test-Path $helperDll) {
+          if (Test-Path $exeCandidate) {
+            # Prefer a native exe when available (self-contained publish)
+            "SHELLRUNNER_LONG_CMD=$exeCandidate|--duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+            Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner exe"
+          } elseif (Test-Path $helperDll) {
             "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
             Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
           } elseif (Get-Command pwsh -ErrorAction SilentlyContinue) {
@@ -325,7 +342,7 @@ jobs:
                 try {
                   Copy-Item $_.FullName -Destination $dest -Force -ErrorAction Stop
                 } catch {
-                  Write-Host "Failed copying $($_.FullName) -> $dest: $($_.Exception.Message)"
+                  Write-Host ("Failed copying {0} -> {1}: {2}" -f $_.FullName, $dest, $_.Exception.Message)
                 }
               } else {
                 Write-Host "Skipping copy of $($_.FullName) - destination equals source"
@@ -523,7 +540,7 @@ jobs:
               try {
                 Copy-Item -Path $src -Destination $dest -Force -ErrorAction Stop
               } catch {
-                Write-Host "Failed copying $src -> $dest: $($_.Exception.Message)"
+                Write-Host ("Failed copying {0} -> {1}: {2}" -f $src, $dest, $_.Exception.Message)
               }
             }
           }
