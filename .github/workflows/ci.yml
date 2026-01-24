@@ -1072,6 +1072,9 @@ jobs:
       - name: Restore
         run: dotnet restore USBDeviceManager.sln
 
+      - name: Build server project (ensure runtime artifacts present)
+        run: dotnet build server/USBDeviceManager -c Debug --no-restore
+
       - name: Restore AgentE2E project
         run: dotnet restore server/AgentE2E.Tests/AgentE2E.Tests.csproj
 
@@ -1192,7 +1195,8 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path ./scripts/start-server-and-wait.ps1) {
-            .\scripts\start-server-and-wait.ps1 -NonInteractive -Port $Env:TEST_PORT
+            # Build artifacts ensured above; start without rebuilding and allow longer startup timeout
+            .\scripts\start-server-and-wait.ps1 -NonInteractive -Port $Env:TEST_PORT -NoBuild -TimeoutSec 240
           } else {
             Write-Host 'No orchestration script present, skipping server start.'
           }
