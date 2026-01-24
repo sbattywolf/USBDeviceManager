@@ -17,11 +17,12 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
         $attemptUrls += ($Url -replace 'localhost','127.0.0.1')
         $attemptUrls += ($Url -replace 'localhost','[::1]')
     } elseif ($Url -match '\[::1\]' -or $Url -match '::1') {
-        $attemptUrls += ($Url -replace '\[::1\]','127.0.0.1') -replace '::1','127.0.0.1'
-    } elseif ($Url -match '127\.0\.0\.1') {
-        # also try IPv6 literal form
+        # Normalize IPv6 literal variants: try bracketed form and IPv4 loopback
+        $attemptUrls += ($Url -replace '\[::1\]','127.0.0.1')
+        $attemptUrls += ($Url -replace '::1','[::1]')
+    } elseif ($Url -match '127\\.0\\.0\\.1') {
+        # also try IPv6 literal form (bracketed) but avoid unbracketed '::1'
         $attemptUrls += ($Url -replace '127.0.0.1','[::1]')
-        $attemptUrls += ($Url -replace '127.0.0.1','::1')
     }
 
     # Expand attempts: for any URL that contains a plain '/health' path, also

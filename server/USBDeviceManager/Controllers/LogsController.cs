@@ -78,20 +78,63 @@ namespace USBDeviceManager.Controllers
                     Name = payload.DeviceId,
                 };
                 _ctx.UsbDevices.Add(device);
-                await _ctx.SaveChangesAsync();
+                // NOTE: do not SaveChanges here. Let EF persist the new device and
+                // the related DeviceStatus in a single SaveChanges call so the
+                // FK will reference the newly-inserted device atomically. This
+                // also reduces races where concurrent requests try to create the
+                // same device.
             }
 
             var status = new DeviceStatus
             {
-                DeviceId = device != null ? device.Id : 0,
-                Device = device!,
+                Device = device,
                 IsConnected = string.Equals(payload.EventType, "CONNECTED", System.StringComparison.OrdinalIgnoreCase),
                 Status = payload.EventType ?? string.Empty,
                 ErrorMessage = payload.Message,
             };
 
             _ctx.DeviceStatuses.Add(status);
-            await _ctx.SaveChangesAsync();
+
+            try
+            {
+                await _ctx.SaveChangesAsync();
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                // Handle a possible race where another request concurrently
+                // inserted the same UsbDevice (unique index on DeviceId), or
+                // where the FK failed due to timing. Try to recover by reloading
+                // the device (if we have a deviceId) and retrying the status
+                // insert.
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(payload.DeviceId))
+                    {
+                        var existing = _ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == payload.DeviceId);
+                        if (existing != null)
+                        {
+                            // Ensure status references the persisted device and retry
+                            status.Device = existing;
+                            status.DeviceId = existing.Id;
+                            _ctx.Entry(status).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                            await _ctx.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                catch
+                {
+                    // Re-throw the original exception to preserve diagnostic info
+                    throw;
+                }
+            }
 
             // Also update the in-memory dashboard recent logs and notify any UI subscribers.
             try
