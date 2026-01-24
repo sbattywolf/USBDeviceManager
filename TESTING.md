@@ -38,7 +38,6 @@ Quick triage steps
 4. Upload artifacts from CI run and inspect the `* -db-sample.bin` and `* -delete-diagnostics.txt` files to determine lock sources or partial-write symptoms.
 
 Notes and next steps
-- There is a long-term plan to centralize artifact helpers and add a CI job that runs the gated repro automatically on failures; see the repository TODO for details.
 - There is a long-term plan to centralize artifact helpers and add a CI job that runs the gated repro automatically on failures; see `docs/TODOs-actionable.md` for details.
 
 - If you want me to also add a short validation unit test to assert the factory-created DB is valid, I can add that next.
