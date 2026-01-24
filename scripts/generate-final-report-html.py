@@ -40,7 +40,7 @@ TEMPLATE = """
     <p>Generated: {utc}</p>
     <h2>Summaries</h2>
     <table>
-        <thead><tr><th>Type</th><th>Total</th><th>Passed</th><th>Failed</th></tr></thead>
+        <thead><tr><th>Type</th><th>Total</th><th>Passed</th><th>Failed</th><th>Env OK</th><th>Env Reason</th></tr></thead>
         <tbody>
         {rows}
         </tbody>
@@ -55,6 +55,18 @@ TEMPLATE = """
 def find_summary_files(src_dir: Path):
     for p in src_dir.rglob('tests-summary.json'):
         yield p
+
+
+def find_env_checks(src_dir: Path):
+    envs = {}
+    for p in src_dir.rglob('env-check.json'):
+        try:
+            data = json.loads(p.read_text(encoding='utf-8'))
+        except Exception:
+            data = None
+        key = p.parent.name or str(p.parent)
+        envs[key] = data
+    return envs
 
 
 def load_summaries(src_dir: Path):
@@ -83,11 +95,22 @@ def load_summaries(src_dir: Path):
     return summaries
 
 
-def build_rows(summaries):
+def build_rows(summaries, env_map=None):
     rows = []
+    env_map = env_map or {}
     for k, v in sorted(summaries.items()):
         cls = 'failed' if v['failed'] > 0 else ''
-        rows.append(f"<tr><td>{k}</td><td>{v['total']}</td><td>{v['passed']}</td><td class=\"{cls}\">{v['failed']}</td></tr>")
+        env = env_map.get(k) or {}
+        env_ok = env.get('env_ok') if isinstance(env, dict) else None
+        reason = env.get('reason') if isinstance(env, dict) else ''
+        env_cell = 'Yes' if env_ok is True or str(env_ok).lower() == 'true' else ('No' if env_ok is False or str(env_ok).lower() == 'false' else 'N/A')
+        reason_text = ''
+        if isinstance(reason, list):
+            reason_text = ';'.join(reason)
+        else:
+            reason_text = str(reason or '')
+
+        rows.append(f"<tr><td>{k}</td><td>{v['total']}</td><td>{v['passed']}</td><td class=\"{cls}\">{v['failed']}</td><td>{env_cell}</td><td>{html_escape(reason_text)[:200]}</td></tr>")
     return '\n'.join(rows)
 
 
@@ -332,7 +355,8 @@ def main():
     NAME_SEGMENTS = int(args.name_segments or 2)
 
     summaries = load_summaries(src)
-    rows = build_rows(summaries)
+    env_map = find_env_checks(src)
+    rows = build_rows(summaries, env_map)
     fail_section = build_failure_section(summaries)
 
     # aggregate totals for ribbon
