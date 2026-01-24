@@ -74,7 +74,7 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
 
     # Exponential backoff (cap at 8s) before next overall attempt
     $sleepSeconds = [int][math]::Min(8, [math]::Pow(2, [int]($attempt - 1)))
-    Write-Host "Attempted variants; sleeping ${sleepSeconds}s before retry. (elapsed $([int](Get-Date - $start).TotalSeconds)s)"
+    Write-Host "Attempted variants; sleeping ${sleepSeconds}s before retry. (elapsed $([int]((Get-Date) - $start).TotalSeconds)s)"
     Start-Sleep -Seconds $sleepSeconds
 }
 Write-Error "Timeout waiting for health at $Url"
