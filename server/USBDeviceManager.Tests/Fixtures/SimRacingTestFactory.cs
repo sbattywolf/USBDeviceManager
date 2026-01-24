@@ -26,6 +26,44 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     private readonly string _testDatabaseName;
     private readonly string _dbFilePath;
     private readonly string _connectionString;
+    
+    // Helper: return both the runtime artifact directory (current dir/TestResults/artifacts)
+    // and, when possible, the repository test project artifact directory
+    private IEnumerable<string> GetArtifactDirectories()
+    {
+        var dirs = new List<string>();
+        try
+        {
+            var current = Path.Combine(Directory.GetCurrentDirectory(), "TestResults", "artifacts");
+            dirs.Add(current);
+
+            var repoRoot = FindRepoRoot();
+            if (!string.IsNullOrEmpty(repoRoot))
+            {
+                var repoArtifacts = Path.Combine(repoRoot, "server", "USBDeviceManager.Tests", "TestResults", "artifacts");
+                dirs.Add(repoArtifacts);
+            }
+        }
+        catch { }
+
+        return dirs.Distinct();
+    }
+
+    private string? FindRepoRoot()
+    {
+        try
+        {
+            var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+            while (dir != null)
+            {
+                var sln = Path.Combine(dir.FullName, "USBDeviceManager.sln");
+                if (File.Exists(sln)) return dir.FullName;
+                dir = dir.Parent;
+            }
+        }
+        catch { }
+        return null;
+    }
     // no shared connection by default; use connection string to allow EF to manage connections
 
     public SimRacingTestFactory()
@@ -34,9 +72,133 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         // DB filename discoverable and helps with cleanup across runs.
         _testDatabaseName = $"SimRacingTest_{DateTime.UtcNow:yyyyMMddHHmmss}_{Process.GetCurrentProcess().Id}";
 
-        // Use a temporary file-based SQLite DB to allow multiple connections
-        _dbFilePath = Path.Combine(Path.GetTempPath(), _testDatabaseName + ".db");
+        // Allow forcing the DB file path for debugging via environment variable
+        // SIMRACING_DEBUG_DBPATH. When present, use the provided path. When the
+        // repro gate is enabled (RUN_DB_REPRO=1) prefer a deterministic repo-
+        // local path under server/.../TestResults/artifacts so CI/local runs
+        // preserve the DB for triage.
+        var envDebugPath = Environment.GetEnvironmentVariable("SIMRACING_DEBUG_DBPATH");
+        var runRepro = Environment.GetEnvironmentVariable("RUN_DB_REPRO") == "1";
+        if (!string.IsNullOrEmpty(envDebugPath))
+        {
+            _dbFilePath = envDebugPath;
+            try
+            {
+                // derive a test database name from the forced path if possible
+                var name = Path.GetFileNameWithoutExtension(_dbFilePath);
+                if (!string.IsNullOrEmpty(name)) _testDatabaseName = name;
+            }
+            catch { }
+            // When forcing the DB path via environment, ensure the file exists
+            // and write a workspace-local sentinel so test runs can be verified
+            try
+            {
+                var dir = Path.GetDirectoryName(_dbFilePath);
+                if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+                // If a previous forced file exists (possibly containing non-SQLite
+                // data), delete it so SQLite can create a clean database file.
+                try
+                {
+                    if (File.Exists(_dbFilePath))
+                    {
+                        File.Delete(_dbFilePath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"SimRacingTestFactory: failed to remove existing forced DB file '{_dbFilePath}': {ex}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"SimRacingTestFactory: failed to prepare directory for forced DB path '{_dbFilePath}': {ex}");
+            }
+
+            try
+            {
+                foreach (var artifactsDir in GetArtifactDirectories())
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(artifactsDir);
+                        var sentinel = Path.Combine(artifactsDir, _testDatabaseName + "-debug-sentinel.txt");
+                        File.WriteAllText(sentinel, $"SIMRACING_DEBUG_DBPATH='{envDebugPath}'\nCreatedAt:{DateTime.UtcNow:O}\n");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine($"SimRacingTestFactory: failed to write debug sentinel to '{artifactsDir}': {ex}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"SimRacingTestFactory: failed to enumerate artifact dirs for debug sentinel: {ex}");
+            }
+        }
+        else
+        {
+            // Prefer a repo-local artifacts DB when running the repro gate so
+            // the file is preserved for triage. Otherwise use a temp file.
+            if (runRepro)
+            {
+                var repoRoot = FindRepoRoot();
+                if (!string.IsNullOrEmpty(repoRoot))
+                {
+                    var repoArtifacts = Path.Combine(repoRoot, "server", "USBDeviceManager.Tests", "TestResults", "artifacts");
+                    try { Directory.CreateDirectory(repoArtifacts); } catch { }
+                    _dbFilePath = Path.Combine(repoArtifacts, _testDatabaseName + ".db");
+                }
+                else
+                {
+                    _dbFilePath = Path.Combine(Path.GetTempPath(), _testDatabaseName + ".db");
+                }
+            }
+            else
+            {
+                // Use a temporary file-based SQLite DB to allow multiple connections
+                _dbFilePath = Path.Combine(Path.GetTempPath(), _testDatabaseName + ".db");
+            }
+        }
+
         _connectionString = $"Data Source={_dbFilePath};Cache=Shared";
+
+        // Log the computed DB path to Console (appears in server logs)
+        try
+        {
+            Console.WriteLine($"SimRacingTestFactory: computed DB path = '{_dbFilePath}'");
+        }
+        catch { }
+
+        // Ensure the DB file exists so repro and CI artifacts can observe it
+        try
+        {
+            var dir = Path.GetDirectoryName(_dbFilePath);
+            if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+            using (var fs = new FileStream(_dbFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                // write nothing; just ensure file exists and is accessible
+            }
+
+            // Create a minimal, valid SQLite DB so Program.Main/EF sees a usable file
+            try
+            {
+                var connStr = $"Data Source={_dbFilePath};Cache=Shared";
+                using var conn = new SqliteConnection(connStr);
+                conn.Open();
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = "CREATE TABLE IF NOT EXISTS __repro_marker (id INTEGER PRIMARY KEY);";
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"SimRacingTestFactory: failed to precreate SQLite DB '{_dbFilePath}': {ex}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"SimRacingTestFactory: failed to create DB file '{_dbFilePath}': {ex}");
+        }
 
         // Defensive startup cleanup: remove old leftover SimRacingTest_*.db files.
         // Expiration window can be configured via SIMRACING_TEST_DB_EXPIRATION_HOURS (hours).
@@ -109,6 +271,61 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
         {
             Console.Error.WriteLine($"SimRacingTestFactory: EF model initialization failed: {ex}");
         }
+
+        // Write an early diagnostic artifact with the computed DB path and copy
+        // a small sample of the DB file if it exists to make it visible to CI/artifact
+        // collection and local repro runs.
+        try
+        {
+            foreach (var artifactsDir in GetArtifactDirectories())
+            {
+                try
+                {
+                    Directory.CreateDirectory(artifactsDir);
+                    var pathFile = Path.Combine(artifactsDir, _testDatabaseName + "-dbpath.txt");
+                    File.WriteAllText(pathFile, _dbFilePath);
+                    if (File.Exists(_dbFilePath))
+                    {
+                        try
+                        {
+                            var samplePath = Path.Combine(artifactsDir, _testDatabaseName + "-db-sample.bin");
+                            using var inFs = new FileStream(_dbFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                            using var outFs = new FileStream(samplePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+                            var buf = new byte[4096];
+                            int read = inFs.Read(buf, 0, buf.Length);
+                            if (read > 0)
+                            {
+                                outFs.Write(buf, 0, read);
+                            }
+                        }
+                        catch (Exception copyEx)
+                        {
+                            Console.Error.WriteLine($"SimRacingTestFactory: failed to copy DB sample to '{artifactsDir}': {copyEx}");
+                        }
+                    }
+                }
+                catch (Exception tex)
+                {
+                    Console.Error.WriteLine($"SimRacingTestFactory: failed to write dbpath artifact to '{artifactsDir}': {tex}");
+                }
+            }
+
+            // Also write a copy of the DB path into the system temp folder so
+            // local repro runs and external tooling can find it reliably.
+            try
+            {
+                var tempPathFile = Path.Combine(Path.GetTempPath(), _testDatabaseName + "-dbpath.txt");
+                File.WriteAllText(tempPathFile, _dbFilePath);
+            }
+            catch (Exception tex)
+            {
+                Console.Error.WriteLine($"SimRacingTestFactory: failed to write temp dbpath file: {tex}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"SimRacingTestFactory: failed to write DB path artifact: {ex}");
+        }
     }
 
     /// <summary>
@@ -128,6 +345,30 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                 _consoleWriter = new StreamWriter(new FileStream(consoleLogPath, FileMode.Append, FileAccess.Write, FileShare.Read)) { AutoFlush = true };
                 Console.SetOut(_consoleWriter);
                 Console.SetError(_consoleWriter);
+
+                // Emit a ConfigureWebHost sentinel: log the effective SIMRACING_DEBUG_DBPATH
+                try
+                {
+                    var debugEnv = Environment.GetEnvironmentVariable("SIMRACING_DEBUG_DBPATH") ?? string.Empty;
+                    Console.WriteLine($"SimRacingTestFactory: ConfigureWebHost sees SIMRACING_DEBUG_DBPATH='{debugEnv}'");
+                    foreach (var cwArtifactsDir in GetArtifactDirectories())
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(cwArtifactsDir);
+                            var cwSentinel = Path.Combine(cwArtifactsDir, _testDatabaseName + "-configurewebhost-sentinel.txt");
+                            File.WriteAllText(cwSentinel, $"SIMRACING_DEBUG_DBPATH='{debugEnv}'\nTimestamp:{DateTime.UtcNow:O}\n");
+                        }
+                        catch (Exception ex)
+                        {
+                            try { Console.Error.WriteLine($"SimRacingTestFactory: failed to write ConfigureWebHost sentinel to '{cwArtifactsDir}': {ex}"); } catch { }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    try { Console.Error.WriteLine($"SimRacingTestFactory: failed to write ConfigureWebHost sentinel: {ex}"); } catch { }
+                }
             }
             catch (Exception ex)
             {
@@ -285,6 +526,11 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
 
         return new SimRacingContext(options);
     }
+
+    /// <summary>
+    /// Expose the database file path for debugging and repro tests.
+    /// </summary>
+    public string DbFilePath => _dbFilePath;
 
     /// <summary>
     /// Seed test data for functional tests
@@ -458,107 +704,54 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     {
         if (disposing)
         {
-            // Best-effort: clear any SQLite connection pools so underlying file
-            // handles are released. Actual file deletion is attempted after
-            // the host is fully disposed (see below) to avoid races where
-            // background services still hold connections.
+            // Clear SQLite pools first to reduce chance of lingering handles
             try
             {
-                try
+                SqliteConnection.ClearAllPools();
+            }
+            catch (Exception ex)
+            {
+                try { Console.Error.WriteLine($"SimRacingTestFactory: ClearAllPools() failed: {ex}"); } catch { }
+            }
+
+            // Restore redirected console output and dispose writer
+            try
+            {
+                if (_consoleWriter != null)
                 {
-                    SqliteConnection.ClearAllPools();
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine($"SimRacingTestFactory: ClearAllPools() failed: {ex}");
+                    try { _consoleWriter.Flush(); } catch { }
+                    try { Console.SetOut(_originalOut ?? TextWriter.Null); Console.SetError(_originalErr ?? TextWriter.Null); } catch { }
+                    try { _consoleWriter.Dispose(); } catch { }
                 }
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"SimRacingTestFactory: unexpected error during dispose cleanup: {ex}");
+                try { Console.Error.WriteLine($"SimRacingTestFactory: error restoring console output: {ex}"); } catch { }
+            }
         }
 
-        // Restore Console output and dispose writer if we redirected it
+        // Ensure base disposal runs to stop the host and background services
         try
         {
-            if (_consoleWriter != null)
-            {
-                try
-                {
-                    _consoleWriter.Flush();
-                }
-                catch { }
-
-                try
-                {
-                    Console.SetOut(_originalOut ?? TextWriter.Null);
-                    Console.SetError(_originalErr ?? TextWriter.Null);
-                }
-                catch { }
-
-                try
-                {
-                    _consoleWriter.Dispose();
-                }
-                catch { }
-            }
+            base.Dispose(disposing);
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"SimRacingTestFactory: error restoring console output: {ex}");
-        }
-
-        // Restore Console output and dispose writer if we redirected it
-        try
-        {
-            if (_consoleWriter != null)
-            {
-                try
-                {
-                    _consoleWriter.Flush();
-                }
-                catch { }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"SimRacingTestFactory: error flushing console writer: {ex}");
-        }
-
-        // Ensure base disposal runs to release other test host resources (stop the host,
-        // background services, and any outstanding DbContext instances). We perform
-        // file deletion after base.Dispose to minimize "file in use" races.
-        base.Dispose(disposing);
-
-        try
-        {
-            if (_consoleWriter != null)
-            {
-                try
-                {
-                    Console.SetOut(_originalOut ?? TextWriter.Null);
-                    Console.SetError(_originalErr ?? TextWriter.Null);
-                }
-                catch { }
-
-                try
-                {
-                    _consoleWriter.Dispose();
-                }
-                catch { }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"SimRacingTestFactory: error restoring console output: {ex}");
+            try { Console.Error.WriteLine($"SimRacingTestFactory: base.Dispose threw: {ex}"); } catch { }
         }
 
         // After the host is stopped, attempt to delete the DB file with retries.
         try
         {
-            if (!string.IsNullOrEmpty(_dbFilePath) && File.Exists(_dbFilePath))
+            // Skip deleting the DB file when running the repro gate so the
+            // repository artifacts preserve the DB for triage.
+            var runRepro = Environment.GetEnvironmentVariable("RUN_DB_REPRO") == "1";
+            if (runRepro)
             {
-                // Force finalizers and wait a short moment to allow handles to be released
+                try { Console.WriteLine($"SimRacingTestFactory: RUN_DB_REPRO=1; skipping deletion of '{_dbFilePath}'"); } catch { }
+            }
+            else if (!string.IsNullOrEmpty(_dbFilePath) && File.Exists(_dbFilePath))
+            {
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 Thread.Sleep(100);
@@ -574,78 +767,89 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                     }
                     catch (IOException ioEx) when (attempt < maxAttempts)
                     {
-                        Console.Error.WriteLine($"SimRacingTestFactory: delete attempt {attempt} failed: {ioEx.Message}. Retrying in {delayMs}ms.");
+                        try { Console.Error.WriteLine($"SimRacingTestFactory: delete attempt {attempt} failed: {ioEx.Message}. Retrying in {delayMs}ms."); } catch { }
                         Thread.Sleep(delayMs);
                         delayMs = Math.Min(2000, delayMs * 2);
                     }
                     catch (Exception ex)
                     {
-                            Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB on dispose '{_dbFilePath}': {ex}");
-                            try
+                        try { Console.Error.WriteLine($"SimRacingTestFactory: failed to delete temp DB on dispose '{_dbFilePath}': {ex}"); } catch { }
+                        try
+                        {
+                            foreach (var artifactsDir in GetArtifactDirectories())
                             {
-                                var artifactsDir = Path.Combine(Directory.GetCurrentDirectory(), "TestResults", "artifacts");
-                                Directory.CreateDirectory(artifactsDir);
-                                var diagPath = Path.Combine(artifactsDir, _testDatabaseName + "-delete-diagnostics.txt");
-                                using var sw = new StreamWriter(new FileStream(diagPath, FileMode.Create, FileAccess.Write, FileShare.Read));
-                                sw.WriteLine($"Timestamp: {DateTime.UtcNow:O}");
-                                sw.WriteLine("Exception:");
-                                sw.WriteLine(ex.ToString());
                                 try
                                 {
-                                    sw.WriteLine("\nFile info:");
-                                    sw.WriteLine($"Exists: {File.Exists(_dbFilePath)}");
-                                    var fi = new FileInfo(_dbFilePath);
-                                    sw.WriteLine($"FullName: {fi.FullName}");
-                                    sw.WriteLine($"Length: {fi.Length}");
-                                    sw.WriteLine($"LastWriteUtc: {fi.LastWriteTimeUtc:O}");
-                                    sw.WriteLine($"Attributes: {fi.Attributes}");
-                                }
-                                catch (Exception fex)
-                                {
-                                    sw.WriteLine($"Failed to probe file info: {fex}");
-                                }
-                                try
-                                {
-                                    sw.WriteLine("\nProcess list (Id - Name):");
-                                    foreach (var p in System.Diagnostics.Process.GetProcesses().OrderBy(p=>p.Id))
+                                    Directory.CreateDirectory(artifactsDir);
+                                    var diagPath = Path.Combine(artifactsDir, _testDatabaseName + "-delete-diagnostics.txt");
+                                    using var sw = new StreamWriter(new FileStream(diagPath, FileMode.Create, FileAccess.Write, FileShare.Read));
+                                    sw.WriteLine($"Timestamp: {DateTime.UtcNow:O}");
+                                    sw.WriteLine("Exception:");
+                                    sw.WriteLine(ex.ToString());
+                                    try
                                     {
-                                        try { sw.WriteLine($"{p.Id} - {p.ProcessName}"); } catch { }
+                                        sw.WriteLine("\nFile info:");
+                                        sw.WriteLine($"Exists: {File.Exists(_dbFilePath)}");
+                                        var fi = new FileInfo(_dbFilePath);
+                                        sw.WriteLine($"FullName: {fi.FullName}");
+                                        sw.WriteLine($"Length: {fi.Length}");
+                                        sw.WriteLine($"LastWriteUtc: {fi.LastWriteTimeUtc:O}");
+                                        sw.WriteLine($"Attributes: {fi.Attributes}");
                                     }
+                                    catch (Exception fex)
+                                    {
+                                        sw.WriteLine($"Failed to probe file info: {fex}");
+                                    }
+                                    try
+                                    {
+                                        sw.WriteLine("\nProcess list (Id - Name):");
+                                        foreach (var p in System.Diagnostics.Process.GetProcesses().OrderBy(p => p.Id))
+                                        {
+                                            try { sw.WriteLine($"{p.Id} - {p.ProcessName}"); } catch { }
+                                        }
+                                    }
+                                    catch (Exception pex)
+                                    {
+                                        sw.WriteLine($"Failed to enumerate processes: {pex}");
+                                    }
+                                    try
+                                    {
+                                        sw.WriteLine("\nAttempting to open DB file for read (shared):");
+                                        using var fs = new FileStream(_dbFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                                        var buf = new byte[4096];
+                                        int read = fs.Read(buf, 0, buf.Length);
+                                        sw.WriteLine($"Read {read} bytes from file (first 1KB hex):");
+                                        sw.WriteLine(BitConverter.ToString(buf, 0, Math.Min(read, 1024)));
+                                        var samplePath = Path.Combine(artifactsDir, _testDatabaseName + "-db-sample.bin");
+                                        using var outFs = new FileStream(samplePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+                                        outFs.Write(buf, 0, read);
+                                        sw.WriteLine($"Wrote sample to {samplePath}");
+                                    }
+                                    catch (Exception openEx)
+                                    {
+                                        sw.WriteLine($"Failed to open/read DB file: {openEx}");
+                                    }
+                                    sw.Flush();
                                 }
-                                catch (Exception pex)
+                                catch (Exception diagEx)
                                 {
-                                    sw.WriteLine($"Failed to enumerate processes: {pex}");
+                                    try { Console.Error.WriteLine($"SimRacingTestFactory: failed to write delete diagnostics to '{artifactsDir}': {diagEx}"); } catch { }
                                 }
-                                try
-                                {
-                                    sw.WriteLine("\nAttempting to open DB file for read (shared):");
-                                    using var fs = new FileStream(_dbFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                                    var buf = new byte[4096];
-                                    int read = fs.Read(buf, 0, buf.Length);
-                                    sw.WriteLine($"Read {read} bytes from file (first 1KB hex):");
-                                    sw.WriteLine(BitConverter.ToString(buf, 0, Math.Min(read, 1024)));
-                                    // attempt to copy small sample for analysis
-                                    var samplePath = Path.Combine(artifactsDir, _testDatabaseName + "-db-sample.bin");
-                                    using var outFs = new FileStream(samplePath, FileMode.Create, FileAccess.Write, FileShare.Read);
-                                    outFs.Write(buf, 0, read);
-                                    sw.WriteLine($"Wrote sample to {samplePath}");
-                                }
-                                catch (Exception openEx)
-                                {
-                                    sw.WriteLine($"Failed to open/read DB file: {openEx}");
-                                }
-                                sw.Flush();
                             }
-                            catch (Exception diagEx)
-                            {
-                                Console.Error.WriteLine($"SimRacingTestFactory: failed to write delete diagnostics: {diagEx}");
-                            }
-                            break;
+                        }
+                        catch (Exception diagExOuter)
+                        {
+                            try { Console.Error.WriteLine($"SimRacingTestFactory: failed to write delete diagnostics: {diagExOuter}"); } catch { }
+                        }
+                        break;
                     }
                 }
             }
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"SimRacingTestFactory: unexpected error during final dispose cleanup: {ex}");
+            try { Console.Error.WriteLine($"SimRacingTestFactory: unexpected error during final dispose cleanup: {ex}"); } catch { }
         }
+
+    }
+}
