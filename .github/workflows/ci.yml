@@ -77,6 +77,34 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Run Unit env-check (Windows)
+        if: runner.os == 'Windows'
+        id: unit-envcheck-windows
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .\scripts\ci\env-check.ps1)) { Write-Host 'No env-check script present; marking ENV_OK=false'; "ENV_OK=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append; "ENV_REASON=env-check-missing" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append; exit 0 }
+          .\scripts\ci\env-check.ps1 -OutFile env-check.json
+          $j = Get-Content env-check.json -Raw | ConvertFrom-Json
+          if ($j.env_ok) { "ENV_OK=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append } else { "ENV_OK=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append }
+          if ($j.reason) { "ENV_REASON=$($j.reason -join ';')" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append }
+
+      - name: Run Unit env-check (Linux)
+        if: runner.os != 'Windows'
+        id: unit-envcheck-linux
+        shell: bash
+        run: |
+          if [ ! -f scripts/ci/env-check.sh ]; then
+            echo "ENV_OK=false" >> $GITHUB_ENV
+            echo "ENV_REASON=env-check-missing" >> $GITHUB_ENV
+            exit 0
+          fi
+          chmod +x scripts/ci/env-check.sh
+          ./scripts/ci/env-check.sh env-check.json
+          env_ok=$(jq -r '.env_ok' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['env_ok'])"))
+          reason=$(jq -r '.reason' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['reason'])"))
+          echo "ENV_OK=${env_ok}" >> $GITHUB_ENV
+          echo "ENV_REASON=${reason}" >> $GITHUB_ENV
+
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -209,6 +237,42 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Run Tests env-check (Windows)
+        if: runner.os == 'Windows'
+        id: job-envcheck-windows
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .\scripts\ci\env-check.ps1)) { Write-Host 'No env-check script present; marking env_ok=false'; echo "env_ok=false" >> $env:GITHUB_OUTPUT; echo "reason=env-check-missing" >> $env:GITHUB_OUTPUT; echo "ENV_OK=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append; echo "ENV_REASON=env-check-missing" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append; exit 0 }
+          .\scripts\ci\env-check.ps1 -OutFile env-check.json
+          $j = Get-Content env-check.json -Raw | ConvertFrom-Json
+          echo ("env_ok={0}" -f $j.env_ok) >> $env:GITHUB_OUTPUT
+          $r = if ($j.reason) { ($j.reason -join ';') } else { '' }
+          echo ("reason={0}" -f $r) >> $env:GITHUB_OUTPUT
+          if ($j.env_ok) { "ENV_OK=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append } else { "ENV_OK=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append }
+          if ($r) { "ENV_REASON=$r" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append }
+
+      - name: Run Tests env-check (Linux)
+        if: runner.os != 'Windows'
+        id: job-envcheck-linux
+        shell: bash
+        run: |
+          if [ ! -f scripts/ci/env-check.sh ]; then
+            echo "env_ok=false" >> $GITHUB_OUTPUT
+            echo "reason=env-check-missing" >> $GITHUB_OUTPUT
+            echo "ENV_OK=false" >> $GITHUB_ENV
+            echo "ENV_REASON=env-check-missing" >> $GITHUB_ENV
+            exit 0
+          fi
+          chmod +x scripts/ci/env-check.sh
+          ./scripts/ci/env-check.sh env-check.json
+          env_ok=$(jq -r '.env_ok' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['env_ok'])"))
+          reason=$(jq -r '.reason' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['reason'])"))
+          echo "env_ok=${env_ok}" >> $GITHUB_OUTPUT
+          echo "reason=${reason}" >> $GITHUB_OUTPUT
+          echo "ENV_OK=${env_ok}" >> $GITHUB_ENV
+          echo "ENV_REASON=${reason}" >> $GITHUB_ENV
+
+
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -220,6 +284,7 @@ jobs:
             nuget-${{ runner.os }}-
 
       - name: Restore NuGet (with retries)
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
         shell: pwsh
         run: |
           $maxAttempts = 3
@@ -244,6 +309,7 @@ jobs:
           }
 
       - name: Publish long-run test helper
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
         shell: pwsh
         run: |
           if (Test-Path test-helpers/LongRunner) {
@@ -357,11 +423,30 @@ jobs:
           }
 
       - name: Build
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
       - name: Run Unit tests (produce TRX)
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
+
+      - name: Skip tests placeholder due to env-check failure
+        if: ${{ ! ( (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') ) }}
+        shell: bash
+        run: |
+          set -euo pipefail || true
+          mkdir -p artifacts/summaries/env-check-failed
+          cat > tests-summary.json <<'JSON'
+          {
+            "total": 0,
+            "passed": 0,
+            "failed": 0,
+            "skipped": 0,
+            "note": "Tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
+          }
+          JSON
+          cp tests-summary.json artifacts/summaries/env-check-failed/tests-summary.json || true
 
       - name: Analyze tests results (per-matrix run)
         if: always()
@@ -625,8 +710,26 @@ jobs:
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
       - name: Run Unit tests (produce TRX)
+        if: ${{ (runner.os == 'Windows' && steps.unit-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.unit-envcheck-linux.outputs.env_ok == 'true') }}
         run: |
           dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
+
+      - name: Skip unit tests placeholder due to env-check failure
+        if: ${{ ! ( (runner.os == 'Windows' && steps.unit-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.unit-envcheck-linux.outputs.env_ok == 'true') ) }}
+        shell: bash
+        run: |
+          set -euo pipefail || true
+          mkdir -p artifacts/summaries/unit/env-check-failed
+          cat > tests-summary.json <<'JSON'
+          {
+            "total": 0,
+            "passed": 0,
+            "failed": 0,
+            "skipped": 0,
+            "note": "Unit tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
+          }
+          JSON
+          cp tests-summary.json artifacts/summaries/unit/env-check-failed/tests-summary.json || true
 
       - name: Convert TRX to HTML (Linux)
         if: runner.os == 'Linux'
@@ -2132,3 +2235,4 @@ jobs:
           echo "Downloading any per-analyzer enriched reports (if present)"
           find artifacts -type f -name '*-enriched-report*.txt' -print -exec sed -n '1,200p' {} + || true
           echo "Log inspection complete"
+
