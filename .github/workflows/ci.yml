@@ -399,6 +399,18 @@ jobs:
           name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
           path: tests-enriched-report.txt
 
+      - name: Upload job logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: job-logs-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: |
+            server_out.txt
+            server_err.txt
+            scripts/tmp/**
+            artifacts/trx/**
+
       - name: Upload tests enriched report (attempt 3)
         if: steps.upload_tests_enriched_1.outcome != 'success' && steps.upload_tests_enriched_2.outcome != 'success'
         uses: actions/upload-artifact@v4
