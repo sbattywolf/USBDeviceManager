@@ -72,22 +72,41 @@ namespace USBDeviceManager.Controllers
 
             if (device == null && !string.IsNullOrWhiteSpace(payload.DeviceId))
             {
+                // Create and persist the device first to avoid FK race conditions
+                // where two concurrent requests both attempt to insert the same
+                // device and then insert a DeviceStatus referencing a device
+                // that isn't yet committed.
                 device = new UsbDevice
                 {
                     DeviceId = payload.DeviceId,
                     Name = payload.DeviceId,
                 };
                 _ctx.UsbDevices.Add(device);
-                // NOTE: do not SaveChanges here. Let EF persist the new device and
-                // the related DeviceStatus in a single SaveChanges call so the
-                // FK will reference the newly-inserted device atomically. This
-                // also reduces races where concurrent requests try to create the
-                // same device.
+                try
+                {
+                    await _ctx.SaveChangesAsync();
+                }
+                catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)
+                {
+                    // Possible unique-index race: another request inserted the
+                    // same device concurrently. Try to reload the existing
+                    // record and proceed; if not found, rethrow.
+                    var existing = _ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == payload.DeviceId);
+                    if (existing != null)
+                    {
+                        device = existing;
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
 
             var status = new DeviceStatus
             {
                 Device = device,
+                DeviceId = device?.Id ?? 0,
                 IsConnected = string.Equals(payload.EventType, "CONNECTED", System.StringComparison.OrdinalIgnoreCase),
                 Status = payload.EventType ?? string.Empty,
                 ErrorMessage = payload.Message,
@@ -95,46 +114,11 @@ namespace USBDeviceManager.Controllers
 
             _ctx.DeviceStatuses.Add(status);
 
-            try
-            {
-                await _ctx.SaveChangesAsync();
-            }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
-            {
-                // Handle a possible race where another request concurrently
-                // inserted the same UsbDevice (unique index on DeviceId), or
-                // where the FK failed due to timing. Try to recover by reloading
-                // the device (if we have a deviceId) and retrying the status
-                // insert.
-                try
-                {
-                    if (!string.IsNullOrWhiteSpace(payload.DeviceId))
-                    {
-                        var existing = _ctx.UsbDevices.FirstOrDefault(d => d.DeviceId == payload.DeviceId);
-                        if (existing != null)
-                        {
-                            // Ensure status references the persisted device and retry
-                            status.Device = existing;
-                            status.DeviceId = existing.Id;
-                            _ctx.Entry(status).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                            await _ctx.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                catch
-                {
-                    // Re-throw the original exception to preserve diagnostic info
-                    throw;
-                }
-            }
+            // Final save of the status record. If this fails due to a FK or
+            // concurrency issue, allow the exception to propagate so CI can
+            // capture diagnostics; earlier we attempted a retry strategy but
+            // persisting the device first avoids the common race condition.
+            await _ctx.SaveChangesAsync();
 
             // Also update the in-memory dashboard recent logs and notify any UI subscribers.
             try
