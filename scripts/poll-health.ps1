@@ -73,7 +73,9 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
     }
 
     # Exponential backoff (cap at 8s) before next overall attempt
-    $sleepSeconds = [int][math]::Min(8, [math]::Pow(2, [int]($attempt - 1)))
+    # Use floating-point overloads to avoid PowerShell attempting to
+    # convert large pow results to Int32 (which can overflow, e.g. 2^33).
+    $sleepSeconds = [int][math]::Min(8.0, [math]::Pow(2.0, [int]($attempt - 1)))
     Write-Host "Attempted variants; sleeping ${sleepSeconds}s before retry. (elapsed $([int]((Get-Date) - $start).TotalSeconds)s)"
     Start-Sleep -Seconds $sleepSeconds
 }
