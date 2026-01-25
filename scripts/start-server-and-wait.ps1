@@ -72,8 +72,8 @@ while ($startAttempt -lt $maxStartAttempts) {
         # Some CI publishes RID outputs under win-x64/SMServer.exe; copy it
         # into the framework root if the test harness expects net8.0/SMServer.exe.
         if ($NoBuild) {
-            $exeRoot = Join-Path $PWD.Path "server\USBDeviceManager\bin\Release\net8.0\SMServer.exe"
-            $exeRid = Join-Path $PWD.Path "server\USBDeviceManager\bin\Release\net8.0\win-x64\SMServer.exe"
+            $exeRoot = Join-Path $PWD.Path "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
+            $exeRid = Join-Path $PWD.Path "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
             if (-not (Test-Path $exeRoot) -and (Test-Path $exeRid)) {
                 try {
                     Copy-Item -Path $exeRid -Destination $exeRoot -Force
@@ -86,7 +86,7 @@ while ($startAttempt -lt $maxStartAttempts) {
 
         $startArgs = $dotnetArgs
         # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
-        $builtDll = Join-Path $PWD.Path "server\USBDeviceManager\bin\Release\net8.0\USBDeviceManager.dll"
+        $builtDll = Join-Path $PWD.Path "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
         if ($NoBuild -and (Test-Path $builtDll)) {
             $startArgs = "`"$builtDll`" --urls http://$($bindAddress):$Port"
             Write-Host "Launching built DLL: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
