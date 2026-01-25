@@ -1,4 +1,4 @@
-# Minimal integration runner shim for agent integration tests
+﻿# Minimal integration runner shim for agent integration tests
 # This script tries to locate any real integration runner; if not found, it returns success.
 
 Write-Output "Agent integration runner shim invoked"
@@ -12,6 +12,7 @@ if (Test-Path $expected) {
     exit $LASTEXITCODE
 }
 
-# No real integration tests present — report success to keep CI green
+# No real integration tests present â€" report success to keep CI green
 Write-Output "No agent integration tests present. Exiting with success."
 exit 0
+

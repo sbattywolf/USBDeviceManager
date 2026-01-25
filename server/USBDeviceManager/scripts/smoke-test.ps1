@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$Port = "5005",
     [int]$TimeoutSeconds = 30
 )
@@ -34,7 +34,7 @@ try {
     }
     if (-not $ready) { throw "Server did not start in time" }
 
-    Write-Host "Server ready — running smoke requests..."
+    Write-Host "Server ready  -  running smoke requests..."
 
     $steps = @(
         @{Method='GET'; Path='/api/configs'; Expect=200},
@@ -64,4 +64,6 @@ try {
         Stop-Process -Id $proc.Id -Force
     }
 }
+
+
 

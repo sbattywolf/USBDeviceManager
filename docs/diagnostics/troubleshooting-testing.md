@@ -1,3 +1,4 @@
+````markdown
 # Troubleshooting & Testing Log
 
 This document captures all troubleshooting steps, test runs, attempted fixes, and lessons learned for CI and integration test stability. It is updated each time a bug-task is worked on.
@@ -69,7 +70,7 @@ We added a small parse-only checker `scripts/ci/ps-parsecheck.ps1` to validate P
 Run locally (PowerShell):
 
 ```powershell
-.\	ools\pwsh -NoProfile -ExecutionPolicy Bypass -Command "& { .\scripts\ci\ps-parsecheck.ps1 -Paths 'scripts/run-integration-noninteractive.ps1','scripts/start-server-and-wait.ps1','scripts/poll-health.ps1','scripts/extract-failures.ps1' }"
+.\tools\pwsh -NoProfile -ExecutionPolicy Bypass -Command "& { .\scripts\ci\ps-parsecheck.ps1 -Paths 'scripts/run-integration-noninteractive.ps1','scripts/start-server-and-wait.ps1','scripts/poll-health.ps1','scripts/extract-failures.ps1' }"
 ```
 
 Or, simpler on a dev machine with `pwsh` available:
@@ -83,4 +84,8 @@ CI integration: a step was added to `.github/workflows/ci.yml` (pre-server-start
 Notes:
 - The parse-check uses the PowerShell Parser API (`[System.Management.Automation.Language.Parser]::ParseFile`) with `[ref]` parameters to avoid emitting guidance warnings; the helper takes a `-Paths` array and will report `PARSE_OK:` lines for successful files.
 - If you add or modify automation scripts, add them to the parse-check invocation list in CI or update the helper call accordingly.
+
+See also: Live troubleshooting notes for rapid edits and temporary observations are in [docs/diagnostics/troubleshooting-testing-live-notes.md](docs/diagnostics/troubleshooting-testing-live-notes.md).
+
+````
 
