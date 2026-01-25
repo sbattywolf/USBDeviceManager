@@ -389,6 +389,81 @@ jobs:
           "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
           "EF_SQL_LOG_FILE=scripts/tmp/ef.log" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
 
+  # Minimal, dedicated Windows publish job to guarantee RID publish artifacts
+  publish-windows:
+    name: Publish Windows RID
+    runs-on: windows-latest
+    needs: [build-and-test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore NuGet
+        shell: pwsh
+        run: |
+          dotnet restore USBDeviceManager.sln --verbosity minimal
+
+      - name: Publish server (Windows) (dedicated)
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows (publish-windows job)'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) { Write-Error "Published server exe missing at $exe"; exit 1 } else { Write-Host "Published server exe at $exe" }
+
+      - name: Create publish sentinel (Windows)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          $sentinel = Join-Path $PWD 'artifacts/publish-sentinel.txt'
+          "run=${{ github.run_id }}" | Out-File -FilePath $sentinel -Encoding ASCII
+          $exeRid = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (Test-Path $exeRid) { "exe=$exeRid" | Out-File -FilePath $sentinel -Append -Encoding ASCII }
+
+      - name: Prepare published-server artifacts (Windows) (dedicated)
+        shell: pwsh
+        run: |
+          $srcRid = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64'
+          $out = Join-Path $PWD 'artifacts/published-server-win-x64'
+          Remove-Item -LiteralPath $out -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          if (Test-Path $srcRid) { Copy-Item -Path (Join-Path $srcRid '*') -Destination $out -Recurse -Force; Write-Host "Copied RID files from $srcRid to $out" }
+          if (-not (Get-ChildItem -Path $out -Recurse -File -ErrorAction SilentlyContinue)) { Write-Error "No server artifacts found in $out"; exit 1 }
+
+      - name: Upload published server artifacts (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64
+          path: |
+            artifacts/published-server-win-x64/**
+
+      - name: Zip deterministic publish bundle (Windows)
+        shell: pwsh
+        run: |
+          $src = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $outDir = Join-Path $PWD 'artifacts'
+          New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+          $zip = Join-Path $outDir 'published-server-win-x64.zip'
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+          if (Test-Path $src) { Compress-Archive -Path (Join-Path $src '*') -DestinationPath $zip -Force; Write-Host "Created deterministic publish zip: $zip" }
+
+      - name: Upload deterministic publish zip (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64-zip
+          path: artifacts/published-server-win-x64.zip
+
+      - name: Upload publish sentinel
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-sentinel
+          path: artifacts/publish-sentinel.txt
+
   tests:
     name: Tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -1408,7 +1483,7 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
-    needs: [build-and-test, env-check-regression]
+    needs: [publish-windows, env-check-regression]
     if: needs.env-check-regression.outputs.env_ok == 'true'
     steps:
       - name: Set TEST_PORT (Windows)
