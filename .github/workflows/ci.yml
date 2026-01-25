@@ -167,6 +167,18 @@ jobs:
             Write-Host 'No long-run helper found; continuing without it.'
           }
 
+      - name: Assert LongRunner artifact (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exeCandidate = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/win-x64/LongRunner.exe'
+          if (-not (Test-Path $exeCandidate)) {
+            Write-Error "LongRunner exe missing at $exeCandidate. Ensure 'dotnet publish' produced the artifact and the publish step ran on a Windows runner."
+            exit 1
+          } else {
+            Write-Host "LongRunner exe present: $exeCandidate"
+          }
+
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
@@ -634,6 +646,12 @@ jobs:
             server_err.txt
             scripts/tmp/**
             artifacts/trx/**
+            # Common DB files and preserved failure DBs for triage
+            simracing.db
+            artifacts/ci-local-simracing-on-failure.db
+            server/USBDeviceManager/simracing.db
+            # EF Core SQL debug log
+            scripts/tmp/ef.log
 
       - name: Upload test DB artifacts (repo + runtime)
         if: always()
@@ -1015,6 +1033,34 @@ jobs:
           name: env-check-e2e-linux
           path: env-check.json
 
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: bash
+        run: |
+          echo "Running failure extractor for run $GITHUB_RUN_ID (env-check-e2e-linux)"
+          if command -v pwsh >/dev/null 2>&1; then
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract-failures.ps1 -RunId $GITHUB_RUN_ID
+          elif command -v powershell >/dev/null 2>&1; then
+            powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract-failures.ps1 -RunId $GITHUB_RUN_ID
+          else
+            echo "PowerShell not available to run extractor; skipping"
+          fi
+
+      - name: Upload extracted failure artifacts (env-check-linux)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-envcheck-${{ github.run_id }}-${{ runner.os }}
+          path: |
+            artifacts/enriched/failures/${{ github.run_id }}
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ef.log
+            artifacts/trx/**
+            artifacts/ci-local-simracing-on-failure.db
+            simracing.db
+            server/USBDeviceManager/simracing.db
+
       - name: Upload server logs (build matrix)
         if: always()
         uses: actions/upload-artifact@v4
@@ -1071,6 +1117,16 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Parse-check PowerShell scripts
+        shell: pwsh
+        run: |
+          Write-Host 'Running PowerShell parse-check for key scripts'
+          if (Test-Path .\scripts\ci\ps-parsecheck.ps1) {
+            .\scripts\ci\ps-parsecheck.ps1 -Paths 'scripts/run-integration-noninteractive.ps1','scripts/start-server-and-wait.ps1','scripts/poll-health.ps1','scripts/extract-failures.ps1'
+          } else {
+            Write-Host 'No parse-check helper found; skipping'
+          }
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -1171,6 +1227,28 @@ jobs:
         with:
           name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
           path: e2e-enriched-report.txt
+
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: pwsh
+        run: |
+          Write-Host "Running failure extractor for run $env:GITHUB_RUN_ID (e2e-windows)"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\extract-failures.ps1 -RunId $env:GITHUB_RUN_ID
+
+      - name: Upload extracted failure artifacts (e2e)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-e2e-${{ github.run_id }}-${{ runner.os }}
+          path: |
+            artifacts/enriched/failures/${{ github.run_id }}
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ef.log
+            artifacts/trx/**
+            artifacts/ci-local-simracing-on-failure.db
+            simracing.db
+            server/USBDeviceManager/simracing.db
 
   # per-job E2E analysis removed; regression analysis handled by analyze-regression job
 
@@ -1286,6 +1364,31 @@ jobs:
             scripts/tmp/server.log
             scripts/tmp/server.err.log
             scripts/tmp/ensure-stopped.log
+
+      - name: On-failure - extract and upload failure artifacts
+        if: failure()
+        shell: pwsh
+        run: |
+          Write-Host 'Integration tests failed; running extractor to preserve artifacts.'
+          $out = 'artifacts/enriched/failures/${{ github.run_id }}'
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          if (Test-Path .\scripts\extract-failures.ps1) {
+            try {
+              .\scripts\extract-failures.ps1 -RunId $env:GITHUB_RUN_ID
+            } catch {
+              Write-Host "Extractor script failed: $($_.Exception.Message)"
+            }
+          } else {
+            Write-Host 'No extractor script found; attempting to preserve known DB files directly.'
+            $candidates = @('artifacts/ci-local-simracing-on-failure.db','simracing.db','server/USBDeviceManager/simracing.db')
+            foreach ($d in $candidates) { if (Test-Path $d) { Copy-Item -Path $d -Destination (Join-Path $out (Split-Path $d -Leaf)) -Force } }
+          }
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-${{ github.run_id }}-${{ runner.os }}
+          path: artifacts/enriched/failures/${{ github.run_id }}
 
       - name: Upload integration results
         if: always()

@@ -1,0 +1,8 @@
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\start-server-and-wait.ps1:105 car:64
++ ... e-Error "Failed to start server process on attempt $startAttempt: $_"
++                                                        ~~~~~~~~~~~~~~
+Riferimento a variabile non valido. ':' non Š seguito da un carattere del nome di variabile valido. Provare a 
+utilizzare ${} per delimitare il nome.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : InvalidVariableReferenceWithDrive
+ 

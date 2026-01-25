@@ -1,0 +1,1 @@
+Get-Content -Path 'scripts\tmp\server.log' -Wait -Tail 200 | ForEach-Object { Write-Host "[server] $_" }
