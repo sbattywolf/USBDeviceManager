@@ -69,8 +69,8 @@ jobs:
             scripts/tmp/**
           overwrite: true
 
-  final-report:
-    name: Final report & analysis
+  integration-test-analysis:
+    name: Integration Test & Analysis
     needs: integration-tests
     runs-on: windows-latest
     if: always()
@@ -90,6 +90,8 @@ jobs:
           New-Item -ItemType Directory -Force -Path artifacts | Out-Null
           if (Test-Path ./integration_artifacts/artifacts) { Copy-Item -Path ./integration_artifacts/artifacts/* -Destination artifacts -Recurse -Force -ErrorAction SilentlyContinue }
           if (Test-Path ./integration_artifacts/scripts/tmp) { New-Item -ItemType Directory -Force -Path scripts\tmp | Out-Null; Copy-Item -Path ./integration_artifacts/scripts/tmp/* -Destination scripts\tmp -Recurse -Force -ErrorAction SilentlyContinue }
+          # Also copy pipeline/workflow YAML for forensic debugging
+          if (Test-Path ./.github/workflows) { New-Item -ItemType Directory -Force -Path artifacts\pipeline-configuration | Out-Null; Copy-Item -Path ./.github/workflows/* -Destination artifacts\pipeline-configuration -Recurse -Force -ErrorAction SilentlyContinue }
 
       - name: Generate integration report (PowerShell)
         shell: pwsh
@@ -97,8 +99,8 @@ jobs:
           $trx = Get-ChildItem -Path artifacts -Recurse -Filter *.trx -ErrorAction SilentlyContinue | Select-Object -First 1
           $trxPath = if ($trx) { $trx.FullName } else { 'artifacts/integration.trx' }
           Write-Host "Using TRX: $trxPath"
-          if (Test-Path ./scripts/generate-integration-report.ps1) {
-            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/generate-integration-report.ps1 -TrxPath $trxPath -LauncherOut 'scripts/tmp/launcher.out' -LauncherErr 'scripts/tmp/launcher.err' -ArtifactDir 'artifacts' -OutReport 'artifacts/integration-report.txt'
+          if (Test-Path ./scripts/generate-integration-test.ps1) {
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/generate-integration-test.ps1 -TrxPath $trxPath -LauncherOut 'scripts/tmp/launcher.out' -LauncherErr 'scripts/tmp/launcher.err' -ArtifactDir 'artifacts' -OutReport 'artifacts/integration-test-report.txt' -OutHtml 'artifacts/integration-test-report.html'
           } else {
             Write-Host 'Report generator not found; creating minimal summary'
             if (Test-Path $trxPath) { Select-String -Path $trxPath -Pattern '<TestMethod|outcome="Failed"' -SimpleMatch | Select-Object -First 200 | Out-File -FilePath artifacts/integration-report.txt }
@@ -125,7 +127,8 @@ jobs:
         with:
           name: integration-report
           path: |
-            artifacts/integration-report.txt
+            artifacts/integration-test-report.txt
+            artifacts/integration-test-report.html
             artifacts/regression-summary.txt
             artifacts/**
           overwrite: true

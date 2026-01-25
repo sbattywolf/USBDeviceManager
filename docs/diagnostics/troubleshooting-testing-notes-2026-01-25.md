@@ -77,6 +77,10 @@ Verification checklist
 Next steps
  - Wait for the next CI run (after these workflow updates) and validate artifacts. If uploads still fail, add an explicit `Compress-Archive` of the RID folder only and upload that as an additional artifact.
 
+Job rename
+- The final reporting job in the integration workflow has been renamed to `Integration Test & Analysis` (job id `integration-test-analysis`). This job downloads `integration-artifacts`, generates the HTML/text integration test report, and uploads `integration-report` and `regression-summary` artifacts. When triaging runs, look for this job name in the Actions UI.
+
+
 Local cleanup helper
 - `scripts/stop-dotnet.ps1` — helper script created to stop stray local `dotnet` instances started during testing and prevent port conflicts. Usage:
 
