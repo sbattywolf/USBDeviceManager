@@ -21,8 +21,27 @@ env:
   CI_BIND_ADDRESS: 127.0.0.1
 
 jobs:
+  ps-parse-check:
+    name: PowerShell Parse-Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run PowerShell parse-check
+        shell: pwsh
+        run: |
+          Write-Host 'Running repository-wide PowerShell parse-check'
+          if (Test-Path ./scripts/ci/ps-parsecheck.ps1) {
+            $paths = (Get-ChildItem -Path scripts -Filter '*.ps1' -Recurse | ForEach-Object { $_.FullName }) -join ','
+            .\scripts\ci\ps-parsecheck.ps1 -Paths $paths
+          } else {
+            Write-Host 'No parse-check helper present; skipping'
+          }
+
   gui-tests:
     runs-on: ubuntu-latest
+    needs: [ps-parse-check]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
@@ -60,7 +79,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    needs: gui-tests
+    needs: [gui-tests, ps-parse-check]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
     steps:
@@ -242,7 +261,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    needs: [gui-tests, build-and-test]
+    needs: [gui-tests, build-and-test, ps-parse-check]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
     steps:
@@ -696,7 +715,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    needs: build-and-test
+    needs: [build-and-test, ps-parse-check]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
     steps:
