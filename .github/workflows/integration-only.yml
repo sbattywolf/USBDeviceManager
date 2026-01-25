@@ -22,6 +22,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: |
+          Write-Host 'Restoring NuGet packages for server/USBDeviceManager'
+          dotnet restore server/USBDeviceManager
+
       - name: Ensure artifacts folder exists
         shell: pwsh
         run: |
