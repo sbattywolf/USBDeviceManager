@@ -227,6 +227,29 @@ jobs:
               Write-Host "$frameworkExe already exists; skipping copy"
             }
           }
+      - name: List published server files (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host 'Listing published server output tree for diagnostics:'
+          $pubDir = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          if (Test-Path $pubDir) {
+            Get-ChildItem -Path $pubDir -Recurse -Force | Select-Object FullName,Length | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          } else {
+            Write-Host "Publish directory not found: $pubDir"
+          }
+          # Fail early if neither framework nor RID exe exists
+          $exeRoot = Join-Path $pubDir 'SMServer.exe'
+          $exeRid = Join-Path $pubDir 'win-x64/SMServer.exe'
+          if (-not (Test-Path $exeRoot) -and -not (Test-Path $exeRid)) {
+            Write-Error "SMServer.exe not produced in publish output (looked for $exeRoot and $exeRid). Failing build to make artifact absence obvious."
+            exit 1
+          } else {
+            Write-Host "Found published server exe: "
+            if (Test-Path $exeRoot) { Write-Host " - $exeRoot" }
+            if (Test-Path $exeRid) { Write-Host " - $exeRid" }
+          }
+
 
       - name: Create publish sentinel (Windows)
         if: runner.os == 'Windows'
