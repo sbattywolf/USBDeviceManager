@@ -15,6 +15,8 @@ Please keep ephemeral notes and research items in their original docs, and move 
 - agent/SimRacingAgent/Docs/README.md: "Service Mode: Background service (TODO: Future implementation)"
 
 - SESSION_SUMMARY.md: "TODO list updated in workspace." (completed-note migrated 2026-01-24)
+ - SESSION_SUMMARY.md: "TODO list updated in workspace." (completed-note migrated 2026-01-24)
+ - HANDOFF.md: "Run isolated repro harness" (migrated from HANDOFF.md logged state; actionable: run concurrent POST repro against failure DB and capture logs/TRX)
 
 If you need the exact line references or surrounding context, open these files:
 
