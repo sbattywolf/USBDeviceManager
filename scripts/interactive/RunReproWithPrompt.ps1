@@ -1,7 +1,7 @@
-<#
+﻿<#
 Example runner showing how to use PromptHelper to drive the repro test interactively.
 
-This script does not assume CI execution — it's a local helper for developers.
+This script does not assume CI execution â€" it's a local helper for developers.
 #>
 
 param(
@@ -76,3 +76,4 @@ catch {
     Write-Error "Interactive run aborted: $_"
     exit 3
 }
+

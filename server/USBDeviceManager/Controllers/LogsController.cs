@@ -18,12 +18,14 @@ namespace USBDeviceManager.Controllers
         private readonly SimRacingContext _ctx;
         private readonly USBDeviceManager.Services.DashboardClient _dashboard;
         private readonly IHubContext<MonitoringHub> _hub;
+        private readonly Microsoft.Extensions.Logging.ILogger<LogsController> _logger;
 
-        public LogsController(SimRacingContext ctx, USBDeviceManager.Services.DashboardClient dashboard, IHubContext<MonitoringHub> hub)
+        public LogsController(SimRacingContext ctx, USBDeviceManager.Services.DashboardClient dashboard, IHubContext<MonitoringHub> hub, Microsoft.Extensions.Logging.ILogger<LogsController> logger)
         {
             _ctx = ctx;
             _dashboard = dashboard;
             _hub = hub;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -88,6 +90,7 @@ namespace USBDeviceManager.Controllers
                 }
                 catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)
                 {
+                    _logger?.LogWarning(dbEx, "Device create SaveChanges failed for DeviceId={DeviceId}", payload?.DeviceId);
                     // Possible unique-index race: another request inserted the
                     // same device concurrently. Try to reload the existing
                     // record and proceed; if not found, rethrow.
@@ -123,6 +126,14 @@ namespace USBDeviceManager.Controllers
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx)
             {
+                // Log payload and FK context to help triage foreign-key failures
+                try
+                {
+                    _logger?.LogError(dbEx, "SaveChanges failed when inserting DeviceStatus. Payload DeviceId={DeviceId} PayloadEventType={EventType} StatusDeviceId={StatusDeviceId}",
+                        payload?.DeviceId, payload?.EventType, status?.DeviceId);
+                }
+                catch { }
+
                 // Try to recover from foreign-key race by ensuring we have
                 // the canonical device entity and id, then retry once.
                 var existing = !string.IsNullOrWhiteSpace(payload?.DeviceId)
@@ -136,9 +147,11 @@ namespace USBDeviceManager.Controllers
                     try
                     {
                         await _ctx.SaveChangesAsync();
+                        _logger?.LogInformation("Recovery SaveChanges succeeded after reloading existing device. DeviceId={DeviceId}", existing.DeviceId);
                     }
-                    catch
+                    catch (Exception retryEx)
                     {
+                        _logger?.LogError(retryEx, "Retry SaveChanges failed for DeviceId={DeviceId}", payload?.DeviceId);
                         // If retry fails, rethrow original exception to preserve diagnostics
                         throw;
                     }
@@ -161,9 +174,11 @@ namespace USBDeviceManager.Controllers
                             status.Device = newDevice;
                             status.DeviceId = newDevice.Id;
                             await _ctx.SaveChangesAsync();
+                            _logger?.LogInformation("Created device during recovery and saved status. DeviceId={DeviceId}", newDevice.DeviceId);
                         }
-                        catch
+                        catch (Exception createEx)
                         {
+                            _logger?.LogError(createEx, "Failed to create device during recovery for DeviceId={DeviceId}", payload?.DeviceId);
                             // If creation or retry fails, rethrow the original exception
                             throw;
                         }

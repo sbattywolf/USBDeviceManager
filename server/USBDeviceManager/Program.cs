@@ -39,9 +39,10 @@ if (!string.IsNullOrEmpty(efLogFile))
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Add database context
+// Add database context (enable sensitive data logging to capture FK/property values when failures occur)
 builder.Services.AddDbContext<SimRacingContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=simracing.db"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=simracing.db")
+           .EnableSensitiveDataLogging());
 
 // Add HTTP client for API calls
 builder.Services.AddScoped<HttpClient>(sp =>

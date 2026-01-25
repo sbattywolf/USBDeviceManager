@@ -24,7 +24,7 @@ try {
         foreach ($pid in $pids) { TryStopPid -pid $pid -label 'listener' }
     }
 } catch {
-    $stopped += "Error checking port $port: $($_.Exception.Message)"
+    $stopped += "Error checking port $($port): $($_.Exception.Message)"
 }
 
 # Stop any powershell process running SimRacingAgent.ps1
