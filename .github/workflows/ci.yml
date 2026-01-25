@@ -312,6 +312,29 @@ jobs:
             server/USBDeviceManager/bin/Release/net8.0/win-x64/**
             server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
 
+      - name: Zip deterministic publish bundle (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $src = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $outDir = Join-Path $PWD 'artifacts'
+          New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+          $zip = Join-Path $outDir 'published-server-win-x64.zip'
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+          if (Test-Path $src) {
+            Compress-Archive -Path (Join-Path $src '*') -DestinationPath $zip -Force
+            Write-Host "Created deterministic publish zip: $zip"
+          } else {
+            Write-Host "Publish source directory not found: $src; skipping zip creation"
+          }
+
+      - name: Upload deterministic publish zip (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64-zip
+          path: artifacts/published-server-win-x64.zip
+
       - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
         shell: bash
@@ -1419,6 +1442,55 @@ jobs:
         with:
           name: published-server-win-x64
           path: .
+
+      - name: Download deterministic publish zip (if present)
+        if: always()
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: published-server-win-x64-zip
+          path: .
+
+      - name: Download publish sentinel (if present)
+        if: always()
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: publish-sentinel
+          path: .
+
+      - name: Verify publish sentinel and list downloaded artifacts
+        if: always()
+        shell: pwsh
+        run: |
+          $sent = Join-Path $PWD 'publish-sentinel/publish-sentinel.txt'
+          if (-not (Test-Path $sent)) {
+            Write-Error "publish-sentinel not found (expected at $sent). Aborting integration to surface missing upload."
+            Write-Host 'Workspace artifact inventory:'
+            Get-ChildItem -Path $PWD -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+            exit 1
+          } else {
+            Write-Host "Found publish sentinel: $sent"
+            Get-Content $sent | ForEach-Object { Write-Host $_ }
+            Write-Host 'Workspace artifact inventory:'
+            Get-ChildItem -Path $PWD -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          }
+
+      - name: Extract deterministic publish zip (Windows)
+        if: always()
+        shell: pwsh
+        run: |
+          $zipCandidates = @(Join-Path $PWD 'published-server-win-x64.zip', Join-Path $PWD 'published-server-win-x64-zip/published-server-win-x64.zip')
+          $found = $null
+          foreach ($z in $zipCandidates) { if (Test-Path $z) { $found = $z; break } }
+          if ($found) {
+            $dest = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+            New-Item -ItemType Directory -Path $dest -Force | Out-Null
+            Expand-Archive -Path $found -DestinationPath $dest -Force
+            Write-Host "Extracted deterministic publish zip ($found) to $dest"
+          } else {
+            Write-Host 'No deterministic publish zip found; skipping extract.'
+          }
 
       - name: Fixup published server exe (copy RID exe to framework root)
         if: always()
