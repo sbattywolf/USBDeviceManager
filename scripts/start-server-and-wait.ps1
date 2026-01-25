@@ -85,20 +85,28 @@ while ($startAttempt -lt $maxStartAttempts) {
             }
         }
 
+        # Prefer running a self-contained exe when available for -NoBuild scenarios
         $startArgs = $dotnetArgs
-        # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
-        $candidate1 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.dll"
-        $candidate2 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
-        $builtDllCandidates = @($candidate1, $candidate2)
-        $chosenDll = $builtDllCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
-        if ($NoBuild -and $chosenDll) {
-            $startArgs = "`"$chosenDll`" --urls http://$($bindAddress):$Port"
-            Write-Host "Launching built DLL: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
-            $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+        $exeRootExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
+        $exeRidExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
+        if ($NoBuild -and (Test-Path $exeRidExe -or Test-Path $exeRootExe)) {
+            $exeToRun = if (Test-Path $exeRidExe) { $exeRidExe } else { $exeRootExe }
+            Write-Host "Launching self-contained exe: $exeToRun (attempt $startAttempt/$maxStartAttempts)"
+            $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
         } else {
-            Write-Host "Launching: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
-            
-            $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
+            $candidate1 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.dll"
+            $candidate2 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
+            $builtDllCandidates = @($candidate1, $candidate2)
+            $chosenDll = $builtDllCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+            if ($NoBuild -and $chosenDll) {
+                $startArgs = "`"$chosenDll`" --urls http://$($bindAddress):$Port"
+                Write-Host "Launching built DLL: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
+                $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            } else {
+                Write-Host "Launching: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
+                $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            }
         }
         Set-Content -Path (Join-Path $tmpDir "server.pid") -Value $proc.Id
         Write-Host "Server started (pid $($proc.Id)), waiting for health..."
