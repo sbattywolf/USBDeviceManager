@@ -72,8 +72,9 @@ while ($startAttempt -lt $maxStartAttempts) {
         # Some CI publishes RID outputs under win-x64/SMServer.exe; copy it
         # into the framework root if the test harness expects net8.0/SMServer.exe.
         if ($NoBuild) {
-            $exeRoot = Join-Path $PWD.Path "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
-            $exeRid = Join-Path $PWD.Path "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
+            $rootPath = (Resolve-Path .)[0].Path
+            $exeRoot = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
+            $exeRid = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
             if (-not (Test-Path $exeRoot) -and (Test-Path $exeRid)) {
                 try {
                     Copy-Item -Path $exeRid -Destination $exeRoot -Force
@@ -86,14 +87,18 @@ while ($startAttempt -lt $maxStartAttempts) {
 
         $startArgs = $dotnetArgs
         # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
-        $builtDll = Join-Path $PWD.Path "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
-        if ($NoBuild -and (Test-Path $builtDll)) {
-            $startArgs = "`"$builtDll`" --urls http://$($bindAddress):$Port"
+        $candidate1 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.dll"
+        $candidate2 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
+        $builtDllCandidates = @($candidate1, $candidate2)
+        $chosenDll = $builtDllCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+        if ($NoBuild -and $chosenDll) {
+            $startArgs = "`"$chosenDll`" --urls http://$($bindAddress):$Port"
             Write-Host "Launching built DLL: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
-            $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
         } else {
             Write-Host "Launching: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
-            $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            
+            $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
         }
         Set-Content -Path (Join-Path $tmpDir "server.pid") -Value $proc.Id
         Write-Host "Server started (pid $($proc.Id)), waiting for health..."

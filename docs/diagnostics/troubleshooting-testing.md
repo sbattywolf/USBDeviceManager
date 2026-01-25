@@ -87,5 +87,18 @@ Notes:
 
 See also: Live troubleshooting notes for rapid edits and temporary observations are in [docs/diagnostics/troubleshooting-testing-live-notes.md](docs/diagnostics/troubleshooting-testing-live-notes.md).
 
+---
+
+### Run 21331804897 — merged trace (2026-01-25)
+
+- **Summary:** CI run for branch `chore/ci-fix-env-check` produced 3090 tests: 3086 passed, 4 failed. Failures returned HTTP 404 NotFound from the test server.
+- **Where to find artifacts:** [artifacts/ci-run-21331804897](artifacts/ci-run-21331804897)
+- **Key logs examined:** [artifacts/ci-run-21331804897/run.log](artifacts/ci-run-21331804897/run.log) and [artifacts/ci-run-21331804897/final-test-report/final-report.txt](artifacts/ci-run-21331804897/final-test-report/final-report.txt)
+- **Root cause (diagnosed):** server binary `SMServer.exe` was not available at the runner-expected path (CI published to `net8.0/win-x64/SMServer.exe` while the tests expect `net8.0/SMServer.exe`), so the test harness received 404 when calling endpoints.
+- **Mitigation applied:** patched `.github/workflows/ci.yml` to (a) defensively copy the RID-published exe from `win-x64` into the framework root before test start, and (b) upload a `publish-sentinel.txt` artifact to assert publish success on Windows runners.
+- **Follow-up actions:** poller running for run `21332370587` will verify presence of `publish-sentinel.txt` and `SMServer.exe` in the downloaded artifacts; if missing, we'll capture full server stdout/stderr and preserved DBs under `artifacts/enriched/failures/<runId>` for triage.
+
+If you want, I can now archive large run logs (move `artifacts/ci-run-21331804897/run.log` into `artifacts/archive/`) and append the archived filename here; confirm and I'll proceed.
+
 ````
 
