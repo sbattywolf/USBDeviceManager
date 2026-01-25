@@ -143,4 +143,15 @@ if ($NoStop -and -not $PreserveDb -and $serverPid) {
     Write-Host "Note: server process $serverPid left running (NoStop). Manually stop with Stop-Process -Id $serverPid or run scripts/stop-server.ps1 -Pid $serverPid when finished."
 }
 
+# Generate an integration report if helper exists (non-fatal)
+$reportScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Definition) 'generate-integration-report.ps1'
+if (Test-Path $reportScript) {
+    Write-Host "Generating integration report via $reportScript"
+    try {
+        & $reportScript -TrxPath $trx -LauncherOut $launcherOut -LauncherErr $launcherErr -ArtifactDir 'artifacts' -OutReport 'artifacts/integration-report.txt'
+    } catch {
+        Write-Host "generate-integration-report.ps1 failed: $($_.Exception.Message)"
+    }
+}
+
 exit $exit
