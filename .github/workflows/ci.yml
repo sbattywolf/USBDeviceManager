@@ -652,6 +652,10 @@ jobs:
             server/USBDeviceManager/simracing.db
             # EF Core SQL debug log
             scripts/tmp/ef.log
+            # Any preserved DB snapshots from the failure extractor
+            artifacts/enriched/failures/**
+            # General enriched artifacts (if present)
+            artifacts/enriched/**
 
       - name: Upload test DB artifacts (repo + runtime)
         if: always()
