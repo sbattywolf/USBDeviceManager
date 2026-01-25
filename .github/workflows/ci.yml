@@ -84,6 +84,7 @@ jobs:
     needs: [gui-tests, ps-parse-check]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
+      ENV_OK: 'false'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -202,6 +203,20 @@ jobs:
 
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Publish server (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) {
+            Write-Error "Published server exe missing at $exe. Ensure publish step ran and project AssemblyName is set to 'SMServer'."
+            exit 1
+          } else {
+            Write-Host "Published server exe at $exe"
+          }
 
       - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
@@ -771,27 +786,40 @@ jobs:
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
-      - name: Run Unit tests (produce TRX)
-        if: ${{ (runner.os == 'Windows' && steps.unit-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.unit-envcheck-linux.outputs.env_ok == 'true') }}
+      - name: Run Unit tests (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
+          if ($env:ENV_OK -ne 'true') {
+            Write-Host "ENV_OK != true; producing placeholder tests-summary and skipping unit tests"
+            New-Item -ItemType Directory -Force -Path artifacts/summaries/unit/env-check-failed | Out-Null
+            $obj = @{ total = 0; passed = 0; failed = 0; skipped = 0; note = "Unit tests skipped due to environment check failure: $($env:ENV_REASON)" }
+            $obj | ConvertTo-Json | Out-File -FilePath tests-summary.json -Encoding ASCII
+            Copy-Item tests-summary.json -Destination artifacts/summaries/unit/env-check-failed/tests-summary.json -Force
+            exit 0
+          }
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-windows.trx"
 
-      - name: Skip unit tests placeholder due to env-check failure
-        if: ${{ ! ( (runner.os == 'Windows' && steps.unit-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.unit-envcheck-linux.outputs.env_ok == 'true') ) }}
+      - name: Run Unit tests (Linux/macOS)
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           set -euo pipefail || true
-          mkdir -p artifacts/summaries/unit/env-check-failed
-          cat > tests-summary.json <<'JSON'
-          {
-            "total": 0,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "note": "Unit tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
-          }
-          JSON
-          cp tests-summary.json artifacts/summaries/unit/env-check-failed/tests-summary.json || true
+          if [ "${ENV_OK:-false}" != "true" ]; then
+            mkdir -p artifacts/summaries/unit/env-check-failed
+            cat > tests-summary.json <<'JSON'
+            {
+              "total": 0,
+              "passed": 0,
+              "failed": 0,
+              "skipped": 0,
+              "note": "Unit tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
+            }
+            JSON
+            cp tests-summary.json artifacts/summaries/unit/env-check-failed/tests-summary.json || true
+            exit 0
+          fi
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
 
       - name: Convert TRX to HTML (Linux)
         if: runner.os == 'Linux'
