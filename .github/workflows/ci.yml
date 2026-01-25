@@ -1360,6 +1360,33 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Download published server artifacts (if present)
+        if: always()
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: published-server-win-x64
+          path: .
+
+      - name: Fixup published server exe (copy RID exe to framework root)
+        if: always()
+        shell: pwsh
+        run: |
+          $ridExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          $rootExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+          Write-Host "Looking for published RID exe at: $ridExe"
+          if (Test-Path $ridExe) {
+            Write-Host "Found RID exe. Ensuring framework-root exe exists at: $rootExe"
+            if (-not (Test-Path $rootExe)) {
+              Copy-Item -Path $ridExe -Destination $rootExe -Force
+              Write-Host "Copied $ridExe to $rootExe"
+            } else {
+              Write-Host "$rootExe already exists; skipping copy"
+            }
+          } else {
+            Write-Host "No RID exe found at $ridExe; nothing to copy"
+          }
+
       - name: Start server for Integration tests (PowerShell)
         if: always()
         shell: pwsh
