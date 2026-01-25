@@ -145,8 +145,34 @@ namespace USBDeviceManager.Controllers
                 }
                 else
                 {
-                    // No device row found to recover with; rethrow to allow diagnostics
-                    throw;
+                    // No device row found to recover with; attempt to create it
+                    if (!string.IsNullOrWhiteSpace(payload?.DeviceId))
+                    {
+                        try
+                        {
+                            var newDevice = new UsbDevice
+                            {
+                                DeviceId = payload.DeviceId,
+                                Name = payload.DeviceId,
+                            };
+                            _ctx.UsbDevices.Add(newDevice);
+                            await _ctx.SaveChangesAsync();
+
+                            status.Device = newDevice;
+                            status.DeviceId = newDevice.Id;
+                            await _ctx.SaveChangesAsync();
+                        }
+                        catch
+                        {
+                            // If creation or retry fails, rethrow the original exception
+                            throw;
+                        }
+                    }
+                    else
+                    {
+                        // No device info available; rethrow to allow diagnostics
+                        throw;
+                    }
                 }
             }
 
