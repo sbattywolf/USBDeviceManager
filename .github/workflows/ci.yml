@@ -273,6 +273,7 @@ jobs:
         with:
           name: publish-sentinel
           path: artifacts/publish-sentinel.txt
+          overwrite: true
 
       - name: Prepare published-server artifacts (Windows)
         if: runner.os == 'Windows'
@@ -311,6 +312,7 @@ jobs:
             # Fallbacks: original publish locations (kept for compatibility)
             server/USBDeviceManager/bin/Release/net8.0/win-x64/**
             server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
+          overwrite: true
 
       - name: Zip deterministic publish bundle (Windows)
         if: runner.os == 'Windows'
