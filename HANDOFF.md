@@ -53,7 +53,7 @@ Notes
 - If you resume later, ensure `pwsh` is available in PATH. `start-server-and-wait.ps1` will fall back to `powershell` if not.
 
 Logged state
-- TODO list updated in repository practice (tool-managed). Next actionable: run isolated repro harness.
+- Centralized TODOs: actionable steps moved into `docs/TODOs-collected.md`.
 
 Contact
 - Resume with these steps or ping me if you want me to run the repro now before you power off.
