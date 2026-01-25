@@ -251,6 +251,15 @@ jobs:
           name: publish-sentinel
           path: artifacts/publish-sentinel.txt
 
+      - name: Upload published server artifacts (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64
+          path: |
+            server/USBDeviceManager/bin/Release/net8.0/win-x64/**
+            server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
+
       - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
         shell: bash
@@ -528,15 +537,7 @@ jobs:
         run: |
           set -euo pipefail || true
           mkdir -p artifacts/summaries/env-check-failed
-          cat > tests-summary.json <<'JSON'
-          {
-            "total": 0,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "note": "Tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
-          }
-          JSON
+          python3 -c 'import os,json; d={"total":0,"passed":0,"failed":0,"skipped":0,"note":"Tests skipped due to environment check failure: "+os.environ.get("ENV_REASON","unknown")}; open("tests-summary.json","w",encoding="utf-8").write(json.dumps(d,indent=2))'
           cp tests-summary.json artifacts/summaries/env-check-failed/tests-summary.json || true
 
       - name: Analyze tests results (per-matrix run)
@@ -840,15 +841,7 @@ jobs:
           set -euo pipefail || true
           if [ "${ENV_OK:-false}" != "true" ]; then
             mkdir -p artifacts/summaries/unit/env-check-failed
-            cat > tests-summary.json <<'JSON'
-            {
-              "total": 0,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "note": "Unit tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
-            }
-            JSON
+            python3 -c 'import os,json; d={"total":0,"passed":0,"failed":0,"skipped":0,"note":"Unit tests skipped due to environment check failure: "+os.environ.get("ENV_REASON","unknown")}; open("tests-summary.json","w",encoding="utf-8").write(json.dumps(d,indent=2))'
             cp tests-summary.json artifacts/summaries/unit/env-check-failed/tests-summary.json || true
             exit 0
           fi
