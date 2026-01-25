@@ -1543,9 +1543,15 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          $sent = Join-Path $PWD 'publish-sentinel/publish-sentinel.txt'
-          if (-not (Test-Path $sent)) {
-            Write-Error "publish-sentinel not found (expected at $sent). Aborting integration to surface missing upload."
+          # Accept multiple possible extraction layouts produced by upload/download-artifact
+          $candidates = @(
+            Join-Path $PWD 'publish-sentinel/publish-sentinel.txt',
+            Join-Path $PWD 'publish-sentinel/artifacts/publish-sentinel.txt',
+            Join-Path $PWD 'publish-sentinel.txt'
+          )
+          $sent = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $sent) {
+            Write-Error "publish-sentinel not found (checked: $($candidates -join ', ')). Aborting integration to surface missing upload."
             Write-Host 'Workspace artifact inventory:'
             Get-ChildItem -Path $PWD -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
             exit 1
