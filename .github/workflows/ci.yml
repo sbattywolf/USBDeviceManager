@@ -228,6 +228,29 @@ jobs:
             }
           }
 
+      - name: Create publish sentinel (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Ensure either framework root or RID-specific exe exists
+          $exeRoot = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+          $exeRid = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exeRoot) -and -not (Test-Path $exeRid)) {
+            Write-Error "SMServer.exe not found in expected locations: $exeRoot or $exeRid"
+            exit 1
+          }
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          $sentinel = Join-Path $PWD 'artifacts/publish-sentinel.txt'
+          "run=${{ github.run_id }}" | Out-File -FilePath $sentinel -Encoding ASCII
+          if (Test-Path $exeRoot) { "exe=$exeRoot" | Out-File -FilePath $sentinel -Append -Encoding ASCII } else { "exe=$exeRid" | Out-File -FilePath $sentinel -Append -Encoding ASCII }
+
+      - name: Upload publish sentinel
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-sentinel
+          path: artifacts/publish-sentinel.txt
+
       - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
         shell: bash
