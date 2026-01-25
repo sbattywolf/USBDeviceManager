@@ -1,3 +1,38 @@
+Troubleshooting Notes — Testing and CI (2026-01-25)
+
+Purpose
+- Capture observed CI failures and remediation steps when running integration tests.
+
+Symptoms
+- CI step fails when invoking `scripts/start-server-and-wait.ps1` with: "A parameter cannot be found that matches parameter name 'or'".
+- Integration job downloads publish artifacts but server logs are empty or the server process terminates quickly.
+- Artifact upload 409 Conflict when the same artifact name is uploaded multiple times in a run without `overwrite: true`.
+
+Immediate Remediations
+- Ensure orchestration scripts accept the switches used by CI (eg. add `-NonInteractive` to `start-server-and-wait.ps1`).
+- Parenthesize `Join-Path` when building arrays in PowerShell (eg. `$candidates = @((Join-Path ...), (Join-Path ...))`) to avoid `System.Object[]` coercion errors.
+- Add `overwrite: true` to `actions/upload-artifact@v4` steps that may re-run in the same workflow to avoid 409 conflicts.
+
+Integration-only CI
+- Create and use a minimal integration-only workflow (`.github/workflows/integration-only.yml`) that:
+  - Runs on `windows-latest` (host environment that matches the published RID)
+  - Downloads `publish-sentinel` and `published-server-win-x64-zip` artifacts
+  - Extracts the deterministic publish zip into `server/USBDeviceManager/bin/Release/net8.0`
+  - Copies the RID exe to the framework root if necessary
+  - Runs `scripts/run-integration-noninteractive.ps1 -Port <port> -NoStop` to start server and run tests
+
+Debugging checklist when the server exits quickly
+1. Confirm the chosen executable exists and is runnable: `Test-Path <path>` and attempt a local run.
+2. Dump working directory listing immediately before launch (add `Get-ChildItem -Recurse` in `start-server-and-wait.ps1` if failing).
+3. Capture stdout/stderr to files and upload them as artifacts; ensure the start script creates placeholder log files before launching so uploads always include them.
+4. If stdout is empty and stderr contains nothing, try launching the exe interactively on a matching runner or locally to observe missing runtime dependencies.
+
+Notes for operators
+- When reproducing locally, stop stray `dotnet` processes first: `pwsh ./scripts/stop-dotnet.ps1`.
+- For out-of-band artifact downloads, use a narrowly-scoped PAT and `gh` or the Actions artifact URLs; revoke the PAT after use.
+
+History
+- 2026-01-25: Added notes based on multiple failing runs and fixes (Join-Path parenthesis fix, `start-server-and-wait.ps1` accepts `-NonInteractive`, sentinel verification tolerant to extraction layouts).
 # Troubleshooting Notes — PowerShell parse errors (2026-01-25)
 
 Symptom

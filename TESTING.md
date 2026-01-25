@@ -57,3 +57,25 @@ Notes and next steps
 - There is a long-term plan to centralize artifact helpers and add a CI job that runs the gated repro automatically on failures; see `docs/TODOs-actionable.md` for details.
 
 - If you want me to also add a short validation unit test to assert the factory-created DB is valid, I can add that next.
+
+Integration tests (non-interactive)
+
+To run the integration test harness locally (this starts the server, waits for readiness, runs integration tests, and preserves DB on failure):
+
+```powershell
+# Stop any stray dotnet processes first to avoid port or file-lock issues
+pwsh ./scripts/stop-dotnet.ps1
+
+# Run the integration test wrapper (non-interactive). Adjust Port/DbPath as needed.
+pwsh ./scripts/run-integration-noninteractive.ps1 -Port 5010 -NonInteractive
+
+# Check artifacts and logs:
+# - scripts/tmp/server.log
+# - scripts/tmp/server.err.log
+# - artifacts/integration.trx
+```
+
+Troubleshooting notes
+
+- If you see "A parameter cannot be found that matches parameter name 'or'" when the CI invokes `start-server-and-wait.ps1`, ensure the called script accepts the switches passed by CI (for example `-NonInteractive`) and that the invocation uses `-File` or `-Command` consistently. A missing parameter in the script signature is a common cause.
+- Use the new integration-only GitHub Action to reproduce CI behavior locally: see [/.github/workflows/integration-only.yml](.github/workflows/integration-only.yml).

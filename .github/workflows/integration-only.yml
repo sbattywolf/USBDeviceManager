@@ -1,0 +1,77 @@
+name: Integration Only
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ 'chore/ci-hardening-sentinel', 'main' ]
+
+env:
+  CI_BIND_ADDRESS: 127.0.0.1
+  TEST_PORT: 51879
+
+jobs:
+  integration-tests:
+    name: Integration Tests (Windows only)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Ensure artifacts folder exists
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+
+      - name: Download publish sentinel (if present)
+        uses: actions/download-artifact@v4
+        with:
+          name: publish-sentinel
+          path: .
+
+      - name: Download deterministic publish zip (if present)
+        uses: actions/download-artifact@v4
+        with:
+          name: published-server-win-x64-zip
+          path: .
+
+      - name: Extract deterministic publish zip (Windows)
+        if: always()
+        shell: pwsh
+        run: |
+          $zip = Join-Path $PWD 'published-server-win-x64.zip'
+          $dest = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          if (Test-Path $zip) { Expand-Archive -Path $zip -DestinationPath $dest -Force; Write-Host "Extracted deterministic publish zip ($zip) to $dest" } else { Write-Host 'No deterministic publish zip present; continuing' }
+
+      - name: Fixup published server exe (copy RID exe to framework root)
+        shell: pwsh
+        run: |
+          $ridExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          $rootExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+          Write-Host "Looking for published RID exe at: $ridExe"
+          if (Test-Path $ridExe) { Write-Host "Found RID exe. Ensuring framework-root exe exists at: $rootExe"; if (-not (Test-Path $rootExe)) { Copy-Item -Path $ridExe -Destination $rootExe -Force; Write-Host "Copied $ridExe to $rootExe" } }
+
+      - name: Start server for Integration tests (PowerShell)
+        shell: pwsh
+        run: |
+          if (Test-Path ./scripts/run-integration-noninteractive.ps1) {
+            # Run the orchestration wrapper that launches server and executes integration tests
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/run-integration-noninteractive.ps1 -Port $Env:TEST_PORT -NoStop
+          } else {
+            Write-Error 'scripts/run-integration-noninteractive.ps1 missing; cannot run integration tests.'
+            exit 1
+          }
+
+      - name: Upload integration artifacts (server logs, test TRX)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-artifacts
+          path: |
+            artifacts/**
+            scripts/tmp/**
+          overwrite: true
