@@ -17,6 +17,22 @@ set "RUN_DB_REPRO=1"
 dotnet test server/USBDeviceManager.Tests/USBDeviceManager.Tests.csproj --filter DisplayName~Repro_DbDeleteLock_Local -v minimal
 ```
 
+Local cleanup (recommended)
+
+Before running the repro ensure no prior test hosts are running and stop them after the run completes:
+
+```powershell
+# Stop any running dotnet test hosts
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-dotnet.ps1
+
+# Run the repro (example below)
+set "RUN_DB_REPRO=1"
+dotnet test server/USBDeviceManager.Tests/USBDeviceManager.Tests.csproj --filter DisplayName~Repro_DbDeleteLock_Local -v minimal
+
+# Ensure cleanup after the test
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-dotnet.ps1
+```
+
 Expected artifacts (local runs)
 - Repo-level artifacts directory (already created by `SimRacingTestFactory`):
   - `server/USBDeviceManager.Tests/TestResults/artifacts/`
