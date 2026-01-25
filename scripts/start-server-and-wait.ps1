@@ -3,6 +3,7 @@ param(
     [int]$Port = 5000,
     [int]$TimeoutSec = 180,
     [switch]$NoBuild,
+    [switch]$NonInteractive,
     [string]$Configuration = 'Release'
 )
 
@@ -86,6 +87,8 @@ while ($startAttempt -lt $maxStartAttempts) {
         }
 
         # Prefer running a self-contained exe when available for -NoBuild scenarios
+        # Fallback: if NoBuild requested but the expected RID/framework paths are not present,
+        # scan the workspace for any SMServer.exe produced by the publish step and use that.
         $startArgs = $dotnetArgs
         $exeRootExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
         $exeRidExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
@@ -94,6 +97,19 @@ while ($startAttempt -lt $maxStartAttempts) {
             Write-Host "Launching self-contained exe: $exeToRun (attempt $startAttempt/$maxStartAttempts)"
             $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
         } else {
+            if ($NoBuild) {
+                try {
+                    $foundExe = Get-ChildItem -Path $rootPath -Filter SMServer.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if ($foundExe) {
+                        $exeToRun = $foundExe.FullName
+                        Write-Host "Found fallback self-contained exe: $exeToRun (attempt $startAttempt/$maxStartAttempts)"
+                        $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+                    }
+                } catch {
+                    $fsEx = $_
+                    Write-Verbose ("Fallback search for SMServer.exe failed: {0}" -f ($fsEx.Exception.Message -or $fsEx.ToString()))
+                }
+            }
             # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
             $candidate1 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.dll"
             $candidate2 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
@@ -131,7 +147,9 @@ while ($startAttempt -lt $maxStartAttempts) {
         # If we get here the process is alive; break out of retry loop
         break
     } catch {
-        Write-Error ("Failed to start server process on attempt {0}: {1}" -f $startAttempt, $_)
+        $startEx = $_
+        $startMsg = if ($startEx -and $startEx.Exception) { $startEx.Exception.Message } else { $startEx.ToString() }
+        Write-Error ("Failed to start server process on attempt {0}: {1}" -f $startAttempt, $startMsg)
         if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
         if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
         if ($startAttempt -lt $maxStartAttempts) {
@@ -205,9 +223,11 @@ try {
     & $shellExe -NoProfile -ExecutionPolicy Bypass -File "$scriptDir/poll-health.ps1" -Url $healthUrl -TimeoutSec $TimeoutSec
     $phExit = $LASTEXITCODE
 } catch {
-    Write-Error "Exception while invoking poll-health.ps1: $($_.Exception.Message)"
-    if ($_.Exception -is [System.Management.Automation.ParameterBindingException]) {
-        Write-Error "Parameter binding failure details: $($_.Exception | Out-String)"
+    $phEx = $_
+    $phMsg = if ($phEx -and $phEx.Exception) { $phEx.Exception.Message } else { $phEx.ToString() }
+    Write-Error ("Exception while invoking poll-health.ps1: {0}" -f $phMsg)
+    if ($phEx.Exception -is [System.Management.Automation.ParameterBindingException]) {
+        Write-Error ("Parameter binding failure details: {0}" -f ($phEx.Exception | Out-String))
     }
     Write-Host "Dumping environment and recent logs to help triage:"
     Write-Host "Health URL: $healthUrl"
