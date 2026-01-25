@@ -79,6 +79,8 @@ Next steps
 
 Job rename
 - The final reporting job in the integration workflow has been renamed to `Integration Test & Analysis` (job id `integration-test-analysis`). This job downloads `integration-artifacts`, generates the HTML/text integration test report, and uploads `integration-report` and `regression-summary` artifacts. When triaging runs, look for this job name in the Actions UI.
+  
+  It also packages the collected integration artifacts and logs into `artifacts/integration-report-full.zip` for easy forensic download. Note: this is an integration-text debug bundle (reports, logs, TRX, DB artifacts), not a full test archive.
 
 
 Local cleanup helper

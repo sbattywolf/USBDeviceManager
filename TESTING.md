@@ -76,6 +76,8 @@ pwsh ./scripts/run-integration-noninteractive.ps1 -Port 5010 -NonInteractive
 
 CI job naming
 - The integration workflow now includes a final analysis job named `Integration Test & Analysis` (workflow job id `integration-test-analysis`). This job downloads integration artifacts, generates the HTML/text reports, and uploads them as `integration-report` artifacts. Use that job name when looking for the report in the GitHub Actions UI.
+  
+  The analysis job also packages the collected integration artifacts and logs into `artifacts/integration-report-full.zip` (integration-text debug bundle) for easy forensic download.
 ```
 
 Troubleshooting notes

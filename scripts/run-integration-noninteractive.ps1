@@ -144,14 +144,21 @@ if ($NoStop -and -not $PreserveDb -and $serverPid) {
 }
 
 # Generate an integration report if helper exists (non-fatal)
-$reportScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Definition) 'generate-integration-report.ps1'
+$reportScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Definition) 'generate-integration-test.ps1'
 if (Test-Path $reportScript) {
-    Write-Host "Generating integration report via $reportScript"
+    Write-Host "Generating integration test report via $reportScript"
     try {
-        & $reportScript -TrxPath $trx -LauncherOut $launcherOut -LauncherErr $launcherErr -ArtifactDir 'artifacts' -OutReport 'artifacts/integration-report.txt'
+        & $reportScript -TrxPath $trx -LauncherOut $launcherOut -LauncherErr $launcherErr -ArtifactDir 'artifacts' -OutReport 'artifacts/integration-test-report.txt' -OutHtml 'artifacts/integration-test-report.html'
     } catch {
-        Write-Host "generate-integration-report.ps1 failed: $($_.Exception.Message)"
+        Write-Host "generate-integration-test.ps1 failed: $($_.Exception.Message)"
     }
 }
+
+# Always attempt to copy logs and pipeline files into `artifacts/` so workflow uploads capture them
+try {
+    New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+    if (Test-Path 'scripts/tmp') { Copy-Item -Path 'scripts/tmp/*' -Destination 'artifacts' -Recurse -Force -ErrorAction SilentlyContinue }
+    if (Test-Path '.github/workflows') { New-Item -ItemType Directory -Force -Path 'artifacts/pipeline-configuration' | Out-Null; Copy-Item -Path '.github/workflows/*' -Destination 'artifacts/pipeline-configuration' -Recurse -Force -ErrorAction SilentlyContinue }
+} catch { Write-Host "Warning: failed to copy logs to artifacts: $($_.Exception.Message)" }
 
 exit $exit

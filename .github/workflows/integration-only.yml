@@ -121,6 +121,13 @@ jobs:
             Write-Host 'Regression summary written to artifacts/regression-summary.txt'
           } catch { Write-Host 'Failed to parse TRX for regression summary'; }
 
+      - name: Package integration report files
+        shell: pwsh
+        run: |
+          Write-Host 'Packaging integration artifacts and logs into artifacts/integration-report-full.zip'
+          $paths = @('artifacts/*','scripts/tmp/*','integration_artifacts/*')
+          Compress-Archive -Path $paths -DestinationPath artifacts/integration-report-full.zip -Force -ErrorAction SilentlyContinue
+
       - name: Upload final reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -130,5 +137,6 @@ jobs:
             artifacts/integration-test-report.txt
             artifacts/integration-test-report.html
             artifacts/regression-summary.txt
+            artifacts/integration-report-full.zip
             artifacts/**
           overwrite: true
