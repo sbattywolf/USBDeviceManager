@@ -94,7 +94,7 @@ while ($startAttempt -lt $maxStartAttempts) {
         $exeRidExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
         if ($NoBuild -and (Test-Path $exeRidExe -or Test-Path $exeRootExe)) {
             $exeToRun = if (Test-Path $exeRidExe) { $exeRidExe } else { $exeRootExe }
-            Write-Host "Launching self-contained exe: $exeToRun (attempt $startAttempt/$maxStartAttempts)"
+            Write-Host "Launching self-contained exe: ${exeToRun} (attempt ${startAttempt}/${maxStartAttempts})"
             $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
         } else {
             if ($NoBuild) {
@@ -131,7 +131,7 @@ while ($startAttempt -lt $maxStartAttempts) {
         Start-Sleep -Seconds 10
         $p = Get-Process -Id $proc.Id -ErrorAction SilentlyContinue
         if (-not $p) {
-            Write-Host "Server process $($proc.Id) terminated quickly on attempt $startAttempt. Capturing logs and retrying if attempts remain."
+            Write-Host "Server process $($proc.Id) terminated quickly on attempt ${startAttempt}. Capturing logs and retrying if attempts remain."
             if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
             if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
             if ($startAttempt -lt $maxStartAttempts) {
@@ -140,7 +140,7 @@ while ($startAttempt -lt $maxStartAttempts) {
                 $backoffSeconds = [math]::Min(30, $backoffSeconds * 2)
                 continue
             } else {
-                Write-Error "Server failed to stay alive after $maxStartAttempts attempts."
+                Write-Error "Server failed to stay alive after ${maxStartAttempts} attempts."
                 exit 1
             }
         }
@@ -149,16 +149,16 @@ while ($startAttempt -lt $maxStartAttempts) {
     } catch {
         $startEx = $_
         $startMsg = if ($startEx -and $startEx.Exception) { $startEx.Exception.Message } else { $startEx.ToString() }
-        Write-Error ("Failed to start server process on attempt {0}: {1}" -f $startAttempt, $startMsg)
+        Write-Error ("Failed to start server process on attempt {0}: {1}" -f ${startAttempt}, $startMsg)
         if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
         if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
         if ($startAttempt -lt $maxStartAttempts) {
-            Write-Host "Retrying after $backoffSeconds seconds..."
+            Write-Host "Retrying after ${backoffSeconds} seconds..."
             Start-Sleep -Seconds $backoffSeconds
             $backoffSeconds = [math]::Min(30, $backoffSeconds * 2)
             continue
         } else {
-            Write-Error "Exhausted start attempts ($maxStartAttempts). Aborting."
+            Write-Error "Exhausted start attempts (${maxStartAttempts}). Aborting."
             exit 1
         }
     }
