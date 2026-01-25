@@ -23,6 +23,29 @@ if ([string]::IsNullOrWhiteSpace($bindAddress)) { $bindAddress = '127.0.0.1' }
 $WriteHostMsg = "Starting server project: $ProjectPath on port $Port (binding: $bindAddress)"
 Write-Host $WriteHostMsg
 
+# Helper to check whether a TCP port is currently in use on this machine
+function Test-PortInUse {
+    param([int]$p)
+    try {
+        $listeners = [System.Net.NetworkInformation.IPGlobalProperties]::GetIPGlobalProperties().GetActiveTcpListeners()
+        return ($listeners | Where-Object { $_.Port -eq $p }).Count -gt 0
+    } catch {
+        return $false
+    }
+}
+
+# If the requested port is already in use, choose a random ephemeral port instead
+$initialPort = $Port
+if (Test-PortInUse -p $Port) {
+    Write-Host "Port $Port is in use; selecting an ephemeral port."
+    $maxAttempts = 8
+    for ($i = 0; $i -lt $maxAttempts; $i++) {
+        $candidate = Get-Random -Minimum 15000 -Maximum 65000
+        if (-not (Test-PortInUse -p $candidate)) { $Port = $candidate; break }
+    }
+    Write-Host "Using port $Port (initial requested: $initialPort)"
+}
+
 $dotnetArgs = "run --project `"$ProjectPath`" --configuration $Configuration --urls http://$($bindAddress):$Port"
 if ($NoBuild) { $dotnetArgs += ' --no-build' }
 
@@ -62,6 +85,38 @@ if (-not $p) {
     if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
     exit 1
 }
+
+# Wait for an explicit Kestrel/readiness marker in the stdout log before starting active health checks.
+# This helps differentiate between a process that's alive but not yet bound, vs one that failed to bind.
+$readinessMarkers = @('Now listening on','[DIAG] ApplicationStarted','USB Device Manager Server starting...')
+$markerFound = $false
+$readStart = Get-Date
+$markerTimeout = [int][math]::Min($TimeoutSec, 30) # limit waiting for marker to avoid long stalls
+Write-Host "Waiting up to ${markerTimeout}s for server readiness markers in $outFile"
+while (((Get-Date) - $readStart).TotalSeconds -lt $markerTimeout) {
+    try {
+        if (Test-Path $outFile) {
+            $tail = Get-Content $outFile -Tail 200 -ErrorAction SilentlyContinue | Out-String
+            foreach ($m in $readinessMarkers) {
+                if ($tail -match [regex]::Escape($m)) { $markerFound = $true; break }
+            }
+            if ($markerFound) { break }
+            # also fail fast if stderr contains obvious fatal errors
+            if (Test-Path $errFile) {
+                $errTail = Get-Content $errFile -Tail 50 -ErrorAction SilentlyContinue | Out-String
+                if ($errTail -match 'fail:|Unhandled exception|Exception') {
+                    Write-Error "Detected possible fatal error in stderr while waiting for readiness marker." 
+                    Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200
+                    break
+                }
+            }
+        }
+    } catch {
+        # swallow transient read errors
+    }
+    Start-Sleep -Seconds 1
+}
+if ($markerFound) { Write-Host 'Readiness marker found in server logs; proceeding to health poll.' } else { Write-Host "No explicit readiness marker found after ${markerTimeout}s; proceeding to health polling (health checks will provide final verdict)." }
 
 # Invoke health check with defensive diagnostics; catch parameter binding errors
 $healthUrl = "http://$($bindAddress):$Port/api/health"
