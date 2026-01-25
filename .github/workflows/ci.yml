@@ -443,6 +443,7 @@ jobs:
           name: published-server-win-x64
           path: |
             artifacts/published-server-win-x64/**
+          overwrite: true
 
       - name: Zip deterministic publish bundle (Windows)
         shell: pwsh
@@ -459,12 +460,14 @@ jobs:
         with:
           name: published-server-win-x64-zip
           path: artifacts/published-server-win-x64.zip
+          overwrite: true
 
       - name: Upload publish sentinel
         uses: actions/upload-artifact@v4
         with:
           name: publish-sentinel
           path: artifacts/publish-sentinel.txt
+          overwrite: true
 
   tests:
     name: Tests (${{ matrix.os }})
