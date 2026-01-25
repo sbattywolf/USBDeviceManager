@@ -5,6 +5,34 @@ param(
 $out = "artifacts/enriched/failures/$RunId"
 New-Item -ItemType Directory -Force -Path $out | Out-Null
 
+# Helper: atomically preserve a DB file into the extractor output directory with timestamps
+function Safe-Preserve-Db {
+    param(
+        [string]$Source,
+        [string]$DestDir
+    )
+    if (-not (Test-Path $Source -PathType Leaf)) { Write-Host "No DB at $Source"; return 1 }
+    try {
+        $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
+        $srcInfo = Get-Item -LiteralPath $Source -ErrorAction Stop
+        $name = [System.IO.Path]::GetFileNameWithoutExtension($srcInfo.Name)
+        $final = Join-Path $DestDir ("${name}-$ts.db")
+        $tmp = "${final}.tmp.$([guid]::NewGuid().ToString()).partial"
+        Write-Host "Preserving DB $Source -> $tmp"
+        Copy-Item -Path $Source -Destination $tmp -Force -ErrorAction Stop
+        # preserve timestamps if possible
+        $dst = Get-Item -LiteralPath $tmp -ErrorAction SilentlyContinue
+        if ($dst) { $dst.CreationTime = $srcInfo.CreationTime; $dst.LastWriteTime = $srcInfo.LastWriteTime }
+        Move-Item -Path $tmp -Destination $final -Force -ErrorAction Stop
+        Write-Host "DB preserved to $final"
+        return 0
+    } catch {
+            Write-Error ("Failed to preserve DB {0}: {1}" -f $Source, $_.Exception.Message)
+        try { Remove-Item -Path $tmp -ErrorAction SilentlyContinue } catch {}
+        return 2
+    }
+}
+
 # Try to discover CI run job logs (GitHub Actions / local downloads)
 $possibleRunRoots = @(
     (Join-Path 'artifacts' ("ci-run-$RunId")),
@@ -99,3 +127,20 @@ Get-ChildItem -Path $out -File -ErrorAction SilentlyContinue | ForEach-Object {
 }
 
 Write-Output "Saved artifacts and exception excerpts to $out"
+
+# Attempt to preserve known DB locations for deeper triage
+$dbCandidates = @(
+    'artifacts/ci-local-simracing-on-failure.db',
+    'simracing.db',
+    'server/USBDeviceManager/simracing.db',
+    'server/**/bin/**/simracing.db'
+)
+foreach ($d in $dbCandidates) {
+    try {
+        Get-ChildItem -Path $d -File -ErrorAction SilentlyContinue | ForEach-Object {
+            Safe-Preserve-Db -Source $_.FullName -DestDir $out | Out-Null
+        }
+    } catch {
+        # swallow
+    }
+}
