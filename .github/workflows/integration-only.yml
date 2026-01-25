@@ -27,33 +27,26 @@ jobs:
         run: |
           New-Item -ItemType Directory -Path artifacts -Force | Out-Null
 
-      - name: Download publish sentinel (if present)
-        uses: actions/download-artifact@v4
-        with:
-          name: publish-sentinel
-          path: .
-
-      - name: Download deterministic publish zip (if present)
-        uses: actions/download-artifact@v4
-        with:
-          name: published-server-win-x64-zip
-          path: .
-
-      - name: Extract deterministic publish zip (Windows)
-        if: always()
+      - name: Build server for Integration tests
         shell: pwsh
         run: |
-          $zip = Join-Path $PWD 'published-server-win-x64.zip'
-          $dest = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
-          if (Test-Path $zip) { Expand-Archive -Path $zip -DestinationPath $dest -Force; Write-Host "Extracted deterministic publish zip ($zip) to $dest" } else { Write-Host 'No deterministic publish zip present; continuing' }
+          Write-Host 'Building server/USBDeviceManager (Release) so --no-build later can use outputs'
+          dotnet build server/USBDeviceManager -c Release --no-restore
 
-      - name: Fixup published server exe (copy RID exe to framework root)
+      - name: Publish server (Windows)
         shell: pwsh
         run: |
-          $ridExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
-          $rootExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
-          Write-Host "Looking for published RID exe at: $ridExe"
-          if (Test-Path $ridExe) { Write-Host "Found RID exe. Ensuring framework-root exe exists at: $rootExe"; if (-not (Test-Path $rootExe)) { Copy-Item -Path $ridExe -Destination $rootExe -Force; Write-Host "Copied $ridExe to $rootExe" } }
+          Write-Host 'Publishing server self-contained exe for Windows'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) { Write-Error "Published server exe missing at $exe. Ensure publish step ran and project AssemblyName is set to 'SMServer'."; exit 1 } else { Write-Host "Published server exe at $exe"; $frameworkExe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'; if (-not (Test-Path $frameworkExe)) { Copy-Item -Path $exe -Destination $frameworkExe -Force; Write-Host "Copied published exe to $frameworkExe" } else { Write-Host "$frameworkExe already exists; skipping copy" } }
+
+      - name: List published server files (Windows)
+        shell: pwsh
+        run: |
+          Write-Host 'Listing published server output tree for diagnostics:'
+          $pubDir = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          if (Test-Path $pubDir) { Get-ChildItem -Path $pubDir -Recurse -Force | Select-Object FullName,Length | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) } } else { Write-Host "Publish directory not found: $pubDir" }
 
       - name: Start server for Integration tests (PowerShell)
         shell: pwsh
