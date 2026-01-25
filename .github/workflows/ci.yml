@@ -274,19 +274,6 @@ jobs:
           name: publish-sentinel
           path: artifacts/publish-sentinel.txt
 
-      - name: Upload published server artifacts (Windows)
-        if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
-        with:
-          name: published-server-win-x64
-          path: |
-            # Prefer the consolidated artifacts folder (created below) to avoid
-            # glob/path issues when uploading directly from build output.
-            artifacts/published-server-win-x64/**
-            # Fallbacks: original publish locations (kept for compatibility)
-            server/USBDeviceManager/bin/Release/net8.0/win-x64/**
-            server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
-
       - name: Prepare published-server artifacts (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
@@ -311,6 +298,19 @@ jobs:
             Write-Error "No server artifacts found in $out; failing to make missing-upload explicit"
             exit 1
           }
+
+      - name: Upload published server artifacts (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64
+          path: |
+            # Prefer the consolidated artifacts folder created above to avoid
+            # glob/path issues when uploading directly from build output.
+            artifacts/published-server-win-x64/**
+            # Fallbacks: original publish locations (kept for compatibility)
+            server/USBDeviceManager/bin/Release/net8.0/win-x64/**
+            server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
 
       - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
