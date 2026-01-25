@@ -280,8 +280,37 @@ jobs:
         with:
           name: published-server-win-x64
           path: |
+            # Prefer the consolidated artifacts folder (created below) to avoid
+            # glob/path issues when uploading directly from build output.
+            artifacts/published-server-win-x64/**
+            # Fallbacks: original publish locations (kept for compatibility)
             server/USBDeviceManager/bin/Release/net8.0/win-x64/**
             server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
+
+      - name: Prepare published-server artifacts (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $srcRid = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64'
+          $srcRoot = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $out = Join-Path $PWD 'artifacts/published-server-win-x64'
+          # Ensure clean output folder
+          Remove-Item -LiteralPath $out -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          if (Test-Path $srcRid) {
+            Copy-Item -Path (Join-Path $srcRid '*') -Destination $out -Recurse -Force
+            Write-Host "Copied RID files from $srcRid to $out"
+          }
+          if (Test-Path (Join-Path $srcRoot 'SMServer.exe')) {
+            Copy-Item -Path (Join-Path $srcRoot 'SMServer.exe') -Destination $out -Force
+            Write-Host "Copied framework exe to $out"
+          }
+          Write-Host 'Contents of artifacts/published-server-win-x64:'
+          Get-ChildItem -Path $out -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          if (-not (Get-ChildItem -Path $out -Recurse -File -ErrorAction SilentlyContinue)) {
+            Write-Error "No server artifacts found in $out; failing to make missing-upload explicit"
+            exit 1
+          }
 
       - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
