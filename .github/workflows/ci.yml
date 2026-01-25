@@ -35,8 +35,9 @@ jobs:
         run: |
           Write-Host 'Running repository-wide PowerShell parse-check'
           if (Test-Path ./scripts/ci/ps-parsecheck.ps1) {
-            $paths = (Get-ChildItem -Path scripts -Filter '*.ps1' -Recurse | ForEach-Object { $_.FullName }) -join ','
-            .\scripts\ci\ps-parsecheck.ps1 -Paths $paths
+            Write-Host 'Enumerating PowerShell script files under scripts/ as an array to avoid long command-line issues'
+            $files = Get-ChildItem -Path scripts -Filter '*.ps1' -Recurse | ForEach-Object { $_.FullName }
+            .\scripts\ci\ps-parsecheck.ps1 -Paths $files
           } else {
             Write-Host 'No parse-check helper present; skipping'
           }
