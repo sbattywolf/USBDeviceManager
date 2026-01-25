@@ -79,7 +79,7 @@ while ($startAttempt -lt $maxStartAttempts) {
                     Copy-Item -Path $exeRid -Destination $exeRoot -Force
                     Write-Host "Copied RID exe to framework root: $exeRid -> $exeRoot"
                 } catch {
-                    Write-Warning "Failed to copy RID exe from $exeRid to $exeRoot: $_"
+                    Write-Warning ("Failed to copy RID exe from {0} to {1}: {2}" -f $exeRid, $exeRoot, $_)
                 }
             }
         }
