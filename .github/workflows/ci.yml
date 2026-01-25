@@ -1545,9 +1545,9 @@ jobs:
         run: |
           # Accept multiple possible extraction layouts produced by upload/download-artifact
           $candidates = @(
-            Join-Path $PWD 'publish-sentinel/publish-sentinel.txt',
-            Join-Path $PWD 'publish-sentinel/artifacts/publish-sentinel.txt',
-            Join-Path $PWD 'publish-sentinel.txt'
+            (Join-Path $PWD 'publish-sentinel/publish-sentinel.txt'),
+            (Join-Path $PWD 'publish-sentinel/artifacts/publish-sentinel.txt'),
+            (Join-Path $PWD 'publish-sentinel.txt')
           )
           $sent = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
           if (-not $sent) {
@@ -1566,7 +1566,10 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          $zipCandidates = @(Join-Path $PWD 'published-server-win-x64.zip', Join-Path $PWD 'published-server-win-x64-zip/published-server-win-x64.zip')
+          $zipCandidates = @(
+            (Join-Path $PWD 'published-server-win-x64.zip'),
+            (Join-Path $PWD 'published-server-win-x64-zip/published-server-win-x64.zip')
+          )
           $found = $null
           foreach ($z in $zipCandidates) { if (Test-Path $z) { $found = $z; break } }
           if ($found) {
