@@ -11,6 +11,61 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $tmpDir = Join-Path $scriptDir "tmp"
 New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
 
+# Try to stop any stray server processes early so builds and ports are free.
+# Uses `scripts/ensure-server-stopped.ps1` which respects AUTO_KILL and writes a log.
+$ensureScript = Join-Path $scriptDir 'ensure-server-stopped.ps1'
+if (Test-Path $ensureScript) {
+    Write-Host "Running ensure-server-stopped helper to stop stray server processes..."
+    try {
+        & $ensureScript
+        if ($LASTEXITCODE -eq 2) { Write-Warning "ensure-server-stopped returned 2 (AUTO_KILL=false); skipping automatic kill." }
+    } catch {
+        Write-Warning ("Invocation of ensure-server-stopped failed: {0}" -f $_)
+    }
+} else {
+    Write-Host "ensure-server-stopped helper not found; skipping stray-server cleanup."
+}
+
+# Root of the repo/workspace where CI places artifacts; used for locating build outputs
+$rootPath = (Resolve-Path .)[0].Path
+if (-not $rootPath) {
+    Write-Error "Failed to resolve repository root path; cannot continue."
+    exit 1
+}
+
+# Copy publish outputs (if any) into artifacts for better forensic bundles.
+try {
+    $publishBase = Join-Path $rootPath 'server/USBDeviceManager/bin/Release/net8.0'
+    if (Test-Path $publishBase) {
+        $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
+        $destPublish = Join-Path $rootPath "artifacts/publish-$ts"
+        New-Item -ItemType Directory -Path $destPublish -Force | Out-Null
+        Get-ChildItem -Path $publishBase -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+            $src = $_.FullName
+            $dst = Join-Path $destPublish $_.Name
+            try {
+                Copy-Item -Path $src -Destination $dst -Recurse -Force -ErrorAction Stop
+                Write-Host "Copied publish subfolder to artifacts: $dst"
+            } catch {
+                Write-Warning ("Failed copying publish subfolder {0}: {1}" -f $src, $_)
+            }
+        }
+        # Also copy top-level publish folder if present
+        $topPublish = Join-Path $publishBase 'publish'
+        if (Test-Path $topPublish) {
+            $dstTop = Join-Path $destPublish 'publish'
+            try {
+                Copy-Item -Path $topPublish -Destination $dstTop -Recurse -Force -ErrorAction Stop
+                Write-Host "Copied top-level publish to artifacts: $dstTop"
+            } catch {
+                Write-Warning ("Failed copying top-level publish {0}: {1}" -f $topPublish, $_)
+            }
+        }
+    }
+} catch {
+    Write-Warning ("Error while copying publish outputs into artifacts: {0}" -f $_)
+}
+
 # Load shared utilities (safe date parsing, etc.) if available
 $utilsPath = Join-Path $scriptDir 'utils.ps1'
 if (Test-Path $utilsPath) { . $utilsPath }
@@ -70,13 +125,11 @@ while ($startAttempt -lt $maxStartAttempts) {
     try {
         $startAttempt++
         # If caller requested NoBuild, ensure a runnable exe is available.
-        # Some CI publishes RID outputs under win-x64/SMServer.exe; copy it
-        # into the framework root if the test harness expects net8.0/SMServer.exe.
         if ($NoBuild) {
             $rootPath = (Resolve-Path .)[0].Path
             $exeRoot = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
             $exeRid = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
-            if (-not (Test-Path $exeRoot) -and (Test-Path $exeRid)) {
+            if ((-not (Test-Path $exeRoot)) -and (Test-Path $exeRid)) {
                 try {
                     Copy-Item -Path $exeRid -Destination $exeRoot -Force
                     Write-Host "Copied RID exe to framework root: $exeRid -> $exeRoot"
@@ -86,44 +139,91 @@ while ($startAttempt -lt $maxStartAttempts) {
             }
         }
 
-        # Prefer running a self-contained exe when available for -NoBuild scenarios
-        # Fallback: if NoBuild requested but the expected RID/framework paths are not present,
-        # scan the workspace for any SMServer.exe produced by the publish step and use that.
-        $startArgs = $dotnetArgs
+        # Decide how to launch: prefer self-contained exe, then built DLL, then `dotnet run`.
         $exeRootExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
         $exeRidExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
-        if ($NoBuild -and (Test-Path $exeRidExe -or Test-Path $exeRootExe)) {
+
+        Write-Host "Diagnostics: rootPath=$rootPath"
+        Write-Host "Diagnostics: exeRootExe=$exeRootExe"
+        Write-Host "Diagnostics: exeRidExe=$exeRidExe"
+
+        if ($NoBuild -and ((Test-Path $exeRidExe) -or (Test-Path $exeRootExe))) {
             $exeToRun = if (Test-Path $exeRidExe) { $exeRidExe } else { $exeRootExe }
-            Write-Host "Launching self-contained exe: ${exeToRun} (attempt ${startAttempt}/${maxStartAttempts})"
-            $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
-        } else {
-            if ($NoBuild) {
-                try {
-                    $foundExe = Get-ChildItem -Path $rootPath -Filter SMServer.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-                    if ($foundExe) {
-                        $exeToRun = $foundExe.FullName
-                        Write-Host "Found fallback self-contained exe: $exeToRun (attempt $startAttempt/$maxStartAttempts)"
-                        $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
-                    }
-                } catch {
-                    $fsEx = $_
-                    Write-Verbose ("Fallback search for SMServer.exe failed: {0}" -f ($fsEx.Exception.Message -or $fsEx.ToString()))
+            Write-Host "Launching self-contained exe: $exeToRun (attempt $startAttempt/$maxStartAttempts)"
+            # Ensure CI packaging includes the exe for triage
+            try {
+                $artifactExePath = Join-Path $rootPath "artifacts/SMServer.exe"
+                if ([string]::IsNullOrWhiteSpace($exeToRun)) {
+                    Write-Error "exeToRun is null or empty; cannot copy or start executable (attempt $startAttempt)."
+                    throw "exeToRun-empty"
                 }
+                if (-not (Test-Path $exeToRun)) {
+                    Write-Error "exeToRun path does not exist: $exeToRun"
+                    throw "exeToRun-missing"
+                }
+                Copy-Item -Path $exeToRun -Destination $artifactExePath -Force -ErrorAction Stop
+                Write-Host "Copied server exe to artifacts: $artifactExePath"
+            } catch {
+                Write-Warning ("Could not copy server exe to artifacts: {0}" -f $_)
             }
+            try {
+                $exeArgs = @('--urls', "http://$($bindAddress):$Port")
+                Write-Host "Start-Process (exe) FilePath: $exeToRun"
+                Write-Host ("Arguments: " + ($exeArgs -join ' | '))
+                if ([string]::IsNullOrWhiteSpace($exeToRun)) { throw "exeToRun-empty" }
+                $proc = Start-Process -FilePath $exeToRun -ArgumentList $exeArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            } catch {
+                Write-Host '--- Start-Process Exception (exe) raw output ---'
+                Write-Host ($_ | Out-String)
+                if ($Error.Count -gt 0) { Write-Host ($Error[0] | Format-List * -Force | Out-String) }
+                throw
+            }
+        } else {
             # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
             $candidate1 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.dll"
             $candidate2 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
             $builtDllCandidates = @($candidate1, $candidate2)
             $chosenDll = $builtDllCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+
             if ($NoBuild -and $chosenDll) {
-                $startArgs = "`"$chosenDll`" --urls http://$($bindAddress):$Port"
-                Write-Host "Launching built DLL: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
-                $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+                Write-Host "Diagnostics: chosenDll=$chosenDll"
+                if ([string]::IsNullOrWhiteSpace($chosenDll) -or -not (Test-Path $chosenDll)) {
+                    Write-Error "Chosen DLL path invalid or missing: $chosenDll"
+                    throw "chosenDll-invalid"
+                }
+                $argsArray = @($chosenDll, '--urls', "http://$($bindAddress):$Port")
+                Write-Host "Launching built DLL: dotnet with args: $([string]::Join(' ', $argsArray)) (attempt $startAttempt/$maxStartAttempts)"
+                try {
+                    Write-Host "Start-Process (dotnet DLL) FilePath: dotnet"
+                    Write-Host ("Arguments: " + ($argsArray -join ' | '))
+                    $proc = Start-Process -FilePath dotnet -ArgumentList $argsArray -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+                } catch {
+                    Write-Host '--- Start-Process Exception (dotnet DLL) ---'
+                    Write-Host ($_ | Out-String)
+                    if ($Error.Count -gt 0) { Write-Host ($Error[0] | Format-List * -Force | Out-String) }
+                    if ($_.Exception) { Write-Host ('Exception.Message: {0}' -f $_.Exception.Message) }
+                    if ($_.InvocationInfo) { Write-Host ('InvocationInfo: {0}' -f ($_.InvocationInfo | Out-String)) }
+                    throw
+                }
             } else {
-                Write-Host "Launching: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
-                $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+                $dotnetArgsArray = @('run','--project',$ProjectPath,'--configuration',$Configuration,'--urls',"http://$($bindAddress):$Port")
+                Write-Host "Launching: dotnet with args: $([string]::Join(' ', $dotnetArgsArray)) (attempt $startAttempt/$maxStartAttempts)"
+                try {
+                    Write-Host "Start-Process (dotnet run) FilePath: dotnet"
+                    Write-Host ("Arguments: " + ($dotnetArgsArray -join ' | '))
+                    if (-not $ProjectPath) { Write-Error "ProjectPath is null or empty: cannot run 'dotnet run'"; throw "projectpath-empty" }
+                    $proc = Start-Process -FilePath dotnet -ArgumentList $dotnetArgsArray -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+                } catch {
+                    Write-Host '--- Start-Process Exception (dotnet run) ---'
+                    Write-Host ($_ | Out-String)
+                    if ($Error.Count -gt 0) { Write-Host ($Error[0] | Format-List * -Force | Out-String) }
+                    if ($_.Exception) { Write-Host ('Exception.Message: {0}' -f $_.Exception.Message) }
+                    if ($_.InvocationInfo) { Write-Host ('InvocationInfo: {0}' -f ($_.InvocationInfo | Out-String)) }
+                    throw
+                }
             }
         }
+
         Set-Content -Path (Join-Path $tmpDir "server.pid") -Value $proc.Id
         Write-Host "Server started (pid $($proc.Id)), waiting for health..."
 
@@ -150,6 +250,15 @@ while ($startAttempt -lt $maxStartAttempts) {
         $startEx = $_
         $startMsg = if ($startEx -and $startEx.Exception) { $startEx.Exception.Message } else { $startEx.ToString() }
         Write-Error ("Failed to start server process on attempt {0}: {1}" -f ${startAttempt}, $startMsg)
+        # Dump full exception details to a timestamped file for offline inspection
+        try {
+            $dumpFile = Join-Path $tmpDir ("start-exception-{0}-attempt-{1}.txt" -f (Get-Date -Format 'yyyyMMdd-HHmmss'), $startAttempt)
+            Set-Content -Path $dumpFile -Value ($startEx | Format-List * -Force | Out-String)
+            Write-Host "Wrote start exception dump to: $dumpFile"
+            if ($Error.Count -gt 0) { Add-Content -Path $dumpFile -Value "`n--- PowerShell Error[0] ---`n"; Add-Content -Path $dumpFile -Value ($Error[0] | Format-List * -Force | Out-String) }
+        } catch {
+            Write-Warning ("Failed to write exception dump: {0}" -f $_)
+        }
         if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
         if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
         if ($startAttempt -lt $maxStartAttempts) {
