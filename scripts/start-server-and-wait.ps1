@@ -129,7 +129,8 @@ if ($markerFound) { Write-Host 'Readiness marker found in server logs; proceedin
 # Invoke health check with defensive diagnostics; catch parameter binding errors
 $healthUrl = "http://$($bindAddress):$Port/api/health"
 try {
-    & "$scriptDir/poll-health.ps1" -Url $healthUrl -TimeoutSec $TimeoutSec
+    # Invoke poll-health in a fresh pwsh process to avoid parameter-binding/locale issues in the parent shell
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "$scriptDir/poll-health.ps1" -Url $healthUrl -TimeoutSec $TimeoutSec
     $phExit = $LASTEXITCODE
 } catch {
     Write-Error "Exception while invoking poll-health.ps1: $($_.Exception.Message)"
