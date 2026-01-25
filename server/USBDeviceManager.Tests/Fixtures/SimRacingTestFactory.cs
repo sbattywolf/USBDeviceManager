@@ -801,8 +801,8 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                 GC.WaitForPendingFinalizers();
                 Thread.Sleep(100);
 
-                const int maxAttempts = 6;
-                int delayMs = 200;
+                const int maxAttempts = 8;
+                int delayMs = 500;
                 for (int attempt = 1; attempt <= maxAttempts; attempt++)
                 {
                     try

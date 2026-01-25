@@ -40,7 +40,7 @@ TEMPLATE = """
     <p>Generated: {utc}</p>
     <h2>Summaries</h2>
     <table>
-        <thead><tr><th>Type</th><th>Total</th><th>Passed</th><th>Failed</th><th>Env OK</th><th>Env Reason</th></tr></thead>
+        <thead><tr><th>Type</th><th>Total</th><th>Passed</th><th>Failed</th><th>Executed</th><th>Status</th></tr></thead>
         <tbody>
         {rows}
         </tbody>
@@ -103,14 +103,30 @@ def build_rows(summaries, env_map=None):
         env = env_map.get(k) or {}
         env_ok = env.get('env_ok') if isinstance(env, dict) else None
         reason = env.get('reason') if isinstance(env, dict) else ''
-        env_cell = 'Yes' if env_ok is True or str(env_ok).lower() == 'true' else ('No' if env_ok is False or str(env_ok).lower() == 'false' else 'N/A')
+        # Map env check into a clear Executed/Skipped/Unknown label
+        if env_ok is True or str(env_ok).lower() == 'true':
+            executed_cell = 'Executed'
+        elif env_ok is False or str(env_ok).lower() == 'false':
+            executed_cell = 'Skipped'
+        else:
+            executed_cell = 'Unknown'
+
+        # Map summary counts to a clear Status: Passed/Failed/No tests
+        if int(v.get('total', 0) or 0) == 0:
+            status_cell = 'No tests'
+        else:
+            status_cell = 'Failed' if int(v.get('failed', 0) or 0) > 0 else 'Passed'
+
+        # Put reason into a tooltip/title on the Executed cell for context
         reason_text = ''
         if isinstance(reason, list):
             reason_text = ';'.join(reason)
         else:
             reason_text = str(reason or '')
 
-        rows.append(f"<tr><td>{k}</td><td>{v['total']}</td><td>{v['passed']}</td><td class=\"{cls}\">{v['failed']}</td><td>{env_cell}</td><td>{html_escape(reason_text)[:200]}</td></tr>")
+        title_attr = f' title="{html_escape(reason_text)[:200]}"' if reason_text else ''
+
+        rows.append(f"<tr><td>{k}</td><td>{v['total']}</td><td>{v['passed']}</td><td class=\"{cls}\">{v['failed']}</td><td{title_attr}>{executed_cell}</td><td>{status_cell}</td></tr>")
     return '\n'.join(rows)
 
 

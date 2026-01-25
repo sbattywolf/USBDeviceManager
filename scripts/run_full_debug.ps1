@@ -62,7 +62,7 @@ Run-Command $parseCmd $parseLog | Out-Null
 # 4) Run focused ShellRunner tests locally to try to reproduce
 Write-Host "Running ShellRunner unit tests (may take a moment)"
 $testProject = 'server/USBDeviceManager.Tests/USBDeviceManager.Tests.csproj'
-$testCmd = "dotnet test $testProject --configuration Debug --filter \"FullyQualifiedName~ShellRunnerTests\" --logger \"trx;LogFileName=shellrunner-local-run.trx\""
+$testCmd = "dotnet test $testProject --configuration Debug --filter 'FullyQualifiedName~ShellRunnerTests' --logger 'trx;LogFileName=shellrunner-local-run.trx'"
 Run-Command $testCmd $testLog | Out-Null
 
 # 5) Summarize results

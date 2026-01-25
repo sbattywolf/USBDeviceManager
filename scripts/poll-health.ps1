@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$Url,
     [int]$TimeoutSec = 60,
-    [int]$PerAttemptTimeout = 5
+    [int]$PerAttemptTimeout = 5,
+    [switch]$VerboseMode
 )
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -11,7 +12,13 @@ $utilsPath = Join-Path $scriptDir 'utils.ps1'
 if (Test-Path $utilsPath) { . $utilsPath }
 
 $start = Get-Date
+if ($VerboseMode) { $VerbosePreference = 'Continue' }
 Write-Host "Polling health: $Url (overall timeout ${TimeoutSec}s, per-attempt timeout ${PerAttemptTimeout}s)"
+
+# Allow CI override for per-attempt timeout via env var CI_POLL_HEALTH_PER_ATTEMPT
+if ($Env:CI_POLL_HEALTH_PER_ATTEMPT) {
+    try { $envVal = [int]$Env:CI_POLL_HEALTH_PER_ATTEMPT; $PerAttemptTimeout = $envVal; Write-Host "Overriding PerAttemptTimeout from CI env: $PerAttemptTimeout" } catch { Write-Verbose "Invalid CI_POLL_HEALTH_PER_ATTEMPT value: $($Env:CI_POLL_HEALTH_PER_ATTEMPT)" }
+}
 while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
     $attempt = [int]((Get-Date) - $start).TotalSeconds + 1
     $attemptUrls = @($Url)
@@ -21,13 +28,16 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
     if ($Url -match 'localhost') {
         $attemptUrls += ($Url -replace 'localhost','127.0.0.1')
         $attemptUrls += ($Url -replace 'localhost','[::1]')
-    } elseif ($Url -match '\[::1\]' -or $Url -match '::1') {
-        # Normalize IPv6 literal variants: try bracketed form and IPv4 loopback
-        $attemptUrls += ($Url -replace '\[::1\]','127.0.0.1')
-        $attemptUrls += ($Url -replace '::1','[::1]')
-    } elseif ($Url -match '127\\.0\\.0\\.1') {
-        # also try IPv6 literal form (bracketed) but avoid unbracketed '::1'
-        $attemptUrls += ($Url -replace '127.0.0.1','[::1]')
+    } else {
+        # If URL contains an IPv6 literal without brackets, add bracketed variant
+        if ($Url -match '::' -and $Url -notmatch '\[') {
+            try {
+                $bracketed = $Url -replace 'http://(::[0-9a-fA-F:]+)','http://[$1]'
+                        if ($bracketed -ne $Url) { $attemptUrls += $bracketed }
+                    } catch { Write-Verbose ("Failed to produce bracketed IPv6 variant for {0}: {1}" -f $Url, $_) }
+        }
+        # If URL is IPv4 loopback, also try IPv6 literal
+        if ($Url -match '127\.0\.0\.1') { $attemptUrls += ($Url -replace '127.0.0.1','[::1]') }
     }
 
     # Expand attempts: for any URL that contains a plain '/health' path, also
@@ -50,8 +60,8 @@ while ((Get-Date) -lt $start.AddSeconds($TimeoutSec)) {
             } catch {
                 # If Uri parsing failed due to unbracketed IPv6, try bracketed form once
                 $errMsg = $_.Exception.Message
-                if ($errMsg -and $u -match 'http://::[0-9]') {
-                    $tryBracket = $u -replace 'http://(::[0-9]+)','http://[$1]'
+                if ($errMsg -and $u -match '::' -and $u -notmatch '\[') {
+                    $tryBracket = $u -replace 'http://(::[0-9a-fA-F:]+)','http://[$1]'
                     Write-Host "Retrying with bracketed IPv6: $tryBracket"
                     try { $resp = Invoke-WebRequest -Uri $tryBracket -UseBasicParsing -TimeoutSec $PerAttemptTimeout -ErrorAction Stop } catch { throw }
                 } else { throw }

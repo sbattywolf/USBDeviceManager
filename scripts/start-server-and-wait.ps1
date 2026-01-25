@@ -3,6 +3,7 @@ param(
     [int]$Port = 5000,
     [int]$TimeoutSec = 180,
     [switch]$NoBuild,
+    [switch]$NonInteractive,
     [string]$Configuration = 'Release'
 )
 
@@ -59,31 +60,114 @@ if (-not (Test-Path $outFile)) { New-Item -Path $outFile -ItemType File -Force |
 # Note: no placeholder files created here to avoid leaving temporary artifacts in CI.
 if (-not (Test-Path $errFile)) { New-Item -Path $errFile -ItemType File -Force | Out-Null }
 
-try {
-    $startArgs = $dotnetArgs
-    # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
-    $builtDll = Join-Path $PWD.Path "server\USBDeviceManager\bin\Release\net8.0\USBDeviceManager.dll"
-    if ($NoBuild -and (Test-Path $builtDll)) {
-        $startArgs = "`"$builtDll`" --urls http://$($bindAddress):$Port"
-        Write-Host "Launching built DLL: dotnet $startArgs"
-        $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
-    } else {
-        Write-Host "Launching: dotnet $startArgs"
-        $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+# Attempt to start the server with guarded retries if it exits immediately.
+$maxStartAttempts = 3
+$startAttempt = 0
+$backoffSeconds = 2
+$proc = $null
+
+while ($startAttempt -lt $maxStartAttempts) {
+    try {
+        $startAttempt++
+        # If caller requested NoBuild, ensure a runnable exe is available.
+        # Some CI publishes RID outputs under win-x64/SMServer.exe; copy it
+        # into the framework root if the test harness expects net8.0/SMServer.exe.
+        if ($NoBuild) {
+            $rootPath = (Resolve-Path .)[0].Path
+            $exeRoot = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
+            $exeRid = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
+            if (-not (Test-Path $exeRoot) -and (Test-Path $exeRid)) {
+                try {
+                    Copy-Item -Path $exeRid -Destination $exeRoot -Force
+                    Write-Host "Copied RID exe to framework root: $exeRid -> $exeRoot"
+                } catch {
+                    Write-Warning ("Failed to copy RID exe from {0} to {1}: {2}" -f $exeRid, $exeRoot, $_)
+                }
+            }
+        }
+
+        # Prefer running a self-contained exe when available for -NoBuild scenarios
+        # Fallback: if NoBuild requested but the expected RID/framework paths are not present,
+        # scan the workspace for any SMServer.exe produced by the publish step and use that.
+        $startArgs = $dotnetArgs
+        $exeRootExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.exe"
+        $exeRidExe = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe"
+        if ($NoBuild -and (Test-Path $exeRidExe -or Test-Path $exeRootExe)) {
+            $exeToRun = if (Test-Path $exeRidExe) { $exeRidExe } else { $exeRootExe }
+            Write-Host "Launching self-contained exe: ${exeToRun} (attempt ${startAttempt}/${maxStartAttempts})"
+            $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+        } else {
+            if ($NoBuild) {
+                try {
+                    $foundExe = Get-ChildItem -Path $rootPath -Filter SMServer.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if ($foundExe) {
+                        $exeToRun = $foundExe.FullName
+                        Write-Host "Found fallback self-contained exe: $exeToRun (attempt $startAttempt/$maxStartAttempts)"
+                        $proc = Start-Process -FilePath $exeToRun -ArgumentList "--urls","http://$($bindAddress):$Port" -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+                    }
+                } catch {
+                    $fsEx = $_
+                    Write-Verbose ("Fallback search for SMServer.exe failed: {0}" -f ($fsEx.Exception.Message -or $fsEx.ToString()))
+                }
+            }
+            # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
+            $candidate1 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/SMServer.dll"
+            $candidate2 = Join-Path $rootPath "server/USBDeviceManager/bin/Release/net8.0/USBDeviceManager.dll"
+            $builtDllCandidates = @($candidate1, $candidate2)
+            $chosenDll = $builtDllCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+            if ($NoBuild -and $chosenDll) {
+                $startArgs = "`"$chosenDll`" --urls http://$($bindAddress):$Port"
+                Write-Host "Launching built DLL: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
+                $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            } else {
+                Write-Host "Launching: dotnet $startArgs (attempt $startAttempt/$maxStartAttempts)"
+                $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $rootPath -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+            }
+        }
+        Set-Content -Path (Join-Path $tmpDir "server.pid") -Value $proc.Id
+        Write-Host "Server started (pid $($proc.Id)), waiting for health..."
+
+        # Give the server a short moment to detect immediate exits (allow a bit longer for slow CI hosts)
+        Start-Sleep -Seconds 10
+        $p = Get-Process -Id $proc.Id -ErrorAction SilentlyContinue
+        if (-not $p) {
+            Write-Host "Server process $($proc.Id) terminated quickly on attempt ${startAttempt}. Capturing logs and retrying if attempts remain."
+            if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
+            if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
+            if ($startAttempt -lt $maxStartAttempts) {
+                Write-Host "Retrying start after $backoffSeconds seconds..."
+                Start-Sleep -Seconds $backoffSeconds
+                $backoffSeconds = [math]::Min(30, $backoffSeconds * 2)
+                continue
+            } else {
+                Write-Error "Server failed to stay alive after ${maxStartAttempts} attempts."
+                exit 1
+            }
+        }
+        # If we get here the process is alive; break out of retry loop
+        break
+    } catch {
+        $startEx = $_
+        $startMsg = if ($startEx -and $startEx.Exception) { $startEx.Exception.Message } else { $startEx.ToString() }
+        Write-Error ("Failed to start server process on attempt {0}: {1}" -f ${startAttempt}, $startMsg)
+        if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
+        if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
+        if ($startAttempt -lt $maxStartAttempts) {
+            Write-Host "Retrying after ${backoffSeconds} seconds..."
+            Start-Sleep -Seconds $backoffSeconds
+            $backoffSeconds = [math]::Min(30, $backoffSeconds * 2)
+            continue
+        } else {
+            Write-Error "Exhausted start attempts (${maxStartAttempts}). Aborting."
+            exit 1
+        }
     }
-    Set-Content -Path (Join-Path $tmpDir "server.pid") -Value $proc.Id
-    Write-Host "Server started (pid $($proc.Id)), waiting for health..."
-} catch {
-    Write-Error "Failed to start server process: $_"
-    Write-Host "Attempting to capture any available output files..."
-    if (Test-Path $outFile) { Write-Host "Server stdout (partial):"; Get-Content $outFile -Tail 200 }
-    if (Test-Path $errFile) { Write-Host "Server stderr (partial):"; Get-Content $errFile -Tail 200 }
-    exit 1
 }
 
 # Give the server a short moment; if it exits immediately capture output
-# early so diagnostics are available in CI artifacts.
-Start-Sleep -Seconds 3
+# early so diagnostics are available in CI artifacts. Keep this small because
+# guarded start loop already performs a longer initial wait.
+Start-Sleep -Seconds 1
 try {
     $p = Get-Process -Id $proc.Id -ErrorAction SilentlyContinue
 } catch { $p = $null }
@@ -96,10 +180,12 @@ if (-not $p) {
 
 # Wait for an explicit Kestrel/readiness marker in the stdout log before starting active health checks.
 # This helps differentiate between a process that's alive but not yet bound, vs one that failed to bind.
-$readinessMarkers = @('Now listening on','[DIAG] ApplicationStarted','USB Device Manager Server starting...')
+$readinessMarkers = @('Now listening on','[DIAG] ApplicationStarted','Application started','USB Device Manager Server starting...')
 $markerFound = $false
 $readStart = Get-Date
-$markerTimeout = [int][math]::Min($TimeoutSec, 30) # limit waiting for marker to avoid long stalls
+# Allow CI override via env var CI_READINESS_MARKER_TIMEOUT (seconds).
+$envTimeout = $Env:CI_READINESS_MARKER_TIMEOUT
+if ($envTimeout -and ([int]::TryParse($envTimeout,[ref]$null))) { $markerTimeout = [int]$envTimeout } else { $markerTimeout = [int][math]::Min($TimeoutSec, 120) }
 Write-Host "Waiting up to ${markerTimeout}s for server readiness markers in $outFile"
 while (((Get-Date) - $readStart).TotalSeconds -lt $markerTimeout) {
     try {
@@ -111,10 +197,10 @@ while (((Get-Date) - $readStart).TotalSeconds -lt $markerTimeout) {
             if ($markerFound) { break }
             # also fail fast if stderr contains obvious fatal errors
             if (Test-Path $errFile) {
-                $errTail = Get-Content $errFile -Tail 50 -ErrorAction SilentlyContinue | Out-String
+                $errTail = Get-Content $errFile -Tail 200 -ErrorAction SilentlyContinue | Out-String
                 if ($errTail -match 'fail:|Unhandled exception|Exception') {
                     Write-Error "Detected possible fatal error in stderr while waiting for readiness marker." 
-                    Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200
+                    Write-Host '--- server.err (tail 500) ---'; Get-Content $errFile -Tail 500
                     break
                 }
             }
@@ -129,13 +215,19 @@ if ($markerFound) { Write-Host 'Readiness marker found in server logs; proceedin
 # Invoke health check with defensive diagnostics; catch parameter binding errors
 $healthUrl = "http://$($bindAddress):$Port/api/health"
 try {
-    # Invoke poll-health in a fresh pwsh process to avoid parameter-binding/locale issues in the parent shell
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "$scriptDir/poll-health.ps1" -Url $healthUrl -TimeoutSec $TimeoutSec
+    # Invoke poll-health in a fresh shell process (prefer 'pwsh', fall back to 'powershell')
+    $shellExe = (Get-Command pwsh -ErrorAction SilentlyContinue).Name
+    if (-not $shellExe) { $shellExe = (Get-Command powershell -ErrorAction SilentlyContinue).Name }
+    if (-not $shellExe) { throw "Neither 'pwsh' nor 'powershell' found in PATH" }
+    Write-Host "Invoking poll-health.ps1 using shell: $shellExe"
+    & $shellExe -NoProfile -ExecutionPolicy Bypass -File "$scriptDir/poll-health.ps1" -Url $healthUrl -TimeoutSec $TimeoutSec
     $phExit = $LASTEXITCODE
 } catch {
-    Write-Error "Exception while invoking poll-health.ps1: $($_.Exception.Message)"
-    if ($_.Exception -is [System.Management.Automation.ParameterBindingException]) {
-        Write-Error "Parameter binding failure details: $($_.Exception | Out-String)"
+    $phEx = $_
+    $phMsg = if ($phEx -and $phEx.Exception) { $phEx.Exception.Message } else { $phEx.ToString() }
+    Write-Error ("Exception while invoking poll-health.ps1: {0}" -f $phMsg)
+    if ($phEx.Exception -is [System.Management.Automation.ParameterBindingException]) {
+        Write-Error ("Parameter binding failure details: {0}" -f ($phEx.Exception | Out-String))
     }
     Write-Host "Dumping environment and recent logs to help triage:"
     Write-Host "Health URL: $healthUrl"

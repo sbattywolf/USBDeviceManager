@@ -1,6 +1,8 @@
 ---
 name: CI
 
+# Trigger marker: CI Windows verification (no-op comment)
+
 "on":
   push:
     branches: [main, master, '**/chore/**', '**/feat/**']
@@ -21,8 +23,28 @@ env:
   CI_BIND_ADDRESS: 127.0.0.1
 
 jobs:
+  ps-parse-check:
+    name: PowerShell Parse-Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run PowerShell parse-check
+        shell: pwsh
+        run: |
+          Write-Host 'Running repository-wide PowerShell parse-check'
+          if (Test-Path ./scripts/ci/ps-parsecheck.ps1) {
+            Write-Host 'Enumerating PowerShell script files under scripts/ as an array to avoid long command-line issues'
+            $files = Get-ChildItem -Path scripts -Filter '*.ps1' -Recurse | ForEach-Object { $_.FullName }
+            .\scripts\ci\ps-parsecheck.ps1 -Paths $files
+          } else {
+            Write-Host 'No parse-check helper present; skipping'
+          }
+
   gui-tests:
     runs-on: ubuntu-latest
+    needs: [ps-parse-check]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
@@ -60,9 +82,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    needs: gui-tests
+    needs: [gui-tests, ps-parse-check]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
+      ENV_OK: 'false'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -167,8 +190,152 @@ jobs:
             Write-Host 'No long-run helper found; continuing without it.'
           }
 
+      - name: Assert LongRunner artifact (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exeCandidate = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/win-x64/LongRunner.exe'
+          if (-not (Test-Path $exeCandidate)) {
+            Write-Error "LongRunner exe missing at $exeCandidate. Ensure 'dotnet publish' produced the artifact and the publish step ran on a Windows runner."
+            exit 1
+          } else {
+            Write-Host "LongRunner exe present: $exeCandidate"
+          }
+
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Publish server (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) {
+            Write-Error "Published server exe missing at $exe. Ensure publish step ran and project AssemblyName is set to 'SMServer'."
+            exit 1
+          } else {
+            Write-Host "Published server exe at $exe"
+            # Also copy the published exe into the framework folder so tests
+            # and existing scripts that look for the exe under net8.0 find it.
+            $frameworkExe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+            if (-not (Test-Path $frameworkExe)) {
+              Copy-Item -Path $exe -Destination $frameworkExe -Force
+              Write-Host "Copied published exe to $frameworkExe"
+            } else {
+              Write-Host "$frameworkExe already exists; skipping copy"
+            }
+          }
+      - name: List published server files (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host 'Listing published server output tree for diagnostics:'
+          $pubDir = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          if (Test-Path $pubDir) {
+            Get-ChildItem -Path $pubDir -Recurse -Force | Select-Object FullName,Length | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          } else {
+            Write-Host "Publish directory not found: $pubDir"
+          }
+          # Fail early if neither framework nor RID exe exists
+          $exeRoot = Join-Path $pubDir 'SMServer.exe'
+          $exeRid = Join-Path $pubDir 'win-x64/SMServer.exe'
+          if (-not (Test-Path $exeRoot) -and -not (Test-Path $exeRid)) {
+            Write-Error "SMServer.exe not produced in publish output (looked for $exeRoot and $exeRid). Failing build to make artifact absence obvious."
+            exit 1
+          } else {
+            Write-Host "Found published server exe: "
+            if (Test-Path $exeRoot) { Write-Host " - $exeRoot" }
+            if (Test-Path $exeRid) { Write-Host " - $exeRid" }
+          }
+
+
+      - name: Create publish sentinel (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Ensure either framework root or RID-specific exe exists
+          $exeRoot = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+          $exeRid = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exeRoot) -and -not (Test-Path $exeRid)) {
+            Write-Error "SMServer.exe not found in expected locations: $exeRoot or $exeRid"
+            exit 1
+          }
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          $sentinel = Join-Path $PWD 'artifacts/publish-sentinel.txt'
+          "run=${{ github.run_id }}" | Out-File -FilePath $sentinel -Encoding ASCII
+          if (Test-Path $exeRoot) { "exe=$exeRoot" | Out-File -FilePath $sentinel -Append -Encoding ASCII } else { "exe=$exeRid" | Out-File -FilePath $sentinel -Append -Encoding ASCII }
+
+      - name: Upload publish sentinel
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-sentinel
+          path: artifacts/publish-sentinel.txt
+          overwrite: true
+
+      - name: Prepare published-server artifacts (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $srcRid = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64'
+          $srcRoot = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $out = Join-Path $PWD 'artifacts/published-server-win-x64'
+          # Ensure clean output folder
+          Remove-Item -LiteralPath $out -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          if (Test-Path $srcRid) {
+            Copy-Item -Path (Join-Path $srcRid '*') -Destination $out -Recurse -Force
+            Write-Host "Copied RID files from $srcRid to $out"
+          }
+          if (Test-Path (Join-Path $srcRoot 'SMServer.exe')) {
+            Copy-Item -Path (Join-Path $srcRoot 'SMServer.exe') -Destination $out -Force
+            Write-Host "Copied framework exe to $out"
+          }
+          Write-Host 'Contents of artifacts/published-server-win-x64:'
+          Get-ChildItem -Path $out -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          if (-not (Get-ChildItem -Path $out -Recurse -File -ErrorAction SilentlyContinue)) {
+            Write-Error "No server artifacts found in $out; failing to make missing-upload explicit"
+            exit 1
+          }
+
+      - name: Upload published server artifacts (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64
+          path: |
+            # Prefer the consolidated artifacts folder created above to avoid
+            # glob/path issues when uploading directly from build output.
+            artifacts/published-server-win-x64/**
+            # Fallbacks: original publish locations (kept for compatibility)
+            server/USBDeviceManager/bin/Release/net8.0/win-x64/**
+            server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
+          overwrite: true
+
+      - name: Zip deterministic publish bundle (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $src = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $outDir = Join-Path $PWD 'artifacts'
+          New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+          $zip = Join-Path $outDir 'published-server-win-x64.zip'
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+          if (Test-Path $src) {
+            Compress-Archive -Path (Join-Path $src '*') -DestinationPath $zip -Force
+            Write-Host "Created deterministic publish zip: $zip"
+          } else {
+            Write-Host "Publish source directory not found: $src; skipping zip creation"
+          }
+
+      - name: Upload deterministic publish zip (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64-zip
+          path: artifacts/published-server-win-x64.zip
 
       - name: 'On build failure: produce tests-summary placeholder'
         if: failure()
@@ -224,13 +391,91 @@ jobs:
           "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
           "EF_SQL_LOG_FILE=scripts/tmp/ef.log" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
 
+  # Minimal, dedicated Windows publish job to guarantee RID publish artifacts
+  publish-windows:
+    name: Publish Windows RID
+    runs-on: windows-latest
+    needs: [build-and-test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore NuGet
+        shell: pwsh
+        run: |
+          dotnet restore USBDeviceManager.sln --verbosity minimal
+
+      - name: Publish server (Windows) (dedicated)
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows (publish-windows job)'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) { Write-Error "Published server exe missing at $exe"; exit 1 } else { Write-Host "Published server exe at $exe" }
+
+      - name: Create publish sentinel (Windows)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          $sentinel = Join-Path $PWD 'artifacts/publish-sentinel.txt'
+          "run=${{ github.run_id }}" | Out-File -FilePath $sentinel -Encoding ASCII
+          $exeRid = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (Test-Path $exeRid) { "exe=$exeRid" | Out-File -FilePath $sentinel -Append -Encoding ASCII }
+
+      - name: Prepare published-server artifacts (Windows) (dedicated)
+        shell: pwsh
+        run: |
+          $srcRid = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64'
+          $out = Join-Path $PWD 'artifacts/published-server-win-x64'
+          Remove-Item -LiteralPath $out -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          if (Test-Path $srcRid) { Copy-Item -Path (Join-Path $srcRid '*') -Destination $out -Recurse -Force; Write-Host "Copied RID files from $srcRid to $out" }
+          if (-not (Get-ChildItem -Path $out -Recurse -File -ErrorAction SilentlyContinue)) { Write-Error "No server artifacts found in $out"; exit 1 }
+
+      - name: Upload published server artifacts (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64
+          path: |
+            artifacts/published-server-win-x64/**
+          overwrite: true
+
+      - name: Zip deterministic publish bundle (Windows)
+        shell: pwsh
+        run: |
+          $src = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $outDir = Join-Path $PWD 'artifacts'
+          New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+          $zip = Join-Path $outDir 'published-server-win-x64.zip'
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+          if (Test-Path $src) { Compress-Archive -Path (Join-Path $src '*') -DestinationPath $zip -Force; Write-Host "Created deterministic publish zip: $zip" }
+
+      - name: Upload deterministic publish zip (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64-zip
+          path: artifacts/published-server-win-x64.zip
+          overwrite: true
+
+      - name: Upload publish sentinel
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-sentinel
+          path: artifacts/publish-sentinel.txt
+          overwrite: true
+
   tests:
     name: Tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    needs: [gui-tests, build-and-test]
+    needs: [gui-tests, build-and-test, ps-parse-check]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
     steps:
@@ -447,15 +692,7 @@ jobs:
         run: |
           set -euo pipefail || true
           mkdir -p artifacts/summaries/env-check-failed
-          cat > tests-summary.json <<'JSON'
-          {
-            "total": 0,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "note": "Tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
-          }
-          JSON
+          python3 -c 'import os,json; d={"total":0,"passed":0,"failed":0,"skipped":0,"note":"Tests skipped due to environment check failure: "+os.environ.get("ENV_REASON","unknown")}; open("tests-summary.json","w",encoding="utf-8").write(json.dumps(d,indent=2))'
           cp tests-summary.json artifacts/summaries/env-check-failed/tests-summary.json || true
 
       - name: Analyze tests results (per-matrix run)
@@ -634,6 +871,16 @@ jobs:
             server_err.txt
             scripts/tmp/**
             artifacts/trx/**
+            # Common DB files and preserved failure DBs for triage
+            simracing.db
+            artifacts/ci-local-simracing-on-failure.db
+            server/USBDeviceManager/simracing.db
+            # EF Core SQL debug log
+            scripts/tmp/ef.log
+            # Any preserved DB snapshots from the failure extractor
+            artifacts/enriched/failures/**
+            # General enriched artifacts (if present)
+            artifacts/enriched/**
 
       - name: Upload test DB artifacts (repo + runtime)
         if: always()
@@ -674,7 +921,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    needs: build-and-test
+    needs: [build-and-test, ps-parse-check]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
     steps:
@@ -728,27 +975,32 @@ jobs:
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
-      - name: Run Unit tests (produce TRX)
-        if: ${{ (runner.os == 'Windows' && steps.unit-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.unit-envcheck-linux.outputs.env_ok == 'true') }}
+      - name: Run Unit tests (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
+          if ($env:ENV_OK -ne 'true') {
+            Write-Host "ENV_OK != true; producing placeholder tests-summary and skipping unit tests"
+            New-Item -ItemType Directory -Force -Path artifacts/summaries/unit/env-check-failed | Out-Null
+            $obj = @{ total = 0; passed = 0; failed = 0; skipped = 0; note = "Unit tests skipped due to environment check failure: $($env:ENV_REASON)" }
+            $obj | ConvertTo-Json | Out-File -FilePath tests-summary.json -Encoding ASCII
+            Copy-Item tests-summary.json -Destination artifacts/summaries/unit/env-check-failed/tests-summary.json -Force
+            exit 0
+          }
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-windows.trx"
 
-      - name: Skip unit tests placeholder due to env-check failure
-        if: ${{ ! ( (runner.os == 'Windows' && steps.unit-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.unit-envcheck-linux.outputs.env_ok == 'true') ) }}
+      - name: Run Unit tests (Linux/macOS)
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           set -euo pipefail || true
-          mkdir -p artifacts/summaries/unit/env-check-failed
-          cat > tests-summary.json <<'JSON'
-          {
-            "total": 0,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "note": "Unit tests skipped due to environment check failure: ${ENV_REASON:-unknown}"
-          }
-          JSON
-          cp tests-summary.json artifacts/summaries/unit/env-check-failed/tests-summary.json || true
+          if [ "${ENV_OK:-false}" != "true" ]; then
+            mkdir -p artifacts/summaries/unit/env-check-failed
+            python3 -c 'import os,json; d={"total":0,"passed":0,"failed":0,"skipped":0,"note":"Unit tests skipped due to environment check failure: "+os.environ.get("ENV_REASON","unknown")}; open("tests-summary.json","w",encoding="utf-8").write(json.dumps(d,indent=2))'
+            cp tests-summary.json artifacts/summaries/unit/env-check-failed/tests-summary.json || true
+            exit 0
+          fi
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-unit-tests-${{ matrix.os }}.trx"
 
       - name: Convert TRX to HTML (Linux)
         if: runner.os == 'Linux'
@@ -1015,6 +1267,34 @@ jobs:
           name: env-check-e2e-linux
           path: env-check.json
 
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: bash
+        run: |
+          echo "Running failure extractor for run $GITHUB_RUN_ID (env-check-e2e-linux)"
+          if command -v pwsh >/dev/null 2>&1; then
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract-failures.ps1 -RunId $GITHUB_RUN_ID
+          elif command -v powershell >/dev/null 2>&1; then
+            powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract-failures.ps1 -RunId $GITHUB_RUN_ID
+          else
+            echo "PowerShell not available to run extractor; skipping"
+          fi
+
+      - name: Upload extracted failure artifacts (env-check-linux)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-envcheck-${{ github.run_id }}-${{ runner.os }}
+          path: |
+            artifacts/enriched/failures/${{ github.run_id }}
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ef.log
+            artifacts/trx/**
+            artifacts/ci-local-simracing-on-failure.db
+            simracing.db
+            server/USBDeviceManager/simracing.db
+
       - name: Upload server logs (build matrix)
         if: always()
         uses: actions/upload-artifact@v4
@@ -1071,6 +1351,16 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Parse-check PowerShell scripts
+        shell: pwsh
+        run: |
+          Write-Host 'Running PowerShell parse-check for key scripts'
+          if (Test-Path .\scripts\ci\ps-parsecheck.ps1) {
+            .\scripts\ci\ps-parsecheck.ps1 -Paths 'scripts/run-integration-noninteractive.ps1','scripts/start-server-and-wait.ps1','scripts/poll-health.ps1','scripts/extract-failures.ps1'
+          } else {
+            Write-Host 'No parse-check helper found; skipping'
+          }
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -1172,11 +1462,33 @@ jobs:
           name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
           path: e2e-enriched-report.txt
 
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: pwsh
+        run: |
+          Write-Host "Running failure extractor for run $env:GITHUB_RUN_ID (e2e-windows)"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\extract-failures.ps1 -RunId $env:GITHUB_RUN_ID
+
+      - name: Upload extracted failure artifacts (e2e)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-e2e-${{ github.run_id }}-${{ runner.os }}
+          path: |
+            artifacts/enriched/failures/${{ github.run_id }}
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ef.log
+            artifacts/trx/**
+            artifacts/ci-local-simracing-on-failure.db
+            simracing.db
+            server/USBDeviceManager/simracing.db
+
   # per-job E2E analysis removed; regression analysis handled by analyze-regression job
 
   integration-tests:
     runs-on: windows-latest
-    needs: [build-and-test, env-check-regression]
+    needs: [publish-windows, env-check-regression]
     if: needs.env-check-regression.outputs.env_ok == 'true'
     steps:
       - name: Set TEST_PORT (Windows)
@@ -1202,6 +1514,91 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
+
+      - name: Download published server artifacts (if present)
+        if: always()
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: published-server-win-x64
+          path: .
+
+      - name: Download deterministic publish zip (if present)
+        if: always()
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: published-server-win-x64-zip
+          path: .
+
+      - name: Download publish sentinel (if present)
+        if: always()
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: publish-sentinel
+          path: .
+
+      - name: Verify publish sentinel and list downloaded artifacts
+        if: always()
+        shell: pwsh
+        run: |
+          # Accept multiple possible extraction layouts produced by upload/download-artifact
+          $candidates = @(
+            (Join-Path $PWD 'publish-sentinel/publish-sentinel.txt'),
+            (Join-Path $PWD 'publish-sentinel/artifacts/publish-sentinel.txt'),
+            (Join-Path $PWD 'publish-sentinel.txt')
+          )
+          $sent = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $sent) {
+            Write-Error "publish-sentinel not found (checked: $($candidates -join ', ')). Aborting integration to surface missing upload."
+            Write-Host 'Workspace artifact inventory:'
+            Get-ChildItem -Path $PWD -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+            exit 1
+          } else {
+            Write-Host "Found publish sentinel: $sent"
+            Get-Content $sent | ForEach-Object { Write-Host $_ }
+            Write-Host 'Workspace artifact inventory:'
+            Get-ChildItem -Path $PWD -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          }
+
+      - name: Extract deterministic publish zip (Windows)
+        if: always()
+        shell: pwsh
+        run: |
+          $zipCandidates = @(
+            (Join-Path $PWD 'published-server-win-x64.zip'),
+            (Join-Path $PWD 'published-server-win-x64-zip/published-server-win-x64.zip')
+          )
+          $found = $null
+          foreach ($z in $zipCandidates) { if (Test-Path $z) { $found = $z; break } }
+          if ($found) {
+            $dest = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+            New-Item -ItemType Directory -Path $dest -Force | Out-Null
+            Expand-Archive -Path $found -DestinationPath $dest -Force
+            Write-Host "Extracted deterministic publish zip ($found) to $dest"
+          } else {
+            Write-Host 'No deterministic publish zip found; skipping extract.'
+          }
+
+      - name: Fixup published server exe (copy RID exe to framework root)
+        if: always()
+        shell: pwsh
+        run: |
+          $ridExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          $rootExe = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+          Write-Host "Looking for published RID exe at: $ridExe"
+          if (Test-Path $ridExe) {
+            Write-Host "Found RID exe. Ensuring framework-root exe exists at: $rootExe"
+            if (-not (Test-Path $rootExe)) {
+              Copy-Item -Path $ridExe -Destination $rootExe -Force
+              Write-Host "Copied $ridExe to $rootExe"
+            } else {
+              Write-Host "$rootExe already exists; skipping copy"
+            }
+          } else {
+            Write-Host "No RID exe found at $ridExe; nothing to copy"
+          }
 
       - name: Start server for Integration tests (PowerShell)
         if: always()
@@ -1286,6 +1683,31 @@ jobs:
             scripts/tmp/server.log
             scripts/tmp/server.err.log
             scripts/tmp/ensure-stopped.log
+
+      - name: On-failure - extract and upload failure artifacts
+        if: failure()
+        shell: pwsh
+        run: |
+          Write-Host 'Integration tests failed; running extractor to preserve artifacts.'
+          $out = 'artifacts/enriched/failures/${{ github.run_id }}'
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          if (Test-Path .\scripts\extract-failures.ps1) {
+            try {
+              .\scripts\extract-failures.ps1 -RunId $env:GITHUB_RUN_ID
+            } catch {
+              Write-Host "Extractor script failed: $($_.Exception.Message)"
+            }
+          } else {
+            Write-Host 'No extractor script found; attempting to preserve known DB files directly.'
+            $candidates = @('artifacts/ci-local-simracing-on-failure.db','simracing.db','server/USBDeviceManager/simracing.db')
+            foreach ($d in $candidates) { if (Test-Path $d) { Copy-Item -Path $d -Destination (Join-Path $out (Split-Path $d -Leaf)) -Force } }
+          }
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-${{ github.run_id }}-${{ runner.os }}
+          path: artifacts/enriched/failures/${{ github.run_id }}
 
       - name: Upload integration results
         if: always()

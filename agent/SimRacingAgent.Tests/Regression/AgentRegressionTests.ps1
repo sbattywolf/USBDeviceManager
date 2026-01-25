@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 
 <#
 .SYNOPSIS
@@ -523,7 +523,7 @@ function Test-AgentCompatibilityRegression {
                 }
             }
             
-            # Test migration — prefer test-provided mock when present to avoid module shadowing
+            # Test migration â€" prefer test-provided mock when present to avoid module shadowing
             if ($Global:MockFunctions -and $Global:MockFunctions.ContainsKey('ConvertTo-ConfigV2')) {
                 $mock = $Global:MockFunctions['ConvertTo-ConfigV2']
                 try {
