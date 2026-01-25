@@ -102,7 +102,7 @@ while ($startAttempt -lt $maxStartAttempts) {
         # If we get here the process is alive; break out of retry loop
         break
     } catch {
-        Write-Error ("Failed to start server process on attempt ${startAttempt}: {0}" -f $_)
+        Write-Error ("Failed to start server process on attempt {0}: {1}" -f $startAttempt, $_)
         if (Test-Path $outFile) { Write-Host '--- server.out (tail 200) ---'; Get-Content $outFile -Tail 200 }
         if (Test-Path $errFile) { Write-Host '--- server.err (tail 200) ---'; Get-Content $errFile -Tail 200 }
         if ($startAttempt -lt $maxStartAttempts) {
