@@ -3,7 +3,7 @@ $max = 30
 $repo = 'sbattywolf/USBDeviceManager'
 $branch = 'ci/restore-retry'
 for ($i = 0; $i -lt $max; $i++) {
-    Write-Host "Poll $($i+1)/$max: $(Get-Date -Format o)"
+    Write-Host "Poll $($i+1)/$($max): $(Get-Date -Format o)"
     try {
         $runsJson = gh run list --repo $repo --branch $branch --limit 20 --json databaseId,workflowName,status,conclusion,url 2>$null
         if (-not $runsJson) { Write-Host 'No runs yet'; Start-Sleep -Seconds 12; continue }
