@@ -217,6 +217,15 @@ jobs:
             exit 1
           } else {
             Write-Host "Published server exe at $exe"
+            # Also copy the published exe into the framework folder so tests
+            # and existing scripts that look for the exe under net8.0 find it.
+            $frameworkExe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+            if (-not (Test-Path $frameworkExe)) {
+              Copy-Item -Path $exe -Destination $frameworkExe -Force
+              Write-Host "Copied published exe to $frameworkExe"
+            } else {
+              Write-Host "$frameworkExe already exists; skipping copy"
+            }
           }
 
       - name: 'On build failure: produce tests-summary placeholder'
