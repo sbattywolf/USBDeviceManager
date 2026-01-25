@@ -1,6 +1,8 @@
 ---
 name: CI
 
+# Trigger marker: CI Windows verification (no-op comment)
+
 "on":
   push:
     branches: [main, master, '**/chore/**', '**/feat/**']
