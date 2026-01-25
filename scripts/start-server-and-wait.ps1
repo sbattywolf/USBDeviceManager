@@ -61,8 +61,16 @@ if (-not (Test-Path $errFile)) { New-Item -Path $errFile -ItemType File -Force |
 
 try {
     $startArgs = $dotnetArgs
-    Write-Host "Launching: dotnet $startArgs"
-    $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+    # If caller requested NoBuild and a built DLL exists, prefer running the built DLL
+    $builtDll = Join-Path $PWD.Path "server\USBDeviceManager\bin\Release\net8.0\USBDeviceManager.dll"
+    if ($NoBuild -and (Test-Path $builtDll)) {
+        $startArgs = "`"$builtDll`" --urls http://$($bindAddress):$Port"
+        Write-Host "Launching built DLL: dotnet $startArgs"
+        $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+    } else {
+        Write-Host "Launching: dotnet $startArgs"
+        $proc = Start-Process -FilePath dotnet -ArgumentList $startArgs -WorkingDirectory $PWD.Path -RedirectStandardOutput $outFile -RedirectStandardError $errFile -PassThru
+    }
     Set-Content -Path (Join-Path $tmpDir "server.pid") -Value $proc.Id
     Write-Host "Server started (pid $($proc.Id)), waiting for health..."
 } catch {
