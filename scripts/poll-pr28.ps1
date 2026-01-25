@@ -19,7 +19,7 @@ for ($i = 0; $i -lt $max; $i++) {
             if (-not $viewJson) { continue }
             $view = $viewJson | ConvertFrom-Json
         } catch {
-            Write-Host "Error viewing run $id: $_"; continue
+            Write-Host "Error viewing run $($id): $_"; continue
         }
 
         if ($view.jobs) {
