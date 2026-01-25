@@ -58,6 +58,25 @@ Automated local cleanup
 Best practice
 - Run `scripts/stop-dotnet.ps1` before and after local integration/publish tests to avoid stray processes holding ports or files. Consider adding the same cleanup call to any other long-running local test wrappers you use.
 
+Enforced local cleanup policy
+
+- Why this change: during iterative debugging the test host was sometimes intentionally left running to allow additional manual checks without restarting the server; that produced stray `dotnet` processes. To avoid intermittent port/file-lock issues we now mandate explicit cleanup.
+
+- Policy (recommended): Always stop any local `dotnet` instances when a test or manual run completes. For automated wrappers add a `finally`/cleanup block that calls `scripts/stop-dotnet.ps1` so cleanup runs regardless of success or failure.
+
+- Recommended commands (pre/post-test):
+
+```powershell
+# Ensure no existing test hosts are running before starting
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-dotnet.ps1
+
+# Run the start+wait wrapper which itself performs cleanup in a finally block
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\run-start-debug.ps1
+
+# Explicitly stop any remaining dotnet hosts after testing
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-dotnet.ps1
+```
+
 Summary of issues found (current investigation)
 - **PowerShell parsing fragility:** variable interpolation followed by punctuation and array->string coercion with `Join-Path` caused CI parse failures and strange path resolution behavior; these were patched.
 - **Runner vs artifact path mismatch:** `publish-sentinel.txt` contains an absolute runner path (e.g. `D:\a\USBDeviceManager\USBDeviceManager\...\SMServer.exe`) while artifacts contain relative package layouts (`published-server-win-x64/...`), causing integration logic that relied on exact paths to miss the exe unless extraction/copying logic ran.
