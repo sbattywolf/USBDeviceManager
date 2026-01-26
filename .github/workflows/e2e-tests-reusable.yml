@@ -1,0 +1,58 @@
+---
+name: E2E Tests (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: 'Dotnet version to install'
+        required: false
+        type: string
+        default: '8.0.x'
+      use-self-hosted:
+        description: 'Run on self-hosted runner'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  e2e-tests:
+    runs-on: ${{ matrix.os }}
+    name: Run E2E tests (publish/start real server if needed)
+    strategy:
+      matrix:
+        os: ['windows-latest']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Run E2E runner
+        shell: pwsh
+        run: |
+          # E2E expectations: scripts/run-e2e.ps1 or similar should handle start/stop of services and test orchestration
+          if (Test-Path .\scripts\run-e2e.ps1) {
+            pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\run-e2e.ps1 -NonInteractive
+          } else {
+            Write-Host 'No scripts/run-e2e.ps1 found; attempting dotnet test for e2e projects.'
+            pwsh -NoProfile -ExecutionPolicy Bypass -Command "dotnet test ./test/ --filter Category=E2E -c Release"
+          }
+
+      - name: Upload e2e artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts
+          path: artifacts/**
+      - name: Collect any TRX into canonical test-results folder
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -Command "mkdir -Force artifacts\test-results\e2e\${{ runner.os }}; Get-ChildItem -Path . -Recurse -Filter *.trx -ErrorAction SilentlyContinue | ForEach-Object { Copy-Item -Path $_.FullName -Destination artifacts\test-results\e2e\${{ runner.os }} -Force }"
+      - name: Publish e2e test results (canonical path)
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-${{ runner.os }}
+          path: artifacts/test-results/e2e/${{ runner.os }}/**
