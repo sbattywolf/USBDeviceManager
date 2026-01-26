@@ -78,6 +78,16 @@ jobs:
             scripts/tmp/**
           overwrite: true
 
+      - name: Upload canonical integration triage artifact (dual upload)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-triage
+          path: |
+            artifacts/**
+            scripts/tmp/**
+          overwrite: true
+
       - name: Upload integration artifacts (legacy name)
         if: always()
         uses: actions/upload-artifact@v4
