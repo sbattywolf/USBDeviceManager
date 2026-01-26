@@ -1691,9 +1691,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HTML_COMMENT_MAX_CHARS: '60000'
-    # Run after the core build and the test-runner so the aggregator executes
-    # for focused/unit-only dispatches where analyzers may be skipped.
-    needs: [build-and-test, test-runner]
+    # Run after the core build so the aggregator executes for focused/unit-only
+    # dispatches where the `test-runner` job may be absent or skipped at the
+    # target ref. Avoid depending on `test-runner` to allow aggregation even
+    # when only unit tests were executed.
+    needs: [build-and-test]
     if: always()
     steps:
       - name: Checkout
