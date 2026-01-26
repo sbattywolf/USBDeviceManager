@@ -1,0 +1,45 @@
+name: Temp Unit Dispatch (branch-run)
+on:
+  push:
+    branches:
+      - ci/enrich-aggregator
+
+jobs:
+  unit:
+    name: Unit Tests (temp dispatch)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore USBDeviceManager.sln --verbosity minimal
+
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Run unit tests and collect TRX + console log
+        run: |
+          mkdir -p artifacts/test-results/unit/${{ runner.os }}
+          dotnet test --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/unit.console.log
+
+      - name: Setup Python (for parser)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run in-repo parser
+        run: |
+          python scripts/ci/parse_test_logs.py --results artifacts/test-results/unit/${{ runner.os }} --out artifacts/test-results/skip-info.json
+
+      - name: Upload test results artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-unit-temp
+          path: |
+            artifacts/test-results/**
