@@ -36,6 +36,15 @@ jobs:
             $env:FULL_INTEGRATION_ARCHIVE = '1'
           }
           pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\package-integration-zip.ps1
+      - name: Collect any TRX into canonical test-results folder
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -Command "mkdir -Force artifacts\test-results\integration\${{ runner.os }}; Get-ChildItem -Path . -Recurse -Filter *.trx -ErrorAction SilentlyContinue | ForEach-Object { Copy-Item -Path $_.FullName -Destination artifacts\test-results\integration\${{ runner.os }} -Force }"
+      - name: Publish integration test results (canonical path)
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-integration-${{ runner.os }}
+          path: artifacts/test-results/integration/${{ runner.os }}/**
       - name: Upload triage artifact
         uses: actions/upload-artifact@v4
         with:

@@ -1,0 +1,38 @@
+﻿---
+name: Unit Tests (reusable)
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: 'Dotnet version to install'
+        required: false
+        type: string
+        default: '8.0.x'
+jobs:
+  unit-tests:
+    runs-on: windows-latest
+    name: Run unit tests and collect results
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+      - name: Restore
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -Command "dotnet restore"
+      - name: Build
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -Command "dotnet build -c Release --no-restore"
+      - name: Run unit tests
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -Command "mkdir -Force artifacts\test-results\unit\${{ runner.os }}; dotnet test -c Release --no-build --results-directory artifacts\test-results\unit\${{ runner.os }} --logger \"trx;LogFileName=unit-test-results.trx\""
+      - name: Publish unit test results (canonical path)
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-unit-${{ runner.os }}
+          path: artifacts/test-results/unit/${{ runner.os }}/**
