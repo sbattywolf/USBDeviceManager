@@ -48,6 +48,27 @@ jobs:
           name: ${{ inputs.integration_artifact }}-${{ inputs.artifact_os }}
           path: artifacts/integration/${{ inputs.artifact_os }}
 
+      - name: "Download integration artifacts (fallback: integration-tests-${{ inputs.artifact_os }})"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-tests-${{ inputs.artifact_os }}
+          path: artifacts/integration/fallback-1
+
+      - name: "Download integration artifacts (fallback: integration-tests)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-tests
+          path: artifacts/integration/fallback-2
+
+      - name: "Download integration artifacts (fallback: dotnet-integration)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: dotnet-integration
+          path: artifacts/integration/fallback-3
+
       - name: Download integration artifacts (fallback)
         uses: actions/download-artifact@v4
         continue-on-error: true
@@ -61,6 +82,37 @@ jobs:
         with:
           name: ${{ inputs.e2e_artifact }}-${{ inputs.artifact_os }}
           path: artifacts/e2e/${{ inputs.artifact_os }}
+
+      - name: "Download e2e artifacts (fallbacks)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.e2e_artifact }}
+          path: artifacts/e2e/fallback
+
+      - name: List downloaded artifacts for diagnostics
+        shell: bash
+        run: |
+          echo 'Artifacts present under artifacts/:'
+          find artifacts -maxdepth 3 -type f -print || true
+
+      - name: Convert TRX to HTML summary (best-effort)
+        shell: bash
+        run: |
+          python3 --version || true
+          if [ -f scripts/ci/trx_to_html.py ]; then
+            mkdir -p artifacts || true
+            python3 scripts/ci/trx_to_html.py --input-dir artifacts --out artifacts/trx-summary.html || true
+          else
+            echo 'No trx_to_html.py; skipping TRX->HTML conversion'
+          fi
+
+      - name: Collect DB dumps (best-effort)
+        shell: bash
+        run: |
+          mkdir -p artifacts/db-dumps || true
+          # Copy any .db files found in downloaded artifacts into artifacts/db-dumps (preserve path)
+          find . -type f -name '*.db' -print0 | xargs -0 -I{} bash -lc 'mkdir -p "artifacts/db-dumps/$(dirname "{}")" 2>/dev/null || true; cp -f "{}" "artifacts/db-dumps/{}" 2>/dev/null || true' || true
 
       - name: Run analysis scripts
         shell: bash
@@ -84,3 +136,5 @@ jobs:
             artifacts/enriched/**
             artifacts/unit/**
             artifacts/integration/**
+            artifacts/trx-summary.html
+            artifacts/db-dumps/**
