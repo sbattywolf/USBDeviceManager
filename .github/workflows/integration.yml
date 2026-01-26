@@ -3,18 +3,23 @@ on:
   workflow_call:
     inputs:
       configuration:
+        type: string
         required: false
         default: 'Release'
       dotnet-version:
+        type: string
         required: false
         default: '8.0.x'
       os:
+        type: string
         required: false
         default: 'windows-latest'
       publish-rid:
+        type: string
         required: false
         default: 'true'
       full-archive:
+        type: string
         required: false
         default: 'false'
 
