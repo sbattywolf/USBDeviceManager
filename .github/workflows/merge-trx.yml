@@ -1,0 +1,30 @@
+name: Merge TRX (reusable)
+
+on:
+  workflow_call: {}
+
+jobs:
+  merge-trx:
+    name: Merge per-job TRX into canonical all-tests.trx
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run TRX merger
+        run: |
+          python3 scripts/ci/merge_trx.py artifacts/test-results artifacts/test-results/all-tests.trx || (
+            echo "merge_trx failed, attempting fallback copy" && \
+            find artifacts/test-results -name "*.trx" -print -quit | xargs -r cp -v -t artifacts/test-results || true
+          )
+
+      - name: Upload merged TRX
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-all
+          path: artifacts/test-results/all-tests.trx
