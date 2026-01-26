@@ -19,32 +19,30 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Find solution file
-        id: find_sln
+      - name: Discover and run test projects
         run: |
           set -euo pipefail
-          sln=$(git ls-files '*.sln' | sed -n '1p' || true)
-          if [ -z "$sln" ]; then
-            sln=$(find . -type f -name "*.sln" -print -quit || true)
-            sln=${sln#./}
+          mkdir -p artifacts/test-results/unit/${{ runner.os }}
+          ran=0
+          for p in $(git ls-files "*.Tests.csproj" || true); do
+            ran=1
+            name=$(basename "$p" .csproj)
+            echo "Running tests for $p"
+            dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
+          done
+          if [ $ran -eq 0 ]; then
+            echo "No tracked test projects found; searching filesystem..."
+            while IFS= read -r p; do
+              ran=1
+              name=$(basename "$p" .csproj)
+              echo "Running tests for $p"
+              dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
+            done < <(find . -type f -name "*.Tests.csproj" -print)
           fi
-          if [ -z "$sln" ]; then
-            echo "No .sln file found in repository. Listing files for debugging..."
-            git ls-files | sed -n '1,200p'
+          if [ $ran -eq 0 ]; then
+            echo "No test projects found; aborting"
             exit 1
           fi
-          echo "sln=$sln" >> $GITHUB_OUTPUT
-
-      - name: Restore
-        run: dotnet restore "${{ steps.find_sln.outputs.sln }}" --verbosity minimal
-
-      - name: Build
-        run: dotnet build "${{ steps.find_sln.outputs.sln }}" --configuration Release --no-restore
-
-      - name: Run unit tests and collect TRX + console log
-        run: |
-          mkdir -p artifacts/test-results/unit/${{ runner.os }}
-          dotnet test "${{ steps.find_sln.outputs.sln }}" --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/unit.console.log
 
       - name: Setup Python (for parser)
         uses: actions/setup-python@v4
