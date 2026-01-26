@@ -1,6 +1,27 @@
 name: Integration (stub)
 on:
-  workflow_call: {}
+  workflow_call:
+    inputs:
+      configuration:
+        required: false
+        type: string
+        default: 'Release'
+      dotnet-version:
+        required: false
+        type: string
+        default: '8.0.x'
+      os:
+        required: false
+        type: string
+        default: 'ubuntu-latest'
+      publish-rid:
+        required: false
+        type: string
+        default: 'false'
+      full-archive:
+        required: false
+        type: string
+        default: 'false'
 
 jobs:
   integration-stub:
