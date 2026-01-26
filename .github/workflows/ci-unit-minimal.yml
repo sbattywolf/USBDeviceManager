@@ -25,9 +25,12 @@ jobs:
       - name: Discover and run test projects
         run: |
           set -euo pipefail
+          echo "Working directory: $(pwd)"
           echo "Repository file listing (top-level)"
-          git ls-files --stage | sed -n '1,200p'
-          echo "Searching common test folders: server/ test/"
+          git ls-files --stage | sed -n '1,200p' || true
+          echo "Directory listing (current):"; ls -la || true
+          echo "Directory listing (parent):"; ls -la .. || true
+          echo "Searching common test folders: server/ test/ (and parent)"
           mkdir -p artifacts/test-results/unit/${{ runner.os }}
           ran=0
           # prefer tracked test projects
@@ -45,7 +48,7 @@ jobs:
               name=$(basename "$p" .csproj)
               echo "Running tests for $p"
               dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
-            done < <(find server test . -type f -name "*.Tests.csproj" -print 2>/dev/null || true)
+            done < <(find server test . .. -type f -name "*.Tests.csproj" -print 2>/dev/null || true)
             if [ $ran -eq 0 ]; then
               echo "Still no test projects in server/ or test/; doing full search..."
               while IFS= read -r p; do
