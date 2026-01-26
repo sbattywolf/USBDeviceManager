@@ -400,7 +400,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-    needs: [gui-tests, build-and-test, ps-parse-check]
+    needs: [gui-tests, build-and-test]
     env:
       CI_BIND_ADDRESS: 127.0.0.1
     steps:
@@ -1976,7 +1976,7 @@ jobs:
     name: Analyze Unit Test Results
     runs-on: ubuntu-latest
     if: always()
-    needs: unit-tests
+    needs: tests
     outputs:
       tests_ok: ${{ steps.summary.outputs.tests_ok }}
       failed_count: ${{ steps.summary.outputs.failed_count }}
