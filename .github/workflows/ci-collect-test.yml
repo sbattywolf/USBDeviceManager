@@ -1,0 +1,31 @@
+name: CI Collect Logs Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      collect_ci_logs:
+        description: 'Enable CI logs collection for this run (true/false)'
+        required: false
+        default: 'true'
+
+jobs:
+  collect-test:
+    name: Collect CI Logs Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run CI logs collector (opt-in)
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/ci/ci-collect-logs.ps1 -OutDir artifacts/ci-logs -MaxLines 200 || true
+
+      - name: Upload CI logs artifact (opt-in)
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs-test-${{ github.run_id }}
+          path: artifacts/ci-logs/**
+          overwrite: true
