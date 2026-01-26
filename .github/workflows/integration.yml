@@ -3,18 +3,23 @@ on:
   workflow_call:
     inputs:
       configuration:
+        type: string
         required: false
         default: 'Release'
       dotnet-version:
+        type: string
         required: false
         default: '8.0.x'
       os:
+        type: string
         required: false
         default: 'windows-latest'
       publish-rid:
+        type: string
         required: false
         default: 'true'
       full-archive:
+        type: string
         required: false
         default: 'false'
 
@@ -105,6 +110,36 @@ jobs:
             '**/*dotnet-integration-*.trx'
             '**/TestResults/*.trx'
 
+      - name: "Always: collect TRX and upload (fallback by OS)"
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}"
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
+      - name: "Always: collect TRX and upload (fallback latest)"
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}-latest"
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
+      - name: "Always: collect TRX and upload (fallback bare name)"
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
       - name: "On-failure: preserve DB artifacts and run integrity check"
         if: failure()
         shell: bash
@@ -112,24 +147,24 @@ jobs:
           set -euo pipefail || true
           mkdir -p artifacts/integration-db-checks || true
           python3 - <<'PY' || true
-import sqlite3,glob,os
-outdir='artifacts/integration-db-checks'
-files=glob.glob('**/*.db', recursive=True)
-if not files:
-    print('No .db files found')
-for f in files:
-    try:
-        con=sqlite3.connect(f)
-        cur=con.execute('PRAGMA integrity_check')
-        rows=list(cur)
-        con.close()
-        fn=os.path.join(outdir, os.path.basename(f)+'.integrity.txt')
-        with open(fn,'w', encoding='utf-8') as fh:
-            fh.write('\n'.join([str(r) for r in rows]))
-        print('Checked', f)
-    except Exception as e:
-        print('Failed to check', f, e)
-PY
+          import sqlite3,glob,os
+          outdir='artifacts/integration-db-checks'
+          files=glob.glob('**/*.db', recursive=True)
+          if not files:
+            print('No .db files found')
+          for f in files:
+            try:
+              con=sqlite3.connect(f)
+              cur=con.execute('PRAGMA integrity_check')
+              rows=list(cur)
+              con.close()
+              fn=os.path.join(outdir, os.path.basename(f)+'.integrity.txt')
+              with open(fn,'w', encoding='utf-8') as fh:
+                fh.write('\n'.join([str(r) for r in rows]))
+              print('Checked', f)
+            except Exception as e:
+              print('Failed to check', f, e)
+          PY
 
       - name: Upload DB integrity checks
         if: always()

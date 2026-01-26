@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -22,7 +23,7 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
 {
     private TextWriter? _originalOut;
     private TextWriter? _originalErr;
-    private StreamWriter? _consoleWriter;
+    private List<StreamWriter>? _consoleWriters;
     private readonly string _testDatabaseName;
     private readonly string _dbFilePath;
     private readonly string _connectionString;
@@ -353,23 +354,44 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
             // Redirect Console output/errors to a test artifact file so CI uploads host logs
-            try
-            {
-                var artifactsDir = Path.Combine(Directory.GetCurrentDirectory(), "TestResults", "artifacts");
-                Directory.CreateDirectory(artifactsDir);
-                var consoleLogPath = Path.Combine(artifactsDir, _testDatabaseName + "-server-console.log");
-
-                _originalOut = Console.Out;
-                _originalErr = Console.Error;
-                _consoleWriter = new StreamWriter(new FileStream(consoleLogPath, FileMode.Append, FileAccess.Write, FileShare.Read)) { AutoFlush = true };
-                Console.SetOut(_consoleWriter);
-                Console.SetError(_consoleWriter);
-
-                // Emit a ConfigureWebHost sentinel: log the effective SIMRACING_DEBUG_DBPATH
                 try
                 {
-                    var debugEnv = Environment.GetEnvironmentVariable("SIMRACING_DEBUG_DBPATH") ?? string.Empty;
-                    Console.WriteLine($"SimRacingTestFactory: ConfigureWebHost sees SIMRACING_DEBUG_DBPATH='{debugEnv}'");
+                    _originalOut = Console.Out;
+                    _originalErr = Console.Error;
+
+                    // Create a writer for each artifacts directory so CI collectors
+                    // and local repro invocations can find the same deterministic
+                    // server console log regardless of working directory.
+                    _consoleWriters = new List<StreamWriter>();
+                    foreach (var artifactsDir in GetArtifactDirectories())
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(artifactsDir);
+                            var consoleLogPath = Path.Combine(artifactsDir, _testDatabaseName + "-server-console.log");
+                            var sw = new StreamWriter(new FileStream(consoleLogPath, FileMode.Append, FileAccess.Write, FileShare.Read)) { AutoFlush = true };
+                            _consoleWriters.Add(sw);
+                        }
+                        catch (Exception ex)
+                        {
+                            try { Console.Error.WriteLine($"SimRacingTestFactory: failed to create console writer for '{artifactsDir}': {ex}"); } catch { }
+                        }
+                    }
+
+                    // If we have at least one writer, wrap them in a MultiTextWriter
+                    // and redirect Console.Out/Err to it. Otherwise leave Console as-is.
+                    if (_consoleWriters != null && _consoleWriters.Count > 0)
+                    {
+                        var multi = new MultiTextWriter(_consoleWriters);
+                        Console.SetOut(multi);
+                        Console.SetError(multi);
+                    }
+
+                // Emit a ConfigureWebHost sentinel: log the effective SIMRACING_DEBUG_DBPATH
+                    try
+                    {
+                        var debugEnv = Environment.GetEnvironmentVariable("SIMRACING_DEBUG_DBPATH") ?? string.Empty;
+                        try { Console.WriteLine($"SimRacingTestFactory: ConfigureWebHost sees SIMRACING_DEBUG_DBPATH='{debugEnv}'"); } catch { }
                     foreach (var cwArtifactsDir in GetArtifactDirectories())
                     {
                         try
@@ -487,6 +509,63 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
             {
                 // swallow
             }
+        }
+    }
+
+    // TextWriter that fans out writes to multiple underlying writers.
+    private class MultiTextWriter : TextWriter
+    {
+        private readonly IReadOnlyList<TextWriter> _writers;
+
+        public MultiTextWriter(IEnumerable<TextWriter> writers)
+        {
+            _writers = writers.ToList();
+        }
+
+        public override Encoding Encoding => Encoding.UTF8;
+
+        public override void Write(char value)
+        {
+            foreach (var w in _writers)
+            {
+                try { w.Write(value); } catch { }
+            }
+        }
+
+        public override void Write(string? value)
+        {
+            foreach (var w in _writers)
+            {
+                try { w.Write(value); } catch { }
+            }
+        }
+
+        public override void WriteLine(string? value)
+        {
+            foreach (var w in _writers)
+            {
+                try { w.WriteLine(value); } catch { }
+            }
+        }
+
+        public override void Flush()
+        {
+            foreach (var w in _writers)
+            {
+                try { w.Flush(); } catch { }
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                foreach (var w in _writers)
+                {
+                    try { w.Dispose(); } catch { }
+                }
+            }
+            base.Dispose(disposing);
         }
     }
 
@@ -759,14 +838,18 @@ public class SimRacingTestFactory : WebApplicationFactory<Program>
                 try { Console.Error.WriteLine($"SimRacingTestFactory: ClearAllPools() failed: {ex}"); } catch { }
             }
 
-            // Restore redirected console output and dispose writer
+            // Restore redirected console output and dispose writers
             try
             {
-                if (_consoleWriter != null)
+                if (_consoleWriters != null && _consoleWriters.Count > 0)
                 {
-                    try { _consoleWriter.Flush(); } catch { }
                     try { Console.SetOut(_originalOut ?? TextWriter.Null); Console.SetError(_originalErr ?? TextWriter.Null); } catch { }
-                    try { _consoleWriter.Dispose(); } catch { }
+                    foreach (var w in _consoleWriters)
+                    {
+                        try { w.Flush(); } catch { }
+                        try { w.Dispose(); } catch { }
+                    }
+                    _consoleWriters = null;
                 }
             }
             catch (Exception ex)
