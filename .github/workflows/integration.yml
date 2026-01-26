@@ -110,6 +110,36 @@ jobs:
             '**/*dotnet-integration-*.trx'
             '**/TestResults/*.trx'
 
+      - name: "Always: collect TRX and upload (fallback by OS)"
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}"
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
+      - name: "Always: collect TRX and upload (fallback latest)"
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}-latest"
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
+      - name: "Always: collect TRX and upload (fallback bare name)"
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
       - name: "On-failure: preserve DB artifacts and run integrity check"
         if: failure()
         shell: bash
