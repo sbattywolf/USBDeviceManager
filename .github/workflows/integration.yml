@@ -140,6 +140,16 @@ jobs:
             '**/*dotnet-integration-*.trx'
             '**/TestResults/*.trx'
 
+      - name: "Always: collect TRX and upload (canonical integration-triage)"
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-triage
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
       - name: "On-failure: preserve DB artifacts and run integrity check"
         if: failure()
         shell: bash
