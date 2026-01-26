@@ -26,10 +26,11 @@ jobs:
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
 
-      - name: Run unit tests and collect TRX
+      - name: Run unit tests and collect TRX + console log
         run: |
           mkdir -p artifacts/test-results/unit/${{ runner.os }}
-          dotnet test --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results/unit/${{ runner.os }}
+          # Run tests, write TRX and capture console output to a log for parsing
+          dotnet test --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/unit.console.log
 
       - name: Copy canonical TRX
         run: |
@@ -42,4 +43,20 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results-unit
-          path: artifacts/test-results/**
+          path: |
+            artifacts/test-results/**
+            scripts/ci/parse_test_logs.py
+
+      - name: Setup Python (for log parsing)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Parse TRX and console logs to produce skip-info
+        run: |
+          python scripts/ci/parse_test_logs.py --results artifacts/test-results/unit/${{ runner.os }} --out artifacts/test-results/skip-info.json
+      - name: Upload skip-info artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-skip-info
+          path: artifacts/test-results/skip-info.json
