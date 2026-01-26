@@ -1691,7 +1691,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HTML_COMMENT_MAX_CHARS: '60000'
-    needs: [analyze-unit, analyze-results, analyze-regression, analyze-integration, analyze-e2e]
+    # Run after the core build and the test-runner so the aggregator executes
+    # for focused/unit-only dispatches where analyzers may be skipped.
+    needs: [build-and-test, test-runner]
     if: always()
     steps:
       - name: Checkout
