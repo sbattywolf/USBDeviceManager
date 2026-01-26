@@ -96,6 +96,24 @@ jobs:
           echo 'Artifacts present under artifacts/:'
           find artifacts -maxdepth 3 -type f -print || true
 
+      - name: Convert TRX to HTML summary (best-effort)
+        shell: bash
+        run: |
+          python3 --version || true
+          if [ -f scripts/ci/trx_to_html.py ]; then
+            mkdir -p artifacts || true
+            python3 scripts/ci/trx_to_html.py --input-dir artifacts --out artifacts/trx-summary.html || true
+          else
+            echo 'No trx_to_html.py; skipping TRX->HTML conversion'
+          fi
+
+      - name: Collect DB dumps (best-effort)
+        shell: bash
+        run: |
+          mkdir -p artifacts/db-dumps || true
+          # Copy any .db files found in downloaded artifacts into artifacts/db-dumps (preserve path)
+          find . -type f -name '*.db' -print0 | xargs -0 -I{} bash -lc 'mkdir -p "artifacts/db-dumps/$(dirname "{}")" 2>/dev/null || true; cp -f "{}" "artifacts/db-dumps/{}" 2>/dev/null || true' || true
+
       - name: Run analysis scripts
         shell: bash
         run: |
@@ -118,3 +136,5 @@ jobs:
             artifacts/enriched/**
             artifacts/unit/**
             artifacts/integration/**
+            artifacts/trx-summary.html
+            artifacts/db-dumps/**
