@@ -1,10 +1,9 @@
+﻿---
 name: Check TODO centralization
-
 on:
   pull_request:
   push:
     branches: ["**"]
-
 jobs:
   check-todos:
     name: Fail on TODOs outside centralized list
@@ -12,7 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Find TODOs in Markdown
         run: |
           set -e
