@@ -5,6 +5,8 @@
 namespace USBDeviceManager.Controllers;
 
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using USBDeviceManager.Data;
@@ -248,9 +250,31 @@ public class MonitoringController : ControllerBase
         // Calculate memory usage
         var memoryUsage = (process.WorkingSet64 / (1024.0 * 1024.0 * 1024.0)) * 100; // Convert to percentage
 
-        // Calculate disk usage (simplified for C: drive)
-        var driveInfo = new DriveInfo("C");
-        var diskUsage = ((double)(driveInfo.TotalSize - driveInfo.AvailableFreeSpace) / driveInfo.TotalSize) * 100;
+        // Calculate disk usage (choose a sensible root per-platform and guard failures)
+        double diskUsage = 0.0;
+        try
+        {
+            string driveRoot;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                driveRoot = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)) ?? "C:\\";
+            }
+            else
+            {
+                driveRoot = Path.GetPathRoot(Environment.CurrentDirectory) ?? "/";
+            }
+
+            var driveInfo = new DriveInfo(driveRoot);
+            if (driveInfo.TotalSize > 0)
+            {
+                diskUsage = ((double)(driveInfo.TotalSize - driveInfo.AvailableFreeSpace) / driveInfo.TotalSize) * 100;
+            }
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogWarning(ex, "Failed to compute disk usage for drive; defaulting to 0.");
+            diskUsage = 0.0;
+        }
 
         // Count connected devices
         var connectedDevices = await this.context.DeviceStatuses
