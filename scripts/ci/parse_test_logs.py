@@ -13,16 +13,38 @@ def parse_trx(trx_path):
     try:
         tree = ET.parse(trx_path)
         root = tree.getroot()
-        # namespaces can vary; look for ResultSummary/Counters
-        for counters in root.findall('.//Counters'):
-            for attr, val in counters.attrib.items():
-                out['counters'][attr] = int(val) if val.isdigit() else val
-        # find UnitTestResult elements
-        for utr in root.findall('.//UnitTestResult'):
-            outcome = utr.attrib.get('outcome')
-            test_name = utr.attrib.get('testName') or utr.attrib.get('testId')
-            if outcome and outcome.lower() == 'skipped':
-                out['skipped'].append(test_name)
+        # namespaces can vary; look for Counters and UnitTestResult by local-name
+        def local_name(tag):
+            return tag.split('}', 1)[1] if '}' in tag else tag
+
+        for elem in root.iter():
+            ln = local_name(elem.tag)
+            if ln == 'Counters':
+                for attr, val in elem.attrib.items():
+                    try:
+                        out['counters'][attr] = int(val)
+                    except Exception:
+                        out['counters'][attr] = val
+            elif ln == 'UnitTestResult':
+                outcome = elem.attrib.get('outcome')
+                test_name = elem.attrib.get('testName') or elem.attrib.get('testId')
+                if outcome and outcome.lower() in ('skipped', 'notexecuted'):
+                    out['skipped'].append(test_name)
+        # if we didn't find counters via iteration, try namespace-aware lookup
+        if not out['counters']:
+            try:
+                ns = ''
+                if root.tag.startswith('{'):
+                    ns = root.tag.split('}')[0].strip('{')
+                if ns:
+                    for counters in root.findall('.//{%s}Counters' % ns):
+                        for attr, val in counters.attrib.items():
+                            try:
+                                out['counters'][attr] = int(val)
+                            except Exception:
+                                out['counters'][attr] = val
+            except Exception:
+                pass
     except Exception as e:
         out['error'] = str(e)
     return out
@@ -66,9 +88,13 @@ def main():
                 trx_info = parse_trx(path)
                 out['trx'].append(trx_info)
                 c = trx_info.get('counters', {})
-                out['summary']['total_skipped'] += int(c.get('skipped', 0) or c.get('aborted', 0) or 0)
-                out['summary']['total_failed'] += int(c.get('failed', 0) or 0)
-                out['summary']['total_passed'] += int(c.get('passed', 0) or 0)
+                # counters may use different keys (skipped / notExecuted / aborted)
+                skipped_count = int(c.get('skipped', 0) or c.get('notExecuted', 0) or c.get('aborted', 0) or 0)
+                failed_count = int(c.get('failed', 0) or 0)
+                passed_count = int(c.get('passed', 0) or 0)
+                out['summary']['total_skipped'] += skipped_count
+                out['summary']['total_failed'] += failed_count
+                out['summary']['total_passed'] += passed_count
             elif name.lower().endswith('.log') or 'console' in name.lower():
                 errs = parse_console_log(path)
                 out['console_errors'].extend(errs)
