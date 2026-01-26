@@ -52,6 +52,11 @@ jobs:
     steps:
       # (unit-tests job moved to a reusable workflow: see the 'unit-tests' job below)
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -71,7 +76,7 @@ jobs:
           $success = $false
           for ($i = 1; $i -le $maxAttempts; $i++) {
             Write-Host "dotnet restore attempt $i of $maxAttempts"
-            dotnet restore USBDeviceManager.sln --verbosity minimal
+            dotnet restore ./USBDeviceManager.sln --verbosity minimal
             if ($LASTEXITCODE -eq 0) {
               $success = $true
               break
@@ -91,7 +96,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Host 'Building server/USBDeviceManager (Release) so --no-build later can use outputs'
-          dotnet build server/USBDeviceManager -c Release --no-restore
+          dotnet build ./server/USBDeviceManager -c Release --no-restore
 
       - name: Publish long-run test helper
         shell: pwsh
@@ -123,14 +128,14 @@ jobs:
           }
 
       - name: Build
-        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+        run: dotnet build ./USBDeviceManager.sln --configuration Release --no-restore
 
       - name: Publish server (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           Write-Host 'Publishing server self-contained exe for Windows'
-          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          dotnet publish ./server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
           $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
           if (-not (Test-Path $exe)) {
             Write-Error "Published server exe missing at $exe. Ensure publish step ran and project AssemblyName is set to 'SMServer'."
