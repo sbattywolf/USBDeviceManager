@@ -1,0 +1,89 @@
+﻿name: Test Runner Dispatch (stub)
+
+on:
+  workflow_call:
+    inputs:
+      run_unit:
+        required: false
+        type: string
+      run_integration:
+        required: false
+        type: string
+      run_e2e:
+        required: false
+        type: string
+
+jobs:
+  dispatch-stub:
+    runs-on: ubuntu-latest
+    outputs: {}
+    steps:
+      - name: Stub step
+        run: echo "This is a stub reusable workflow to satisfy parser during CI dispatch."
+---
+name: Test Runner Dispatcher
+on:
+  workflow_dispatch:
+    inputs:
+      run_unit:
+        description: 'Run unit tests'
+        required: false
+        default: 'false'
+      run_integration:
+        description: 'Run integration tests'
+        required: false
+        default: 'false'
+      run_e2e:
+        description: 'Run e2e tests'
+        required: false
+        default: 'false'
+      full:
+        description: 'Run all tests (shortcut)'
+        required: false
+        default: 'false'
+  workflow_call:
+    inputs:
+      run_unit:
+        required: false
+        type: string
+        default: 'false'
+      run_integration:
+        required: false
+        type: string
+        default: 'false'
+      run_e2e:
+        required: false
+        type: string
+        default: 'false'
+      full:
+        required: false
+        type: string
+        default: 'false'
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    outputs:
+      RUN_UNIT: ${{ steps.decide.outputs.RUN_UNIT }}
+      RUN_INTEGRATION: ${{ steps.decide.outputs.RUN_INTEGRATION }}
+      RUN_E2E: ${{ steps.decide.outputs.RUN_E2E }}
+      FULL: ${{ steps.decide.outputs.FULL }}
+    steps:
+      - name: Decide tests to run
+        id: decide
+        run: |
+          echo "RUN_UNIT=${{ inputs.run_unit || github.event.inputs.run_unit }}" >> $GITHUB_OUTPUT
+          echo "RUN_INTEGRATION=${{ inputs.run_integration || github.event.inputs.run_integration }}" >> $GITHUB_OUTPUT
+          echo "RUN_E2E=${{ inputs.run_e2e || github.event.inputs.run_e2e }}" >> $GITHUB_OUTPUT
+          echo "FULL=${{ inputs.full || github.event.inputs.full }}" >> $GITHUB_OUTPUT
+  run-unit:
+    needs: dispatch
+    if: needs.dispatch.outputs.FULL == 'true' || needs.dispatch.outputs.RUN_UNIT == 'true'
+    uses: ./.github/workflows/unit-tests-reusable.yml
+  run-integration:
+    needs: dispatch
+    if: needs.dispatch.outputs.FULL == 'true' || needs.dispatch.outputs.RUN_INTEGRATION == 'true'
+    uses: ./.github/workflows/integration-analysis-reusable.yml
+  run-e2e:
+    needs: dispatch
+    if: needs.dispatch.outputs.FULL == 'true' || needs.dispatch.outputs.RUN_E2E == 'true'
+    uses: ./.github/workflows/e2e-tests-reusable.yml
