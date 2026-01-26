@@ -1,0 +1,41 @@
+name: Unit Tests (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      configuration:
+        description: 'Build configuration'
+        required: false
+        type: string
+        default: 'Debug'
+      dotnet-version:
+        description: 'Dotnet SDK version'
+        required: false
+        type: string
+        default: '8.0.x'
+
+jobs:
+  run-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Restore
+        run: dotnet restore USBDeviceManager.sln
+
+      - name: Test
+        run: |
+          dotnet test USBDeviceManager.sln --configuration ${{ inputs.configuration }} --logger "trx;LogFileName=unit-tests.trx"
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests
+          path: '**/TestResults/*.trx'
