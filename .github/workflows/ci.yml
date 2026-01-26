@@ -11,6 +11,18 @@ on:
         description: 'Enable CI logs collection for this run (true/false)'
         required: false
         default: 'false'
+      run_unit:
+        description: 'Run unit tests (true/false)'
+        required: false
+        default: 'true'
+      run_integration:
+        description: 'Run integration tests (true/false)'
+        required: false
+        default: 'true'
+      run_e2e:
+        description: 'Run end-to-end tests (true/false)'
+        required: false
+        default: 'false'
 jobs:
   gui-tests:
     name: GUI Tests (headless)
