@@ -1,0 +1,60 @@
+﻿{
+    "Dashboard":  {
+                      "HeartbeatInterval":  60,
+                      "Url":  "http://localhost:5000",
+                      "ApiKey":  "",
+                      "Enabled":  true
+                  },
+    "SoftwareManagement":  {
+                               "ManagedSoftware":  [
+
+                                                   ],
+                               "AutoStart":  false,
+                               "MonitorInterval":  10,
+                               "Enabled":  true
+                           },
+    "Agent":  {
+                  "UpdateInterval":  30,
+                  "MaxRetries":  3,
+                  "Name":  "SimRacingAgent",
+                  "Version":  "1.0.0"
+              },
+    "Logging":  {
+                    "Console":  true,
+                    "Level":  "Info",
+                    "File":  true,
+                    "Dashboard":  false,
+                    "MaxLogFiles":  30
+                },
+    "Automation":  {
+                       "RulesFile":  "automation-rules.json",
+                       "MaxConcurrentRules":  5,
+                       "Enabled":  true
+                   },
+    "DeviceMonitoring":  {
+                             "DeviceFilters":  [
+
+                                               ],
+                             "ScanInterval":  5,
+                             "NotifyOnChanges":  true,
+                             "Enabled":  true
+                         },
+    "HealthMonitoring":  {
+                             "MonitorInterval":  30,
+                             "Thresholds":  {
+                                                "CPU":  {
+                                                            "Critical":  95,
+                                                            "Warning":  80
+                                                        },
+                                                "Memory":  {
+                                                               "Critical":  95,
+                                                               "Warning":  85
+                                                           },
+                                                "Disk":  {
+                                                             "Critical":  95,
+                                                             "Warning":  85
+                                                         }
+                                            },
+                             "Enabled":  false
+                         }
+}

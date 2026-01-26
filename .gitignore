@@ -1,0 +1,108 @@
+# Ignore build outputs
+**/bin/
+**/obj/
+
+# Python virtualenv
+/.venv/
+
+# Python bytecode
+**/__pycache__/
+*.pyc
+
+# Test results and CI artifacts
+/test-results/
+*.trx
+
+# Artifacts folder (archived index is kept)
+/artifacts/
+!/artifacts/archive/
+!/artifacts/archive/index.txt
+
+# CI build caches
+/ci/**/obj/
+/ci/**/bin/
+
+# Dotnet temporary files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / VSCode
+.idea/
+.vscode/
+
+# NuGet
+*.nupkg
+.packages/
+
+# Logs
+*.log
+
+# Test artifacts
+**/TestResults/
+**/*.TestLogger.*
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# Local tooling
+.env
+.env.*
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Generated files
+server/USBDeviceManager/USBDeviceManager.db
+
+# Ignore published app outputs
+publish/
+# Ignore build outputs
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / IDE
+.idea/
+.vscode/
+.vs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
+*.db
+*.sqlite
+*.db-journal
+
+# Test/output artifacts
+coverage.opencover.xml
+
+# NuGet
+*.nupkg
+**/packages/
+
+# JetBrains Rider
+*.sln.iml
+.tmp_*.txt
+.tmp_*.ps1
+# Ignore build outputs
+**/bin/
+**/obj/
+# Ignore build outputs
+**/bin/
+**/obj/
+**/bin/
+**/obj/

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CI Final Test Summary</title>
+  <style>
+  {{STYLES}}
+  </style>
+  </head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title">CI Final Test Summary</div>
+        <div class="meta">Generated: {{UTC}}</div>
+        <div class="session-sub">Source: {{SRC}}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="small">Report generator: scripts/generate-final-report-html.py</div>
+        <div style="margin-left:12px;display:flex;align-items:center;gap:8px">
+          <div>
+            <label style="font-size:13px;color:#fff;margin-right:6px">Name segs:</label>
+            <select id="nameSegments" title="Choose how many trailing dot-separated segments of the test name to show" style="padding:6px;border-radius:6px;border:0;background:rgba(255,255,255,0.06);color:#fff;">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script>
+    // Ensure initial button state matches the active tab-content and make switching robust
+    document.addEventListener('DOMContentLoaded', function(){
+      var activeContent = document.querySelector('.tab-content.active');
+      var buttons = Array.from(document.querySelectorAll('.tab-buttons button'));
+      if(activeContent){
+        var activeId = activeContent.id;
+        var match = buttons.find(b=>b.getAttribute('data-tab')===activeId);
+        if(match) match.classList.add('active');
+      }
+
+      // If no button is active yet, prefer first button with a non-zero count, otherwise first button
+      if(!buttons.some(b=>b.classList.contains('active'))){
+        var prefer = buttons.find(b=>/\(0\)$/.test(b.textContent)===false) || buttons[0];
+        if(prefer){ prefer.classList.add('active'); var tab = prefer.getAttribute('data-tab'); document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.id===tab); }); }
+      }
+
+      // Re-bind click handlers defensively (in case generator script ran before DOM ready)
+      buttons.forEach(function(b){
+        b.removeEventListener('click', b._tabHandler);
+        var handler = function(){
+          buttons.forEach(x=>x.classList.remove('active'));
+          b.classList.add('active');
+          var tab = b.getAttribute('data-tab');
+          document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.id===tab); });
+          // update details visibility after switching
+          try{ if(window.updateDetailsVisibility) window.updateDetailsVisibility(); }catch(e){}
+        };
+        b._tabHandler = handler;
+        b.addEventListener('click', handler);
+      });
+    });
+  </script>
+    <div class="ribbon">
+      <div class="card">
+        <div class="kpi">{{TOTAL}}</div>
+        <div class="kpi-sub">Total tests</div>
+      </div>
+      <div class="card">
+        <div class="kpi">{{PASSED}}</div>
+        <div class="kpi-sub">Passed</div>
+      </div>
+      <div class="card">
+        <div class="kpi">{{FAILED}}</div>
+        <div class="kpi-sub">Failed</div>
+      </div>
+      <div class="card">
+        <div class="kpi">{{PASS_RATE}}</div>
+        <div class="kpi-sub">Pass rate</div>
+      </div>
+
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="panel">
+          <h3>Summaries</h3>
+          <table class="summary-table">
+            <thead><tr><th>Type</th><th>Total</th><th>Passed</th><th>Failed</th><th>Executed</th><th>Status</th></tr></thead>
+            <tbody>
+            {{ROWS}}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <h3>Failures</h3>
+          {{FAIL_SECTION}}
+        </div>
+      </div>
+
+      <aside>
+        <div class="panel">
+          <h4>Filters</h4>
+          <div class="filters">
+            <input id="search" class="search" placeholder="Search test name or message" />
+            <div class="small">Tip: type to filter failures below</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // Small client-side filter
+    document.addEventListener('DOMContentLoaded', function(){
+      var s = document.getElementById('search');
+      if(!s) return;
+      s.addEventListener('input', function(){
+        var q = this.value.trim().toLowerCase();
+        document.querySelectorAll('table.fail-table tbody tr').forEach(function(r){
+          var txt = r.textContent.toLowerCase();
+          r.style.display = q==='' || txt.indexOf(q) !== -1 ? '' : 'none';
+        });
+      });
+    });
+  </script>
+  <script>
+    // Ensure <details> outside the active tab are hidden — show only details for active tab
+    document.addEventListener('DOMContentLoaded', function(){
+      function updateDetailsVisibility(){
+        var activeTab = document.querySelector('.tab-content.active');
+        document.querySelectorAll('details').forEach(function(d){
+          if(activeTab && activeTab.contains(d)){
+            d.style.display = '';
+          } else {
+            d.style.display = 'none';
+          }
+        });
+      }
+
+      // expose for other handlers
+      try{ window.updateDetailsVisibility = updateDetailsVisibility; }catch(e){}
+
+      // Run once on load
+      updateDetailsVisibility();
+
+      // Attach to tab buttons; allow a tiny delay so other handlers can toggle classes first
+      document.querySelectorAll('.tab-buttons button').forEach(function(b){
+        b.addEventListener('click', function(){ setTimeout(updateDetailsVisibility, 8); });
+      });
+
+      // Observe class changes on tab-content elements to react to other scripts
+      try{
+        var observer = new MutationObserver(function(){ updateDetailsVisibility(); });
+        document.querySelectorAll('.tab-content').forEach(function(tc){
+          observer.observe(tc, {attributes:true,attributeFilter:['class']});
+        });
+      }catch(e){ /* MutationObserver not supported; fallback handled by button listeners */ }
+    });
+  </script>
+  <script>
+    // client-side name-segments control
+    (function(){
+      function simplifyName(fullname, segs){
+        if(!fullname) return fullname;
+        var name = fullname;
+        var prefixes = ['USBDeviceManager.Tests.','USBDeviceManager.Tests','USBDeviceManager.','Tests.'];
+        prefixes.forEach(function(p){ if(name.indexOf(p)===0) name = name.substring(p.length); });
+        var parts = name.split('.');
+        var keep = (typeof segs === 'number' && segs>0) ? segs : 2;
+        if(parts.length >= keep) return parts.slice(-keep).join('.');
+        return name;
+      }
+      function updateAll(segs){
+        document.querySelectorAll('td.testcase').forEach(function(td){
+          var full = td.getAttribute('data-fullname') || '';
+          var disp = simplifyName(full, segs);
+          var span = td.querySelector('.display-name');
+          if(span) span.textContent = disp;
+        });
+      }
+      document.addEventListener('DOMContentLoaded', function(){
+        var sel = document.getElementById('nameSegments');
+        if(!sel) return;
+        var val = (function(){ try{ return localStorage.getItem('report-name-segments') || '2' }catch(e){ return '2' }})();
+        sel.value = val;
+        updateAll(parseInt(val,10));
+        sel.addEventListener('change', function(){
+          var v = parseInt(this.value,10) || 2;
+          try{ localStorage.setItem('report-name-segments', String(v)); }catch(e){}
+          updateAll(v);
+        });
+      });
+    })();
+  </script>
+  <script>
+    // Final enforcement script: tab delegation + robust nameSegments binding
+    document.addEventListener('DOMContentLoaded', function(){
+      // Tab delegation
+      var tabButtonsWrap = document.querySelector('.tab-buttons');
+      if(tabButtonsWrap){
+        tabButtonsWrap.addEventListener('click', function(ev){
+          var btn = ev.target.closest('button');
+          if(!btn) return;
+          var buttons = Array.from(tabButtonsWrap.querySelectorAll('button'));
+          buttons.forEach(function(b){ b.classList.remove('active'); });
+          btn.classList.add('active');
+          var tab = btn.getAttribute('data-tab');
+          document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.id===tab); });
+          try{ if(window.updateDetailsVisibility) window.updateDetailsVisibility(); }catch(e){}
+        });
+      }
+
+      // Robust nameSegments handler (ensures it works regardless of load order)
+      var sel = document.getElementById('nameSegments');
+      if(sel){
+        var applySegs = function(v){
+          var keep = (typeof v==='number' && v>0) ? v : 2;
+          document.querySelectorAll('td.testcase').forEach(function(td){
+            var full = td.getAttribute('data-fullname') || '';
+            var name = full.replace(/^USBDeviceManager\.Tests\.?/,'').replace(/^USBDeviceManager\.?/,'').replace(/^Tests\.?/,'');
+            var parts = name.split('.');
+            var disp = (parts.length>=keep) ? parts.slice(-keep).join('.') : name;
+            var span = td.querySelector('.display-name'); if(span) span.textContent = disp;
+          });
+        };
+        sel.addEventListener('change', function(){
+          var v = parseInt(this.value,10) || 2;
+          try{ localStorage.setItem('report-name-segments', String(v)); }catch(e){}
+          applySegs(v);
+        });
+        // init from storage or current value
+        try{ var val = parseInt(localStorage.getItem('report-name-segments')||sel.value||'2',10); }catch(e){ var val = parseInt(sel.value||'2',10); }
+        applySegs(val);
+        sel.value = String(val);
+      }
+    });
+  </script>
+    <script>
+      // Per-tab sub-tabs (All / Unit / E2E / Regression) and per-tab nameSegmentsLocal binding
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('.tab-content').forEach(function(tc){
+          // sub-tab buttons
+          var subWrap = tc.querySelector('.sub-tab-buttons');
+          if(subWrap){
+            subWrap.addEventListener('click', function(ev){
+              var btn = ev.target.closest('button');
+              if(!btn) return;
+              Array.from(subWrap.querySelectorAll('button')).forEach(function(b){ b.classList.remove('active'); });
+              btn.classList.add('active');
+              var sub = btn.getAttribute('data-sub');
+              tc.querySelectorAll('table.fail-table tbody tr').forEach(function(r){
+                var t = r.getAttribute('data-test-type') || 'other';
+                r.style.display = (sub==='all' || sub===t) ? '' : 'none';
+              });
+            });
+          }
+
+          // per-tab nameSegmentsLocal select
+          var sel = tc.querySelector('.nameSegmentsLocal');
+          if(sel){
+            var applyLocal = function(v){
+              tc.querySelectorAll('td.testcase').forEach(function(td){
+                var full = td.getAttribute('data-fullname') || '';
+                var name = full.replace(/^USBDeviceManager\.Tests\.?/,'').replace(/^USBDeviceManager\.?/,'').replace(/^Tests\.?/,'');
+                var parts = name.split('.');
+                var keep = (typeof v==='number' && v>0) ? v : 2;
+                var disp = (parts.length>=keep) ? parts.slice(-keep).join('.') : name;
+                var span = td.querySelector('.display-name'); if(span) span.textContent = disp;
+              });
+            };
+            sel.addEventListener('change', function(){ applyLocal(parseInt(this.value,10)||2); });
+            // init to 2 by default
+            try{ sel.value = localStorage.getItem('report-name-segments') || sel.value || '2'; }catch(e){}
+            applyLocal(parseInt(sel.value||'2',10));
+          }
+
+        });
+      });
+    </script>
+  <div class="footer">Generated by CI report tools — compacted view. Use the per-failure links to access full TRX files and logs.</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+
+<Project>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn)</NoWarn>
+    <!-- Enable analyzers during build by default -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <!-- Disable analyzers for test projects (project names containing 'Tests') to reduce noise -->
+  <PropertyGroup Condition=" '$([System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' == 'True' ">
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <!-- Analyzer packages for non-test projects only -->
+    <ItemGroup Condition=" '$( [System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' != 'True' ">
+    <!-- Bump StyleCop.Analyzers to a pre-release that contains fixes for record declarations (if available) -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- Generate XML documentation for non-test projects so doc analyzers run -->
+  <PropertyGroup Condition=" '$( [System.String]::Copy($(MSBuildProjectName)).Contains(&quot;Tests&quot;))' != 'True' ">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>

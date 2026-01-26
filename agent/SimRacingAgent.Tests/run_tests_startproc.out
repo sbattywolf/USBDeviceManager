@@ -1,0 +1,2761 @@
+Trascrizione avviata. File di output: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\run_tests_transcript_20260123_155314.txt
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\shared\TestFramework.p
+sm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
+hared\TestFramework.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
+hared\AdapterStubs.psm1'.
+DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Esportazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Esportazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'AdapterStubs' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'AdapterStubs' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
+DEBUG: Global Get-DefaultConfiguration available: True
+DETTAGLIATO: Esportazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Esportazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Esportazione della funzione 'New-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Esportazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Esportazione della funzione 'Assert-True'.
+DETTAGLIATO: Esportazione della funzione 'Assert-False'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Esportazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Esportazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Esportazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Esportazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Esportazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Esportazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Esportazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Esportazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Esportazione della funzione 'Assert-False'.
+DETTAGLIATO: Esportazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Esportazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Esportazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Esportazione della funzione 'Assert-True'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Esportazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Esportazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Esportazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Esportazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Esportazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Esportazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Esportazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Esportazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Esportazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Esportazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'New-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Esportazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Esportazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\ConfigManager
+.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\C
+onfiguration.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
+ogging.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
+ogging.psm1'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Esportazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Importazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Importazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\AgentCore.psm
+1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Core\Ag
+entEngine.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
+ogging.psm1'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Esportazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\USBMonitor
+.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Modules
+\DeviceMonitor.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
+ogging.psm1'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Esportazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Esportazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-USBDevices'.
+DETTAGLIATO: Esportazione della funzione 'Get-USBHealthCheck'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-USBMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Initialize-USBMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\ProcessMan
+ager.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Modules
+\SoftwareManager.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
+ogging.psm1'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Start-Software'.
+DETTAGLIATO: Esportazione della funzione 'Stop-Software'.
+DETTAGLIATO: Esportazione della funzione 'Restart-Software'.
+DETTAGLIATO: Esportazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Esportazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Importazione della funzione 'Restart-Software'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-Software'.
+DETTAGLIATO: Importazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-Software'.
+DETTAGLIATO: Importazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Esportazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Esportazione della funzione 'Restart-Software'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Esportazione della funzione 'Start-Software'.
+DETTAGLIATO: Esportazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Stop-Software'.
+DETTAGLIATO: Esportazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-ProcessHealthCheck'.
+DETTAGLIATO: Esportazione della funzione 'Test-ManagedProcess'.
+DETTAGLIATO: Esportazione della funzione 'Start-ManagedProcess'.
+DETTAGLIATO: Esportazione della funzione 'Get-ProcessMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Calculate-ProcessHealth'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
+'ProcessManager' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Verbi
+ alternativi suggeriti "Measure".
+DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Importazione della funzione 'Restart-Software'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Start-Software'.
+DETTAGLIATO: Importazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-Software'.
+DETTAGLIATO: Importazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Test-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module 
+E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\sh
+ared\TestFramework.psm1
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
+hared\TestFramework.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\s
+hared\AdapterStubs.psm1'.
+DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Esportazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Esportazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'AdapterStubs' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'AdapterStubs' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
+DEBUG: Global Get-DefaultConfiguration available: True
+DETTAGLIATO: Esportazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Esportazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Esportazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Esportazione della funzione 'New-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Esportazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Esportazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Esportazione della funzione 'Assert-True'.
+DETTAGLIATO: Esportazione della funzione 'Assert-False'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Esportazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Esportazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Esportazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Esportazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Esportazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Esportazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Esportazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Esportazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Esportazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Esportazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Esportazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Esportazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Esportazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Esportazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importing module 
+E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Un
+it\AgentCoreTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
+nit\AgentCoreTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
+nit\AgentCoreTests.ps1'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Rimozione della funzione "Get-AgentConfiguration" importata.
+DETTAGLIATO: Rimozione della funzione "Get-AgentInfo" importata.
+DETTAGLIATO: Rimozione della funzione "Get-AutomationConfig" importata.
+DETTAGLIATO: Rimozione della funzione "Get-ConfigurationKeys" importata.
+DETTAGLIATO: Rimozione della funzione "Get-ConfigurationSection" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Get-ConfigurationStatus" importata.
+DETTAGLIATO: Rimozione della funzione "Get-DashboardConfig" importata.
+DETTAGLIATO: Rimozione della funzione "Get-DeviceConfig" importata.
+DETTAGLIATO: Rimozione della funzione "Get-HealthConfig" importata.
+DETTAGLIATO: Rimozione della funzione "Get-LoggingConfig" importata.
+DETTAGLIATO: Rimozione della funzione "Get-SoftwareConfig" importata.
+DETTAGLIATO: Rimozione della funzione "Initialize-Configuration" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Reset-AgentConfiguration" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Save-AgentConfiguration" importata.
+DETTAGLIATO: Rimozione della funzione "Set-AgentConfiguration" importata.
+DETTAGLIATO: Rimozione della funzione "Set-ConfigurationSection" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Test-AgentConfiguration" importata.
+DETTAGLIATO: Rimozione della funzione "Test-ConfigurationExists" 
+importata.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\ConfigManager
+.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\C
+onfiguration.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
+ogging.psm1'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Esportazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Importazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Esportazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Esportazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Esportazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Importazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Rimozione della funzione "Get-AgentEngineStatus" importata.
+DETTAGLIATO: Rimozione della funzione "Start-AgentEngine" importata.
+DETTAGLIATO: Rimozione della funzione "Stop-AgentEngine" importata.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\core\AgentCore.psm
+1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Core\Ag
+entEngine.psm1'.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\Utils\L
+ogging.psm1'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Esportazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Esportazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
+ cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un 
+modulo.
+DETTAGLIATO: Importing module 
+E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Un
+it\AgentMonitoringTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
+nit\AgentMonitoringTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\U
+nit\AgentMonitoringTests.ps1'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Rimozione della funzione "Get-ConnectedDevices" importata.
+DETTAGLIATO: Rimozione della funzione "Get-DeviceHistory" importata.
+DETTAGLIATO: Rimozione della funzione "Get-DeviceMonitoringStatus" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Get-RacingDevices" importata.
+DETTAGLIATO: Rimozione della funzione "Get-USBDevices" importata.
+DETTAGLIATO: Rimozione della funzione "Get-USBHealthCheck" importata.
+DETTAGLIATO: Rimozione della funzione "Initialize-USBMonitoring" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Start-DeviceMonitoring" importata.
+DETTAGLIATO: Rimozione della funzione "Stop-DeviceMonitoring" importata.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\USBMonitor
+.psm1'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Esportazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Esportazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-USBDevices'.
+DETTAGLIATO: Esportazione della funzione 'Get-USBHealthCheck'.
+DETTAGLIATO: Esportazione della funzione 'Initialize-USBMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Initialize-USBMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Rimozione della funzione "Calculate-ProcessHealth" importata.
+DETTAGLIATO: Rimozione della funzione "Get-ManagedSoftware" importata.
+DETTAGLIATO: Rimozione della funzione "Get-ProcessHealthCheck" importata.
+DETTAGLIATO: Rimozione della funzione "Get-ProcessMetrics" importata.
+DETTAGLIATO: Rimozione della funzione "Get-RunningSoftware" importata.
+DETTAGLIATO: Rimozione della funzione "Get-SoftwareMonitoringStatus" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Get-SoftwareStatus" importata.
+DETTAGLIATO: Rimozione della funzione "Restart-Software" importata.
+DETTAGLIATO: Rimozione della funzione "Start-ManagedProcess" importata.
+DETTAGLIATO: Rimozione della funzione "Start-Software" importata.
+DETTAGLIATO: Rimozione della funzione "Start-SoftwareMonitoring" 
+importata.
+DETTAGLIATO: Rimozione della funzione "Stop-Software" importata.
+DETTAGLIATO: Rimozione della funzione "Stop-SoftwareMonitoring" importata.
+DETTAGLIATO: Rimozione della funzione "Test-ManagedProcess" importata.
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\src\modules\ProcessMan
+ager.psm1'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Importazione della funzione 'Restart-Software'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-Software'.
+DETTAGLIATO: Importazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-Software'.
+DETTAGLIATO: Importazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Esportazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Esportazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Esportazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Esportazione della funzione 'Restart-Software'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Esportazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Esportazione della funzione 'Start-Software'.
+DETTAGLIATO: Esportazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Stop-Software'.
+DETTAGLIATO: Esportazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Esportazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Esportazione della funzione 'Get-ProcessHealthCheck'.
+DETTAGLIATO: Esportazione della funzione 'Test-ManagedProcess'.
+DETTAGLIATO: Esportazione della funzione 'Start-ManagedProcess'.
+DETTAGLIATO: Esportazione della funzione 'Get-ProcessMetrics'.
+DETTAGLIATO: Esportazione della funzione 'Calculate-ProcessHealth'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
+'ProcessManager' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Verbi
+ alternativi suggeriti "Measure".
+DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Importazione della funzione 'Restart-Software'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Start-Software'.
+DETTAGLIATO: Importazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-Software'.
+DETTAGLIATO: Importazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Test-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
+ cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un 
+modulo.
+DETTAGLIATO: Importing module 
+E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\In
+tegration\AgentWorkflowTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\I
+ntegration\AgentWorkflowTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\I
+ntegration\AgentWorkflowTests.ps1'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Importazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Initialize-USBMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
+'ProcessManager' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Verbi
+ alternativi suggeriti "Measure".
+DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Importazione della funzione 'Restart-Software'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Start-Software'.
+DETTAGLIATO: Importazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-Software'.
+DETTAGLIATO: Importazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Test-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
+ cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un 
+modulo.
+DETTAGLIATO: Importing module 
+E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\Re
+gression\AgentRegressionTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\R
+egression\AgentRegressionTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\R
+egression\AgentRegressionTests.ps1'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Global\Assert-Contains' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Contains'.
+DETTAGLIATO: Il comando 'Global\Assert-Equal' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-Equal'.
+DETTAGLIATO: Il comando 'Global\Assert-False' del modulo 'TestFramework' ä
+ stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-False'.
+DETTAGLIATO: Il comando 'Global\Assert-MockCalled' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-MockCalled'.
+DETTAGLIATO: Il comando 'Global\Assert-NotNull' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-NotNull'.
+DETTAGLIATO: Il comando 'Global\Assert-PathExists' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-PathExists'.
+DETTAGLIATO: Il comando 'Global\Assert-True' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Assert-True'.
+DETTAGLIATO: Il comando 'Global\Clear-AllMocks' del modulo 'TestFramework'
+ ä stato importato, tuttavia potrebbe risultare difficile individuarlo 
+poichÇ il relativo nome non include un verbo approvato. Per un elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-AllMocks'.
+DETTAGLIATO: Il comando 'Global\Clear-TestEnvironment' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Clear-TestEnvironment'.
+DETTAGLIATO: Il comando 'Global\Complete-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Complete-TestSession'.
+DETTAGLIATO: Il comando 'Global\Get-DefaultConfiguration' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 
+'Global\Get-DefaultConfiguration'.
+DETTAGLIATO: Il comando 'Global\Invoke-Test' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Invoke-Test'.
+DETTAGLIATO: Il comando 'Global\New-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\New-Mock'.
+DETTAGLIATO: Il comando 'Global\Remove-Mock' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Per un elenco dei verbi 
+approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Remove-Mock'.
+DETTAGLIATO: Il comando 'Global\Start-TestSession' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Global\Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Get-AutomationConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationKeys'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Get-ConfigurationStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-DashboardConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-HealthConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-LoggingConfig'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareConfig'.
+DETTAGLIATO: Importazione della funzione 'Initialize-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Reset-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Save-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Set-ConfigurationSection'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Test-ConfigurationExists'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentEngineStatus'.
+DETTAGLIATO: Importazione della funzione 'Start-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentEngine'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ConnectedDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceHistory'.
+DETTAGLIATO: Importazione della funzione 'Get-DeviceMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-RacingDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBDevices'.
+DETTAGLIATO: Importazione della funzione 'Get-USBHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Initialize-USBMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-DeviceMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Calculate-ProcessHealth' del modulo 
+'ProcessManager' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Verbi
+ alternativi suggeriti "Measure".
+DETTAGLIATO: Importazione della funzione 'Calculate-ProcessHealth'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogBuffer'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentLogStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-ManagedSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessHealthCheck'.
+DETTAGLIATO: Importazione della funzione 'Get-ProcessMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RunningSoftware'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareMonitoringStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-SoftwareStatus'.
+DETTAGLIATO: Importazione della funzione 'Restart-Software'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogLevel'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLogOutput'.
+DETTAGLIATO: Importazione della funzione 'Start-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Start-Software'.
+DETTAGLIATO: Importazione della funzione 'Start-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Stop-Software'.
+DETTAGLIATO: Importazione della funzione 'Stop-SoftwareMonitoring'.
+DETTAGLIATO: Importazione della funzione 'Test-ManagedProcess'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentCritical'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentDebug'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentError'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentEvent'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentException'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentInfo'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentMetric'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentPerformance'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentTrace'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentWarning'.
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module 
+E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\ap
+plication\api\ApplicationAPITests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
+pplication\api\ApplicationAPITests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
+pplication\api\ApplicationAPITests.ps1'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Importing module 
+E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\ap
+plication\integration\ApplicationIntegrationTests.ps1
+DETTAGLIATO: Caricamento del modulo dal percorso 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
+pplication\integration\ApplicationIntegrationTests.ps1'.
+DETTAGLIATO: Dot-sourcing del file script 
+'E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\a
+pplication\integration\ApplicationIntegrationTests.ps1'.
+DETTAGLIATO: Importazione della funzione 'Assert-Contains'.
+DETTAGLIATO: Importazione della funzione 'Assert-Equal'.
+DETTAGLIATO: Importazione della funzione 'Assert-False'.
+DETTAGLIATO: Importazione della funzione 'Assert-MockCalled'.
+DETTAGLIATO: Importazione della funzione 'Assert-NotNull'.
+DETTAGLIATO: Importazione della funzione 'Assert-PathExists'.
+DETTAGLIATO: Importazione della funzione 'Assert-True'.
+DETTAGLIATO: Importazione della funzione 'Clear-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Clear-AllMocks'.
+DETTAGLIATO: Importazione della funzione 'Clear-TestEnvironment'.
+DETTAGLIATO: Importazione della funzione 'Complete-TestSession'.
+DETTAGLIATO: Importazione della funzione 'ConvertTo-ConfigV2'.
+DETTAGLIATO: Importazione della funzione 'Export-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentHealthStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentState'.
+DETTAGLIATO: Importazione della funzione 'Get-AgentStatus'.
+DETTAGLIATO: Importazione della funzione 'Get-AggregatedHealthScore'.
+DETTAGLIATO: Importazione della funzione 'Get-CoordinatedMonitoringData'.
+DETTAGLIATO: Importazione della funzione 'Get-DefaultConfiguration'.
+DETTAGLIATO: Importazione della funzione 
+'Get-MonitoringPerformanceMetrics'.
+DETTAGLIATO: Importazione della funzione 'Get-RegisteredEventCount'.
+DETTAGLIATO: Importazione della funzione 'Import-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Initialize-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Initialize-MonitoringEvents'.
+DETTAGLIATO: Importazione della funzione 'Invoke-HealthCheckWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Invoke-Test'.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' 
+includono verbi non approvati che possono renderli meno individuabili. Per
+ trovare i comandi con verbi non approvati, eseguire di nuovo il comando 
+Import-Module con il parametro Verbose. Per visualizzare l'elenco dei 
+verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Il comando 'Load-Configuration' del modulo 'TestFramework' ä 
+stato importato, tuttavia potrebbe risultare difficile individuarlo poichÇ
+ il relativo nome non include un verbo approvato. Verbi alternativi 
+suggeriti "Import".
+DETTAGLIATO: Importazione della funzione 'Load-Configuration'.
+DETTAGLIATO: Importazione della funzione 'New-Mock'.
+DETTAGLIATO: Il comando 'Process-MonitoringEvent' del modulo 
+'TestFramework' ä stato importato, tuttavia potrebbe risultare difficile 
+individuarlo poichÇ il relativo nome non include un verbo approvato. Per 
+un elenco dei verbi approvati, digitare Get-Verb.
+DETTAGLIATO: Importazione della funzione 'Process-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Register-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Remove-Mock'.
+DETTAGLIATO: Importazione della funzione 'Save-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Set-AgentLock'.
+DETTAGLIATO: Importazione della funzione 'Start-TestSession'.
+DETTAGLIATO: Importazione della funzione 'Stop-AgentWorkflow'.
+DETTAGLIATO: Importazione della funzione 'Sync-ComponentStates'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Test-AgentRunning'.
+DETTAGLIATO: Importazione della funzione 'Test-Configuration'.
+DETTAGLIATO: Importazione della funzione 'Test-ModuleDependency'.
+DETTAGLIATO: Importazione della funzione 'Test-WindowsCompatibility'.
+DETTAGLIATO: Importazione della funzione 'Unregister-EngineEvent'.
+DETTAGLIATO: Importazione della funzione 'Unregister-MonitoringEvent'.
+DETTAGLIATO: Importazione della funzione 'Update-AgentConfiguration'.
+DETTAGLIATO: Importazione della funzione 'Write-AgentLog'.
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un modulo.
+DETTAGLIATO: Export-ModuleMember skipped (not running inside a module): Il
+ cmdlet Export-ModuleMember puï essere chiamato solo dall'interno di un 
+modulo.
+DEBUG: Invoke-CompleteTestSuite started at 01/23/2026 15:53:16
+DEBUG: No TestCategories specified; running default set.
+DEBUG: IncludePerformance=False StopOnFirstFailure=True GenerateReport=True ReportPath=E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports Parallel=False ShowVerbose=False
+SimRacing Complete Test Suite Execution
+=======================================
+Started at: 2026-01-23 15:53:16
+
+Test Categories to Execute:
+  V AgentUnit
+  V AgentIntegration
+  V AgentRegression
+  V ApplicationAPI
+  V ApplicationIntegration
+
+Test reports will be saved to: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports
+
+Executing AgentUnit Tests...
+========================
+Starting SimRacing Agent Core Unit Tests
+=======================================
+
+Running agent test suite: ConfigManager
+[PASS] ConfigManager - Get-DefaultConfiguration returns valid agent config
+[PASS] ConfigManager - Test-Configuration validates agent settings correctly
+[PASS] ConfigManager - Save-Configuration and Load-Configuration work for agent
+[PASS] ConfigManager - Configuration paths are agent-specific
+[PASS] ConfigManager - Export-Configuration uses agent naming
+
+Running agent test suite: AgentCore
+[PASS] AgentCore - Test-AgentRunning detects agent instances correctly
+[PASS] AgentCore - Set-AgentLock creates lock file with correct data
+[2026-01-23 15:53:16] [Info] [Test] Test agent message
+[PASS] AgentCore - Write-AgentLog writes agent-specific logs
+[PASS] AgentCore - Get-AgentStatus provides comprehensive agent information
+[PASS] AgentCore - Clear-AgentLock removes lock file properly
+
+Agent Core Test Summary
+======================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+Starting SimRacing Agent Monitoring Unit Tests
+=============================================
+
+Running agent monitoring test suite: USBMonitoring
+[PASS] USBMonitor - Get-USBDevices returns device collection
+[PASS] USBMonitor - Get-USBHealthCheck calculates agent-specific metrics
+[PASS] USBMonitor - Initialize-USBMonitoring sets up agent monitoring
+DEBUG: WMI/Get-WmiObject mock failed: WMI service unavailable. Surface ServiceUnavailable error.
+[PASS] USBMonitor - USB operations handle WMI failures gracefully
+[PASS] USBMonitor - USB device filtering works for agent monitoring
+
+Running agent monitoring test suite: ProcessManager
+[PASS] ProcessManager - Get-ProcessHealthCheck provides agent process metrics
+[PASS] ProcessManager - Test-ManagedProcess validates agent process definitions
+[PASS] ProcessManager - Start-ManagedProcess handles agent process startup
+[PASS] ProcessManager - Get-ProcessMetrics provides agent-relevant metrics
+[PASS] ProcessManager - Calculate-ProcessHealth uses agent-specific scoring
+
+Agent Monitoring Test Summary
+============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentUnit Test Results:
+  Duration: 00:00.508
+  Passed:   20
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing AgentIntegration Tests...
+===============================
+Starting SimRacing Agent Integration Tests
+==========================================
+
+Running agent integration test suite: HealthCheckWorkflow
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-HealthCheckWorkflow (stub) called
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-USBHealthCheck returned type: System.Collections.Hashtable
+DEBUG: Get-USBHealthCheck returned type=System.Object[] value=[
+    5,
+    {
+        "value":  "\/Date(1769179996738)\/",
+        "DisplayHint":  2,
+        "DateTime":  "venerdç 23 gennaio 2026 15:53:16"
+    },
+    100,
+    5,
+    {
+        "HealthyDevices":  5,
+        "Timestamp":  {
+                          "value":  "\/Date(1769179996738)\/",
+                          "DisplayHint":  2,
+                          "DateTime":  "venerdç 23 gennaio 2026 15:53:16"
+                      },
+        "OverallHealth":  100,
+        "DeviceCount":  5
+    }
+]
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-ProcessHealthCheck returned type: System.Collections.Hashtable
+DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
+    {
+        "value":  "\/Date(1769179996763)\/",
+        "DisplayHint":  2,
+        "DateTime":  "venerdç 23 gennaio 2026 15:53:16"
+    },
+    3,
+    95,
+    3,
+    157286400,
+    {
+        "Timestamp":  {
+                          "value":  "\/Date(1769179996763)\/",
+                          "DisplayHint":  2,
+                          "DateTime":  "venerdç 23 gennaio 2026 15:53:16"
+                      },
+        "HealthyProcesses":  3,
+        "OverallHealth":  95,
+        "ProcessCount":  3,
+        "MemoryUsage":  157286400
+    }
+]
+DEBUG: ComponentResult USB result type=System.Collections.Hashtable
+DEBUG: ComponentResult Process result type=System.Collections.Hashtable
+DEBUG: Returning health result type=System.Management.Automation.PSCustomObject payload={
+    "OverallHealth":  98,
+    "ComponentResults":  [
+                             {
+                                 "Result":  {
+                                                "HealthyDevices":  5,
+                                                "Timestamp":  {
+                                                                  "value":  "\/Date(1769179996738)\/",
+                                                                  "DisplayHint":  2,
+                                                                  "DateTime":  "venerdç 23 gennaio 2026 15:53:16"
+                                                              },
+                                                "OverallHealth":  100,
+                                                "DeviceCount":  5
+                                            },
+                                 "Name":  "USB"
+                             },
+                             {
+                                 "Result":  {
+                                                "Timestamp":  {
+                                                                  "value":  "\/Date(1769179996763)\/",
+                                                                  "DisplayHint":  2,
+                                                                  "DateTime":  "venerdç 23 gennaio 2026 15:53:16"
+                                                              },
+                                                "HealthyProcesses":  3,
+                                                "OverallHealth":  95,
+                                                "ProcessCount":  3,
+                                                "MemoryUsage":  157286400
+                                            },
+                                 "Name":  "Process"
+                             }
+                         ],
+    "Timestamp":  "2026-01-23T15:53:16.7804055+01:00"
+}
+[PASS] AgentWorkflow - Agent health check workflow executes end-to-end
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Initialize-AgentWorkflow (stub) called
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Initialize-AgentConfiguration returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Initialize-USBMonitoring returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Initialize-ProcessMonitoring returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Start-AgentLogging returned type: System.Boolean
+[PASS] AgentWorkflow - Agent initialization workflow sets up all components
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Stop-AgentWorkflow (stub) called
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Stop-USBMonitoring returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Stop-ProcessMonitoring returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Save-AgentConfiguration returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Stop-AgentLogging returned type: System.Boolean
+[PASS] AgentWorkflow - Agent shutdown workflow cleanly stops all components
+DEBUG: Get-USBHealthCheck returned: <null>
+DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
+    2,
+    90,
+    2,
+    {
+        "HealthyProcesses":  2,
+        "OverallHealth":  90,
+        "ProcessCount":  2
+    }
+]
+DEBUG: ComponentResult Process result type=System.Collections.Hashtable
+DEBUG: Returning health result type=System.Management.Automation.PSCustomObject payload={
+    "OverallHealth":  90,
+    "ComponentResults":  [
+                             {
+                                 "Result":  {
+                                                "HealthyProcesses":  2,
+                                                "OverallHealth":  90,
+                                                "ProcessCount":  2
+                                            },
+                                 "Name":  "Process"
+                             }
+                         ],
+    "Timestamp":  "2026-01-23T15:53:16.8320907+01:00",
+    "ComponentErrors":  [
+                            {
+                                "Error":  "USB monitoring service unavailable",
+                                "Name":  "USB"
+                            }
+                        ]
+}
+[PASS] AgentWorkflow - Agent handles component failures gracefully
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Restart-USBMonitoring returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Stop-ProcessMonitoring returned type: System.Boolean
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Set-LoggingLevel returned type: System.Boolean
+[PASS] AgentWorkflow - Agent handles configuration changes dynamically
+
+Running agent integration test suite: MonitoringIntegration
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Get-CoordinatedMonitoringData (stub) called
+[PASS] MonitoringIntegration - USB and Process monitors coordinate data collection
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Initialize-MonitoringEvents (stub) called
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Process-MonitoringEvent (stub) invoked
+[PASS] MonitoringIntegration - Agent handles real-time monitoring events across components
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Get-AggregatedHealthScore (stub) called
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-USBHealthCheck returned type: System.Collections.Hashtable
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-ProcessHealthCheck returned type: System.Collections.Hashtable
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-SystemHealthCheck returned type: System.Collections.Hashtable
+[PASS] MonitoringIntegration - Agent aggregates health across all monitoring components
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Get-MonitoringPerformanceMetrics (stub) called
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-PerformanceCounter returned type: System.Int32
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-PerformanceCounter returned type: System.Int32
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Get-LatencyMs returned type: null
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Invoke-Mockable: Measure-Command returned type: System.TimeSpan
+[PASS] MonitoringIntegration - Agent tracks performance across monitoring components
+[2026-01-23 15:53:16] [Debug] [AdapterStubs] Sync-ComponentStates (stub) called
+[PASS] MonitoringIntegration - Agent maintains consistent state across components
+
+Agent Integration Test Summary
+==============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentIntegration Test Results:
+  Duration: 00:00.299
+  Passed:   10
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing AgentRegression Tests...
+==============================
+Starting SimRacing Agent Regression Tests
+=========================================
+
+Running agent regression test suite: CoreRegression
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Import-AgentConfiguration (stub) called with path=agent-config.json
+DEBUG: Import-AgentConfiguration Test-Path via mock returned=True
+DEBUG: Import-AgentConfiguration invoked stored mock closure (args/no-args), raw type=System.String
+DEBUG: Import-AgentConfiguration parsed obj type=System.Management.Automation.PSCustomObject
+DEBUG: Import-AgentConfiguration found MonitoringSettings.USBPollingInterval=30
+DEBUG: LoadedConfig.MonitoringSettings.USBPollingInterval = [30] (type: System.Int32)
+[PASS] ConfigRegression - Agent maintains backwards compatibility with existing config files
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Get-AgentHealthStatus (stub) called
+[PASS] APIRegression - Health check API maintains stable response format
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Get-AgentHealthStatus (stub) called
+[PASS] PerformanceRegression - Agent performance meets established benchmarks
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=dd80f614-a3f8-4552-b817-c4e85e4538b8
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=59848b8f-127a-442e-9c4f-d5acd2c1c4d5
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=78101998-6583-4e24-99ab-2dca7640c62b
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=18a2e516-6145-44bf-9ab7-1ec4095ba423
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=ef1fbd69-caef-4941-b332-a75f47810397
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=d341a38e-f87d-45e3-905b-1cdb3c007a20
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=b46ac9f0-0633-454d-bf09-8fcc98222206
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=b8142c42-63cf-4590-9f43-95530ae94901
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=56aedea4-952d-4a80-aefe-02e20340b44e
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=dc82f55b-ec1f-42c5-b767-96c40cf97dec
+[PASS] EventRegression - Agent event handling remains stable across scenarios
+DEBUG: WMI/Get-WmiObject mock failed: The RPC server is unavailable. Surface ServiceUnavailable error.
+DEBUG-CATCH: caught exception type=System.Management.Automation.ErrorRecord Category=ResourceUnavailable
+DEBUG-CATCH-DUMP: Exception full dump:
+The RPC server is unavailable
+
+
+PSMessageDetails      : 
+Exception             : System.Management.Automation.RuntimeException: 
+                        The RPC server is unavailable
+TargetObject          : 
+CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+FullyQualifiedErrorId : WMIServiceUnavailable
+ErrorDetails          : 
+InvocationInfo        : System.Management.Automation.InvocationInfo
+ScriptStackTrace      : in Get-USBDevices, E:\Workspaces\Git\SimRacing\USB
+                        DeviceManager\agent\src\modules\USBMonitor.psm1: 
+                        riga 65
+                        in <ScriptBlock>, E:\Workspaces\Git\SimRacing\USBD
+                        eviceManager\agent\SimRacingAgent.Tests\Regression
+                        \AgentRegressionTests.ps1: riga 227
+                        in Invoke-Test, E:\Workspaces\Git\SimRacing\USBDev
+                        iceManager\agent\SimRacingAgent.Tests\shared\TestF
+                        ramework.psm1: riga 16
+                        in Test-AgentCoreRegression, E:\Workspaces\Git\Sim
+                        Racing\USBDeviceManager\agent\SimRacingAgent.Tests
+                        \Regression\AgentRegressionTests.ps1: riga 197
+                        in Invoke-AgentRegressionTests, E:\Workspaces\Git\
+                        SimRacing\USBDeviceManager\agent\SimRacingAgent.Te
+                        sts\Regression\AgentRegressionTests.ps1: riga 588
+                        in Invoke-CompleteTestSuite, E:\Workspaces\Git\Sim
+                        Racing\USBDeviceManager\agent\SimRacingAgent.Tests
+                        \TestRunner.ps1: riga 172
+                        in Invoke-CICDTestSuite, E:\Workspaces\Git\SimRaci
+                        ng\USBDeviceManager\agent\SimRacingAgent.Tests\Tes
+                        tRunner.ps1: riga 496
+                        in <ScriptBlock>, E:\Workspaces\Git\SimRacing\USBD
+                        eviceManager\agent\SimRacingAgent.Tests\.__run_wra
+                        pper.ps1: riga 6
+PipelineIterationInfo : {}
+
+
+
+
+[2026-01-23 15:53:17] [Debug] [AdapterStubs] Import-AgentConfiguration (stub) called with path=test.json
+DEBUG: Import-AgentConfiguration Test-Path native returned=False
+[PASS] ErrorRegression - Agent error handling maintains consistent behavior
+
+Running agent regression test suite: CompatibilityRegression
+[PASS] CompatibilityRegression - Agent functions correctly across PowerShell versions
+[PASS] CompatibilityRegression - Agent supports expected Windows versions
+[PASS] CompatibilityRegression - Agent module dependencies remain stable
+[PASS] CompatibilityRegression - Agent CLI maintains backwards compatibility
+DEBUG: ConvertTo-ConfigV2 received V1Config = {
+    "usb_polling_interval":  30,
+    "log_level":  "info",
+    "agent_name":  "SimRacingAgent",
+    "process_monitoring":  true
+}
+DEBUG: ConvertTo-ConfigV2 lookup keys = agent_name,log_level,usb_polling_interval,process_monitoring
+DEBUG: lookup[agent_name] = SimRacingAgent (type: System.String)
+DEBUG: lookup[log_level] = info (type: System.String)
+DEBUG: lookup[usb_polling_interval] = 30 (type: System.Int32)
+DEBUG: lookup[process_monitoring] = True (type: System.Boolean)
+DEBUG: MigratedConfig.MonitoringSettings.USBPollingInterval = [30] (type: System.Int32)
+DEBUG: MigratedConfig.LoggingSettings.LogLevel = [Info] (type: System.String)
+DEBUG: MigratedConfig.MonitoringSettings.ProcessMonitoringEnabled = [True] (type: System.Boolean)
+[PASS] CompatibilityRegression - Agent handles configuration format migrations
+
+Agent Regression Test Summary
+=============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentRegression Test Results:
+  Duration: 00:00.662
+  Passed:   10
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing ApplicationAPI Tests...
+=============================
+[PASS] Application.API - Placeholder API test
+
+ApplicationAPI Test Results:
+  Duration: 00:00.013
+  Passed:   1
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing ApplicationIntegration Tests...
+=====================================
+[PASS] Application.Integration - Placeholder Integration test
+
+ApplicationIntegration Test Results:
+  Duration: 00:00.003
+  Passed:   1
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Overall Test Suite Results
+==========================
+Total Duration:    00:00:01.537
+Categories Run:    5
+Total Tests:       42
+Total Passed:      42
+Total Failed:      0
+Total Skipped:     0
+Success Rate:      100%
+Overall Status:    SUCCESS
+
+Generating Test Reports...
+DEBUG: Preparing reports; timestamp=20260123_155317; ReportPath=E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports
+DEBUG: Exporting JUnit XML to E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports\TestResults_20260123_155317.xml
+DEBUG: Exporting HTML report to E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports\TestResults_20260123_155317.html
+Reports generated:
+  XML:  E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports\TestResults_20260123_155317.xml
+  HTML: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports\TestResults_20260123_155317.html
+  JSON: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\..\..\scripts\tmp\reports\TestResults_20260123_155317.json
+
+
+Name                           Value                                      
+----                           -----                                      
+Summary                        {Skipped, TotalTests, Failed, Passed}      
+TotalDuration                  00:00:01.5374480                           
+TestCategories                 {System.Collections.Hashtable, System.Co...
+StartTime                      23/01/2026 15:53:16                        
+EndTime                        23/01/2026 15:53:17                        
+OverallSuccess                 True                                       
+True
+Trascrizione arrestata. File di output: E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\run_tests_transcript_20260123_155314.txt
+TRANSCRIPT:
+
+

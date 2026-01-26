@@ -1,0 +1,30 @@
+﻿---
+name: Check TODO centralization
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+jobs:
+  check-todos:
+    name: Fail on TODOs outside centralized list
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Find TODOs in Markdown
+        run: |
+          set -e
+          # Find TODO occurrences in .md files
+          matches=$(git grep -n -I -E "\\bTODO\\b" -- '*.md' || true)
+          # Exclude the centralized TODO file and docs archive/session folders
+          # Also ignore the legacy TODO-IMPLEMENTATION-GUIDE.md which is archived
+          filtered=$(echo "$matches" | grep -v "^docs/TODOs-collected.md" | grep -v "^docs/" | grep -v "^TODO-IMPLEMENTATION-GUIDE.md" || true)
+          if [ -n "$filtered" ]; then
+            echo "Found TODOs outside docs/TODOs-collected.md:\n"
+            echo "$filtered"
+            echo
+            echo "Action required: move actionable TODOs into docs/TODOs-collected.md or update docs/CONTRIBUTING-TODO.md with guidance."
+            exit 1
+          else
+            echo "No external TODOs found."
+          fi

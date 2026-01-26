@@ -48,12 +48,6 @@ namespace USBDeviceManager.Tests.Unit.Adapters
         [Fact]
         public async Task RunAsync_ReturnsOutputAndZeroExit()
         {
-            if (!RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-            {
-                // Skip this test on non-Windows CI runners where shell semantics differ.
-                return;
-            }
-
             var (file, args, _, _) = ResolveCommands();
             var sut = new ShellRunner();
 
@@ -66,12 +60,6 @@ namespace USBDeviceManager.Tests.Unit.Adapters
         [Fact]
         public async Task RunAsync_Cancellation_TriggersTaskCanceled()
         {
-            if (!RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-            {
-                // Skip long-running/cancellation behavior on non-Windows runners.
-                return;
-            }
-
             var (_, _, longFile, longArgs) = ResolveCommands();
             var sut = new ShellRunner();
 

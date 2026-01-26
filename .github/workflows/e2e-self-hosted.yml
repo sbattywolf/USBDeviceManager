@@ -1,0 +1,49 @@
+﻿name: E2E Self-Hosted Runner
+
+on:
+  workflow_dispatch: {}
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+jobs:
+  e2e-self-hosted:
+    # Requires a self-hosted runner with Windows label and an 'e2e' label.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on:
+      - self-hosted
+      - Windows
+      - e2e
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore USBDeviceManager.sln
+
+      - name: Validate runner prerequisites
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-e2e-runner.ps1 -RunBuild
+
+      - name: Build
+        run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
+
+      - name: Run Agent E2E tests (self-hosted)
+        run: |
+          dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Debug --logger "trx;LogFileName=AgentE2E.selfhost.trx"
+
+      - name: Upload E2E results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-e2e-selfhost
+          path: server/AgentE2E.Tests/**/TestResults/*.trx
+

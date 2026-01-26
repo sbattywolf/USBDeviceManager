@@ -1,0 +1,199 @@
+---
+name: Integration Only
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - 'chore/ci-hardening-sentinel'
+      - main
+
+env:
+  CI_BIND_ADDRESS: 127.0.0.1
+  TEST_PORT: 51879
+
+jobs:
+  integration-tests:
+    name: Integration Tests (Windows only)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: |
+          Write-Host 'Restoring NuGet packages for server/USBDeviceManager'
+          dotnet restore server/USBDeviceManager
+
+      - name: Ensure artifacts folder exists
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+
+      - name: Build server for Integration tests
+        shell: pwsh
+        run: |
+          Write-Host 'Building server/USBDeviceManager (Release) so --no-build later can use outputs'
+          dotnet build server/USBDeviceManager -c Release --no-restore
+
+      - name: Publish server (Windows)
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) { Write-Error "Published server exe missing at $exe. Ensure publish step ran and project AssemblyName is set to 'SMServer'."; exit 1 } else { Write-Host "Published server exe at $exe"; $frameworkExe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'; if (-not (Test-Path $frameworkExe)) { Copy-Item -Path $exe -Destination $frameworkExe -Force; Write-Host "Copied published exe to $frameworkExe" } else { Write-Host "$frameworkExe already exists; skipping copy" } }
+
+      - name: List published server files (Windows)
+        shell: pwsh
+        run: |
+          Write-Host 'Listing published server output tree for diagnostics:'
+          $pubDir = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          if (Test-Path $pubDir) { Get-ChildItem -Path $pubDir -Recurse -Force | Select-Object FullName,Length | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) } } else { Write-Host "Publish directory not found: $pubDir" }
+
+      - name: Start server for Integration tests (PowerShell)
+        shell: pwsh
+        run: |
+          if (Test-Path ./scripts/run-integration-noninteractive.ps1) {
+            # Run the orchestration wrapper that launches server and executes integration tests
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/run-integration-noninteractive.ps1 -Port $Env:TEST_PORT -NoStop
+          } else {
+            Write-Error 'scripts/run-integration-noninteractive.ps1 missing; cannot run integration tests.'
+            exit 1
+          }
+
+      - name: Upload integration artifacts (by OS)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}"
+          path: |
+            artifacts/**
+            scripts/tmp/**
+          overwrite: true
+
+      - name: Upload canonical integration triage artifact (dual upload)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-triage
+          path: |
+            artifacts/**
+            scripts/tmp/**
+          overwrite: true
+
+      - name: Upload integration artifacts (legacy name)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests
+          path: |
+            artifacts/**
+            scripts/tmp/**
+          overwrite: true
+
+      - name: Collect CI logs (optional)
+        if: ${{ env.COLLECT_CI_LOGS == 'true' }}
+        shell: pwsh
+        run: |
+          Write-Host "COLLECT_CI_LOGS is true; running ci-collect-logs.ps1"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\ci-collect-logs.ps1 -OutDir artifacts/ci-logs -MaxLines 500
+
+      - name: Upload CI logs artifact (optional)
+        if: ${{ env.COLLECT_CI_LOGS == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/ci-logs/**/*.zip
+          overwrite: true
+
+  integration-test-analysis:
+    name: Integration Test & Analysis
+    needs: integration-tests
+    runs-on: windows-latest
+    if: always()
+    steps:
+      - name: Checkout (for report script)
+        uses: actions/checkout@v4
+
+      - name: Download integration artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-artifacts
+          path: ./integration_artifacts
+
+      - name: Ensure artifacts dir
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          if (Test-Path ./integration_artifacts/artifacts) { Copy-Item -Path ./integration_artifacts/artifacts/* -Destination artifacts -Recurse -Force -ErrorAction SilentlyContinue }
+          if (Test-Path ./integration_artifacts/scripts/tmp) { New-Item -ItemType Directory -Force -Path scripts\tmp | Out-Null; Copy-Item -Path ./integration_artifacts/scripts/tmp/* -Destination scripts\tmp -Recurse -Force -ErrorAction SilentlyContinue }
+          # Also copy pipeline/workflow YAML for forensic debugging
+          if (Test-Path ./.github/workflows) { New-Item -ItemType Directory -Force -Path artifacts\pipeline-configuration | Out-Null; Copy-Item -Path ./.github/workflows/* -Destination artifacts\pipeline-configuration -Recurse -Force -ErrorAction SilentlyContinue }
+
+      - name: Generate integration report (PowerShell)
+        shell: pwsh
+        run: |
+          $trx = Get-ChildItem -Path artifacts -Recurse -Filter *.trx -ErrorAction SilentlyContinue | Select-Object -First 1
+          $trxPath = if ($trx) { $trx.FullName } else { 'artifacts/integration.trx' }
+          Write-Host "Using TRX: $trxPath"
+          if (Test-Path ./scripts/generate-integration-test.ps1) {
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/generate-integration-test.ps1 -TrxPath $trxPath -LauncherOut 'scripts/tmp/launcher.out' -LauncherErr 'scripts/tmp/launcher.err' -ArtifactDir 'artifacts' -OutReport 'artifacts/integration-test-report.txt' -OutHtml 'artifacts/integration-test-report.html'
+          } else {
+            Write-Host 'Report generator not found; creating minimal summary'
+            if (Test-Path $trxPath) { Select-String -Path $trxPath -Pattern '<TestMethod|outcome="Failed"' -SimpleMatch | Select-Object -First 200 | Out-File -FilePath artifacts/integration-report.txt }
+          }
+
+      - name: Create regression summary
+        shell: pwsh
+        run: |
+          $trx = Get-ChildItem -Path artifacts -Recurse -Filter *.trx -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $trx) { Write-Host 'No TRX found; skipping regression summary'; exit 0 }
+          try {
+            $xml = [xml](Get-Content $trx.FullName -Raw)
+            $counts = @{}
+            $xml.TestRun.Results.UnitTestResult | Group-Object -Property outcome | ForEach-Object { $counts[$_.Name] = $_.Count }
+            $out = 'Regression Summary:`n'
+            foreach ($k in $counts.Keys) { $out += "{0}: {1}`n" -f $k, $counts[$k] }
+            $out | Out-File -FilePath artifacts/regression-summary.txt -Encoding UTF8 -Force
+            Write-Host 'Regression summary written to artifacts/regression-summary.txt'
+          } catch { Write-Host 'Failed to parse TRX for regression summary'; }
+
+      - name: Package integration report files
+        shell: pwsh
+        run: |
+          Write-Host 'Packaging integration artifacts and logs into artifacts/integration-report-full.zip'
+          $paths = @('artifacts/*','scripts/tmp/*','integration_artifacts/*')
+          Compress-Archive -Path $paths -DestinationPath artifacts/integration-report-full.zip -Force -ErrorAction SilentlyContinue
+
+      - name: Upload final reports (report artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-report
+          path: |
+            artifacts/integration-test-report.txt
+            artifacts/integration-test-report.html
+            artifacts/regression-summary.txt
+            artifacts/integration-report-full.zip
+            artifacts/**
+          overwrite: true
+
+      - name: Upload final reports (summary by OS)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-tests-summary-${{ runner.os }}"
+          path: |
+            artifacts/integration-test-report.txt
+            artifacts/integration-test-report.html
+            artifacts/regression-summary.txt
+            artifacts/integration-report-full.zip
+            artifacts/**
+          overwrite: true

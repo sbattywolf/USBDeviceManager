@@ -1,0 +1,121 @@
+@page "/software"
+@using USBDeviceManager.Models
+@inject USBDeviceManager.Services.DashboardClient Dashboard
+@implements IDisposable
+
+<h3>Software</h3>
+<p>Start/stop managed software instances.</p>
+
+<button class="btn btn-secondary" @onclick="LoadSoftware">Load Software</button>
+
+@if (softs == null)
+{
+    <p><em>Not loaded</em></p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Executable Path</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in softs)
+                {
+                    <tr>
+                        <td>@s.Name</td>
+                        <td><code>@s.ExecutablePath</code></td>
+                        <td>
+                            <span class="badge @(s.IsEnabled ? "bg-success" : "bg-secondary")">@(s.IsEnabled ? "Enabled" : "Disabled")</span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-sm btn-success" @onclick="() => StartSoftware(s.Id)"><i class="fas fa-play"></i></button>
+                                <button class="btn btn-sm btn-danger" @onclick="() => StopSoftware(s.Id)"><i class="fas fa-stop"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    List<ManagedSoftware>? softs;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Dashboard.StartHubAsync();
+        softwareUpdatedHandler = sw =>
+        {
+            try
+            {
+                if (softs != null)
+                {
+                    var idx = softs.FindIndex(s => s.Id == sw.Id);
+                    if (idx >= 0) softs[idx] = sw;
+                    else softs.Insert(0, sw);
+                }
+                else
+                {
+                    softs = new List<ManagedSoftware> { sw };
+                }
+                InvokeAsync(StateHasChanged);
+            }
+            catch { }
+        };
+        Dashboard.SoftwareUpdated += softwareUpdatedHandler;
+
+        await LoadSoftware();
+    }
+
+    async Task LoadSoftware()
+    {
+        try
+        {
+            softs = await Dashboard.GetSoftwareAsync();
+        }
+        catch (Exception ex)
+        {
+            softs = new List<ManagedSoftware> { new ManagedSoftware { Name = "Error: " + ex.Message } };
+        }
+    }
+
+    async Task StartSoftware(int id)
+    {
+        try
+        {
+            await Dashboard.StartSoftwareAsync(id);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"StartSoftware error: {ex.Message}");
+        }
+    }
+
+    async Task StopSoftware(int id)
+    {
+        try
+        {
+            await Dashboard.StopSoftwareAsync(id);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"StopSoftware error: {ex.Message}");
+        }
+    }
+
+    public void Dispose()
+    {
+        if (softwareUpdatedHandler != null) Dashboard.SoftwareUpdated -= softwareUpdatedHandler;
+    }
+
+    private Action<ManagedSoftware>? softwareUpdatedHandler;
+}

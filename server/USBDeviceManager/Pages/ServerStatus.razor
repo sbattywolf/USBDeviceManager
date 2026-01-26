@@ -1,0 +1,506 @@
+@page "/server-status"
+@using USBDeviceManager.Services
+@inject StatusService Status
+@inject NavigationManager Nav
+@inject HttpClient Http
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<h3>Server & Agent Status</h3>
+
+<p class="text-muted">Configure the ports used by the HTTP server and the PowerShell agent. Suggested available ports are shown.</p>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>Diagnostics</h5>
+        <p class="text-muted">Run quick client-side checks to diagnose why the UI may be stuck on "Loading".</p>
+        <div class="mb-2">
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="RunHealthCheck">Check /health</button>
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="RunApiCheck">Check /api/services/running</button>
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="RunSignalRCheck">Test SignalR negotiate</button>
+            <button class="btn btn-sm btn-outline-secondary" @onclick="ClearDiagnostics">Clear</button>
+        </div>
+        <div id="diagnostics" style="max-height:180px;overflow:auto;background:#111;color:#e6e6e6;padding:8px;font-family:monospace;font-size:0.85rem;border-radius:4px;">
+            @if (clientDiagnostics == null || !clientDiagnostics.Any())
+            {
+                <div class="text-muted">No diagnostics run yet.</div>
+            }
+            else
+            {
+                @foreach (var d in clientDiagnostics)
+                {
+                    <div>@d</div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row gx-3 gy-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label">Server Port</label>
+                <input type="number" min="1024" max="65535" class="form-control" @bind="serverPort" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Agent Port</label>
+                <input type="number" min="1024" max="65535" class="form-control" @bind="agentPort" />
+            </div>
+            <div class="col-md-4 text-end">
+                <button class="btn btn-primary me-2" @onclick="ApplyPorts">Apply</button>
+                <button class="btn btn-secondary" @onclick="RefreshSuggestions">Refresh</button>
+                <button class="btn btn-outline-primary ms-2" @onclick="SaveConfig">Save</button>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <label class="form-check-label me-3"><input class="form-check-input me-1" type="checkbox" @bind="autostartServer" /> Autostart Server</label>
+            <label class="form-check-label"><input class="form-check-input me-1" type="checkbox" @bind="autostartAgent" /> Autostart Agent</label>
+        </div>
+    </div>
+</div>
+
+<h5>Suggested ports</h5>
+@if (suggestions == null)
+{
+    <p><em>Loading suggestions...</em></p>
+}
+else
+{
+    <div class="list-group mb-3">
+        @foreach (var s in suggestions)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@s.Port</strong>
+                    <span class="text-muted ms-2">@(s.IsAvailable ? "available" : "in use")</span>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="() => UseSuggestedPort(s.Port, true)">Use for Server</button>
+                    <button class="btn btn-sm btn-outline-secondary ms-1" @onclick="() => UseSuggestedPort(s.Port, false)">Use for Agent</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<h5>Live status</h5>
+<table class="table table-sm">
+    <thead>
+        <tr><th>Service</th><th>Port</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Server</td>
+            <td>@Status.ServerPort</td>
+            <td>
+                @if (serverListening == null)
+                {
+                    <em>unknown</em>
+                }
+                else if (serverListening == true)
+                {
+                    <span class="badge bg-success">listening</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">not listening</span>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>Agent</td>
+            <td>@Status.AgentPort</td>
+            <td>
+                @if (agentListening == null)
+                {
+                    <em>unknown</em>
+                }
+                else if (agentListening == true)
+                {
+                    <span class="badge bg-success">listening</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">not listening</span>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="mb-3">
+    <div class="btn-group" role="group">
+        <button class="btn btn-success" @onclick="StartServer">Start Server</button>
+        <button class="btn btn-danger" @onclick="StopServer">Stop Server</button>
+        <button class="btn btn-success ms-2" @onclick="StartAgent">Start Agent</button>
+        <button class="btn btn-danger" @onclick="StopAgent">Stop Agent</button>
+    </div>
+</div>
+
+<h5>Running processes</h5>
+<div class="mb-2">
+    <button class="btn btn-outline-secondary btn-sm me-2" @onclick="RefreshRunning">Refresh</button>
+    <button class="btn btn-outline-secondary btn-sm" @onclick="RefreshLiveStatus">Refresh Listening</button>
+</div>
+@if (runningProcesses == null)
+{
+    <p><em>Not loaded</em></p>
+}
+else if (!runningProcesses.Any())
+{
+    <div class="alert alert-secondary">No processes started by manager. Showing sample processes.</div>
+    <div class="list-group mb-3">
+        @foreach (var kv in sampleProcesses)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@kv.Key</strong>
+                    <span class="text-muted ms-2">PID: @kv.Value</span>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="() => ShowLogs(kv.Key)">View Logs</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="list-group mb-3">
+        @foreach (var kv in runningProcesses)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@kv.Key</strong>
+                    <span class="text-muted ms-2">PID: @kv.Value</span>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="() => ShowLogs(kv.Key)">View Logs</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@if (selectedProcess != null)
+{
+    <h5>Logs — @selectedProcess</h5>
+    <div class="mb-2">
+        <label class="me-2">Lines:</label>
+        <input style="width:6rem;" class="form-control d-inline-block" @bind="logLines" />
+        <label class="ms-3 me-2">Auto-refresh:</label>
+        <input type="checkbox" class="form-check-input" checked="@autoRefreshEnabled" @onchange="ToggleAutoRefresh" />
+        <label class="ms-2 me-2">Interval (s):</label>
+        <input style="width:4rem;" class="form-control d-inline-block" @bind="autoRefreshSeconds" />
+        <button class="btn btn-sm btn-outline-secondary ms-2" @onclick="RefreshLogs">Refresh</button>
+        <button class="btn btn-sm btn-outline-danger ms-2" @onclick="ClearLogs">Clear</button>
+    </div>
+    <div id="logs-panel" class="border p-2" style="height:300px;overflow:auto;background:#0b0b0b;color:#eaeaea;font-family:monospace;font-size:0.85rem;">
+        @if (selectedLogs == null)
+        {
+            <em>Loading...</em>
+        }
+        else
+        {
+            @foreach (var line in selectedLogs)
+            {
+                <div>@line</div>
+            }
+        }
+    </div>
+}
+
+@code {
+    int serverPort;
+    int agentPort;
+    IEnumerable<(int Port, bool IsAvailable)>? suggestions;
+    bool? serverListening;
+    bool? agentListening;
+    bool autostartServer;
+    bool autostartAgent;
+    Dictionary<string,int>? runningProcesses;
+    Dictionary<string,int>? sampleProcesses = new Dictionary<string,int>();
+    string? selectedProcess;
+    List<string>? selectedLogs;
+    int logLines = 200;
+    bool autoRefreshEnabled = false;
+    int autoRefreshSeconds = 2;
+
+    System.Threading.PeriodicTimer? _periodicTimer;
+    System.Threading.CancellationTokenSource? _periodicCts;
+    List<string>? clientDiagnostics = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Status != null)
+        {
+            serverPort = Status.ServerPort;
+            agentPort = Status.AgentPort;
+            var cfg = Status.GetConfig();
+            autostartServer = cfg?.AutostartServer ?? false;
+            autostartAgent = cfg?.AutostartAgent ?? false;
+        }
+        else
+        {
+            serverPort = 0;
+            agentPort = 0;
+            autostartServer = false;
+            autostartAgent = false;
+        }
+
+        await RefreshSuggestions();
+        await RefreshLiveStatus();
+    }
+
+    async Task RefreshSuggestions()
+    {
+        suggestions = await Status.GetSuggestedPortsAsync(5000, 10);
+        StateHasChanged();
+    }
+
+    async Task UseSuggestedPort(int port, bool forServer)
+    {
+        if (forServer) serverPort = port; else agentPort = port;
+        StateHasChanged();
+    }
+
+    async Task ApplyPorts()
+    {
+        Status.SetPorts(serverPort, agentPort);
+        await RefreshLiveStatus();
+    }
+
+    async Task SaveConfig()
+    {
+        var cfg = new USBDeviceManager.Services.ServiceConfig
+        {
+            ServerPort = serverPort,
+            AgentPort = agentPort,
+            AutostartServer = autostartServer,
+            AutostartAgent = autostartAgent
+        };
+        var r = await Http.PostAsJsonAsync("/api/services/config", cfg);
+        if (r.IsSuccessStatusCode) await RefreshLiveStatus();
+    }
+
+    async Task StartServer()
+    {
+        var r = await Http.PostAsJsonAsync("/api/services/start/server", new { Port = Status.ServerPort });
+        if (r.IsSuccessStatusCode) await RefreshLiveStatus();
+    }
+
+    async Task StopServer()
+    {
+        await Http.PostAsync($"/api/services/stop/server", null);
+        await RefreshLiveStatus();
+    }
+
+    async Task StartAgent()
+    {
+        var r = await Http.PostAsJsonAsync("/api/services/start/agent", new { Port = Status.AgentPort });
+        if (r.IsSuccessStatusCode) await RefreshLiveStatus();
+    }
+
+    async Task StopAgent()
+    {
+        await Http.PostAsync($"/api/services/stop/agent", null);
+        await RefreshLiveStatus();
+    }
+
+    async Task RefreshLiveStatus()
+    {
+        serverListening = await Status.IsServiceListeningAsync(Status.ServerPort);
+        agentListening = await Status.IsServiceListeningAsync(Status.AgentPort);
+        StateHasChanged();
+    }
+
+    async Task RefreshRunning()
+    {
+        try
+        {
+            runningProcesses = await Http.GetFromJsonAsync<Dictionary<string,int>>("/api/services/running");
+        }
+        catch { runningProcesses = new Dictionary<string,int>(); }
+        // If none returned, attempt to load sample processes from wwwroot
+        if (runningProcesses != null && !runningProcesses.Any())
+        {
+            try
+            {
+                var samples = await Http.GetFromJsonAsync<Dictionary<string,int>>("sample-data/processes.json");
+                if (samples != null) { sampleProcesses = samples; }
+            }
+            catch { sampleProcesses = new Dictionary<string,int>{ {"sample-device-1", 1234}, {"sample-agent-1", 4321} }; }
+        }
+        StateHasChanged();
+    }
+
+    void AddDiagnostic(string s)
+    {
+        if (clientDiagnostics == null) clientDiagnostics = new List<string>();
+        clientDiagnostics.Insert(0, $"[{DateTime.Now:HH:mm:ss}] {s}");
+        if (clientDiagnostics.Count > 200) clientDiagnostics.RemoveRange(200, clientDiagnostics.Count - 200);
+        InvokeAsync(StateHasChanged);
+    }
+
+    void ClearDiagnostics()
+    {
+        clientDiagnostics = new List<string>();
+        StateHasChanged();
+    }
+
+    async Task RunHealthCheck()
+    {
+        AddDiagnostic("Checking /health...");
+        try
+        {
+            var r = await Http.GetAsync("/health");
+            AddDiagnostic($"GET /health -> {(int)r.StatusCode} {r.ReasonPhrase}");
+        }
+        catch (Exception ex)
+        {
+            AddDiagnostic($"/health error: {ex.GetType().Name}: {ex.Message}");
+        }
+    }
+
+    async Task RunApiCheck()
+    {
+        AddDiagnostic("Checking /api/services/running...");
+        try
+        {
+            var r = await Http.GetAsync("/api/services/running");
+            AddDiagnostic($"GET /api/services/running -> {(int)r.StatusCode} {r.ReasonPhrase}");
+            if (r.IsSuccessStatusCode)
+            {
+                var body = await r.Content.ReadAsStringAsync();
+                AddDiagnostic($"Body: {body.Substring(0, Math.Min(400, body.Length)).Replace('\n',' ')}");
+            }
+        }
+        catch (Exception ex)
+        {
+            AddDiagnostic($"/api/services/running error: {ex.GetType().Name}: {ex.Message}");
+        }
+    }
+
+    async Task RunSignalRCheck()
+    {
+        AddDiagnostic("Testing SignalR negotiate endpoint... (GET /hubs/monitoring/negotiate)");
+        try
+        {
+            // Blazor server uses different negotiate patterns; try a GET to hub path to detect 404/405
+            var r = await Http.GetAsync("/hubs/monitoring/negotiate");
+            AddDiagnostic($"GET /hubs/monitoring/negotiate -> {(int)r.StatusCode} {r.ReasonPhrase}");
+            var body = await r.Content.ReadAsStringAsync();
+            if (!string.IsNullOrEmpty(body)) AddDiagnostic($"Body: {body.Substring(0, Math.Min(800, body.Length)).Replace('\n',' ')}");
+        }
+        catch (Exception ex)
+        {
+            AddDiagnostic($"SignalR negotiate error: {ex.GetType().Name}: {ex.Message}");
+        }
+    }
+
+    async Task ShowLogs(string name)
+    {
+        selectedProcess = name;
+        try
+        {
+            if (name != null && name.StartsWith("sample-"))
+            {
+                // load local sample logs
+                var sample = await Http.GetFromJsonAsync<List<string>>("sample-data/logs.json");
+                selectedLogs = sample ?? new List<string>{"(no sample logs)"};
+            }
+            else
+            {
+                selectedLogs = await Http.GetFromJsonAsync<List<string>>($"/api/services/logs/{name}?maxLines={logLines}");
+            }
+        }
+        catch { selectedLogs = new List<string>{"Failed to load logs."}; }
+        StateHasChanged();
+        // allow UI to render, then scroll
+        await Task.Delay(50);
+        try { await JS.InvokeVoidAsync("logsScroll.scrollIfNearBottom", "logs-panel", 150); } catch { }
+    }
+
+    async Task RefreshLogs()
+    {
+        if (selectedProcess != null) await ShowLogs(selectedProcess);
+    }
+
+    async Task ClearLogs()
+    {
+        if (selectedProcess != null)
+        {
+            await Http.PostAsync($"/api/services/logs/{selectedProcess}/clear", null);
+            selectedLogs = new List<string>();
+            StateHasChanged();
+        }
+    }
+
+    async Task ToggleAutoRefresh(ChangeEventArgs? e)
+    {
+        if (e != null && e.Value is bool b)
+        {
+            autoRefreshEnabled = b;
+        }
+        else
+        {
+            autoRefreshEnabled = !autoRefreshEnabled;
+        }
+
+        if (autoRefreshEnabled)
+        {
+            StartAutoRefresh();
+        }
+        else
+        {
+            await StopAutoRefresh();
+        }
+    }
+
+    void StartAutoRefresh()
+    {
+        if (_periodicTimer != null) return;
+        _periodicCts = new System.Threading.CancellationTokenSource();
+        _periodicTimer = new System.Threading.PeriodicTimer(TimeSpan.FromSeconds(Math.Max(1, autoRefreshSeconds)));
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                while (await _periodicTimer!.WaitForNextTickAsync(_periodicCts.Token))
+                {
+                    try
+                    {
+                        await InvokeAsync(async () => await RefreshLogs());
+                    }
+                    catch { }
+                }
+            }
+            catch (OperationCanceledException) { }
+            catch { }
+        });
+    }
+
+    async Task StopAutoRefresh()
+    {
+        try
+        {
+            _periodicCts?.Cancel();
+            _periodicTimer?.Dispose();
+        }
+        catch { }
+        finally
+        {
+            _periodicTimer = null;
+            _periodicCts?.Dispose();
+            _periodicCts = null;
+        }
+        await Task.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await StopAutoRefresh();
+    }
+}

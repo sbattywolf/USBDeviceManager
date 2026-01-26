@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc.Testing;
 using USBDeviceManager.Models;
 using USBDeviceManager.Tests.Fixtures;
@@ -77,12 +76,6 @@ namespace USBDeviceManager.Tests.Functional
     [Fact]
     public async Task SimRacingWorkflow_SetupDeviceAndSoftwareWithAutomation_ShouldWorkEndToEnd()
     {
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            // Skip Windows-specific end-to-end workflows on non-Windows CI runners
-            return;
-        }
-
         // Arrange - Start with clean slate
         await _factory.ResetDatabaseAsync();
 
@@ -172,12 +165,6 @@ namespace USBDeviceManager.Tests.Functional
     [Fact]
     public async Task MultiDeviceRacingSetup_ComplexAutomation_ShouldHandleMultipleDevicesAndSoftware()
     {
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            // Skip Windows-specific multi-device automation on non-Windows runners
-            return;
-        }
-
         // Arrange
         await _factory.ResetDatabaseAsync();
 
@@ -287,12 +274,6 @@ namespace USBDeviceManager.Tests.Functional
     [Fact]
     public async Task SystemHealthMonitoring_ContinuousMonitoring_ShouldTrackSystemMetrics()
     {
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            // Monitoring endpoints may access Windows-specific drives; skip on non-Windows
-            return;
-        }
-
         // Arrange
         await _factory.ResetDatabaseAsync();
 
@@ -378,12 +359,6 @@ namespace USBDeviceManager.Tests.Functional
     [Fact]
     public async Task PerformanceUnderLoad_MultipleSimultaneousRequests_ShouldMaintainResponsiveness()
     {
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            // Performance/load tests exercise Windows-only monitoring; skip on non-Windows
-            return;
-        }
-
         // Arrange
         await _factory.ResetDatabaseAsync();
         await _factory.SeedTestDataAsync();

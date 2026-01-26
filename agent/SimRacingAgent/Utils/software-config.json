@@ -1,0 +1,36 @@
+{
+  "Software": [
+    {
+      "Name": "iRacing",
+      "ExecutablePath": "C:\\Program Files (x86)\\iRacing\\iRacingLauncher.exe",
+      "Arguments": "",
+      "WorkingDirectory": "C:\\Program Files (x86)\\iRacing",
+      "AutoStart": false,
+      "IsEnabled": true
+    },
+    {
+      "Name": "Assetto Corsa Competizione",
+      "ExecutablePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64\\AC2-Win64-Shipping.exe",
+      "Arguments": "",
+      "WorkingDirectory": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione",
+      "AutoStart": false,
+      "IsEnabled": true
+    },
+    {
+      "Name": "SimHub",
+      "ExecutablePath": "C:\\Program Files\\SimHub\\SimHubWPF.exe",
+      "Arguments": "",
+      "WorkingDirectory": "C:\\Program Files\\SimHub",
+      "AutoStart": false,
+      "IsEnabled": true
+    },
+    {
+      "Name": "CrewChief",
+      "ExecutablePath": "C:\\Program Files\\CrewChief\\CrewChiefV4.exe",
+      "Arguments": "",
+      "WorkingDirectory": "C:\\Program Files\\CrewChief",
+      "AutoStart": false,
+      "IsEnabled": true
+    }
+  ]
+}

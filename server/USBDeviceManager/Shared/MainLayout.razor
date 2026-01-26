@@ -1,0 +1,17 @@
+@inherits Microsoft.AspNetCore.Components.LayoutComponentBase
+
+<div class="main-layout">
+  <header style="background:#222;color:#fff;padding:12px">USB Device Manager</header>
+  <div style="display:flex;">
+    <nav style="width:220px;padding:12px;background:#f4f4f4;"> 
+      <!-- simple placeholder navigation -->
+      <ul style="list-style:none;padding:0;margin:0">
+        <li><a href="/">Overview</a></li>
+        <li><a href="/devices">Devices</a></li>
+        <li><a href="/software">Software</a></li>
+        <li><a href="/logs">Logs</a></li>
+      </ul>
+    </nav>
+    <main style="flex:1;padding:12px">@Body</main>
+  </div>
+</div>

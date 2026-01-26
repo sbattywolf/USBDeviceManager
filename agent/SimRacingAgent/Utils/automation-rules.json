@@ -1,0 +1,98 @@
+{
+  "Rules": [
+    {
+      "Id": "start-simhub-on-wheel-connect",
+      "Name": "Start SimHub on Wheel Connect",
+      "Description": "Automatically start SimHub when a racing wheel is connected",
+      "TriggerType": "Device",
+      "TriggerConfig": {
+        "DeviceType": "USB",
+        "Event": "Connected"
+      },
+      "Conditions": {
+        "Device.Name": {
+          "Operator": "Contains",
+          "Value": "wheel"
+        }
+      },
+      "Actions": [
+        {
+          "Type": "StartSoftware",
+          "Config": {
+            "SoftwareName": "SimHub"
+          }
+        },
+        {
+          "Type": "Log",
+          "Config": {
+            "Message": "Racing wheel connected - started SimHub",
+            "Level": "Info"
+          }
+        }
+      ],
+      "IsEnabled": true
+    },
+    {
+      "Id": "daily-health-check",
+      "Name": "Daily Health Check",
+      "Description": "Perform comprehensive health check every day at 9 AM",
+      "TriggerType": "Schedule",
+      "TriggerConfig": {
+        "Schedule": {
+          "Type": "Daily",
+          "Time": "09:00:00"
+        }
+      },
+      "Conditions": {},
+      "Actions": [
+        {
+          "Type": "Log",
+          "Config": {
+            "Message": "Performing daily health check",
+            "Level": "Info"
+          }
+        },
+        {
+          "Type": "SendNotification",
+          "Config": {
+            "Title": "Daily Health Check",
+            "Message": "System health check completed"
+          }
+        }
+      ],
+      "IsEnabled": true
+    },
+    {
+      "Id": "high-cpu-alert",
+      "Name": "High CPU Usage Alert",
+      "Description": "Alert when CPU usage exceeds 90%",
+      "TriggerType": "Health",
+      "TriggerConfig": {
+        "Severity": "Critical"
+      },
+      "Conditions": {
+        "Metrics.System.CPU.Usage": {
+          "Operator": "GreaterThan",
+          "Value": "90"
+        }
+      },
+      "Actions": [
+        {
+          "Type": "SendNotification",
+          "Config": {
+            "Title": "High CPU Usage Alert",
+            "Message": "CPU usage is critically high"
+          }
+        },
+        {
+          "Type": "Log",
+          "Config": {
+            "Message": "High CPU usage detected",
+            "Level": "Warning"
+          }
+        }
+      ],
+      "IsEnabled": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "Thresholds": {
+    "CPU": {
+      "Warning": 80,
+      "Critical": 95
+    },
+    "Memory": {
+      "Warning": 85,
+      "Critical": 95
+    },
+    "Disk": {
+      "Warning": 85,
+      "Critical": 95
+    },
+    "Temperature": {
+      "Warning": 70,
+      "Critical": 85
+    }
+  },
+  "MonitoringInterval": 30,
+  "HistoryRetention": 100,
+  "AlertSettings": {
+    "EnableNotifications": true,
+    "AlertCooldown": 300,
+    "CriticalAlertCooldown": 60
+  }
+}

@@ -1,0 +1,140 @@
+---
+on:
+  workflow_call:
+    inputs:
+      unit_artifact:
+        type: string
+        required: false
+        default: 'dotnet-unit-tests'
+      integration_artifact:
+        type: string
+        required: false
+        default: 'dotnet-integration'
+      e2e_artifact:
+        type: string
+        required: false
+        default: 'dotnet-e2e'
+      artifact_os:
+        type: string
+        required: false
+        default: 'ubuntu-latest'
+
+jobs:
+  analyze:
+    name: Analyze Test Results
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download unit artifacts (primary)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.unit_artifact }}-${{ inputs.artifact_os }}
+          path: artifacts/unit/${{ inputs.artifact_os }}
+
+      - name: Download unit artifacts (fallback)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.unit_artifact }}
+          path: artifacts/unit/fallback
+
+      - name: Download integration artifacts (primary)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.integration_artifact }}-${{ inputs.artifact_os }}
+          path: artifacts/integration/${{ inputs.artifact_os }}
+
+      - name: "Download integration artifacts (fallback: integration-tests-${{ inputs.artifact_os }})"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-tests-${{ inputs.artifact_os }}
+          path: artifacts/integration/fallback-1
+
+      - name: "Download integration artifacts (fallback: integration-tests)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-tests
+          path: artifacts/integration/fallback-2
+
+      - name: "Download integration artifacts (fallback: dotnet-integration)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: dotnet-integration
+          path: artifacts/integration/fallback-3
+
+      - name: Download integration artifacts (fallback)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.integration_artifact }}
+          path: artifacts/integration/fallback
+
+      - name: Download e2e artifacts (best-effort)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.e2e_artifact }}-${{ inputs.artifact_os }}
+          path: artifacts/e2e/${{ inputs.artifact_os }}
+
+      - name: "Download e2e artifacts (fallbacks)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.e2e_artifact }}
+          path: artifacts/e2e/fallback
+
+      - name: List downloaded artifacts for diagnostics
+        shell: bash
+        run: |
+          echo 'Artifacts present under artifacts/:'
+          find artifacts -maxdepth 3 -type f -print || true
+
+      - name: Convert TRX to HTML summary (best-effort)
+        shell: bash
+        run: |
+          python3 --version || true
+          if [ -f scripts/ci/trx_to_html.py ]; then
+            mkdir -p artifacts || true
+            python3 scripts/ci/trx_to_html.py --input-dir artifacts --out artifacts/trx-summary.html || true
+          else
+            echo 'No trx_to_html.py; skipping TRX->HTML conversion'
+          fi
+
+      - name: Collect DB dumps (best-effort)
+        shell: bash
+        run: |
+          mkdir -p artifacts/db-dumps || true
+          # Copy any .db files found in downloaded artifacts into artifacts/db-dumps (preserve path)
+          find . -type f -name '*.db' -print0 | xargs -0 -I{} bash -lc 'mkdir -p "artifacts/db-dumps/$(dirname "{}")" 2>/dev/null || true; cp -f "{}" "artifacts/db-dumps/{}" 2>/dev/null || true' || true
+
+      - name: Run analysis scripts
+        shell: bash
+        run: |
+          set -euo pipefail || true
+          python3 --version || true
+          if [ -f scripts/ci-analyze.py ]; then
+            python3 scripts/ci-analyze.py || true
+          else
+            echo 'No scripts/ci-analyze.py found; skipping analyzer'
+          fi
+          if [ -f scripts/enrich-summary.py ] && [ -f tests-summary.json ]; then
+            python3 scripts/enrich-summary.py --src tests-summary.json --out-dir artifacts/enriched || true
+          fi
+
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-results-${{ github.run_id }}
+          path: |
+            artifacts/enriched/**
+            artifacts/unit/**
+            artifacts/integration/**
+            artifacts/trx-summary.html
+            artifacts/db-dumps/**
