@@ -1,0 +1,58 @@
+name: CI Unit-Only Verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      collect_ci_logs:
+        description: 'Enable CI logs collection for this run (true/false)'
+        required: false
+        default: 'false'
+
+jobs:
+  unit-and-aggregate:
+    name: Unit tests and aggregator
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        shell: pwsh
+        run: |
+          dotnet restore USBDeviceManager.sln --verbosity minimal
+
+      - name: Build
+        shell: pwsh
+        run: |
+          dotnet build USBDeviceManager.sln -c Release --no-restore
+
+      - name: Run unit tests (produce TRX)
+        shell: pwsh
+        run: |
+          $out = "artifacts/test-results/unit/${{ runner.os }}"
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          dotnet test -c Release --no-build --results-directory $out --logger "trx;LogFileName=unit-test-results.trx"
+
+      - name: Create canonical all-tests.trx (first TRX)
+        shell: pwsh
+        run: |
+          $trxFiles = Get-ChildItem -Path artifacts -Recurse -Filter *.trx -File -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($trxFiles) {
+            New-Item -ItemType Directory -Path artifacts/test-results -Force | Out-Null
+            Copy-Item -Path $trxFiles.FullName -Destination artifacts/test-results/all-tests.trx -Force
+            Write-Host "Created artifacts/test-results/all-tests.trx from $($trxFiles.FullName)"
+          } else {
+            Write-Host "No TRX files found to create all-tests.trx"
+          }
+
+      - name: Upload consolidated test-results artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-all
+          path: artifacts/test-results/**
+          overwrite: true
