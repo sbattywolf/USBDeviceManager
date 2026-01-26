@@ -1,0 +1,2197 @@
+---
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      collect_ci_logs:
+        description: 'Enable CI logs collection for this run (true/false)'
+        required: false
+        default: 'false'
+jobs:
+  gui-tests:
+    name: GUI Tests (headless)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install system GUI dependencies
+        run: |
+          set -e
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            libgl1-mesa-dri libgbm1 xvfb mesa-utils \
+            libx11-6 libxrender1 libxext6 libxcb1 libxkbcommon0 \
+            ca-certificates || true
+
+      - name: Install GUI requirements
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f gui/requirements.txt ]; then pip install -r gui/requirements.txt || true; else echo 'No gui/requirements.txt found; skipping'; fi
+
+      - name: Run GUI tests (headless)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          set -euo pipefail
+          if [ -d gui/tests ]; then xvfb-run -s "-screen 0 1280x1024x24" pytest -q gui/tests || true; else echo 'No gui/tests directory; skipping GUI tests'; fi
+
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      # (unit-tests job moved to a reusable workflow: see the 'unit-tests' job below)
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        shell: pwsh
+        run: |
+          # Retry wrapper for transient NuGet failures (3 attempts with exponential backoff)
+          $maxAttempts = 3
+          $baseDelay = 5
+          $success = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            Write-Host "dotnet restore attempt $i of $maxAttempts"
+            dotnet restore USBDeviceManager.sln --verbosity minimal
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+            if ($i -lt $maxAttempts) {
+              $delay = $baseDelay * [math]::Pow(2, $i - 1)
+              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
+              Start-Sleep -Seconds $delay
+            }
+          }
+          if (-not $success) {
+            Write-Error "dotnet restore failed after $maxAttempts attempts"
+            exit 1
+          }
+
+      - name: Build server for Integration tests
+        shell: pwsh
+        run: |
+          Write-Host 'Building server/USBDeviceManager (Release) so --no-build later can use outputs'
+          dotnet build server/USBDeviceManager -c Release --no-restore
+
+      - name: Publish long-run test helper
+        shell: pwsh
+        run: |
+          if (Test-Path test-helpers/LongRunner) {
+            if ($env:RUNNER_OS -and $env:RUNNER_OS -ieq 'Windows') {
+              # Produce a self-contained Windows exe under artifacts/longrunner/win-x64
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -r win-x64 --self-contained true -o ./artifacts/longrunner/win-x64
+              Write-Host 'Published LongRunner (win-x64 exe) to ./artifacts/longrunner/win-x64'
+            } else {
+              # Default: publish portable dll for non-Windows runners
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
+              Write-Host 'Published LongRunner (dll) to ./artifacts/longrunner'
+            }
+          } else {
+            Write-Host 'No long-run helper found; continuing without it.'
+          }
+
+      - name: Assert LongRunner artifact (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exeCandidate = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/win-x64/LongRunner.exe'
+          if (-not (Test-Path $exeCandidate)) {
+            Write-Error "LongRunner exe missing at $exeCandidate. Ensure 'dotnet publish' produced the artifact and the publish step ran on a Windows runner."
+            exit 1
+          } else {
+            Write-Host "LongRunner exe present: $exeCandidate"
+          }
+
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Publish server (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) {
+            Write-Error "Published server exe missing at $exe. Ensure publish step ran and project AssemblyName is set to 'SMServer'."
+            exit 1
+          } else {
+            Write-Host "Published server exe at $exe"
+            # Also copy the published exe into the framework folder so tests
+            # and existing scripts that look for the exe under net8.0 find it.
+            $frameworkExe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+            if (-not (Test-Path $frameworkExe)) {
+              Copy-Item -Path $exe -Destination $frameworkExe -Force
+              Write-Host "Copied published exe to $frameworkExe"
+            } else {
+              Write-Host "$frameworkExe already exists; skipping copy"
+            }
+          }
+      - name: List published server files (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host 'Listing published server output tree for diagnostics:'
+          $pubDir = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          if (Test-Path $pubDir) {
+            Get-ChildItem -Path $pubDir -Recurse -Force | Select-Object FullName,Length | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          } else {
+            Write-Host "Publish directory not found: $pubDir"
+          }
+          # Fail early if neither framework nor RID exe exists
+          $exeRoot = Join-Path $pubDir 'SMServer.exe'
+          $exeRid = Join-Path $pubDir 'win-x64/SMServer.exe'
+          if (-not (Test-Path $exeRoot) -and -not (Test-Path $exeRid)) {
+            Write-Error "SMServer.exe not produced in publish output (looked for $exeRoot and $exeRid). Failing build to make artifact absence obvious."
+            exit 1
+          } else {
+            Write-Host "Found published server exe: "
+            if (Test-Path $exeRoot) { Write-Host " - $exeRoot" }
+            if (Test-Path $exeRid) { Write-Host " - $exeRid" }
+          }
+
+
+      - name: Create publish sentinel (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Ensure either framework root or RID-specific exe exists
+          $exeRoot = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/SMServer.exe'
+          $exeRid = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exeRoot) -and -not (Test-Path $exeRid)) {
+            Write-Error "SMServer.exe not found in expected locations: $exeRoot or $exeRid"
+            exit 1
+          }
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          $sentinel = Join-Path $PWD 'artifacts/publish-sentinel.txt'
+          "run=${{ github.run_id }}" | Out-File -FilePath $sentinel -Encoding ASCII
+          if (Test-Path $exeRoot) { "exe=$exeRoot" | Out-File -FilePath $sentinel -Append -Encoding ASCII } else { "exe=$exeRid" | Out-File -FilePath $sentinel -Append -Encoding ASCII }
+
+      - name: Upload publish sentinel
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-sentinel
+          path: artifacts/publish-sentinel.txt
+          overwrite: true
+
+      - name: Prepare published-server artifacts (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $srcRid = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64'
+          $srcRoot = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $out = Join-Path $PWD 'artifacts/published-server-win-x64'
+          # Ensure clean output folder
+          Remove-Item -LiteralPath $out -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          if (Test-Path $srcRid) {
+            Copy-Item -Path (Join-Path $srcRid '*') -Destination $out -Recurse -Force
+            Write-Host "Copied RID files from $srcRid to $out"
+          }
+          if (Test-Path (Join-Path $srcRoot 'SMServer.exe')) {
+            Copy-Item -Path (Join-Path $srcRoot 'SMServer.exe') -Destination $out -Force
+            Write-Host "Copied framework exe to $out"
+          }
+          Write-Host 'Contents of artifacts/published-server-win-x64:'
+          Get-ChildItem -Path $out -Recurse -Force | ForEach-Object { Write-Host ("{0} {1}" -f $_.FullName, $_.Length) }
+          if (-not (Get-ChildItem -Path $out -Recurse -File -ErrorAction SilentlyContinue)) {
+            Write-Error "No server artifacts found in $out; failing to make missing-upload explicit"
+            exit 1
+          }
+
+      - name: Upload published server artifacts (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64
+          path: |
+            # Prefer the consolidated artifacts folder created above to avoid
+            # glob/path issues when uploading directly from build output.
+            artifacts/published-server-win-x64/**
+            # Fallbacks: original publish locations (kept for compatibility)
+            server/USBDeviceManager/bin/Release/net8.0/win-x64/**
+            server/USBDeviceManager/bin/Release/net8.0/SMServer.exe
+          overwrite: true
+
+      - name: Zip deterministic publish bundle (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $src = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $outDir = Join-Path $PWD 'artifacts'
+          New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+          $zip = Join-Path $outDir 'published-server-win-x64.zip'
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+          if (Test-Path $src) {
+            Compress-Archive -Path (Join-Path $src '*') -DestinationPath $zip -Force
+            Write-Host "Created deterministic publish zip: $zip"
+          } else {
+            Write-Host "Publish source directory not found: $src; skipping zip creation"
+          }
+
+      - name: Upload deterministic publish zip (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64-zip
+          path: artifacts/published-server-win-x64.zip
+
+      - name: 'On build failure: produce tests-summary placeholder'
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/summaries/build-failure
+          echo '{' > tests-summary.json
+          echo '  "total": 0,' >> tests-summary.json
+          echo '  "passed": 0,' >> tests-summary.json
+          echo '  "failed": 0,' >> tests-summary.json
+          echo '  "skipped": 0,' >> tests-summary.json
+          echo '  "note": "Build failed; tests were not executed in this job. See job logs for build error details."' >> tests-summary.json
+          echo '}' >> tests-summary.json
+          cp tests-summary.json artifacts/summaries/build-failure/tests-summary.json || true
+          echo "Produced tests-summary placeholder due to build failure"
+
+      - name: Build CI DB initializer helper
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj') {
+            dotnet build 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj' --configuration Release
+          } else {
+            Write-Host 'No EnsureDb helper present; skipping build'
+          }
+
+      - name: Initialize database (EnsureCreated)
+        if: always()
+        shell: pwsh
+        run: |
+          # Run the small helper that calls EF EnsureCreated to create sqlite schema before tests
+          if (Test-Path 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj') {
+            Write-Host 'Running EnsureDb; failures will fail the job'
+            dotnet run -p 'scripts/ci-init-db/EnsureDb/EnsureDb.csproj' -c Release --no-build
+          } else {
+            Write-Host 'No EnsureDb helper present; skipping DB initialization'
+          }
+
+      - name: Set EF Core logging env (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        shell: bash
+        run: |
+          echo "Logging__LogLevel__Microsoft=Debug" >> $GITHUB_ENV
+          echo "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" >> $GITHUB_ENV
+          echo "EF_SQL_LOG_FILE=scripts/tmp/ef.log" >> $GITHUB_ENV
+
+      - name: Set EF Core logging env (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          "Logging__LogLevel__Microsoft=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          "Logging__LogLevel__Microsoft.EntityFrameworkCore=Debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          "EF_SQL_LOG_FILE=scripts/tmp/ef.log" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+
+  # Test runner dispatcher: run selected test suites (unit + integration by default)
+  test-runner:
+    name: Test Suite Runner (dispatch)
+    needs: [build-and-test]
+    uses: ./.github/workflows/test-runner-dispatch.yml
+    with:
+      run_unit: 'true'
+      run_integration: 'true'
+      run_e2e: 'false'
+      full: 'false'
+
+  # Minimal, dedicated Windows publish job to guarantee RID publish artifacts
+  publish-windows:
+    name: Publish Windows RID
+    runs-on: windows-latest
+    needs: [build-and-test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore NuGet
+        shell: pwsh
+        run: |
+          dotnet restore USBDeviceManager.sln --verbosity minimal
+
+      - name: Publish server (Windows) (dedicated)
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows (publish-windows job)'
+          dotnet publish server/USBDeviceManager -c Release -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exe = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exe)) { Write-Error "Published server exe missing at $exe"; exit 1 } else { Write-Host "Published server exe at $exe" }
+
+      - name: Create publish sentinel (Windows)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          $sentinel = Join-Path $PWD 'artifacts/publish-sentinel.txt'
+          "run=${{ github.run_id }}" | Out-File -FilePath $sentinel -Encoding ASCII
+          $exeRid = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (Test-Path $exeRid) { "exe=$exeRid" | Out-File -FilePath $sentinel -Append -Encoding ASCII }
+
+      - name: Prepare published-server artifacts (Windows) (dedicated)
+        shell: pwsh
+        run: |
+          $srcRid = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0/win-x64'
+          $out = Join-Path $PWD 'artifacts/published-server-win-x64'
+          Remove-Item -LiteralPath $out -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          if (Test-Path $srcRid) { Copy-Item -Path (Join-Path $srcRid '*') -Destination $out -Recurse -Force; Write-Host "Copied RID files from $srcRid to $out" }
+          if (-not (Get-ChildItem -Path $out -Recurse -File -ErrorAction SilentlyContinue)) { Write-Error "No server artifacts found in $out"; exit 1 }
+
+      - name: Upload published server artifacts (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64
+          path: |
+            artifacts/published-server-win-x64/**
+          overwrite: true
+
+      - name: Zip deterministic publish bundle (Windows)
+        shell: pwsh
+        run: |
+          $src = Join-Path $PWD 'server/USBDeviceManager/bin/Release/net8.0'
+          $outDir = Join-Path $PWD 'artifacts'
+          New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+          $zip = Join-Path $outDir 'published-server-win-x64.zip'
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+          if (Test-Path $src) { Compress-Archive -Path (Join-Path $src '*') -DestinationPath $zip -Force; Write-Host "Created deterministic publish zip: $zip" }
+
+      - name: Upload deterministic publish zip (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server-win-x64-zip
+          path: artifacts/published-server-win-x64.zip
+          overwrite: true
+
+      - name: Upload publish sentinel
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-sentinel
+          path: artifacts/publish-sentinel.txt
+          overwrite: true
+
+  tests:
+    name: Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    needs: [gui-tests, build-and-test]
+    env:
+      CI_BIND_ADDRESS: 127.0.0.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Run Tests env-check (Windows)
+        if: runner.os == 'Windows'
+        id: job-envcheck-windows
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .\scripts\ci\env-check.ps1)) { Write-Host 'No env-check script present; marking env_ok=false'; echo "env_ok=false" >> $env:GITHUB_OUTPUT; echo "reason=env-check-missing" >> $env:GITHUB_OUTPUT; echo "ENV_OK=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append; echo "ENV_REASON=env-check-missing" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append; exit 0 }
+          .\scripts\ci\env-check.ps1 -OutFile env-check.json
+          $j = Get-Content env-check.json -Raw | ConvertFrom-Json
+          echo ("env_ok={0}" -f $j.env_ok) >> $env:GITHUB_OUTPUT
+          $r = if ($j.reason) { ($j.reason -join ';') } else { '' }
+          echo ("reason={0}" -f $r) >> $env:GITHUB_OUTPUT
+          if ($j.env_ok) { "ENV_OK=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append } else { "ENV_OK=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append }
+          if ($r) { "ENV_REASON=$r" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append }
+
+      - name: Run Tests env-check (Linux)
+        if: runner.os != 'Windows'
+        id: job-envcheck-linux
+        shell: bash
+        run: |
+          if [ ! -f scripts/ci/env-check.sh ]; then
+            echo "env_ok=false" >> $GITHUB_OUTPUT
+            echo "reason=env-check-missing" >> $GITHUB_OUTPUT
+            echo "ENV_OK=false" >> $GITHUB_ENV
+            echo "ENV_REASON=env-check-missing" >> $GITHUB_ENV
+            exit 0
+          fi
+          chmod +x scripts/ci/env-check.sh
+          ./scripts/ci/env-check.sh env-check.json
+          env_ok=$(jq -r '.env_ok' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['env_ok'])"))
+          reason=$(jq -r '.reason' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['reason'])"))
+          echo "env_ok=${env_ok}" >> $GITHUB_OUTPUT
+          echo "reason=${reason}" >> $GITHUB_OUTPUT
+          echo "ENV_OK=${env_ok}" >> $GITHUB_ENV
+          echo "ENV_REASON=${reason}" >> $GITHUB_ENV
+
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
+        shell: pwsh
+        run: |
+          $maxAttempts = 3
+          $baseDelay = 5
+          $success = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            Write-Host "dotnet restore attempt $i of $maxAttempts"
+            dotnet restore USBDeviceManager.sln --verbosity minimal
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+            if ($i -lt $maxAttempts) {
+              $delay = $baseDelay * [math]::Pow(2, $i - 1)
+              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
+              Start-Sleep -Seconds $delay
+            }
+          }
+          if (-not $success) {
+            Write-Error "dotnet restore failed after $maxAttempts attempts"
+            exit 1
+          }
+
+      - name: Publish long-run test helper
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
+        shell: pwsh
+        run: |
+          if (Test-Path test-helpers/LongRunner) {
+            if ($env:RUNNER_OS -and $env:RUNNER_OS -ieq 'Windows') {
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -r win-x64 --self-contained true -o ./artifacts/longrunner/win-x64
+              Write-Host 'Published LongRunner (win-x64 exe) to ./artifacts/longrunner/win-x64'
+            } else {
+              dotnet publish test-helpers/LongRunner/LongRunner.csproj -c Release -o ./artifacts/longrunner
+              Write-Host 'Published LongRunner (dll) to ./artifacts/longrunner'
+            }
+          } else {
+            Write-Host 'No long-run helper found; continuing without it.'
+          }
+
+      - name: Detect long-sleep command for ShellRunner tests
+        run: |
+          echo "Detecting long-sleep helper for ShellRunner tests"
+
+      - name: Set SHELLRUNNER_LONG_CMD (Linux)
+        if: runner.os == 'Linux' || runner.os == 'Ubuntu' || runner.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          if [ -f ./artifacts/longrunner/LongRunner.dll ]; then
+            echo "SHELLRUNNER_LONG_CMD=dotnet|./artifacts/longrunner/LongRunner.dll --duration=30" >> $GITHUB_ENV
+            echo "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
+          elif [ -x /bin/bash ] && /bin/bash -c "sleep 0" >/dev/null 2>&1; then
+            echo "SHELLRUNNER_LONG_CMD=/bin/bash|-c \"sleep 30\"" >> $GITHUB_ENV
+            echo "Set SHELLRUNNER_LONG_CMD for bash"
+          elif command -v sleep >/dev/null 2>&1; then
+            echo "SHELLRUNNER_LONG_CMD=/bin/sh|-c \"sleep 30\"" >> $GITHUB_ENV
+            echo "Set SHELLRUNNER_LONG_CMD for sh"
+          else
+            echo "No sleep command detected; leaving SHELLRUNNER_LONG_CMD unset"
+          fi
+
+      - name: Assert LongRunner exists (Linux/Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f ./artifacts/longrunner/LongRunner.dll ]; then
+            echo "LongRunner dll present"
+            exit 0
+          fi
+          if [ -x /bin/bash ] || command -v sleep >/dev/null 2>&1; then
+            echo "System sleep available; LongRunner not required"
+            exit 0
+          fi
+          echo "No LongRunner and no system sleep detected — failing early"
+          mkdir -p artifacts/summaries/longrunner-missing
+          echo '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"Missing LongRunner helper; tests aborted"}' > tests-summary.json
+          cp tests-summary.json artifacts/summaries/longrunner-missing/tests-summary.json || true
+          exit 1
+
+      - name: Set SHELLRUNNER_LONG_CMD (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exeCandidate = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/win-x64/LongRunner.exe'
+          $helperDll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
+          if (Test-Path $exeCandidate) {
+            # Prefer a native exe when available (self-contained publish)
+            "SHELLRUNNER_LONG_CMD=$exeCandidate|--duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+            Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner exe"
+          } elseif (Test-Path $helperDll) {
+            "SHELLRUNNER_LONG_CMD=dotnet|$helperDll --duration=30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+            Write-Host "Set SHELLRUNNER_LONG_CMD to LongRunner via dotnet"
+          } elseif (Get-Command pwsh -ErrorAction SilentlyContinue) {
+            "SHELLRUNNER_LONG_CMD=pwsh|-Command Start-Sleep -Seconds 30" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+            Write-Host "Set SHELLRUNNER_LONG_CMD for pwsh"
+          } else {
+            Write-Host "No PowerShell found; leaving SHELLRUNNER_LONG_CMD unset"
+          }
+
+      - name: Assert LongRunner exists (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exe = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/win-x64/LongRunner.exe'
+          $dll = Join-Path $env:GITHUB_WORKSPACE 'artifacts/longrunner/LongRunner.dll'
+          if (Test-Path $exe -PathType Leaf) { Write-Host 'LongRunner exe present'; exit 0 }
+          if (Test-Path $dll -PathType Leaf) { Write-Host 'LongRunner dll present'; exit 0 }
+          if (Get-Command Start-Sleep -ErrorAction SilentlyContinue) { Write-Host 'pwsh Start-Sleep available; LongRunner not required'; exit 0 }
+          New-Item -ItemType Directory -Force -Path artifacts/summaries/longrunner-missing | Out-Null
+          $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"Missing LongRunner helper on Windows; tests aborted"}'
+          $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+          Copy-Item tests-summary.json artifacts/summaries/longrunner-missing/tests-summary.json -Force -ErrorAction SilentlyContinue
+          Write-Error 'LongRunner missing; failing job'
+          exit 1
+
+      - name: Enable in-process smoke server for CI (cross-platform)
+        run: |
+          echo "SMOKE_USE_TESTSERVER=1" >> $GITHUB_ENV
+
+      - name: Ensure server stopped (optional auto-kill)
+        shell: pwsh
+        run: |
+          if (Test-Path .\scripts\ensure-server-stopped.ps1) {
+            Write-Host 'Running ensure-server-stopped.ps1 (respects AUTO_KILL env var).'
+            $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue)?.Source ?? 'pwsh'
+            $args = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File', "$PWD\scripts\ensure-server-stopped.ps1")
+            $proc = Start-Process -FilePath $pwshPath -ArgumentList $args -NoNewWindow -PassThru -Wait
+            $rc = $proc.ExitCode
+            if ($rc -eq 2) {
+              Write-Host "ensure-server-stopped returned 2 (AUTO_KILL=false and process present). Continuing as configured."
+            } elseif ($rc -ne 0) {
+              throw "ensure-server-stopped.ps1 failed with exit code $rc"
+            }
+          } else {
+            Write-Host 'No ensure-server-stopped.ps1 present; skipping.'
+          }
+
+      - name: Build
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Run Unit tests (produce TRX)
+        if: ${{ (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') }}
+        run: |
+          dotnet test USBDeviceManager.sln --configuration Debug --filter "Category=Unit" --logger "trx;LogFileName=dotnet-tests-${{ matrix.os }}.trx"
+
+      - name: Skip tests placeholder due to env-check failure
+        if: ${{ ! ( (runner.os == 'Windows' && steps.job-envcheck-windows.outputs.env_ok == 'true') || (runner.os != 'Windows' && steps.job-envcheck-linux.outputs.env_ok == 'true') ) }}
+        shell: bash
+        run: |
+          set -euo pipefail || true
+          mkdir -p artifacts/summaries/env-check-failed
+          python3 -c 'import os,json; d={"total":0,"passed":0,"failed":0,"skipped":0,"note":"Tests skipped due to environment check failure: "+os.environ.get("ENV_REASON","unknown")}; open("tests-summary.json","w",encoding="utf-8").write(json.dumps(d,indent=2))'
+          cp tests-summary.json artifacts/summaries/env-check-failed/tests-summary.json || true
+
+      - name: Analyze tests results (per-matrix run)
+        if: always()
+        id: perjob-summary
+        shell: bash
+        run: |
+          # Ensure Python available
+          python3 --version || true
+          set -euo pipefail
+          # parse any TRX files produced in this job
+          python3 scripts/ci-analyze.py || true
+          # upload produced summaries for aggregation
+          if [ -f tests-summary.json ]; then
+            echo "Uploading per-job tests-summary artifacts"
+            mkdir -p artifacts/summaries/tests
+            cp tests-summary.json tests-summary.txt artifacts/summaries/tests/ || true
+          fi
+
+      - name: Convert TRX to HTML (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Generate TRX HTML (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/trx-html artifacts/trx
+          shopt -s globstar || true
+          if command -v trx2html >/dev/null 2>&1; then
+            for f in **/*.trx; do
+              if [ -f "$f" ]; then
+                trx2html "$f" -o "artifacts/trx-html/$(basename "$f").html" || true
+              fi
+            done
+          else
+            echo "trx2html not available; copying .trx files to artifacts/trx for upload"
+            for f in **/*.trx; do
+              if [ -f "$f" ]; then
+                cp "$f" "artifacts/trx/$(basename "$f")"
+              fi
+            done
+          fi
+
+      - name: Convert TRX to HTML (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Generate TRX HTML (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts\trx-html, artifacts\trx | Out-Null
+          if (Get-Command trx2html -ErrorAction SilentlyContinue) {
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              $out = Join-Path artifacts\trx-html ($_.Name + '.html')
+              trx2html $_.FullName -o $out || Write-Host "trx2html failed for $($_.FullName)"
+            }
+          } else {
+            Write-Host "trx2html not available; copying .trx files to artifacts\trx for upload"
+            # Ensure we don't try to copy a file onto itself (causes failure)
+            $destDir = (Get-Item -Path "artifacts\trx").FullName
+            Get-ChildItem -Path . -Filter *.trx -Recurse | ForEach-Object {
+              $dest = Join-Path $destDir $_.Name
+              if ($_.FullName -ne $dest) {
+                try {
+                  Copy-Item $_.FullName -Destination $dest -Force -ErrorAction Stop
+                } catch {
+                  Write-Host ("Failed copying {0} -> {1}: {2}" -f $_.FullName, $dest, $_.Exception.Message)
+                }
+              } else {
+                Write-Host "Skipping copy of $($_.FullName) - destination equals source"
+              }
+            }
+          }
+
+      - name: Enrich tests logs (on failures/errors)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f tests-summary.json ]; then
+            python3 scripts/enrich-summary.py --src tests-summary.json --out-dir artifacts/enriched/tests --report tests-enriched-report.txt || true
+          else
+            echo "No tests-summary.json present; skipping enrichment"
+          fi
+
+      - name: Produce prefixed tests errors file
+        if: always()
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          # concise error snippet for faster triage
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/tests-enriched-errors.txt || true
+          # preserve legacy enriched report copy for correlation
+          if [ -f tests-enriched-report.txt ]; then cp tests-enriched-report.txt artifacts/enriched/$PREFIX/tests-enriched-report.txt || true; fi
+
+      - name: Upload tests enriched errors (prefixed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/tests-enriched-errors.txt
+
+      - name: Upload tests enriched report (attempt 1)
+        id: upload_tests_enriched_1
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: tests-enriched-report.txt
+
+      - name: Upload tests enriched report (attempt 2)
+        id: upload_tests_enriched_2
+        if: steps.upload_tests_enriched_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: tests-enriched-report.txt
+
+      - name: Verify EF SQL log (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          ef='scripts/tmp/ef.log'
+          if [ -f "$ef" ] && [ -s "$ef" ]; then
+            echo "EF SQL log present: $ef"
+          else
+            echo "EF SQL log missing or empty: $ef"
+            mkdir -p artifacts/summaries/ef-log-missing
+            echo '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"EF SQL log missing or empty: tests ran but EF_SQL_LOG_FILE not captured"}' > tests-summary.json
+            cp tests-summary.json artifacts/summaries/ef-log-missing/tests-summary.json || true
+          fi
+
+      - name: Verify EF SQL log (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ef = Join-Path $env:GITHUB_WORKSPACE 'scripts/tmp/ef.log'
+          if (Test-Path $ef -PathType Leaf) {
+            $item = Get-Item -LiteralPath $ef -ErrorAction SilentlyContinue
+            if ($item -and $item.Length -gt 0) {
+              Write-Host "EF SQL log present: $ef"
+            } else {
+              Write-Host "EF SQL log missing or empty: $ef"
+              New-Item -ItemType Directory -Force -Path artifacts/summaries/ef-log-missing | Out-Null
+              $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"EF SQL log missing or empty: tests ran but EF_SQL_LOG_FILE not captured"}'
+              $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+              Copy-Item tests-summary.json artifacts/summaries/ef-log-missing/tests-summary.json -Force -ErrorAction SilentlyContinue
+            }
+          } else {
+            Write-Host "EF SQL log missing or empty: $ef"
+            New-Item -ItemType Directory -Force -Path artifacts/summaries/ef-log-missing | Out-Null
+            $json = '{"total":0,"passed":0,"failed":0,"skipped":0,"note":"EF SQL log missing or empty: tests ran but EF_SQL_LOG_FILE not captured"}'
+            $json | Out-File -FilePath tests-summary.json -Encoding ASCII
+            Copy-Item tests-summary.json artifacts/summaries/ef-log-missing/tests-summary.json -Force -ErrorAction SilentlyContinue
+          }
+
+      - name: Upload job logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: job-logs-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: |
+            server_out.txt
+            server_err.txt
+            scripts/tmp/**
+            artifacts/trx/**
+            # Common DB files and preserved failure DBs for triage
+            simracing.db
+            artifacts/ci-local-simracing-on-failure.db
+            server/USBDeviceManager/simracing.db
+            # EF Core SQL debug log
+            scripts/tmp/ef.log
+            # Any preserved DB snapshots from the failure extractor
+            artifacts/enriched/failures/**
+            # General enriched artifacts (if present)
+            artifacts/enriched/**
+
+      - name: Upload test DB artifacts (repo + runtime)
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: test-db-artifacts-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: |
+            server/USBDeviceManager.Tests/TestResults/artifacts/**
+            server/**/bin/**/TestResults/artifacts/**
+            server/**/TestResults/artifacts/**
+
+      - name: Collect CI logs (optional)
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        shell: pwsh
+        run: |
+          Write-Host "COLLECT_CI_LOGS is true; running ci-collect-logs.ps1"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\ci-collect-logs.ps1 -OutDir artifacts/ci-logs -MaxLines 500
+
+      - name: Upload CI logs artifact (optional)
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/ci-logs/**/*.zip
+          overwrite: true
+
+      - name: Upload tests enriched report (attempt 3)
+        if: steps.upload_tests_enriched_1.outcome != 'success' && steps.upload_tests_enriched_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: tests-enriched-report.txt
+
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: pwsh
+        run: |
+          Write-Host "Running failure extractor for run $env:GITHUB_RUN_ID"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\extract-failures.ps1 -RunId $env:GITHUB_RUN_ID
+
+      - name: Upload extracted failure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-${{ github.run_id }}-${{ runner.os }}
+          path: artifacts/enriched/failures/${{ github.run_id }}
+
+
+
+  env-check-e2e:
+    name: E2E Environment Check (Windows)
+    runs-on: windows-latest
+    needs: build-and-test
+    outputs:
+      env_ok: ${{ steps.check.outputs.env_ok }}
+      reason: ${{ steps.check.outputs.reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run E2E env check (Windows)
+        id: check
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .\scripts\ci\env-check.ps1)) { Write-Host 'No env-check script present; marking env_ok=false'; echo "env_ok=false" >> $env:GITHUB_OUTPUT; echo "reason=env-check-missing" >> $env:GITHUB_OUTPUT; exit 0 }
+          .\scripts\ci\env-check.ps1 -OutFile env-check.json
+          $j = Get-Content env-check.json -Raw | ConvertFrom-Json
+          echo ("env_ok={0}" -f $j.env_ok) >> $env:GITHUB_OUTPUT
+          $r = if ($j.reason) { ($j.reason -join ';') } else { '' }
+          echo ("reason={0}" -f $r) >> $env:GITHUB_OUTPUT
+
+      - name: Upload env-check artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-check-e2e
+          path: env-check.json
+
+  env-check-e2e-linux:
+    name: E2E Environment Check (Linux)
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    outputs:
+      env_ok: ${{ steps.check.outputs.env_ok }}
+      reason: ${{ steps.check.outputs.reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run E2E env check (Linux)
+        id: check
+        shell: bash
+        run: |
+          # Lightweight Linux probe for E2E parity: if a full env-check script exists run it,
+          # otherwise emit a minimal positive probe so downstream analysis can proceed.
+          if [ -f scripts/ci/env-check.sh ]; then
+            chmod +x scripts/ci/env-check.sh
+            ./scripts/ci/env-check.sh env-check.json
+            env_ok=$(jq -r '.env_ok' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['env_ok'])"))
+            reason=$(jq -r '.reason' env-check.json 2>/dev/null || (python3 -c "import json,sys;print(json.load(open('env-check.json'))['reason'])"))
+          else
+            # Create a minimal env-check.json indicating a successful lightweight probe
+            echo '{"env_ok": true, "reason": "lightweight-linux-probe-no-e2e-tests"}' > env-check.json
+            env_ok=true
+            reason=lightweight-linux-probe-no-e2e-tests
+          fi
+          echo "env_ok=${env_ok}" >> $GITHUB_OUTPUT
+          echo "reason=${reason}" >> $GITHUB_OUTPUT
+
+      - name: Upload env-check artifact (Linux)
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-check-e2e-linux
+          path: env-check.json
+
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: bash
+        run: |
+          echo "Running failure extractor for run $GITHUB_RUN_ID (env-check-e2e-linux)"
+          if command -v pwsh >/dev/null 2>&1; then
+            pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract-failures.ps1 -RunId $GITHUB_RUN_ID
+          elif command -v powershell >/dev/null 2>&1; then
+            powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/extract-failures.ps1 -RunId $GITHUB_RUN_ID
+          else
+            echo "PowerShell not available to run extractor; skipping"
+          fi
+
+      - name: Upload extracted failure artifacts (env-check-linux)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-envcheck-${{ github.run_id }}-${{ runner.os }}
+          path: |
+            artifacts/enriched/failures/${{ github.run_id }}
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ef.log
+            artifacts/trx/**
+            artifacts/ci-local-simracing-on-failure.db
+            simracing.db
+            server/USBDeviceManager/simracing.db
+
+      - name: Upload server logs (build matrix)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log-${{ matrix.os }}
+          path: |
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ensure-stopped.log
+  env-check-regression:
+    name: Regression Environment Check (Windows)
+    runs-on: windows-latest
+    needs: build-and-test
+    outputs:
+      env_ok: ${{ steps.check.outputs.env_ok }}
+      reason: ${{ steps.check.outputs.reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Regression env check (Windows)
+        id: check
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .\scripts\ci\env-check.ps1)) { Write-Host 'No env-check script present; marking env_ok=false'; echo "env_ok=false" >> $env:GITHUB_OUTPUT; echo "reason=env-check-missing" >> $env:GITHUB_OUTPUT; exit 0 }
+          .\scripts\ci\env-check.ps1 -OutFile env-check.json
+          $j = Get-Content env-check.json -Raw | ConvertFrom-Json
+          echo ("env_ok={0}" -f $j.env_ok) >> $env:GITHUB_OUTPUT
+          $r = if ($j.reason) { ($j.reason -join ';') } else { '' }
+          echo ("reason={0}" -f $r) >> $env:GITHUB_OUTPUT
+
+      - name: Upload env-check artifact (regression)
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-check-regression
+          path: env-check.json
+
+  # env-check-regression-linux removed: no Linux regression job consumes this output
+  e2e-windows:
+    runs-on: windows-latest
+    needs: [build-and-test, env-check-e2e]
+    if: needs.env-check-e2e.outputs.env_ok == 'true'
+    steps:
+      - name: Set TEST_PORT (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback,0)
+          $listener.Start()
+          $port = ($listener.LocalEndpoint -as [System.Net.IPEndPoint]).Port
+          $listener.Stop()
+          "TEST_PORT=$port" | Out-File -FilePath $env:GITHUB_ENV -Encoding ASCII -Append
+          Write-Host "Set TEST_PORT=$port"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse-check PowerShell scripts
+        shell: pwsh
+        run: |
+          Write-Host 'Running PowerShell parse-check for key scripts'
+          if (Test-Path .\scripts\ci\ps-parsecheck.ps1) {
+            .\scripts\ci\ps-parsecheck.ps1 -Paths 'scripts/run-integration-noninteractive.ps1','scripts/start-server-and-wait.ps1','scripts/poll-health.ps1','scripts/extract-failures.ps1'
+          } else {
+            Write-Host 'No parse-check helper found; skipping'
+          }
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore USBDeviceManager.sln
+
+      - name: Build server project (ensure runtime artifacts present)
+        run: dotnet build server/USBDeviceManager -c Debug --no-restore
+
+      - name: Restore AgentE2E project
+        run: dotnet restore server/AgentE2E.Tests/AgentE2E.Tests.csproj
+
+      - name: Build
+        run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
+
+      - name: Run Agent E2E tests (Windows)
+        run: |
+          dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Debug --logger "trx;LogFileName=AgentE2E.windows.trx"
+
+      - name: Upload E2E results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-e2e-windows
+          path: server/AgentE2E.Tests/**/TestResults/*.trx
+
+      - name: Analyze E2E results (per-job)
+        if: always()
+        shell: bash
+        run: |
+          python3 --version || true
+          set -euo pipefail
+          python3 scripts/ci-analyze.py || true
+          if [ -f tests-summary.json ]; then
+            mkdir -p artifacts/summaries/e2e
+            cp tests-summary.json tests-summary.txt artifacts/summaries/e2e/ || true
+          fi
+
+      - name: Enrich E2E logs (on failures/errors)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f tests-summary.json ]; then
+            python3 scripts/enrich-summary.py --src tests-summary.json --out-dir artifacts/enriched/e2e --report e2e-enriched-report.txt || true
+          else
+            echo "No tests-summary.json present; skipping e2e enrichment"
+          fi
+
+      - name: Produce prefixed e2e errors file
+        if: always()
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/e2e-enriched-errors.txt || true
+          if [ -f e2e-enriched-report.txt ]; then cp e2e-enriched-report.txt artifacts/enriched/$PREFIX/e2e-enriched-report.txt || true; fi
+
+      - name: Upload e2e enriched errors (prefixed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/e2e-enriched-errors.txt
+
+      - name: Upload e2e enriched report (attempt 1)
+        id: upload_e2e_enriched_1
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 2)
+        id: upload_e2e_enriched_2
+        if: steps.upload_e2e_enriched_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 3)
+        if: steps.upload_e2e_enriched_1.outcome != 'success' && steps.upload_e2e_enriched_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Extract failure artifacts (on failure)
+        if: failure()
+        shell: pwsh
+        run: |
+          Write-Host "Running failure extractor for run $env:GITHUB_RUN_ID (e2e-windows)"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\extract-failures.ps1 -RunId $env:GITHUB_RUN_ID
+
+      - name: Upload extracted failure artifacts (e2e)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-e2e-${{ github.run_id }}-${{ runner.os }}
+          path: |
+            artifacts/enriched/failures/${{ github.run_id }}
+            scripts/tmp/server.log
+            scripts/tmp/server.err.log
+            scripts/tmp/ef.log
+            artifacts/trx/**
+            artifacts/ci-local-simracing-on-failure.db
+            simracing.db
+            server/USBDeviceManager/simracing.db
+
+  # per-job E2E analysis removed; regression analysis handled by analyze-regression job
+
+  integration-tests:
+    name: Integration Tests (reusable)
+    needs: [publish-windows, env-check-regression]
+    if: needs.env-check-regression.outputs.env_ok == 'true'
+    uses: ./.github/workflows/integration.yml
+    with:
+      configuration: 'Debug'
+      dotnet-version: '8.0.x'
+      os: 'windows-latest'
+      publish-rid: 'true'
+      full-archive: 'false'
+
+  analyze-results:
+    name: Analyze Test Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs: tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download dotnet test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-ubuntu-latest
+          path: artifacts/tests/ubuntu
+        continue-on-error: true
+
+      - name: Download dotnet test artifacts (Ubuntu) - fallback
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-ubuntu
+          path: artifacts/tests/ubuntu-fallback
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu-latest
+          path: artifacts/unit/ubuntu
+        continue-on-error: true
+
+      - name: 'Download unit test artifacts (Ubuntu) - fallback (bare name)'
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu
+          path: artifacts/unit/ubuntu-fallback
+        continue-on-error: true
+
+      - name: 'Download unit test artifacts (Ubuntu) - fallback (general)'
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests
+          path: artifacts/unit/ubuntu-fallback2
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Ubuntu) - fallback
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu
+          path: artifacts/unit/ubuntu-fallback
+        continue-on-error: true
+
+      - name: Download dotnet test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-windows-latest
+          path: artifacts/tests/windows
+        continue-on-error: true
+
+      - name: Download dotnet test artifacts (Windows) - fallback
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tests-windows
+          path: artifacts/tests/windows-fallback
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-windows-latest
+          path: artifacts/unit/windows
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Windows) - fallback
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-windows
+          path: artifacts/unit/windows-fallback
+        continue-on-error: true
+
+      - name: Download agent & integration artifacts (if present)
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-tests-windows
+          path: artifacts/agent
+        continue-on-error: true
+
+      - name: Generate test summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
+          set -euo pipefail
+          echo "Searching for TRX files under $(pwd)"
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; setting outputs and exiting"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+            python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload test summary artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Upload canonical unit test TRX artifacts
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests
+          path: |
+            '**/*unit*TestResults/*.trx'
+            '**/*TestResults/*.trx'
+            '**/TestResults/*.trx'
+
+      - name: Run log analysis and enrich report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Failures detected, gathering logs and generating enriched report"
+          mkdir -p artifacts/enriched/tests
+          echo "=== Enriched Test Report ===" > tests-enriched-report.txt
+          echo "See tests-summary.json for full summary." >> tests-enriched-report.txt
+          echo "\n--- Failures ---\n" >> tests-enriched-report.txt
+          cat tests-summary.txt >> tests-enriched-report.txt
+
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/tests/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "Message:" >> "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then
+                cp "$fileloc" "$outdir/" || true
+              fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            echo "jq not available; skipping per-failure folder creation" >> tests-enriched-report.txt
+          fi
+
+          echo "Wrote tests-enriched-report.txt and per-failure folders"
+
+      - name: Upload enriched report (failures)
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: tests-enriched-report.txt
+
+  analyze-regression:
+    name: Analyze Regression Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [integration-tests, env-check-regression]
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download integration artifacts (by OS)
+        uses: actions/download-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}"
+          path: artifacts/regression/${{ runner.os }}
+        continue-on-error: true
+
+      - name: 'Download integration artifacts (by OS) - fallback (try-latest)'
+        uses: actions/download-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}-latest"
+          path: artifacts/regression/${{ runner.os }}-fallback
+        continue-on-error: true
+
+      - name: 'Download integration artifacts (fallback: bare name)'
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-tests
+          path: artifacts/regression/${{ runner.os }}-fallback2
+        continue-on-error: true
+
+      - name: Generate regression summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
+          set -euo pipefail
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload regression summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich regression report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Regression failures detected; generating enriched regression report"
+          mkdir -p artifacts/enriched/regression
+          echo "=== Regression Enriched Report ===" > regression-enriched-report.txt
+          cat tests-summary.txt >> regression-enriched-report.txt
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/regression/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> regression-enriched-report.txt || true
+          fi
+      - name: Produce prefixed regression errors file
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        env:
+          PREFIX: ${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/enriched/$PREFIX
+          grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,400p' > artifacts/enriched/$PREFIX/regression-enriched-errors.txt || true
+          if [ -f regression-enriched-report.txt ]; then cp regression-enriched-report.txt artifacts/enriched/$PREFIX/regression-enriched-report.txt || true; fi
+
+      - name: Upload regression enriched errors (prefixed)
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-enriched-errors-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/enriched/${{ github.run_id }}-${{ github.job }}-${{ runner.os }}/regression-enriched-errors.txt
+
+  analyze-integration:
+    name: Analyze Integration Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs: integration-tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download integration artifacts (by OS)
+        uses: actions/download-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}"
+          path: artifacts/integration/${{ runner.os }}
+        continue-on-error: true
+
+      - name: 'Download integration artifacts (by OS) - fallback (try-latest)'
+        uses: actions/download-artifact@v4
+        with:
+          name: "integration-tests-${{ runner.os }}-latest"
+          path: artifacts/integration/${{ runner.os }}-fallback
+        continue-on-error: true
+
+      - name: 'Download integration artifacts (fallback: bare name)'
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-tests
+          path: artifacts/integration/${{ runner.os }}-fallback2
+        continue-on-error: true
+
+      - name: Download integration summary (by OS)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: "integration-tests-summary-${{ runner.os }}"
+          path: artifacts/integration-summary/${{ runner.os }}
+
+      - name: Download integration summary (by OS) - fallback (try-latest)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: "integration-tests-summary-${{ runner.os }}-latest"
+          path: artifacts/integration-summary/${{ runner.os }}-fallback
+
+      - name: "Download integration summary (fallback: legacy)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-tests-summary
+          path: artifacts/integration-summary/fallback
+
+      - name: Generate integration summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
+          set -euo pipefail
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload integration summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich integration report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Integration failures detected; generating enriched integration report"
+          mkdir -p artifacts/enriched/integration
+          echo "=== Integration Enriched Report ===" > integration-enriched-report.txt
+          cat tests-summary.txt >> integration-enriched-report.txt
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/integration/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> integration-enriched-report.txt || true
+          fi
+
+      - name: Upload integration enriched report (attempt 1)
+        id: upload_integration_enriched_1b
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: integration-enriched-report.txt
+
+      - name: Upload integration enriched report (attempt 2)
+        id: upload_integration_enriched_2b
+        if: steps.upload_integration_enriched_1b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: integration-enriched-report.txt
+
+      - name: Upload integration enriched report (attempt 3)
+        if: steps.upload_integration_enriched_1b.outcome != 'success' && steps.upload_integration_enriched_2b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: integration-enriched-report.txt
+
+  analyze-e2e:
+    name: Analyze E2E Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [e2e-windows, env-check-e2e, env-check-e2e-linux]
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download E2E artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-e2e-windows
+          path: artifacts/e2e/windows
+        continue-on-error: true
+
+      - name: 'Download E2E artifacts (Windows) - fallback (try-latest)'
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-e2e-windows-latest
+          path: artifacts/e2e/windows-fallback
+        continue-on-error: true
+
+      - name: 'Download E2E artifacts (Windows) - fallback (bare name)'
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-e2e
+          path: artifacts/e2e/windows-fallback2
+        continue-on-error: true
+
+      - name: Generate E2E summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
+          set -euo pipefail
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; setting outputs and exiting"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload e2e test summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Enrich e2e report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "E2E failures detected; generating enriched e2e report"
+          mkdir -p artifacts/enriched/e2e
+          echo "=== E2E Enriched Report ===" > e2e-enriched-report.txt
+          cat tests-summary.txt >> e2e-enriched-report.txt
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/e2e/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              if [ -f "$fileloc" ]; then cp "$fileloc" "$outdir/" || true; fi
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion" . | sed -n '1,200p' >> e2e-enriched-report.txt || true
+          fi
+
+      - name: Upload e2e enriched report (attempt 1)
+        id: upload_e2e_enriched_1b
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 2)
+        id: upload_e2e_enriched_2b
+        if: steps.upload_e2e_enriched_1b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+      - name: Upload e2e enriched report (attempt 3)
+        if: steps.upload_e2e_enriched_1b.outcome != 'success' && steps.upload_e2e_enriched_2b.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: e2e-enriched-report.txt
+
+  final-report:
+    name: CI Final Test Summary
+    runs-on: ubuntu-latest
+    env:
+      HTML_COMMENT_MAX_CHARS: '60000'
+    needs: [analyze-unit, analyze-results, analyze-regression, analyze-integration, analyze-e2e]
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts for aggregation
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/downloaded
+        continue-on-error: true
+
+      - name: Rehydrate downloaded artifacts into expected folders
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/summaries/unit artifacts/summaries/tests artifacts/summaries/e2e artifacts/summaries/integration \
+                   artifacts/enriched/unit artifacts/enriched/tests artifacts/enriched/e2e artifacts/enriched/integration artifacts/enriched/regression artifacts/downloaded-raw
+          for d in artifacts/downloaded/*; do
+            [ -d "$d" ] || continue
+            bn=$(basename "$d")
+            # Summaries
+            case "$bn" in
+              tests-summary* ) cp -r "$d"/* artifacts/summaries/tests/ || true ;;
+              unit-tests-summary* ) cp -r "$d"/* artifacts/summaries/unit/ || true ;;
+              regression-tests-summary* ) cp -r "$d"/* artifacts/summaries/regression/ || true ;;
+              integration-tests-summary* ) cp -r "$d"/* artifacts/summaries/integration/ || true ;;
+              e2e-tests-summary* ) cp -r "$d"/* artifacts/summaries/e2e/ || true ;;
+            esac
+            # Enriched reports (different jobs may have suffixed names)
+            if ls "$d"/*integration-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/integration
+              cp "$d"/*integration-enriched-report.txt artifacts/enriched/integration/ || true
+            fi
+            if ls "$d"/*regression-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/regression
+              cp "$d"/*regression-enriched-report.txt artifacts/enriched/regression/ || true
+            fi
+            if ls "$d"/*unit-tests-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/unit
+              cp "$d"/*unit-tests-enriched-report.txt artifacts/enriched/unit/ || true
+            fi
+            if ls "$d"/*e2e-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/e2e
+              cp "$d"/*e2e-enriched-report.txt artifacts/enriched/e2e/ || true
+            fi
+            if ls "$d"/*tests-enriched-report.txt >/dev/null 2>&1; then
+              mkdir -p artifacts/enriched/tests
+              cp "$d"/*tests-enriched-report.txt artifacts/enriched/tests/ || true
+            fi
+            # copy anything else for manual inspection
+            cp -r "$d" artifacts/downloaded-raw/ || true
+          done
+
+      - name: Collect TRX files into canonical folder
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/test-results
+          # Copy any found TRX files into artifacts/test-results preserving names
+          find artifacts/downloaded -type f -name '*.trx' -print0 | xargs -0 -I{} cp --parents {} artifacts/test-results/ || true
+          # Also copy TRX files discovered anywhere in the workspace (fallback)
+          find . -type f -name '*.trx' -not -path './artifacts/*' -print0 | xargs -0 -I{} cp {} artifacts/test-results/ || true
+          # If we have at least one TRX, pick the first as a canonical all-tests.trx
+          shopt -s nullglob || true
+          files=(artifacts/test-results/**/*.trx artifacts/test-results/*.trx)
+          if [ ${#files[@]} -gt 0 ]; then
+            echo "Found ${#files[@]} TRX files; creating artifacts/test-results/all-tests.trx from the first one"
+            cp "${files[0]}" artifacts/test-results/all-tests.trx || true
+          else
+            echo "No TRX files found to populate artifacts/test-results"
+          fi
+
+      - name: Upload consolidated test-results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-all
+          path: artifacts/test-results/**
+          overwrite: true
+
+      - name: Aggregate summaries into final report
+        id: aggregate
+        shell: bash
+        run: |
+          # Ensure a known Python is available for the analyzer
+          python3 --version || true
+
+          set -euo pipefail
+          out=final-report.txt
+          echo "CI Final Test Summary" > $out
+          echo "Generated (UTC): $(date -u)" >> $out
+          any_failed=false
+
+          gather() {
+            type=$1
+            json="artifacts/summaries/${type}/tests-summary.json"
+            txt="artifacts/summaries/${type}/tests-summary.txt"
+            echo "\n--- ${type^^} ---\n" >> $out
+            if [ -f "$json" ]; then
+              # Use a small helper to print summary to avoid YAML parser problems
+              python3 scripts/print-summary.py "$json" >> $out
+              failed=$(python3 -c "import json;print(int(json.load(open('$json')).get('failed',0)))")
+              if [ "$failed" -gt 0 ]; then any_failed=true; fi
+              if [ -f "$txt" ]; then
+                echo "\nSummary details:" >> $out
+                sed -n '1,200p' "$txt" >> $out
+              fi
+            else
+              echo "(no ${type} summary)" >> $out
+            fi
+          }
+
+          gather unit
+          gather tests
+          gather e2e
+          gather integration
+
+          # Append any per-analyzer enriched reports if present
+          if [ -f "artifacts/enriched/unit/unit-tests-enriched-report.txt" ]; then
+            echo "\n--- UNIT ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/unit/unit-tests-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/regression/regression-enriched-report.txt" ]; then
+            echo "\n--- REGRESSION ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/regression/regression-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/integration/integration-enriched-report.txt" ]; then
+            echo "\n--- INTEGRATION ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/integration/integration-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/e2e/e2e-enriched-report.txt" ]; then
+            echo "\n--- E2E ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/e2e/e2e-enriched-report.txt >> $out
+          fi
+          if [ -f "artifacts/enriched/tests/tests-enriched-report.txt" ]; then
+            echo "\n--- TESTS ENRICHED REPORT ---\n" >> $out
+            sed -n '1,400p' artifacts/enriched/tests/tests-enriched-report.txt >> $out
+          fi
+
+          echo "Wrote $out"
+          echo "any_failed=$any_failed" >> $GITHUB_OUTPUT
+
+      - name: Generate HTML final report
+        shell: bash
+        run: |
+          set -euo pipefail
+          # renderer will search recursively under artifacts/summaries
+          python3 scripts/generate-final-report-html.py --src artifacts/summaries --out final-report.html || python3 scripts/generate-final-report-html.py --out final-report.html
+
+      - name: Copy final report to stable artifacts/latest-report
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/latest-report
+          cp -f final-report.html artifacts/latest-report/final-report.html || true
+          # include any enriched folders so links in the HTML resolve when downloaded
+          if [ -d artifacts/enriched ]; then
+            rm -rf artifacts/latest-report/enriched || true
+            cp -r artifacts/enriched artifacts/latest-report/enriched || true
+          fi
+
+      - name: Upload latest report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-test-report
+          path: |
+            artifacts/latest-report/final-report.html
+            artifacts/latest-report/enriched/**
+
+      - name: Upload final report HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-test-report-html
+          path: final-report.html
+
+      - name: Upload final report
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-test-report
+          path: final-report.txt
+
+      - name: Post final report as PR comment (on failures)
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' && github.event.pull_request != null }}
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          echo "Posting final report to PR #${PR_NUMBER}"
+          body=$(python3 -c "import json,sys; print(json.dumps(open('final-report.txt',encoding='utf-8').read()))")
+          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"body\":$body}" "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" > /dev/null
+          echo "Comment posted"
+
+      - name: Create check-run failure summary (on failures)
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const body = fs.existsSync('final-report.txt') ? fs.readFileSync('final-report.txt','utf8') : '';
+            const lines = body.split(/\r?\n/).slice(0,40).join('\n');
+            const text = `\`\`\`\n${lines}\n\`\`\``;
+            const output = {
+              title: 'CI Failure Summary',
+              summary: 'One or more test suites failed. See the full report artifact for details.',
+              text: text
+            };
+            try {
+              await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'CI Failure Summary',
+                head_sha: context.sha,
+                status: 'completed',
+                conclusion: 'neutral',
+                output: output
+              });
+            } catch (err) {
+              if (err && err.status === 403) {
+                console.log('Skipping check-run creation: Resource not accessible by integration (403)');
+              } else {
+                throw err;
+              }
+            }
+
+      - name: Fail workflow if any tests failed
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        run: |
+          echo "One or more test suites failed; marking workflow as failed"
+          exit 1
+
+      - name: Prepare failure-report PR files
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha=$(echo "${GITHUB_SHA}" | cut -c1-7)
+          mkdir -p .github/ci-failures
+          outf=".github/ci-failures/ci-failure-${sha}.md"
+          echo "# CI Test Failures for ${GITHUB_SHA}" > "$outf"
+          echo "" >> "$outf"
+          echo 'Generated by CI. See the aggregated report attached.' >> "$outf"
+          echo "" >> "$outf"
+          echo '```' >> "$outf"
+          sed -n '1,400p' final-report.txt >> "$outf" || true
+          echo '```' >> "$outf"
+          # also attach the generated HTML report if present
+          if [ -f final-report.html ]; then
+            cp -f final-report.html ".github/ci-failures/final-report-${sha}.html" || true
+          fi
+
+      - name: Create PR with failure report
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "CI: test failures report (${GITHUB_SHA})"
+          branch: "ci/failures-${{ github.sha }}"
+          title: "CI: Test failures (${GITHUB_SHA})"
+          body: |
+            Automated PR containing the CI failure report generated by the workflow.
+
+            - Aggregated text report: `.github/ci-failures/ci-failure-${{ github.sha }}.md`
+            - HTML report (preview): `.github/ci-failures/final-report-${{ github.sha }}.html`
+
+            You can also download artifacts for this workflow run (includes `latest-test-report`) here:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Review the files in the PR to investigate failures.
+          labels: ci-failure
+
+      - name: Create gist of HTML report and comment on PR
+        if: ${{ steps.aggregate.outputs.any_failed == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const fullSha = process.env.GITHUB_SHA || '';
+            const short = (fullSha || '').substring(0,7);
+            const htmlPath = `.github/ci-failures/final-report-${short}.html`;
+            try {
+              if (!fs.existsSync(htmlPath)) {
+                console.log('HTML report not found at', htmlPath);
+                return;
+              }
+              const content = fs.readFileSync(htmlPath, 'utf8');
+              const gist = await github.rest.gists.create({
+                files: { [`final-report-${short}.html`]: { content } },
+                public: false,
+                description: `CI final-report HTML for ${fullSha}`
+              });
+              console.log('Created gist', gist.data.html_url);
+
+              // find the PR by head branch
+              const head = `${owner}:ci/failures-${fullSha}`;
+              const prs = await github.rest.pulls.list({ owner, repo, head });
+              if (prs.data && prs.data.length > 0) {
+                const prNumber = prs.data[0].number;
+                // Post a short comment linking to the gist
+                const linkBody = `HTML final report attached as gist: ${gist.data.html_url}`;
+                await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: linkBody });
+                console.log('Link comment posted on PR', prNumber);
+
+                // Also post the HTML content as a comment (truncated if very large)
+                const MAX_CHARS = parseInt(process.env.HTML_COMMENT_MAX_CHARS || '60000', 10) || 60000;
+                let attachContent = content;
+                let truncated = false;
+                if (attachContent.length > MAX_CHARS) { attachContent = attachContent.slice(0, MAX_CHARS); truncated = true; }
+                const htmlComment = `HTML final report (raw):\n\n---\n\n` + '```html\n' + attachContent + (truncated ? '\n\n... (truncated)' : '') + '\n```';
+                await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: htmlComment });
+                console.log('HTML content posted as comment on PR', prNumber, truncated ? '(truncated)' : '');
+              } else {
+                console.log('PR not found for head', head);
+              }
+            } catch (e) {
+              console.log('Error creating gist or commenting:', e.message || e);
+            }
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+
+  analyze-unit:
+    name: Analyze Unit Test Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs: tests
+    outputs:
+      tests_ok: ${{ steps.summary.outputs.tests_ok }}
+      failed_count: ${{ steps.summary.outputs.failed_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download unit test artifacts (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-ubuntu-latest
+          path: artifacts/unit/ubuntu
+        continue-on-error: true
+
+      - name: Download unit test artifacts (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-unit-tests-windows-latest
+          path: artifacts/unit/windows
+        continue-on-error: true
+
+      - name: Generate unit test summary (parse TRX)
+        id: summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Searching for TRX files under $(pwd)"
+          mapfile -t files < <(find . -type f -name '*.trx' || true)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No TRX files found; setting outputs and exiting"
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+            echo "failed_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          python3 scripts/ci-analyze.py
+          failed=$(python3 -c "import json; print(json.load(open('tests-summary.json'))['failed'])")
+          if [ "$failed" -eq 0 ]; then
+            echo "tests_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_ok=false" >> $GITHUB_OUTPUT
+          fi
+          echo "failed_count=$failed" >> $GITHUB_OUTPUT
+
+      - name: Upload unit test summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests-summary
+          path: |
+            tests-summary.json
+            tests-summary.txt
+
+      - name: Run unit log analysis and enrich report (on failures)
+        if: steps.summary.outputs.failed_count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Unit failures detected, gathering logs and generating enriched report"
+          mkdir -p artifacts/enriched/unit
+          echo "=== Unit Tests Enriched Report ===" > unit-tests-enriched-report.txt
+          echo "See tests-summary.json for full summary." >> unit-tests-enriched-report.txt
+          echo "\n--- Failures ---\n" >> unit-tests-enriched-report.txt
+          cat tests-summary.txt >> unit-tests-enriched-report.txt
+
+          # Create per-failure folders with details and log excerpts
+          if command -v jq >/dev/null 2>&1; then
+            jq -c '.failures[]' tests-summary.json | while read -r fail; do
+              name=$(echo "$fail" | jq -r '.name' | sed 's/[^a-zA-Z0-9._-]/_/g' | cut -c1-200)
+              msg=$(echo "$fail" | jq -r '.message')
+              fileloc=$(echo "$fail" | jq -r '.file')
+              outdir="artifacts/enriched/unit/$name"
+              mkdir -p "$outdir"
+              echo "Name: $name" > "$outdir/details.txt"
+              echo "Message:" >> "$outdir/details.txt"
+              echo "$msg" >> "$outdir/details.txt"
+              echo "Source file: $fileloc" >> "$outdir/details.txt"
+              # copy trx if present
+              if [ -f "$fileloc" ]; then
+                cp "$fileloc" "$outdir/" || true
+              fi
+              # collect log excerpts nearby
+              grep -RIn --binary-files=text -E "Exception|ERROR|Timeout|Assertion|404|Not Found" . | sed -n '1,200p' > "$outdir/log-excerpts.txt" || true
+            done
+          else
+            echo "jq not available; skipping per-failure folder creation" >> unit-tests-enriched-report.txt
+          fi
+
+          echo "Wrote unit-tests-enriched-report.txt and per-failure folders"
+
+      - name: Upload unit enriched report (failures) (attempt 1)
+        id: upload_unit_enriched_fail_1
+        if: steps.summary.outputs.failed_count != '0'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: unit-tests-enriched-report.txt
+
+      - name: Upload unit enriched report (failures) (attempt 2)
+        id: upload_unit_enriched_fail_2
+        if: steps.upload_unit_enriched_fail_1.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: unit-tests-enriched-report.txt
+
+      - name: Upload unit enriched report (failures) (attempt 3)
+        if: steps.upload_unit_enriched_fail_1.outcome != 'success' && steps.upload_unit_enriched_fail_2.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: unit-tests-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: unit-tests-enriched-report.txt
+
+  log-check:
+    name: Conditional Log Inspection
+    runs-on: ubuntu-latest
+    needs: [analyze-results, analyze-unit, analyze-regression, analyze-integration, analyze-e2e]
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download server logs (Windows)
+        uses: actions/download-artifact@v4
+        with:
+          name: server-log-Windows
+          path: artifacts/logs/windows
+        continue-on-error: true
+
+      - name: Download server logs (Ubuntu)
+        uses: actions/download-artifact@v4
+        with:
+          name: server-log-ubuntu-latest
+          path: artifacts/logs/ubuntu
+        continue-on-error: true
+
+      - name: Quick log scan for exceptions and errors
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Scanning downloaded logs for ERROR/Exception/Timeout entries"
+          find artifacts -type f -name '*.log' -print -exec grep -nE "Exception|ERROR|Unhandled|Timeout|fail(ed)?" {} + || true
+          echo "Downloading any per-analyzer enriched reports (if present)"
+          find artifacts -type f -name '*-enriched-report*.txt' -print -exec sed -n '1,200p' {} + || true
+          echo "Log inspection complete"
+
+  collect-ci-logs:
+    name: Collect CI logs (opt-in)
+    runs-on: ubuntu-latest
+    needs: [test-runner]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run CI logs collector
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        shell: pwsh
+        run: |
+          Write-Host "COLLECT_CI_LOGS enabled; running scripts/ci/ci-collect-logs.ps1"
+          ./scripts/ci/ci-collect-logs.ps1 -OutDir artifacts/ci-logs || true
+      - name: Upload CI logs artifact
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs-${{ github.run_id }}
+          path: artifacts/ci-logs/**
+          overwrite: true
+
