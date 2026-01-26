@@ -74,13 +74,60 @@ pwsh ./scripts/run-integration-noninteractive.ps1 -Port 5010 -NonInteractive
 # - scripts/tmp/server.err.log
 # - artifacts/integration.trx
 
+
+Cleanup behavior
+
+- The integration wrapper now guarantees cleanup: `scripts/run-integration-noninteractive.ps1` calls `scripts/ensure-server-stopped.ps1` in a `finally` block so the server process is stopped at the end of the run (unless you pass `-NoStop`).
+- To explicitly skip automatic stop (for manual post-run inspection), pass `-NoStop` to the wrapper. When `-NoStop` is used you must stop the server manually, for example:
+
+```powershell
+# Manually stop the recorded server pid
+Stop-Process -Id <pid> -ErrorAction SilentlyContinue
+
+# Or use the helper (preferred)
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ensure-server-stopped.ps1
+```
+
+DB preservation on failures
+
+- When tests fail the wrapper attempts to preserve the test DB into `artifacts/ci-local-simracing-on-failure.*.db`. If a strict copy fails due to locks, it will attempt a best-effort fallback copy. To force preservation even when tests pass, run the wrapper and then copy the DB path in `SIMRACING_DEBUG_DBPATH` yourself.
 CI job naming
 - The integration workflow now includes a final analysis job named `Integration Test & Analysis` (workflow job id `integration-test-analysis`). This job downloads integration artifacts, generates the HTML/text reports, and uploads them as `integration-report` artifacts. Use that job name when looking for the report in the GitHub Actions UI.
   
-  The analysis job also packages the collected integration artifacts and logs into `artifacts/integration-report-full.zip` (integration-text debug bundle) for easy forensic download.
+  The analysis job now produces a small, triage-focused bundle by default named `artifacts/integration-report-triage.zip` to avoid creating large full archives every run. This triage bundle contains test TRX, preserved DB snapshots, key logs, and the `publish-sentinel` capture when present.
+
+  When a full forensic bundle is explicitly required (for offline deep-dive), set the environment variable `FULL_INTEGRATION_ARCHIVE=1` in the CI analysis job; this will produce `artifacts/integration-report-full.zip` containing the full artifacts tree.
+
+  Note: the previous automatic trimming workflow (`TRIM_INTEGRATION_LOGS`) is deprecated for CI runs. `scripts/trim-integration-logs.ps1` remains available for manual, local trimming, but it is not run by default in CI.
+
+Test dispatch & job naming
+- **Recommended job id:** `test-runner` — a concise, clear identifier for the CI job that dispatches selected test suites.
+- **Display name used in CI:** `Test Suite Runner (dispatch)` (this job calls the reusable `test-runner-dispatch.yml`).
+- **Run via GitHub UI:** Use the `CI` workflow's run view and select the `Test Suite Runner (dispatch)` job when triggering `workflow_dispatch`.
+- **Run via gh CLI (example):**
+
+```bash
+# Run unit + integration (same as CI defaults)
+gh workflow run CI --ref main --field run_unit=true --field run_integration=true
+
+# Run only unit tests
+gh workflow run CI --ref main --field run_unit=true --field run_integration=false --field run_e2e=false
+
+# Run full (all suites)
+gh workflow run CI --ref main --field full=true
+```
 ```
 
 Troubleshooting notes
 
 - If you see "A parameter cannot be found that matches parameter name 'or'" when the CI invokes `start-server-and-wait.ps1`, ensure the called script accepts the switches passed by CI (for example `-NonInteractive`) and that the invocation uses `-File` or `-Command` consistently. A missing parameter in the script signature is a common cause.
 - Use the new integration-only GitHub Action to reproduce CI behavior locally: see [/.github/workflows/integration-only.yml](.github/workflows/integration-only.yml).
+
+## CI Forensics & Cleanup (added 2026-01-25)
+
+- **When to run cleanup:** Before large local CI runs or when disk space drops below ~30% on the artifacts drive. Run `scripts/cleanup-old-artifacts.ps1` or remove old `artifacts/publish-*` snapshots.
+- **Where preserved DBs are stored:** `artifacts/ci-local-dbs-on-failure/` (also fallback: `D:\temp-preserve-dbs` when E: is full).
+- **If server fails to start with runtime errors:** check `artifacts/server.err.log` and `artifacts/publish-sentinel.txt` for publish layout and runtime-missing captures.
+- **Recording investigations:** Add a short forensic note to `docs/diagnostics/ci-forensics-YYYY-MM-DD.md` with run-IDs and preserved artifact paths.
+
+I will keep these diagnostic notes updated after each investigation.
