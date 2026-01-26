@@ -1,0 +1,17 @@
+name: CI Dispatcher
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_unit:
+        description: 'Run unit tests'
+        required: false
+        default: 'true'
+
+jobs:
+  unit-call:
+    if: ${{ github.event.inputs.run_unit == 'true' }}
+    uses: ./.github/workflows/unit.yml
+    with:
+      configuration: 'Debug'
+      dotnet-version: '8.0.x'
