@@ -105,6 +105,25 @@ Enforced local cleanup policy
 
 - Policy (recommended): Always stop any local `dotnet` instances when a test or manual run completes. For automated wrappers add a `finally`/cleanup block that calls `scripts/stop-dotnet.ps1` so cleanup runs regardless of success or failure.
 
+Server cleanup guarantee
+
+- `scripts/run-integration-noninteractive.ps1` now enforces final cleanup by invoking `scripts/ensure-server-stopped.ps1` in a `finally` block. This ensures stray `SMServer.exe` / `USBDeviceManager` processes are stopped when the wrapper exits, unless you specifically pass `-NoStop` to keep the server running for post-mortem work.
+- If you observe a leftover `SMServer.exe` or `asmser.exe` window on your workstation after a local run, either:
+
+  - run the helper to forcibly stop matching server processes:
+
+    ```powershell
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ensure-server-stopped.ps1
+    ```
+
+  - or stop the specific pid recorded in `scripts/tmp/server.pid`:
+
+    ```powershell
+    if (Test-Path scripts/tmp/server.pid) { Stop-Process -Id (Get-Content scripts/tmp/server.pid) -ErrorAction SilentlyContinue }
+    ```
+
+Best practice: prefer the `ensure-server-stopped` helper because it matches by process name, commandline, and executable path and writes an `ensure-stopped.log` into `scripts/tmp` for artifact collection.
+
 - Recommended commands (pre/post-test):
 
 ```powershell
@@ -131,6 +150,14 @@ Immediate prioritized fixes (next actions)
 - Ensure artifact downloads use authenticated API flow when necessary (document PAT usage for out-of-band forensic downloads only).
 - Keep `scripts/start-server-and-wait.ps1` resilient: treat sentinel runner paths as hints and search published package for `SMServer.exe` by filename, copying into `net8.0` if needed.
 - Continue collecting and attaching `artifacts/extended-diagnostics-*.zip` when investigating failures.
+
+Modular CI modules (recommended)
+- Design a canonical per-test CI module that follows this pattern:
+  - Job A: Build & publish (in-job deterministic `dotnet publish` -> upload `published-server-<rid>-zip`)
+  - Job B: Test runner (checkout, download publish artifacts, extract fallback zip, start server via `scripts/start-server-and-wait.ps1`, run tests, copy logs/TRX into `artifacts/`)
+  - Job C: Analysis (depends on B): run `scripts/generate-integration-test.ps1` (or test-specific generator), emit txt+HTML reports, package `artifacts/integration-report-full.zip`, upload artifacts.
+- Create one template workflow file (example: `.github/workflows/test-module-template.yml`) and instantiate it for `integration`, `e2e`, and `unit` modules so they share the same life-cycle and artifact conventions.
+- Benefits: predictable artifact layout, consistent diagnostics, and the ability to compose modules into a full pipeline by chaining `needs:`.
 
 Files/locations of interest produced during investigation
 - `artifacts/published-server-win-x64-manifest.txt` — manifest of the extracted package (paths, sizes, SHA256).
