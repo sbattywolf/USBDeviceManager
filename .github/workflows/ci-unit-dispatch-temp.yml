@@ -1,0 +1,76 @@
+name: Temp Unit Dispatch (branch-run)
+on:
+  push:
+    branches:
+      - ci/enrich-aggregator
+
+jobs:
+  unit:
+    name: Unit Tests (temp dispatch)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Discover and run test projects
+        run: |
+          set -euo pipefail
+          echo "Working directory: $(pwd)"
+          echo "Repository file listing (top-level)"
+          git ls-files --stage | sed -n '1,200p' || true
+          echo "Directory listing (current):"; ls -la || true
+          echo "Directory listing (parent):"; ls -la .. || true
+          mkdir -p artifacts/test-results/unit/${{ runner.os }}
+          ran=0
+          for p in $(git ls-files "*.Tests.csproj" || true); do
+            ran=1
+            name=$(basename "$p" .csproj)
+            echo "Running tests for $p"
+            dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
+          done
+          if [ $ran -eq 0 ]; then
+            echo "No tracked test projects found; searching filesystem..."
+            # check common folders first and parent dir
+            while IFS= read -r p; do
+              ran=1
+              name=$(basename "$p" .csproj)
+              echo "Running tests for $p"
+              dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
+            done < <(find server test . .. -type f -name "*.Tests.csproj" -print 2>/dev/null || true)
+            if [ $ran -eq 0 ]; then
+              echo "Still no test projects in server/ or test/; doing full search..."
+              while IFS= read -r p; do
+                ran=1
+                name=$(basename "$p" .csproj)
+                echo "Running tests for $p"
+                dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
+              done < <(find . -type f -name "*.Tests.csproj" -print)
+            fi
+          fi
+          if [ $ran -eq 0 ]; then
+            echo "No test projects found; aborting"
+            exit 1
+          fi
+
+      - name: Setup Python (for parser)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run in-repo parser
+        run: |
+          python scripts/ci/parse_test_logs.py --results artifacts/test-results/unit/${{ runner.os }} --out artifacts/test-results/skip-info.json || true
+
+      - name: Upload test results artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-unit-temp
+          path: |
+            artifacts/test-results/**
