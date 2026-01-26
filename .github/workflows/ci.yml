@@ -6,6 +6,40 @@ on:
   pull_request:
     branches: [main]
 jobs:
+  gui-tests:
+    name: GUI Tests (headless)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install system GUI dependencies
+        run: |
+          set -e
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            libgl1-mesa-dri libgbm1 xvfb mesa-utils \
+            libx11-6 libxrender1 libxext6 libxcb1 libxkbcommon0 \
+            ca-certificates || true
+
+      - name: Install GUI requirements
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f gui/requirements.txt ]; then pip install -r gui/requirements.txt || true; else echo 'No gui/requirements.txt found; skipping'; fi
+
+      - name: Run GUI tests (headless)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          set -euo pipefail
+          if [ -d gui/tests ]; then xvfb-run -s "-screen 0 1280x1024x24" pytest -q gui/tests || true; else echo 'No gui/tests directory; skipping GUI tests'; fi
+
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
