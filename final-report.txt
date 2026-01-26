@@ -1,0 +1,6 @@
+﻿CI Final Report -- 2026-01-26T22:45:31.9140867+01:00
+TRX files found: 2
+Total bytes: 353783
+Files:
+ - E:\Workspaces\Git\SimRacing\USBDeviceManager\artifacts\test-results\all-tests-compat.trx (172.75 KB)
+ - E:\Workspaces\Git\SimRacing\USBDeviceManager\artifacts\test-results\all-tests.trx (172.75 KB)
