@@ -111,25 +111,25 @@ jobs:
         run: |
           set -euo pipefail || true
           mkdir -p artifacts/integration-db-checks || true
-          python3 - <<'PY' || true
-import sqlite3,glob,os
-outdir='artifacts/integration-db-checks'
-files=glob.glob('**/*.db', recursive=True)
-if not files:
-    print('No .db files found')
-for f in files:
-    try:
-        con=sqlite3.connect(f)
-        cur=con.execute('PRAGMA integrity_check')
-        rows=list(cur)
-        con.close()
-        fn=os.path.join(outdir, os.path.basename(f)+'.integrity.txt')
-        with open(fn,'w', encoding='utf-8') as fh:
-            fh.write('\n'.join([str(r) for r in rows]))
-        print('Checked', f)
-    except Exception as e:
-        print('Failed to check', f, e)
-PY
+            python3 - <<'PY' || true
+            import sqlite3,glob,os
+            outdir='artifacts/integration-db-checks'
+            files=glob.glob('**/*.db', recursive=True)
+            if not files:
+              print('No .db files found')
+            for f in files:
+              try:
+                con=sqlite3.connect(f)
+                cur=con.execute('PRAGMA integrity_check')
+                rows=list(cur)
+                con.close()
+                fn=os.path.join(outdir, os.path.basename(f)+'.integrity.txt')
+                with open(fn,'w', encoding='utf-8') as fh:
+                  fh.write('\n'.join([str(r) for r in rows]))
+                print('Checked', f)
+              except Exception as e:
+                print('Failed to check', f, e)
+            PY
 
       - name: Upload DB integrity checks
         if: always()
