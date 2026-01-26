@@ -1,6 +1,7 @@
 Handoff: Reproducing FOREIGN KEY failure (snapshot)
 
 Summary
+Summary
 - Current focus: reproduce a SQLite FOREIGN KEY constraint failure observed in CI run `21323958834`.
 - Status: diagnostic work done; `artifacts/ci-local-simracing-on-failure.db` contains a DB snapshot from a run where TRX was missing. Server was stopped and background process cleared.
 
@@ -47,6 +48,13 @@ Next recommended tasks (short):
 - If repro occurs, save `server/USBDeviceManager/simracing.db` to `artifacts/ci-local-simracing-on-failure.db` and attach logs to CI artifacts.
 - Add CI step to upload `simracing.db` and EF debug log on job failure.
 - Implement a deterministic integration test that simulates the race.
+
+Session closure notes (2026-01-27):
+- Today's CI remediation: root workflow sanitized, minimal `dotnet` path fixes applied, `.worktrees` removed from index and ignored.
+- Branch with changes: `ci/enrich-aggregator-stabilize` (ready for smoke run).
+- I will dispatch the `CI` workflow to run on that branch now.
+
+If you want the run scheduled at a specific future time, tell me the desired UTC time and I will create a scheduling PR or add a short workflow to dispatch at that time; otherwise the dispatched run will start immediately on GitHub's runners.
 
 Notes
 - Server process was stopped and PID file cleared before this handoff; it's safe to power off the machine.
