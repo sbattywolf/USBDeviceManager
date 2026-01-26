@@ -1,0 +1,71 @@
+﻿---
+name: Integration Analysis (reusable)
+on:
+  workflow_call:
+    inputs:
+      full_archive:
+        description: 'Create full integration archive'
+        required: false
+        type: boolean
+        default: false
+      dotnet-version:
+        description: 'Dotnet version to install'
+        required: false
+        type: string
+        default: '8.0.x'
+jobs:
+  integration-analysis:
+    runs-on: windows-latest
+    name: Run integration and package artifacts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+      - name: Run integration wrapper (non-interactive)
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\run-integration-noninteractive.ps1 -NonInteractive
+      - name: Package integration artifacts (triage by default)
+        shell: pwsh
+        run: |
+          if (${{ inputs.full_archive }}) {
+            Write-Host 'Requested full archive; enabling FULL_INTEGRATION_ARCHIVE=1'
+            $env:FULL_INTEGRATION_ARCHIVE = '1'
+          }
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\package-integration-zip.ps1
+      - name: Collect any TRX into canonical test-results folder
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -Command "mkdir -Force artifacts\test-results\integration\${{ runner.os }}; Get-ChildItem -Path . -Recurse -Filter *.trx -ErrorAction SilentlyContinue | ForEach-Object { Copy-Item -Path $_.FullName -Destination artifacts\test-results\integration\${{ runner.os }} -Force }"
+      - name: Publish integration test results (canonical path)
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-integration-${{ runner.os }}
+          path: artifacts/test-results/integration/${{ runner.os }}/**
+      - name: Upload triage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-report
+          path: artifacts/integration-report-triage.zip
+
+      - name: Upload triage artifact (by OS)
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-report-${{ runner.os }}"
+          path: artifacts/integration-report-triage.zip
+      - name: Upload full archive (when requested)
+        if: ${{ inputs.full_archive }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-report-full
+          path: artifacts/integration-report-full.zip
+
+      - name: Upload full archive (by OS)
+        if: ${{ inputs.full_archive }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: "integration-report-full-${{ runner.os }}"
+          path: artifacts/integration-report-full.zip
