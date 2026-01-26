@@ -5,7 +5,12 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      collect_ci_logs:
+        description: 'Enable CI logs collection for this run (true/false)'
+        required: false
+        default: 'false'
 jobs:
   gui-tests:
     name: GUI Tests (headless)
@@ -820,14 +825,14 @@ jobs:
             server/**/TestResults/artifacts/**
 
       - name: Collect CI logs (optional)
-        if: env.COLLECT_CI_LOGS == 'true'
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
         shell: pwsh
         run: |
           Write-Host "COLLECT_CI_LOGS is true; running ci-collect-logs.ps1"
           pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\ci-collect-logs.ps1 -OutDir artifacts/ci-logs -MaxLines 500
 
       - name: Upload CI logs artifact (optional)
-        if: env.COLLECT_CI_LOGS == 'true'
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: ci-logs-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
@@ -2140,4 +2145,26 @@ jobs:
           echo "Downloading any per-analyzer enriched reports (if present)"
           find artifacts -type f -name '*-enriched-report*.txt' -print -exec sed -n '1,200p' {} + || true
           echo "Log inspection complete"
+
+  collect-ci-logs:
+    name: Collect CI logs (opt-in)
+    runs-on: ubuntu-latest
+    needs: [test-runner]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run CI logs collector
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        shell: pwsh
+        run: |
+          Write-Host "COLLECT_CI_LOGS enabled; running scripts/ci/ci-collect-logs.ps1"
+          ./scripts/ci/ci-collect-logs.ps1 -OutDir artifacts/ci-logs || true
+      - name: Upload CI logs artifact
+        if: ${{ github.event.inputs.collect_ci_logs == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs-${{ github.run_id }}
+          path: artifacts/ci-logs/**
+          overwrite: true
 
