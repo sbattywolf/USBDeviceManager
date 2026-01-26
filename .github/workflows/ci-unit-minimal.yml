@@ -1,0 +1,45 @@
+name: CI Unit Minimal
+on:
+  workflow_dispatch:
+    inputs:
+      collect_ci_logs:
+        description: 'Enable CI logs collection for this run (true/false)'
+        required: false
+        default: 'false'
+
+jobs:
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore USBDeviceManager.sln --verbosity minimal
+
+      - name: Build
+        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+
+      - name: Run unit tests and collect TRX
+        run: |
+          mkdir -p artifacts/test-results/unit/${{ runner.os }}
+          dotnet test --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results/unit/${{ runner.os }}
+
+      - name: Copy canonical TRX
+        run: |
+          mkdir -p artifacts/test-results
+          # pick the first trx as canonical all-tests.trx
+          $trx=$(ls artifacts/test-results/unit/${{ runner.os }}/*.trx | Select-Object -First 1)
+          if [ -n "$trx" ]; then cp "$trx" artifacts/test-results/all-tests.trx; fi
+
+      - name: Upload test results artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-unit
+          path: artifacts/test-results/**
