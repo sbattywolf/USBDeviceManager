@@ -25,6 +25,9 @@ jobs:
       - name: Discover and run test projects
         run: |
           set -euo pipefail
+          echo "Repository file listing (top-level)"
+          git ls-files --stage | sed -n '1,200p'
+          echo "Searching common test folders: server/ test/"
           mkdir -p artifacts/test-results/unit/${{ runner.os }}
           ran=0
           # prefer tracked test projects
@@ -36,12 +39,22 @@ jobs:
           done
           if [ $ran -eq 0 ]; then
             echo "No tracked test projects found; searching filesystem..."
+            # look in common test folders first to avoid scanning large trees
             while IFS= read -r p; do
               ran=1
               name=$(basename "$p" .csproj)
               echo "Running tests for $p"
               dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
-            done < <(find . -type f -name "*.Tests.csproj" -print)
+            done < <(find server test . -type f -name "*.Tests.csproj" -print 2>/dev/null || true)
+            if [ $ran -eq 0 ]; then
+              echo "Still no test projects in server/ or test/; doing full search..."
+              while IFS= read -r p; do
+                ran=1
+                name=$(basename "$p" .csproj)
+                echo "Running tests for $p"
+                dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
+              done < <(find . -type f -name "*.Tests.csproj" -print)
+            fi
           fi
           if [ $ran -eq 0 ]; then
             echo "No test projects found; aborting"
@@ -51,8 +64,8 @@ jobs:
       - name: Copy canonical TRX
         run: |
           mkdir -p artifacts/test-results
-          # pick the first trx as canonical all-tests.trx
-          $trx=$(ls artifacts/test-results/unit/${{ runner.os }}/*.trx | Select-Object -First 1)
+          # pick the first trx as canonical all-tests.trx (bash)
+          trx=$(ls artifacts/test-results/unit/${{ runner.os }}/*.trx 2>/dev/null | head -n1 || true)
           if [ -n "$trx" ]; then cp "$trx" artifacts/test-results/all-tests.trx; fi
 
       - name: Upload test results artifact
