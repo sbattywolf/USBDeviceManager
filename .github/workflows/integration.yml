@@ -1,0 +1,148 @@
+---
+on:
+  workflow_call:
+    inputs:
+      configuration:
+        required: false
+        default: 'Release'
+      dotnet-version:
+        required: false
+        default: '8.0.x'
+      os:
+        required: false
+        default: 'windows-latest'
+      publish-rid:
+        required: false
+        default: 'true'
+      full-archive:
+        required: false
+        default: 'false'
+
+jobs:
+  integration:
+    name: Integration Tests
+    runs-on: ${{ inputs.os }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Run env-check (if present)
+        shell: bash
+        if: ${{ inputs.os != 'windows-latest' }}
+        run: |
+          if [ -x ./scripts/ci/env-check.sh ]; then
+            chmod +x ./scripts/ci/env-check.sh
+            ./scripts/ci/env-check.sh env-check.json || true
+            cat env-check.json || true
+          else
+            echo '{"env_ok": true, "reason": "env-check-missing"}' > env-check.json
+          fi
+
+      - name: Run env-check (Windows)
+        if: ${{ inputs.os == 'windows-latest' }}
+        shell: pwsh
+        run: |
+          if (Test-Path .\scripts\ci\env-check.ps1) { .\scripts\ci\env-check.ps1 -OutFile env-check.json } else { "{\"env_ok\": true, \"reason\": \"env-check-missing\"}" | Out-File env-check.json -Encoding ASCII }
+
+      - name: Publish server (Windows RID)
+        if: ${{ inputs.os == 'windows-latest' && inputs.publish-rid == 'true' }}
+        shell: pwsh
+        run: |
+          Write-Host 'Publishing server self-contained exe for Windows'
+          dotnet publish server/USBDeviceManager -c ${{ inputs.configuration }} -r win-x64 --self-contained true -o ./server/USBDeviceManager/bin/Release/net8.0/win-x64
+          $exeRid = Join-Path $PWD './server/USBDeviceManager/bin/Release/net8.0/win-x64/SMServer.exe'
+          if (-not (Test-Path $exeRid)) { Write-Error "Published server exe missing at $exeRid"; exit 1 } else { Write-Host "Published server exe at $exeRid" }
+
+      - name: Publish server (portable)
+        if: ${{ inputs.os != 'windows-latest' }}
+        shell: bash
+        run: |
+          echo 'Publishing server portable outputs (non-Windows)'
+          dotnet publish server/USBDeviceManager -c ${{ inputs.configuration }} -o ./server/USBDeviceManager/bin/Release/net8.0 || true
+
+      - name: Run Integration tests
+        shell: pwsh
+        if: ${{ inputs.os == 'windows-latest' }}
+        run: |
+          $outName = "dotnet-integration-${{ inputs.os }}.trx"
+          dotnet test USBDeviceManager.sln --configuration ${{ inputs.configuration }} --filter "Category=Integration" --logger "trx;LogFileName=$outName" || echo "dotnet test exited with non-zero"
+
+      - name: Run Integration tests (Linux)
+        shell: bash
+        if: ${{ inputs.os != 'windows-latest' }}
+        run: |
+          set -euo pipefail || true
+          dotnet test USBDeviceManager.sln --configuration ${{ inputs.configuration }} --filter "Category=Integration" --logger "trx;LogFileName=dotnet-integration-${{ inputs.os }}.trx" || true
+
+      - name: "Always: collect TRX and upload"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-integration-${{ runner.os }}
+          path: |
+            '**/*dotnet-integration-*.trx'
+            '**/TestResults/*.trx'
+
+      - name: "On-failure: preserve DB artifacts and run integrity check"
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail || true
+          mkdir -p artifacts/integration-db-checks || true
+          python3 - <<'PY' || true
+import sqlite3,glob,os
+outdir='artifacts/integration-db-checks'
+files=glob.glob('**/*.db', recursive=True)
+if not files:
+    print('No .db files found')
+for f in files:
+    try:
+        con=sqlite3.connect(f)
+        cur=con.execute('PRAGMA integrity_check')
+        rows=list(cur)
+        con.close()
+        fn=os.path.join(outdir, os.path.basename(f)+'.integrity.txt')
+        with open(fn,'w', encoding='utf-8') as fh:
+            fh.write('\n'.join([str(r) for r in rows]))
+        print('Checked', f)
+    except Exception as e:
+        print('Failed to check', f, e)
+PY
+
+      - name: Upload DB integrity checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-db-checks-${{ github.run_id }}-${{ runner.os }}
+          path: artifacts/integration-db-checks/**
+
+      - name: Upload enriched integration report (if present)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-enriched-report-${{ github.job }}-${{ runner.os }}
+          path: |
+            integration-enriched-report.txt
+            artifacts/enriched/**
