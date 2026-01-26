@@ -20,17 +20,33 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Find solution file
+        id: find_sln
+        run: |
+          set -euo pipefail
+          sln=$(git ls-files '*.sln' | head -n1 || true)
+          if [ -z "$sln" ]; then
+            # try a filesystem search (globstar)
+            shopt -s globstar || true
+            sln=$(printf "%s\n" **/*.sln 2>/dev/null | head -n1 || true)
+          fi
+          if [ -z "$sln" ]; then
+            echo "No .sln file found in repository. Listing files for debugging..."
+            git ls-files | sed -n '1,200p'
+            exit 1
+          fi
+          echo "sln=$sln" >> $GITHUB_OUTPUT
+
       - name: Restore
-        run: dotnet restore USBDeviceManager.sln --verbosity minimal
+        run: dotnet restore "${{ steps.find_sln.outputs.sln }}" --verbosity minimal
 
       - name: Build
-        run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
+        run: dotnet build "${{ steps.find_sln.outputs.sln }}" --configuration Release --no-restore
 
       - name: Run unit tests and collect TRX + console log
         run: |
           mkdir -p artifacts/test-results/unit/${{ runner.os }}
-          # Run tests, write TRX and capture console output to a log for parsing
-          dotnet test --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/unit.console.log
+          dotnet test "${{ steps.find_sln.outputs.sln }}" --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/unit.console.log
 
       - name: Copy canonical TRX
         run: |
