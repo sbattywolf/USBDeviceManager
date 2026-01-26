@@ -2,6 +2,9 @@
 **/bin/
 **/obj/
 
+# Local git worktree metadata (should not be committed)
+.worktrees/
+
 # Python virtualenv
 /.venv/
 
