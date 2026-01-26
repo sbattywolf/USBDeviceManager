@@ -1,46 +1,38 @@
+﻿---
 name: .NET CI
-
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
-
+    branches: [main, master]
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '8.0' ]
-
+        dotnet: ['8.0']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet }}
-
       - name: Restore
         run: dotnet restore USBDeviceManager.sln
-
       - name: Install dotnet-format tool
         run: |
           dotnet tool install -g dotnet-format --version 6.*
           echo "## Add dotnet tools to PATH"
           echo "##[add-path]$HOME/.dotnet/tools"
         shell: bash
-
       - name: Run dotnet-format (check)
         env:
           PATH: ${{ env.PATH }}:$HOME/.dotnet/tools
         run: |
           dotnet-format --verify-no-changes
         continue-on-error: false
-
       - name: Build
         run: dotnet build USBDeviceManager.sln --configuration Release --no-restore
-
       - name: Test
         run: dotnet test server/USBDeviceManager.Tests/USBDeviceManager.Tests.csproj --no-build --verbosity normal
