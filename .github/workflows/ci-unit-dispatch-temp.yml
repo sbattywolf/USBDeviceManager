@@ -22,6 +22,11 @@ jobs:
       - name: Discover and run test projects
         run: |
           set -euo pipefail
+          echo "Working directory: $(pwd)"
+          echo "Repository file listing (top-level)"
+          git ls-files --stage | sed -n '1,200p' || true
+          echo "Directory listing (current):"; ls -la || true
+          echo "Directory listing (parent):"; ls -la .. || true
           mkdir -p artifacts/test-results/unit/${{ runner.os }}
           ran=0
           for p in $(git ls-files "*.Tests.csproj" || true); do
@@ -32,12 +37,22 @@ jobs:
           done
           if [ $ran -eq 0 ]; then
             echo "No tracked test projects found; searching filesystem..."
+            # check common folders first and parent dir
             while IFS= read -r p; do
               ran=1
               name=$(basename "$p" .csproj)
               echo "Running tests for $p"
               dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
-            done < <(find . -type f -name "*.Tests.csproj" -print)
+            done < <(find server test . .. -type f -name "*.Tests.csproj" -print 2>/dev/null || true)
+            if [ $ran -eq 0 ]; then
+              echo "Still no test projects in server/ or test/; doing full search..."
+              while IFS= read -r p; do
+                ran=1
+                name=$(basename "$p" .csproj)
+                echo "Running tests for $p"
+                dotnet test "$p" --configuration Release --logger "trx;LogFileName=${name}.trx" --results-directory artifacts/test-results/unit/${{ runner.os }} 2>&1 | tee artifacts/test-results/unit/${{ runner.os }}/${name}.console.log || true
+              done < <(find . -type f -name "*.Tests.csproj" -print)
+            fi
           fi
           if [ $ran -eq 0 ]; then
             echo "No test projects found; aborting"
