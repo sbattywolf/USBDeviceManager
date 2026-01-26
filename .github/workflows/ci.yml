@@ -818,6 +818,21 @@ jobs:
             server/**/bin/**/TestResults/artifacts/**
             server/**/TestResults/artifacts/**
 
+      - name: Collect CI logs (optional)
+        if: env.COLLECT_CI_LOGS == 'true'
+        shell: pwsh
+        run: |
+          Write-Host "COLLECT_CI_LOGS is true; running ci-collect-logs.ps1"
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\ci-collect-logs.ps1 -OutDir artifacts/ci-logs -MaxLines 500
+
+      - name: Upload CI logs artifact (optional)
+        if: env.COLLECT_CI_LOGS == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs-${{ github.run_id }}-${{ github.job }}-${{ runner.os }}
+          path: artifacts/ci-logs/**/*.zip
+          overwrite: true
+
       - name: Upload tests enriched report (attempt 3)
         if: steps.upload_tests_enriched_1.outcome != 'success' && steps.upload_tests_enriched_2.outcome != 'success'
         uses: actions/upload-artifact@v4
