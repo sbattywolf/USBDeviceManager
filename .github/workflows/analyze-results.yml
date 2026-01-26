@@ -48,6 +48,27 @@ jobs:
           name: ${{ inputs.integration_artifact }}-${{ inputs.artifact_os }}
           path: artifacts/integration/${{ inputs.artifact_os }}
 
+      - name: "Download integration artifacts (fallback: integration-tests-${{ inputs.artifact_os }})"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-tests-${{ inputs.artifact_os }}
+          path: artifacts/integration/fallback-1
+
+      - name: "Download integration artifacts (fallback: integration-tests)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: integration-tests
+          path: artifacts/integration/fallback-2
+
+      - name: "Download integration artifacts (fallback: dotnet-integration)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: dotnet-integration
+          path: artifacts/integration/fallback-3
+
       - name: Download integration artifacts (fallback)
         uses: actions/download-artifact@v4
         continue-on-error: true
@@ -61,6 +82,19 @@ jobs:
         with:
           name: ${{ inputs.e2e_artifact }}-${{ inputs.artifact_os }}
           path: artifacts/e2e/${{ inputs.artifact_os }}
+
+      - name: "Download e2e artifacts (fallbacks)"
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.e2e_artifact }}
+          path: artifacts/e2e/fallback
+
+      - name: List downloaded artifacts for diagnostics
+        shell: bash
+        run: |
+          echo 'Artifacts present under artifacts/:'
+          find artifacts -maxdepth 3 -type f -print || true
 
       - name: Run analysis scripts
         shell: bash
