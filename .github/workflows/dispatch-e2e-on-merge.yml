@@ -1,0 +1,20 @@
+name: Dispatch Self-Hosted E2E
+
+on:
+  push:
+    branches: [ 'main' ]
+  workflow_dispatch: {}
+
+jobs:
+  run-selfhost-e2e:
+    name: Run self-hosted E2E
+    runs-on: [self-hosted, windows]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run E2E self-host wrapper
+        shell: powershell
+        run: |
+          Write-Host 'Invoking repository E2E self-host script'
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_e2e_selfhost.ps1
