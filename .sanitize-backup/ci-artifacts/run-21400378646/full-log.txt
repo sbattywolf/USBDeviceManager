@@ -17,7 +17,7 @@ e2e-self-hosted	Set up job	2026-01-27T14:09:45.0602965Z Download action reposito
 e2e-self-hosted	Set up job	2026-01-27T14:09:45.9438442Z Complete job name: e2e-self-hosted
 e2e-self-hosted	Checkout	´++2026-01-27T14:09:45.9992896Z ##[group]Run actions/checkout@v4
 e2e-self-hosted	Checkout	2026-01-27T14:09:45.9993454Z with:
-e2e-self-hosted	Checkout	2026-01-27T14:09:45.9993651Z   repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:09:45.9993651Z   repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:09:45.9994034Z   token: ***
 e2e-self-hosted	Checkout	2026-01-27T14:09:45.9994228Z   ssh-strict: true
 e2e-self-hosted	Checkout	2026-01-27T14:09:45.9994398Z   ssh-user: git
@@ -31,7 +31,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:09:45.9995759Z   lfs: false
 e2e-self-hosted	Checkout	2026-01-27T14:09:45.9995953Z   submodules: false
 e2e-self-hosted	Checkout	2026-01-27T14:09:45.9996132Z   set-safe-directory: true
 e2e-self-hosted	Checkout	2026-01-27T14:09:45.9996473Z ##[endgroup]
-e2e-self-hosted	Checkout	2026-01-27T14:09:46.1874186Z Syncing repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:09:46.1874186Z Syncing repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.1875275Z ##[group]Getting Git version info
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.1875709Z Working directory is 'C:\actions-runner\_work\USBDeviceManager\USBDeviceManager'
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.1965659Z [command]"C:\Program Files\Git\cmd\git.exe" version
@@ -41,7 +41,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:09:46.2206123Z Temporarily overriding HOM
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.2206874Z Adding repository directory to the temporary git global config as a safe directory
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.2212034Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory C:\actions-runner\_work\USBDeviceManager\USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.2445020Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --get remote.origin.url
-e2e-self-hosted	Checkout	2026-01-27T14:09:46.2634145Z https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:09:46.2634145Z https://github.com/sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.2666384Z ##[group]Removing previously created refs, to avoid conflicts
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.2671642Z [command]"C:\Program Files\Git\cmd\git.exe" rev-parse --symbolic-full-name --verify --quiet HEAD
 e2e-self-hosted	Checkout	2026-01-27T14:09:46.2866154Z refs/heads/ci/enrich-aggregator-stabilize
@@ -68,7 +68,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:09:48.2186162Z [command]"C:\Program Files
 e2e-self-hosted	Checkout	2026-01-27T14:09:48.2435988Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:09:48.2436492Z ##[group]Fetching the repository
 e2e-self-hosted	Checkout	2026-01-27T14:09:48.2443820Z [command]"C:\Program Files\Git\cmd\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +80798b61468d4293ffd99d87a80c83f0053c9b86:refs/remotes/origin/ci/enrich-aggregator-stabilize
-e2e-self-hosted	Checkout	2026-01-27T14:09:48.7771518Z From https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:09:48.7771518Z From https://github.com/sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:09:48.7772383Z  + e07eb6e...80798b6 80798b61468d4293ffd99d87a80c83f0053c9b86 -> origin/ci/enrich-aggregator-stabilize  (forced update)
 e2e-self-hosted	Checkout	2026-01-27T14:09:48.7902169Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:09:48.7902646Z ##[group]Determining the checkout info

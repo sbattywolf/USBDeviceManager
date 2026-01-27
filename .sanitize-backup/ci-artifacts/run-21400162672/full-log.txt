@@ -17,7 +17,7 @@ e2e-self-hosted	Set up job	2026-01-27T14:03:21.4287735Z Download action reposito
 e2e-self-hosted	Set up job	2026-01-27T14:03:22.4115824Z Complete job name: e2e-self-hosted
 e2e-self-hosted	Checkout	´++2026-01-27T14:03:22.4645435Z ##[group]Run actions/checkout@v4
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.4645960Z with:
-e2e-self-hosted	Checkout	2026-01-27T14:03:22.4646272Z   repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:03:22.4646272Z   repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.4646615Z   token: ***
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.4646785Z   ssh-strict: true
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.4646987Z   ssh-user: git
@@ -31,7 +31,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:03:22.4648434Z   lfs: false
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.4648608Z   submodules: false
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.4648820Z   set-safe-directory: true
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.4649149Z ##[endgroup]
-e2e-self-hosted	Checkout	2026-01-27T14:03:22.6578581Z Syncing repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:03:22.6578581Z Syncing repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.6579923Z ##[group]Getting Git version info
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.6580372Z Working directory is 'C:\actions-runner\_work\USBDeviceManager\USBDeviceManager'
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.6673758Z [command]"C:\Program Files\Git\cmd\git.exe" version
@@ -41,18 +41,18 @@ e2e-self-hosted	Checkout	2026-01-27T14:03:22.6913725Z Temporarily overriding HOM
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.6914439Z Adding repository directory to the temporary git global config as a safe directory
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.6919581Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory C:\actions-runner\_work\USBDeviceManager\USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.7148532Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --get remote.origin.url
-e2e-self-hosted	Checkout	2026-01-27T14:03:22.7337900Z https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:03:22.7337900Z https://github.com/sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.7370373Z ##[group]Removing previously created refs, to avoid conflicts
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.7375454Z [command]"C:\Program Files\Git\cmd\git.exe" rev-parse --symbolic-full-name --verify --quiet HEAD
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.7570859Z refs/heads/chore/stabilize-tests
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.7599632Z [command]"C:\Program Files\Git\cmd\git.exe" checkout --detach
-e2e-self-hosted	Checkout	2026-01-27T14:03:22.7975462Z HEAD is now at 31604f6 Merge pull request #54 from Sbatta/ci/restore-test-runner-dispatch-3
+e2e-self-hosted	Checkout	2026-01-27T14:03:22.7975462Z HEAD is now at 31604f6 Merge pull request #54 from sbattywolf/ci/restore-test-runner-dispatch-3
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.8451473Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:03:22.8455335Z [command]"C:\Program Files\Git\cmd\git.exe" submodule status
 e2e-self-hosted	Checkout	2026-01-27T14:03:23.2685000Z ##[group]Cleaning the repository
 e2e-self-hosted	Checkout	2026-01-27T14:03:23.2690375Z [command]"C:\Program Files\Git\cmd\git.exe" clean -ffdx
 e2e-self-hosted	Checkout	2026-01-27T14:03:23.2991965Z [command]"C:\Program Files\Git\cmd\git.exe" reset --hard HEAD
-e2e-self-hosted	Checkout	2026-01-27T14:03:23.3376471Z HEAD is now at 31604f6 Merge pull request #54 from Sbatta/ci/restore-test-runner-dispatch-3
+e2e-self-hosted	Checkout	2026-01-27T14:03:23.3376471Z HEAD is now at 31604f6 Merge pull request #54 from sbattywolf/ci/restore-test-runner-dispatch-3
 e2e-self-hosted	Checkout	2026-01-27T14:03:23.3406645Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:03:23.3407152Z ##[group]Disabling automatic garbage collection
 e2e-self-hosted	Checkout	2026-01-27T14:03:23.3412083Z [command]"C:\Program Files\Git\cmd\git.exe" config --local gc.auto 0
@@ -68,7 +68,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:03:24.6269052Z [command]"C:\Program Files
 e2e-self-hosted	Checkout	2026-01-27T14:03:24.6511676Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:03:24.6512185Z ##[group]Fetching the repository
 e2e-self-hosted	Checkout	2026-01-27T14:03:24.6519217Z [command]"C:\Program Files\Git\cmd\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +17f1496b3fca62ac82f9e7a3d46fa5c8c9d4c5cd:refs/remotes/origin/ci/enrich-aggregator-stabilize
-e2e-self-hosted	Checkout	2026-01-27T14:03:25.2324795Z From https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:03:25.2324795Z From https://github.com/sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.2325576Z  * [new ref]         17f1496b3fca62ac82f9e7a3d46fa5c8c9d4c5cd -> origin/ci/enrich-aggregator-stabilize
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.2461322Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.2461696Z ##[group]Determining the checkout info
@@ -78,7 +78,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:03:25.2751253Z [command]"C:\Program Files
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.2974720Z ##[group]Checking out the ref
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.2980617Z [command]"C:\Program Files\Git\cmd\git.exe" checkout --progress --force -B ci/enrich-aggregator-stabilize refs/remotes/origin/ci/enrich-aggregator-stabilize
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.3648800Z branch 'ci/enrich-aggregator-stabilize' set up to track 'origin/ci/enrich-aggregator-stabilize'.
-e2e-self-hosted	Checkout	2026-01-27T14:03:25.3653684Z Previous HEAD position was 31604f6 Merge pull request #54 from Sbatta/ci/restore-test-runner-dispatch-3
+e2e-self-hosted	Checkout	2026-01-27T14:03:25.3653684Z Previous HEAD position was 31604f6 Merge pull request #54 from sbattywolf/ci/restore-test-runner-dispatch-3
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.3654563Z Switched to a new branch 'ci/enrich-aggregator-stabilize'
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.3683263Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:03:25.3926738Z [command]"C:\Program Files\Git\cmd\git.exe" log -1 --format=%H

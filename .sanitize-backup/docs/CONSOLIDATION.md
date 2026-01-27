@@ -7,7 +7,7 @@
 
 **Actions performed**
 - Merged selected branches into `dev/consolidate` and pushed to remote.
-- Created PR: https://github.com/Sbatta/USBDeviceManager/pull/16 and confirmed merge.
+- Created PR: https://github.com/sbattywolf/USBDeviceManager/pull/16 and confirmed merge.
 - Ran full solution `dotnet test` (TRX: `server/USBDeviceManager.Tests/TestResults/full-solution.trx`).
 - Ran agent test runner: `agent/SimRacingAgent.Tests/TestRunner.ps1` → TRX files under `test-results/`.
 - Ran repo cleanup earlier and archived artifacts under `artifacts/archive/` with index `artifacts/archive/index.txt`.

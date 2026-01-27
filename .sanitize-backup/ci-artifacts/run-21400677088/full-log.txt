@@ -17,7 +17,7 @@ e2e-self-hosted	Set up job	2026-01-27T14:18:18.3622777Z Download action reposito
 e2e-self-hosted	Set up job	2026-01-27T14:18:19.3736344Z Complete job name: e2e-self-hosted
 e2e-self-hosted	Checkout	´++2026-01-27T14:18:19.4345281Z ##[group]Run actions/checkout@v4
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.4346198Z with:
-e2e-self-hosted	Checkout	2026-01-27T14:18:19.4346697Z   repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:18:19.4346697Z   repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.4347542Z   token: ***
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.4348029Z   ssh-strict: true
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.4348545Z   ssh-user: git
@@ -31,7 +31,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:18:19.4351982Z   lfs: false
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.4352558Z   submodules: false
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.4353083Z   set-safe-directory: true
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.4353778Z ##[endgroup]
-e2e-self-hosted	Checkout	2026-01-27T14:18:19.6262668Z Syncing repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:18:19.6262668Z Syncing repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.6263906Z ##[group]Getting Git version info
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.6264384Z Working directory is 'C:\actions-runner\_work\USBDeviceManager\USBDeviceManager'
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.6359695Z [command]"C:\Program Files\Git\cmd\git.exe" version
@@ -41,7 +41,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:18:19.6605249Z Temporarily overriding HOM
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.6606040Z Adding repository directory to the temporary git global config as a safe directory
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.6611179Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory C:\actions-runner\_work\USBDeviceManager\USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.6841481Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --get remote.origin.url
-e2e-self-hosted	Checkout	2026-01-27T14:18:19.7033104Z https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:18:19.7033104Z https://github.com/sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.7064574Z ##[group]Removing previously created refs, to avoid conflicts
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.7069820Z [command]"C:\Program Files\Git\cmd\git.exe" rev-parse --symbolic-full-name --verify --quiet HEAD
 e2e-self-hosted	Checkout	2026-01-27T14:18:19.7266009Z refs/heads/ci/enrich-aggregator-stabilize
@@ -74,7 +74,7 @@ e2e-self-hosted	Checkout	2026-01-27T14:18:21.7938927Z [command]"C:\Program Files
 e2e-self-hosted	Checkout	2026-01-27T14:18:21.8191279Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:18:21.8191868Z ##[group]Fetching the repository
 e2e-self-hosted	Checkout	2026-01-27T14:18:21.8199164Z [command]"C:\Program Files\Git\cmd\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +4c92b7817bc750b55bf8c920b2f85b3b3e825827:refs/remotes/origin/ci/enrich-aggregator-stabilize
-e2e-self-hosted	Checkout	2026-01-27T14:18:22.3589715Z From https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:18:22.3589715Z From https://github.com/sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T14:18:22.3590349Z  + 80798b6...4c92b78 4c92b7817bc750b55bf8c920b2f85b3b3e825827 -> origin/ci/enrich-aggregator-stabilize  (forced update)
 e2e-self-hosted	Checkout	2026-01-27T14:18:22.3720233Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T14:18:22.3720706Z ##[group]Determining the checkout info
@@ -2301,7 +2301,7 @@ e2e-self-hosted	Upload E2E results	2026-01-27T14:18:41.2968354Z SHA256 digest of
 e2e-self-hosted	Upload E2E results	2026-01-27T14:18:41.2969762Z Finalizing artifact upload
 e2e-self-hosted	Upload E2E results	2026-01-27T14:18:41.5640071Z Artifact agent-e2e-selfhost.zip successfully finalized. Artifact ID 5273114547
 e2e-self-hosted	Upload E2E results	2026-01-27T14:18:41.5640596Z Artifact agent-e2e-selfhost has been successfully uploaded! Final size is 66640 bytes. Artifact ID is 5273114547
-e2e-self-hosted	Upload E2E results	2026-01-27T14:18:41.5651173Z Artifact download URL: https://github.com/Sbatta/USBDeviceManager/actions/runs/21400677088/artifacts/5273114547
+e2e-self-hosted	Upload E2E results	2026-01-27T14:18:41.5651173Z Artifact download URL: https://github.com/sbattywolf/USBDeviceManager/actions/runs/21400677088/artifacts/5273114547
 e2e-self-hosted	Post Cache NuGet packages	´++2026-01-27T14:18:41.9183754Z Post job cleanup.
 e2e-self-hosted	Post Cache NuGet packages	2026-01-27T14:18:42.2266691Z [command]"C:\Program Files\Git\usr\bin\tar.exe" --posix -cf cache.tgz --exclude cache.tgz -P -C C:/actions-runner/_work/USBDeviceManager/USBDeviceManager --files-from manifest.txt --force-local -z
 e2e-self-hosted	Post Cache NuGet packages	2026-01-27T14:18:42.2808221Z /bin/sh: line 1: gzip: command not found

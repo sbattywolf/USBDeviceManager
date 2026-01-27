@@ -17,7 +17,7 @@ e2e-self-hosted	Set up job	2026-01-27T13:43:35.0041750Z Download action reposito
 e2e-self-hosted	Set up job	2026-01-27T13:43:35.9495884Z Complete job name: e2e-self-hosted
 e2e-self-hosted	Checkout	´++2026-01-27T13:43:36.0017009Z ##[group]Run actions/checkout@v4
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.0017483Z with:
-e2e-self-hosted	Checkout	2026-01-27T13:43:36.0017637Z   repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T13:43:36.0017637Z   repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.0017939Z   token: ***
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.0018068Z   ssh-strict: true
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.0018203Z   ssh-user: git
@@ -31,7 +31,7 @@ e2e-self-hosted	Checkout	2026-01-27T13:43:36.0019206Z   lfs: false
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.0019326Z   submodules: false
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.0019464Z   set-safe-directory: true
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.0019732Z ##[endgroup]
-e2e-self-hosted	Checkout	2026-01-27T13:43:36.1884889Z Syncing repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T13:43:36.1884889Z Syncing repository: sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.1885884Z ##[group]Getting Git version info
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.1886259Z Working directory is 'C:\actions-runner\_work\USBDeviceManager\USBDeviceManager'
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.1975920Z [command]"C:\Program Files\Git\cmd\git.exe" version
@@ -41,18 +41,18 @@ e2e-self-hosted	Checkout	2026-01-27T13:43:36.2229757Z Temporarily overriding HOM
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.2230390Z Adding repository directory to the temporary git global config as a safe directory
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.2235683Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory C:\actions-runner\_work\USBDeviceManager\USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.2464689Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --get remote.origin.url
-e2e-self-hosted	Checkout	2026-01-27T13:43:36.2651415Z https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T13:43:36.2651415Z https://github.com/sbattywolf/USBDeviceManager
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.2683074Z ##[group]Removing previously created refs, to avoid conflicts
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.2688285Z [command]"C:\Program Files\Git\cmd\git.exe" rev-parse --symbolic-full-name --verify --quiet HEAD
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.2878766Z refs/heads/chore/stabilize-tests
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.2906001Z [command]"C:\Program Files\Git\cmd\git.exe" checkout --detach
-e2e-self-hosted	Checkout	2026-01-27T13:43:36.3284254Z HEAD is now at 31604f6 Merge pull request #54 from Sbatta/ci/restore-test-runner-dispatch-3
+e2e-self-hosted	Checkout	2026-01-27T13:43:36.3284254Z HEAD is now at 31604f6 Merge pull request #54 from sbattywolf/ci/restore-test-runner-dispatch-3
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.3745689Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.3750030Z [command]"C:\Program Files\Git\cmd\git.exe" submodule status
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.7807870Z ##[group]Cleaning the repository
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.7813351Z [command]"C:\Program Files\Git\cmd\git.exe" clean -ffdx
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.8106263Z [command]"C:\Program Files\Git\cmd\git.exe" reset --hard HEAD
-e2e-self-hosted	Checkout	2026-01-27T13:43:36.8487690Z HEAD is now at 31604f6 Merge pull request #54 from Sbatta/ci/restore-test-runner-dispatch-3
+e2e-self-hosted	Checkout	2026-01-27T13:43:36.8487690Z HEAD is now at 31604f6 Merge pull request #54 from sbattywolf/ci/restore-test-runner-dispatch-3
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.8514786Z ##[endgroup]
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.8518804Z ##[group]Disabling automatic garbage collection
 e2e-self-hosted	Checkout	2026-01-27T13:43:36.8523939Z [command]"C:\Program Files\Git\cmd\git.exe" config --local gc.auto 0

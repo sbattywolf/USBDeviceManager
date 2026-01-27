@@ -28,7 +28,7 @@ This file is appended by `scripts/gh-poll-run.ps1` to record poller activity and
 - 2026-01-26 21:53:07Z - Started poller for workflow='ci.yml' branch='chore/stabilize-tests' timeout=60m interval=10s requireActiveRun=False
 - 2026-01-26 21:53:09Z - Found run #215 status=completed conclusion=startup_failure
 - 2026-01-26 21:53:09Z - Run #215 finished with conclusion='startup_failure'. Downloading artifacts...
-- 2026-01-26 21:53:09Z - error fetching artifacts: HTTP 404: Not Found (https://api.github.com/repos/Sbatta/USBDeviceManager/actions/runs/215/artifacts?per_page=100)
+- 2026-01-26 21:53:09Z - error fetching artifacts: HTTP 404: Not Found (https://api.github.com/repos/sbattywolf/USBDeviceManager/actions/runs/215/artifacts?per_page=100)
 - 2026-01-26 21:53:09Z - Artifacts downloaded to artifacts\ci-run-215
 - 2026-01-26 21:53:09Z - Wrote summary to artifacts\ci-run-215\ci-run-summary.json
 - 2026-01-26 21:56:00Z - Retrieval attempted: `designer/mockups` not found; retrieval skipped and task blocked.
