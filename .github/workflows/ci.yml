@@ -177,3 +177,10 @@ jobs:
             server/USBDeviceManager/bin/Release/net8.0/win-x64
             ci-config.json
           if-no-files-found: ignore
+
+      - name: Upload interactive Pester results (if present)
+        uses: actions/upload-artifact@v4
+        with:
+          name: interactive-pester-results
+          path: artifacts/interactive-pester-results.xml
+          if-no-files-found: ignore
