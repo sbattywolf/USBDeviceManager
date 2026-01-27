@@ -34,7 +34,7 @@ jobs:
           }
 
       - name: Setup .NET
-        if: ${{ steps.check_dotnet.outputs.present != 'true' }}
+        if: ${{ steps.check_dotnet.outputs.present == 'false' }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
