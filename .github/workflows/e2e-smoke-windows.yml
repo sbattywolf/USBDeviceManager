@@ -30,8 +30,23 @@ jobs:
           dotnet test ./USBDeviceManager.sln -c Debug --no-build --logger "trx;LogFileName=e2e-smoke.trx" --filter "Category!=LongRunning" --results-directory ./artifacts/test-results
         shell: pwsh
 
+      - name: List test-results for diagnostics
+        if: always()
+        run: |
+          Write-Host 'Listing artifacts/test-results contents:'
+          Get-ChildItem -Path ./artifacts/test-results -Recurse -Force | ForEach-Object { Write-Host $_.FullName }
+        shell: pwsh
+
       - name: Upload smoke TRX
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: e2e-smoke-trx
-          path: ./artifacts/test-results/e2e-smoke.trx
+          path: ./artifacts/test-results/**/*.trx
+
+      - name: Upload test-results folder
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-smoke-test-results
+          path: ./artifacts/test-results
