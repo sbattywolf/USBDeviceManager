@@ -154,4 +154,9 @@ namespace USBDeviceManager.Tests.Functional
             }
         }
     }
+
 }
+
+}
+
+
