@@ -6,7 +6,7 @@ Usage:
 #>
 param(
     [string]$Branch = 'chore/ci-hardening-sentinel',
-    [string]$Owner = 'sbattywolf',
+    [string]$Owner = 'Sbatta',
     [string]$Repo = 'USBDeviceManager',
     [string]$WorkflowFile = 'integration-only.yml'
 )

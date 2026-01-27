@@ -1,6 +1,6 @@
 param(
     [string]$RunId = '21318769550',
-    [string]$Repo = 'sbattywolf/USBDeviceManager',
+    [string]$Repo = 'Sbatta/USBDeviceManager',
     [int]$PollSeconds = 10,
     [int]$MaxMinutes = 120
 )

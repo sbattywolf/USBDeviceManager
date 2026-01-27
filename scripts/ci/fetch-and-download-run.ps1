@@ -8,7 +8,7 @@ Usage:
 #>
 param(
     [Parameter(Mandatory=$true)][int]$RunId,
-    [string]$Owner = 'sbattywolf',
+    [string]$Owner = 'Sbatta',
     [string]$Repo = 'USBDeviceManager',
     [string]$OutDir = "artifacts-ci-run-$RunId",
     [int]$PollIntervalSec = 15,
@@ -46,9 +46,9 @@ while ($true) {
     #>
     param(
         [Parameter(Mandatory=$true)][int]$RunId,
-        [string]$Owner = 'sbattywolf',
-        [string]$Repo = 'USBDeviceManager',
-        [string]$OutDir = "artifacts-ci-run-$RunId",
+    [string]$Owner = 'Sbatta',
+    [string]$Repo = 'USBDeviceManager',
+    [string]$OutDir = "artifacts-ci-run-$RunId",
         [int]$PollIntervalSec = 15,
         [int]$TimeoutSec = 1800
     )

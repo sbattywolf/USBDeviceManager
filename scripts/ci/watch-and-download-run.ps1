@@ -6,14 +6,14 @@ Requirements:
 - Optional env var `GITHUB_TOKEN` or `GH_TOKEN` for authenticated API calls
 
 Usage:
-  powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\watch-and-download-run.ps1 -Repo "sbattywolf/USBDeviceManager" -Branch "chore/stabilize-tests"
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\watch-and-download-run.ps1 -Repo "Sbatta/USBDeviceManager" -Branch "chore/stabilize-tests"
 
 The script polls every `-PollSec` seconds until it finds the latest run for the branch in a completed state,
 then downloads all artifacts into `artifacts/ci-latest/<run-id>`.
 #>
 
 param(
-    [string]$Repo = 'sbattywolf/USBDeviceManager',
+    [string]$Repo = 'Sbatta/USBDeviceManager',
     [string]$Branch = 'chore/stabilize-tests',
     [int]$PollSec = 15,
     [int]$MaxAttempts = 480

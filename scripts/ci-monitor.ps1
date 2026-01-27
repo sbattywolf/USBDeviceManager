@@ -1,5 +1,5 @@
 param(
-    [string]$Repo = 'sbattywolf/USBDeviceManager',
+    [string]$Repo = 'Sbatta/USBDeviceManager',
     [string]$Branch = 'chore/restore-retry',
     [int]$RequiredSuccesses = 3,
     [int]$MaxAttempts = 10,
