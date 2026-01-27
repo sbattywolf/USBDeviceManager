@@ -21,20 +21,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify system .NET (pre-check)
-        shell: powershell
+        shell: cmd
         run: |
-          Write-Host 'Checking for system-installed dotnet...'
-          $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
-          if ($null -ne $dotnet) {
-            Write-Host 'dotnet is present on this runner:'
-            dotnet --info
-          } else {
-            Write-Host 'ERROR: dotnet is not installed on this self-hosted runner.'
-            Write-Host 'Please run the runner maintenance script to install .NET system-wide:'
-            Write-Host '  scripts/ci/install_dotnet_on_runner.ps1'
-            Write-Host 'Or install .NET 8 as administrator on the host and restart the runner service.'
-            exit 1
-          }
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
+            Write-Host 'Checking for system-installed dotnet...'
+            $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
+            if ($null -ne $dotnet) {
+              Write-Host 'dotnet is present on this runner:'
+              dotnet --info
+            } else {
+              Write-Host 'ERROR: dotnet is not installed on this self-hosted runner.'
+              Write-Host 'Please run the runner maintenance script to install .NET system-wide:'
+              Write-Host '  scripts/ci/install_dotnet_on_runner.ps1'
+              Write-Host 'Or install .NET 8 as administrator on the host and restart the runner service.'
+              exit 1
+            }
+          }"
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -47,34 +49,36 @@ jobs:
             nuget-${{ runner.os }}-
 
       - name: Restore NuGet (with retries)
-        shell: powershell
+        shell: cmd
         run: |
-          # Retry wrapper for transient NuGet failures (3 attempts with exponential backoff)
-          $maxAttempts = 3
-          $baseDelay = 5
-          $success = $false
-          for ($i = 1; $i -le $maxAttempts; $i++) {
-            Write-Host "dotnet restore attempt $i of $maxAttempts"
-            dotnet restore ./USBDeviceManager.sln --verbosity minimal
-            if ($LASTEXITCODE -eq 0) {
-              $success = $true
-              break
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
+            # Retry wrapper for transient NuGet failures (3 attempts with exponential backoff)
+            $maxAttempts = 3
+            $baseDelay = 5
+            $success = $false
+            for ($i = 1; $i -le $maxAttempts; $i++) {
+              Write-Host \"dotnet restore attempt $i of $maxAttempts\"
+              dotnet restore ./USBDeviceManager.sln --verbosity minimal
+              if ($LASTEXITCODE -eq 0) {
+                $success = $true
+                break
+              }
+              if ($i -lt $maxAttempts) {
+                $delay = $baseDelay * [math]::Pow(2, $i - 1)
+                Write-Host \"Restore failed; sleeping $delay seconds before retrying...\"
+                Start-Sleep -Seconds $delay
+              }
             }
-            if ($i -lt $maxAttempts) {
-              $delay = $baseDelay * [math]::Pow(2, $i - 1)
-              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
-              Start-Sleep -Seconds $delay
+            if (-not $success) {
+              Write-Error \"dotnet restore failed after $maxAttempts attempts\"
+              exit 1
             }
-          }
-          if (-not $success) {
-            Write-Error "dotnet restore failed after $maxAttempts attempts"
-            exit 1
-          }
+          }"
 
       - name: Validate runner prerequisites
-        shell: powershell
+        shell: cmd
         run: |
-          .\scripts\check-e2e-runner.ps1 -RunBuild
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-e2e-runner.ps1 -RunBuild
 
       - name: Build
         run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
