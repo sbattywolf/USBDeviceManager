@@ -59,3 +59,40 @@ Where to put things
 
 When in doubt
 - Do not remove or uninstall system runtimes on a shared runner host without coordination; prefer documenting the issue and requesting a privileged operator to make changes.
+
+**Runner maintenance runbook**
+
+When preparing a self-hosted Windows runner for CI (recommended order):
+
+- Step 1 — Stop any manually-started server process (operator): keep the server stopped while preparing the runner.
+  ```powershell
+  # if running in a visible terminal use Ctrl+C then close the shell
+  # otherwise find and stop the process by name or PID
+  Get-Process | Where-Object { $_.ProcessName -like '*USBDeviceManager*' } | Select-Object Id,ProcessName,StartTime
+  Stop-Process -Id <PID> -Confirm:$false
+  ```
+
+- Step 2 — Run the automated prep as Administrator (preferred). This installs .NET (system-wide) if needed and restarts the runner service.
+  ```powershell
+  # from the repo clone on the runner host (elevated PowerShell)
+  cd E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\ci
+  powershell -NoProfile -ExecutionPolicy Bypass -File .\prepare_and_restart_runner.ps1 -RunnerDir 'C:\actions-runner'
+  ```
+
+- Step 3 — If the service restart fails, start the runner interactively (temporary, non-service mode):
+  ```powershell
+  cd C:\actions-runner
+  .\run.cmd
+  ```
+
+- Step 4 — Once the runner is confirmed Online in GitHub Actions, restart or start the test server as required for E2E (or let the test job launch it).
+  ```powershell
+  # start server (example)
+  cd C:\path\to\server\build\output
+  Start-Process -FilePath dotnet -ArgumentList 'USBDeviceManager.dll' -NoNewWindow -PassThru
+  ```
+
+Notes
+- Keep the server stopped while restarting the runner service to avoid port conflicts.
+- Non-admin fallback: `prepare_and_restart_runner.ps1` attempts a user-local install to `C:\dotnet` if run without elevation; prefer the admin run for a system-wide install.
+- All prep logs are written to `C:\ci-artifacts\forensics\<timestamp>` by the automation script for post-mortem.
