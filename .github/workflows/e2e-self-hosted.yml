@@ -45,18 +45,17 @@ jobs:
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-e2e-runner.ps1 -RunBuild
 
-      - name: Build
-        run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
-
-      - name: Run Agent E2E tests (self-hosted)
+      - name: Build and Run Agent E2E tests (self-hosted)
+        shell: cmd
         run: |
-          New-Item -ItemType Directory -Force -Path .\artifacts\test-results | Out-Null
-          dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Debug --logger "trx;LogFileName=AgentE2E.selfhost.trx" --results-directory .\artifacts\test-results
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_e2e_selfhost.ps1
 
       - name: Upload E2E results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: agent-e2e-selfhost
-          path: server/AgentE2E.Tests/**/TestResults/*.trx
+          path: |
+            artifacts/test-results/*.trx
+            server/AgentE2E.Tests/**/TestResults/*.trx
 
