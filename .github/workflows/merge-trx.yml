@@ -4,19 +4,23 @@ on:
   workflow_call:
     inputs:
       results_dir:
+        type: string
         description: 'Directory containing per-job TRX files'
         required: false
         default: 'artifacts/test-results'
       output_file:
+        type: string
         description: 'Path for merged TRX output'
         required: false
         default: 'artifacts/test-results/all-tests.trx'
   workflow_dispatch:
     inputs:
       results_dir:
+        type: string
         description: 'Directory containing per-job TRX files'
         required: false
       output_file:
+        type: string
         description: 'Path for merged TRX output'
         required: false
 
