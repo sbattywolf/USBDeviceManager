@@ -14,10 +14,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download test artifacts
+      - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          name: test-artifacts
           path: artifacts
 
       - name: Run artifact scanner
