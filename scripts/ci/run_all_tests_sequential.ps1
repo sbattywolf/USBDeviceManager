@@ -23,11 +23,11 @@ foreach ($s in $suites) {
     $filter = $s.Filter
     $log = $s.Log
     $outPath = $root
-    $cmd = "dotnet test USBDeviceManager.sln --configuration Release --logger \"trx;LogFileName=$log\" --results-directory \"$outPath\" --filter \"$filter\""
     Write-Host "\n--- Running $name tests ---"
-    Write-Host $cmd
+    $cmdArgs = @('test','USBDeviceManager.sln','--configuration','Release','--logger',"trx;LogFileName=$log",'--results-directory',$outPath,'--filter',$filter)
+    Write-Host ('dotnet ' + ($cmdArgs -join ' '))
     if (-not $DryRun) {
-        $proc = Start-Process -FilePath pwsh -ArgumentList "-NoProfile -Command $cmd" -NoNewWindow -Wait -PassThru
+        $proc = Start-Process -FilePath 'dotnet' -ArgumentList $cmdArgs -NoNewWindow -Wait -PassThru
         if ($proc.ExitCode -ne 0) {
             Write-Host "Command exited with code $($proc.ExitCode) for $name tests (continuing to next suite)." -ForegroundColor Yellow
         }
@@ -51,11 +51,11 @@ if (-not $DryRun) {
 $mergePy = Join-Path $PSScriptRoot 'merge_trx.py'
 if (Test-Path $mergePy) {
     $outMerged = Join-Path $root 'all-tests.trx'
-    $mergeCmd = "python $mergePy --src \"$root\" --out \"$outMerged\""
     Write-Host "\n--- Merging TRX files for run into $outMerged ---"
-    Write-Host $mergeCmd
+    Write-Host ('python ' + $mergePy + ' --src ' + $root + ' --out ' + $outMerged)
     if (-not $DryRun) {
         & python $mergePy --src $root --out $outMerged
+        if ($LASTEXITCODE -ne 0) { Write-Host "merge_trx.py returned exit code $LASTEXITCODE" -ForegroundColor Yellow }
     }
 } else {
     Write-Host "merge_trx.py not found in scripts/ci; skipping merge." -ForegroundColor Yellow
