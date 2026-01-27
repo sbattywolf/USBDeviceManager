@@ -38,7 +38,8 @@ jobs:
 
       - name: Run Agent E2E tests (self-hosted)
         run: |
-          dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Debug --logger "trx;LogFileName=AgentE2E.selfhost.trx"
+          New-Item -ItemType Directory -Force -Path .\artifacts\test-results | Out-Null
+          dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Debug --logger "trx;LogFileName=AgentE2E.selfhost.trx" --results-directory .\artifacts\test-results
 
       - name: Upload E2E results
         if: always()

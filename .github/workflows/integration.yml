@@ -91,15 +91,17 @@ jobs:
         shell: pwsh
         if: ${{ inputs.os == 'windows-latest' }}
         run: |
+          New-Item -ItemType Directory -Force -Path .\artifacts\test-results | Out-Null
           $outName = "dotnet-integration-${{ inputs.os }}.trx"
-          dotnet test USBDeviceManager.sln --configuration ${{ inputs.configuration }} --filter "Category=Integration" --logger "trx;LogFileName=$outName" || echo "dotnet test exited with non-zero"
+          dotnet test USBDeviceManager.sln --configuration ${{ inputs.configuration }} --filter "Category=Integration" --logger "trx;LogFileName=$outName" --results-directory .\artifacts\test-results || echo "dotnet test exited with non-zero"
 
       - name: Run Integration tests (Linux)
         shell: bash
         if: ${{ inputs.os != 'windows-latest' }}
         run: |
           set -euo pipefail || true
-          dotnet test USBDeviceManager.sln --configuration ${{ inputs.configuration }} --filter "Category=Integration" --logger "trx;LogFileName=dotnet-integration-${{ inputs.os }}.trx" || true
+          mkdir -p ./artifacts/test-results
+          dotnet test USBDeviceManager.sln --configuration ${{ inputs.configuration }} --filter "Category=Integration" --logger "trx;LogFileName=dotnet-integration-${{ inputs.os }}.trx" --results-directory ./artifacts/test-results || true
 
       - name: "Always: collect TRX and upload"
         if: always()

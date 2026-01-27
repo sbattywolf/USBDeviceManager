@@ -1,7 +1,28 @@
-name: Merge TRX (reusable)
+name: Merge TRX (reusable + dispatch)
 
 on:
-  workflow_call: {}
+  workflow_call:
+    inputs:
+      results_dir:
+        type: string
+        description: 'Directory containing per-job TRX files'
+        required: false
+        default: 'artifacts/test-results'
+      output_file:
+        type: string
+        description: 'Path for merged TRX output'
+        required: false
+        default: 'artifacts/test-results/all-tests.trx'
+  workflow_dispatch:
+    inputs:
+      results_dir:
+        type: string
+        description: 'Directory containing per-job TRX files'
+        required: false
+      output_file:
+        type: string
+        description: 'Path for merged TRX output'
+        required: false
 
 jobs:
   merge-trx:
@@ -17,14 +38,19 @@ jobs:
           python-version: '3.x'
 
       - name: Run TRX merger
+        env:
+          RESULTS_DIR: ${{ github.event_name == 'workflow_call' && inputs.results_dir || github.event.inputs.results_dir || 'artifacts/test-results' }}
+          OUTPUT_FILE: ${{ github.event_name == 'workflow_call' && inputs.output_file || github.event.inputs.output_file || 'artifacts/test-results/all-tests.trx' }}
         run: |
-          python3 scripts/ci/merge_trx.py artifacts/test-results artifacts/test-results/all-tests.trx || (
+          echo "Using results dir: $RESULTS_DIR"
+          echo "Using output file: $OUTPUT_FILE"
+          python3 scripts/ci/merge_trx.py "$RESULTS_DIR" "$OUTPUT_FILE" || (
             echo "merge_trx failed, attempting fallback copy" && \
-            find artifacts/test-results -name "*.trx" -print -quit | xargs -r cp -v -t artifacts/test-results || true
+            find "$RESULTS_DIR" -name "*.trx" -print -quit | xargs -r cp -v -t "$(dirname "$OUTPUT_FILE")" || true
           )
 
       - name: Upload merged TRX
         uses: actions/upload-artifact@v4
         with:
           name: test-results-all
-          path: artifacts/test-results/all-tests.trx
+          path: ${{ github.event_name == 'workflow_call' && inputs.output_file || github.event.inputs.output_file || 'artifacts/test-results/all-tests.trx' }}
