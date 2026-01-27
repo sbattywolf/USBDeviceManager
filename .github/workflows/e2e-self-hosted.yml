@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify system .NET (pre-check)
-        shell: pwsh
+        shell: powershell
         run: |
           Write-Host 'Checking for system-installed dotnet...'
           $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
@@ -47,7 +47,7 @@ jobs:
             nuget-${{ runner.os }}-
 
       - name: Restore NuGet (with retries)
-        shell: pwsh
+        shell: powershell
         run: |
           # Retry wrapper for transient NuGet failures (3 attempts with exponential backoff)
           $maxAttempts = 3
@@ -72,9 +72,9 @@ jobs:
           }
 
       - name: Validate runner prerequisites
-        shell: pwsh
+        shell: powershell
         run: |
-          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-e2e-runner.ps1 -RunBuild
+          .\scripts\check-e2e-runner.ps1 -RunBuild
 
       - name: Build
         run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
