@@ -1,8 +1,8 @@
 **********************
 Inizio trascrizione Windows PowerShell
 Ora di inizio: 20260123155314
-Nome utente: LITTLE_BEAST\Sbatta
-Esegui come utente: LITTLE_BEAST\Sbatta
+Nome utente: LITTLE_BEAST\sbatt
+Esegui come utente: LITTLE_BEAST\sbatt
 Nome configurazione: 
 Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
 Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\.__run_wrapper.ps1

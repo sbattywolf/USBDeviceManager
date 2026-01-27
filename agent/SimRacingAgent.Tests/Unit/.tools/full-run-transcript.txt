@@ -1,8 +1,8 @@
 **********************
 Inizio trascrizione Windows PowerShell
 Ora di inizio: 20251224033708
-Nome utente: BRNMTHF\sbatt
-Esegui come utente: BRNMTHF\sbatt
+Nome utente: BRNMTHF\Sbatta
+Esegui come utente: BRNMTHF\Sbatta
 Nome configurazione: 
 Computer BRNMTHF (Microsoft Windows NT 10.0.26200.0)
 Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location 'E:\Workspaces\Git\SimRacing\USBDeviceManager'; .\.tools\run-unit-tests.ps1 *>&1 | Tee-Object .\.tools\unit-tests.log; Start-Transcript -Path .\.tools\full-run-transcript.txt -Force; . '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1'; Invoke-AgentRegressionTests -Verbose *>&1 | Tee-Object -FilePath '.\.tools\regression-run.log'; .\.tools\run-psa-per-file.ps1 *>&1 | Tee-Object .\.tools\psa-run.log; .\.tools\psa-summary.ps1 *>&1 | Tee-Object .\.tools\psa-summary-run.log; Stop-Transcript
@@ -97,4 +97,5 @@ In riga:1 car:433
 Fine trascrizione Windows PowerShell
 Ora di fine: 20251224033709
 **********************
+
 

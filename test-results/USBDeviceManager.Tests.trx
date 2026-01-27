@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TestRun id="1060f60b-4220-40f6-b226-f53afe018a17" name="sbatt@BRNMTHF 2026-01-19 12:51:06" runUser="BRNMTHF\sbatt" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+<TestRun id="1060f60b-4220-40f6-b226-f53afe018a17" name="Sbatta@BRNMTHF 2026-01-19 12:51:06" runUser="BRNMTHF\Sbatta" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Times creation="2026-01-19T12:51:06.6310661+01:00" queuing="2026-01-19T12:51:06.6310661+01:00" start="2026-01-19T12:51:04.8941517+01:00" finish="2026-01-19T12:51:09.6935647+01:00" />
   <TestSettings name="default" id="33da1da9-6458-4ffc-b33e-7bf881ac1d5d">
     <Deployment runDeploymentRoot="sbatt_BRNMTHF_2026-01-19_12_51_06" />
@@ -418,7 +418,7 @@ Dashboard: http://localhost:5000&#xD;
 API Documentation: http://localhost:5000/swagger&#xD;
 Press Ctrl+C to shut down.&#xD;
 [DIAG] ApplicationStarted: 2026-01-19T11:51:05.8991435Z&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] ApplicationStopping: 2026-01-19T11:51:06.6658173Z&#xD;
@@ -548,7 +548,7 @@ SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppDat
    at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)&#xD;
    at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
 [DIAG] ApplicationStopped: 2026-01-19T11:51:06.6696244Z&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115105_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] app.Run() exited normally.&#xD;
@@ -560,7 +560,7 @@ API Documentation: http://localhost:5000/swagger&#xD;
 Press Ctrl+C to shut down.&#xD;
 [DIAG] ApplicationStarted: 2026-01-19T11:51:06.7574378Z&#xD;
 [DIAG] ApplicationStopping: 2026-01-19T11:51:06.7714104Z&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] Environment.ExitCode = 0&#xD;
@@ -690,7 +690,7 @@ SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppDat
    at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
 [DIAG] ApplicationStopped: 2026-01-19T11:51:06.7722499Z&#xD;
 [DIAG] app.Run() exited normally.&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115106_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
@@ -701,7 +701,7 @@ API Documentation: http://localhost:5000/swagger&#xD;
 Press Ctrl+C to shut down.&#xD;
 [DIAG] ApplicationStarted: 2026-01-19T11:51:08.2871905Z&#xD;
 [DIAG] ApplicationStopping: 2026-01-19T11:51:08.8138530Z&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
 [DIAG] Environment.ExitCode = 0&#xD;
 [DIAG] Managed thread id: 365&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
@@ -831,7 +831,7 @@ SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppDat
    at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
 [DIAG] ApplicationStopped: 2026-01-19T11:51:08.8148822Z&#xD;
 [DIAG] app.Run() exited normally.&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
@@ -842,7 +842,7 @@ API Documentation: http://localhost:5000/swagger&#xD;
 Press Ctrl+C to shut down.&#xD;
 [DIAG] ApplicationStarted: 2026-01-19T11:51:08.8581491Z&#xD;
 [DIAG] ApplicationStopping: 2026-01-19T11:51:08.9143731Z&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] Environment.ExitCode = 0&#xD;
@@ -972,7 +972,7 @@ SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppDat
    at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
 [DIAG] ApplicationStopped: 2026-01-19T11:51:08.9153281Z&#xD;
 [DIAG] app.Run() exited normally.&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] ContentRootPath: E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager&#xD;
@@ -983,7 +983,7 @@ API Documentation: http://localhost:5000/swagger&#xD;
 Press Ctrl+C to shut down.&#xD;
 [DIAG] ApplicationStarted: 2026-01-19T11:51:08.9556139Z&#xD;
 [DIAG] ApplicationStopping: 2026-01-19T11:51:09.0255594Z&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [DIAG] Environment.ExitCode = 0&#xD;
@@ -1113,7 +1113,7 @@ SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppDat
    at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task&amp; currentTaskSlot, Thread threadPoolThread)&#xD;
 [DIAG] ApplicationStopped: 2026-01-19T11:51:09.0264780Z&#xD;
 [DIAG] app.Run() exited normally.&#xD;
-SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\sbatt\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
+SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db': System.IO.IOException: The process cannot access the file 'C:\Users\Sbatta\AppData\Local\Temp\SimRacingTest_20260119115108_9256.db' because it is being used by another process.&#xD;
    at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
    at USBDeviceManager.Tests.Fixtures.SimRacingTestFactory.Dispose(Boolean disposing) in E:\Workspaces\Git\SimRacing\USBDeviceManager\server\USBDeviceManager.Tests\Fixtures\SimRacingTestFactory.cs:line 286&#xD;
 [xUnit.net 00:00:04.47]   Finished:    USBDeviceManager.Tests&#xD;
@@ -1126,3 +1126,4 @@ SimRacingTestFactory: failed to delete temp DB on dispose 'C:\Users\sbatt\AppDat
     </Output>
   </ResultSummary>
 </TestRun>
+

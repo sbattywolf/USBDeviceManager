@@ -1,8 +1,8 @@
 **********************
 Inizio trascrizione Windows PowerShell
 Ora di inizio: 20260123140900
-Nome utente: BRNMTHF\sbatt
-Esegui come utente: BRNMTHF\sbatt
+Nome utente: BRNMTHF\Sbatta
+Esegui come utente: BRNMTHF\Sbatta
 Nome configurazione: 
 Computer BRNMTHF (Microsoft Windows NT 10.0.26200.0)
 Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location -Path 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests'; Start-Transcript -Path full-agent-run-full-transcript.txt -Force; . .\TestRunner.ps1; Invoke-FullAgentTests; Stop-Transcript
@@ -458,4 +458,5 @@ True
 Fine trascrizione Windows PowerShell
 Ora di fine: 20260123140901
 **********************
+
 

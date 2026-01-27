@@ -1,8 +1,8 @@
-﻿**********************
+**********************
 Inizio trascrizione Windows PowerShell
 Ora di inizio: 20251224033622
-Nome utente: LITTLE_BEAST\sbatt
-Esegui come utente: LITTLE_BEAST\sbatt
+Nome utente: LITTLE_BEAST\Sbatta
+Esegui come utente: LITTLE_BEAST\Sbatta
 Nome configurazione: 
 Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
 Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location 'E:\Workspaces\Git\SimRacing\USBDeviceManager'; Start-Transcript -Path .\.tools\regression-run-transcript.txt -Force; . '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1'; Invoke-AgentRegressionTests -Verbose *>&1 | Tee-Object -FilePath '.\.tools\regression-run.log'; Stop-Transcript
@@ -34,3 +34,4 @@ Results                        {System.Collections.Hashtable}
 Fine trascrizione Windows PowerShell
 Ora di fine: 20251224033622
 **********************
+

@@ -1,12 +1,12 @@
 **********************
 Inizio trascrizione Windows PowerShell
-Ora di inizio: 20260123140356
-Nome utente: LITTLE_BEAST\Sbatta
-Esegui come utente: LITTLE_BEAST\Sbatta
+Ora di inizio: 20260123140437
+Nome utente: LITTLE_BEAST\sbatt
+Esegui come utente: LITTLE_BEAST\sbatt
 Nome configurazione: 
 Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
-Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location -Path 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests'; if (-not (Get-Command -Name Export-ModuleMember -CommandType Function -ErrorAction SilentlyContinue)) { New-Item -Path Function:\Export-ModuleMember -Value { param() } -Force | Out-Null }; Start-Transcript -Path full-agent-run-quick-stubbed-transcript.txt -Force; ./TestRunner.ps1 -Quick -Verbose; Stop-Transcript
-ID processo: 1732
+Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location -Path 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests'; if (-not (Get-Command -Name Export-ModuleMember -CommandType Function -ErrorAction SilentlyContinue)) { New-Item -Path Function:\Export-ModuleMember -Value { param() } -Force | Out-Null }; Start-Transcript -Path full-agent-run-quick-exec-transcript.txt -Force; . .\TestRunner.ps1; Invoke-QuickAgentTests; Stop-Transcript
+ID processo: 14100
 PSVersion: 5.1.26100.7462
 PSEdition: Desktop
 PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
@@ -16,7 +16,7 @@ WSManStackVersion: 3.0
 PSRemotingProtocolVersion: 2.3
 SerializationVersion: 1.1.0.1
 **********************
-Trascrizione avviata. File di output: full-agent-run-quick-stubbed-transcript.txt
+Trascrizione avviata. File di output: full-agent-run-quick-exec-transcript.txt
 AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
 DEBUG: Global Get-DefaultConfiguration available: True
@@ -36,8 +36,103 @@ AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono ve
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DEBUG: Invoke-CompleteTestSuite started at 01/23/2026 14:04:37
+DEBUG: TestCategories requested: AgentUnit
+DEBUG: IncludePerformance=False StopOnFirstFailure=True GenerateReport=False ReportPath=.\TestResults Parallel=False ShowVerbose=False
+SimRacing Complete Test Suite Execution
+=======================================
+Started at: 2026-01-23 14:04:37
+
+Test Categories to Execute:
+  ? AgentUnit
+
+Executing AgentUnit Tests...
+========================
+Starting SimRacing Agent Core Unit Tests
+=======================================
+
+Running agent test suite: ConfigManager
+[PASS] ConfigManager - Get-DefaultConfiguration returns valid agent config
+[PASS] ConfigManager - Test-Configuration validates agent settings correctly
+[PASS] ConfigManager - Save-Configuration and Load-Configuration work for agent
+[PASS] ConfigManager - Configuration paths are agent-specific
+[PASS] ConfigManager - Export-Configuration uses agent naming
+
+Running agent test suite: AgentCore
+[PASS] AgentCore - Test-AgentRunning detects agent instances correctly
+[PASS] AgentCore - Set-AgentLock creates lock file with correct data
+[2026-01-23 14:04:38] [Info] [Test] Test agent message
+[PASS] AgentCore - Write-AgentLog writes agent-specific logs
+[PASS] AgentCore - Get-AgentStatus provides comprehensive agent information
+[PASS] AgentCore - Clear-AgentLock removes lock file properly
+
+Agent Core Test Summary
+======================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+Starting SimRacing Agent Monitoring Unit Tests
+=============================================
+
+Running agent monitoring test suite: USBMonitoring
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - Get-USBDevices returns device collection
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - Get-USBHealthCheck calculates agent-specific metrics
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - Initialize-USBMonitoring sets up agent monitoring
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+>> Errore fatale (): "WMI service unavailable"
+DEBUG: WMI/Get-WmiObject mock failed: WMI service unavailable. Surface ServiceUnavailable error.
+[PASS] USBMonitor - USB operations handle WMI failures gracefully
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - USB device filtering works for agent monitoring
+
+Running agent monitoring test suite: ProcessManager
+[PASS] ProcessManager - Get-ProcessHealthCheck provides agent process metrics
+[PASS] ProcessManager - Test-ManagedProcess validates agent process definitions
+[PASS] ProcessManager - Start-ManagedProcess handles agent process startup
+[PASS] ProcessManager - Get-ProcessMetrics provides agent-relevant metrics
+[PASS] ProcessManager - Calculate-ProcessHealth uses agent-specific scoring
+
+Agent Monitoring Test Summary
+============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentUnit Test Results:
+  Duration: 00:00.380
+  Passed:   20
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Overall Test Suite Results
+==========================
+Total Duration:    00:00:00.406
+Categories Run:    1
+Total Tests:       20
+Total Passed:      20
+Total Failed:      0
+Total Skipped:     0
+Success Rate:      100%
+Overall Status:    SUCCESS
+
+
+Name                           Value
+----                           -----
+Summary                        {Skipped, TotalTests, Failed, Passed}
+TotalDuration                  00:00:00.4065791
+TestCategories                 {System.Collections.Hashtable}
+StartTime                      23/01/2026 14:04:37
+EndTime                        23/01/2026 14:04:38
+OverallSuccess                 True
+True
 **********************
 Fine trascrizione Windows PowerShell
-Ora di fine: 20260123140357
+Ora di fine: 20260123140438
 **********************
 
