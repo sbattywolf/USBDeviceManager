@@ -1,7 +1,7 @@
 param(
     [string]$RunId = '21295514078',
     [int]$TimeoutMinutes = 30,
-    [string]$Repo = 'sbattywolf/USBDeviceManager'
+    [string]$Repo = 'Sbatta/USBDeviceManager'
 )
 
 $end = (Get-Date).AddMinutes($TimeoutMinutes)

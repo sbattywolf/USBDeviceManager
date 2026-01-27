@@ -1,0 +1,140 @@
+e2e-self-hosted	Set up job	´++2026-01-27T14:08:20.5626536Z Current runner version: '2.331.0'
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5633807Z Runner name: 'WIN-E2E-01'
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5634295Z Runner group name: 'Default'
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5634742Z Machine name: 'BRNMTHF'
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5636609Z ##[group]GITHUB_TOKEN Permissions
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5637829Z Contents: read
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5638181Z Metadata: read
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5638522Z Packages: read
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5638813Z ##[endgroup]
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5640047Z Secret source: Actions
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.5640472Z Prepare workflow directory
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.6157827Z Prepare all required actions
+e2e-self-hosted	Set up job	2026-01-27T14:08:20.6182375Z Getting action download info
+e2e-self-hosted	Set up job	2026-01-27T14:08:21.1627482Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+e2e-self-hosted	Set up job	2026-01-27T14:08:21.9214558Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+e2e-self-hosted	Set up job	2026-01-27T14:08:22.7690852Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+e2e-self-hosted	Set up job	2026-01-27T14:08:23.6551345Z Complete job name: e2e-self-hosted
+e2e-self-hosted	Checkout	´++2026-01-27T14:08:23.7087971Z ##[group]Run actions/checkout@v4
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7088513Z with:
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7088739Z   repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7089122Z   token: ***
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7089293Z   ssh-strict: true
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7089482Z   ssh-user: git
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7089660Z   persist-credentials: true
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7089906Z   clean: true
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7090079Z   sparse-checkout-cone-mode: true
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7090309Z   fetch-depth: 1
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7090508Z   fetch-tags: false
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7090692Z   show-progress: true
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7090905Z   lfs: false
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7091073Z   submodules: false
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7091268Z   set-safe-directory: true
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.7091586Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.8994767Z Syncing repository: Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.8995901Z ##[group]Getting Git version info
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.8996386Z Working directory is 'C:\actions-runner\_work\USBDeviceManager\USBDeviceManager'
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9091111Z [command]"C:\Program Files\Git\cmd\git.exe" version
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9299140Z git version 2.52.0.windows.1
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9341062Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9356914Z Temporarily overriding HOME='C:\actions-runner\_work\_temp\594c7d33-bea6-4895-b6a9-1cc858bb5f59' before making global git config changes
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9357862Z Adding repository directory to the temporary git global config as a safe directory
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9362759Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory C:\actions-runner\_work\USBDeviceManager\USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9606813Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --get remote.origin.url
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9800104Z https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9830775Z ##[group]Removing previously created refs, to avoid conflicts
+e2e-self-hosted	Checkout	2026-01-27T14:08:23.9835979Z [command]"C:\Program Files\Git\cmd\git.exe" rev-parse --symbolic-full-name --verify --quiet HEAD
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.0031831Z refs/heads/ci/enrich-aggregator-stabilize
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.0063618Z [command]"C:\Program Files\Git\cmd\git.exe" checkout --detach
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.0448269Z HEAD is now at a33a319 ci(self-hosted): use Windows PowerShell for pre-check and runner validation when pwsh absent
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.0944421Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.0948129Z [command]"C:\Program Files\Git\cmd\git.exe" submodule status
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.4988410Z ##[group]Cleaning the repository
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.4993620Z [command]"C:\Program Files\Git\cmd\git.exe" clean -ffdx
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5294541Z [command]"C:\Program Files\Git\cmd\git.exe" reset --hard HEAD
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5688663Z HEAD is now at a33a319 ci(self-hosted): use Windows PowerShell for pre-check and runner validation when pwsh absent
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5717983Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5722067Z ##[group]Disabling automatic garbage collection
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5727369Z [command]"C:\Program Files\Git\cmd\git.exe" config --local gc.auto 0
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5967790Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5968227Z ##[group]Setting up auth
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.5975534Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --name-only --get-regexp core\.sshCommand
+e2e-self-hosted	Checkout	2026-01-27T14:08:24.6196716Z [command]"C:\Program Files\Git\cmd\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.0315212Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.0545453Z [command]"C:\Program Files\Git\cmd\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.4498580Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.4722979Z [command]"C:\Program Files\Git\cmd\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.8881190Z [command]"C:\Program Files\Git\cmd\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.9129574Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.9130088Z ##[group]Fetching the repository
+e2e-self-hosted	Checkout	2026-01-27T14:08:25.9137226Z [command]"C:\Program Files\Git\cmd\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e07eb6eb16b5286a28bd3454e8dde8fb6e7a5392:refs/remotes/origin/ci/enrich-aggregator-stabilize
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4227399Z From https://github.com/Sbatta/USBDeviceManager
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4228162Z  + a33a319...e07eb6e e07eb6eb16b5286a28bd3454e8dde8fb6e7a5392 -> origin/ci/enrich-aggregator-stabilize  (forced update)
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4359468Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4359937Z ##[group]Determining the checkout info
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4360493Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4366238Z [command]"C:\Program Files\Git\cmd\git.exe" sparse-checkout disable
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4656899Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --unset-all extensions.worktreeConfig
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4880164Z ##[group]Checking out the ref
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.4885566Z [command]"C:\Program Files\Git\cmd\git.exe" checkout --progress --force -B ci/enrich-aggregator-stabilize refs/remotes/origin/ci/enrich-aggregator-stabilize
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.5391398Z branch 'ci/enrich-aggregator-stabilize' set up to track 'origin/ci/enrich-aggregator-stabilize'.
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.5392561Z Your branch is up to date with 'origin/ci/enrich-aggregator-stabilize'.
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.5394821Z Previous HEAD position was a33a319 ci(self-hosted): use Windows PowerShell for pre-check and runner validation when pwsh absent
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.5395637Z Switched to and reset branch 'ci/enrich-aggregator-stabilize'
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.5424172Z ##[endgroup]
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.5681857Z [command]"C:\Program Files\Git\cmd\git.exe" log -1 --format=%H
+e2e-self-hosted	Checkout	2026-01-27T14:08:26.5902367Z e07eb6eb16b5286a28bd3454e8dde8fb6e7a5392
+e2e-self-hosted	Verify system .NET (pre-check)	´++2026-01-27T14:08:26.6261224Z ##[group]Run powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6261742Z [36;1mpowershell -NoProfile -ExecutionPolicy Bypass -Command "& {[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6262119Z [36;1m  Write-Host 'Checking for system-installed dotnet...'[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6262467Z [36;1m  $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6262763Z [36;1m  if ($null -ne $dotnet) {[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6263011Z [36;1m    Write-Host 'dotnet is present on this runner:'[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6263264Z [36;1m    dotnet --info[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6264089Z [36;1m  } else {[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6264359Z [36;1m    Write-Host 'ERROR: dotnet is not installed on this self-hosted runner.'[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6264835Z [36;1m    Write-Host 'Please run the runner maintenance script to install .NET system-wide:'[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6265260Z [36;1m    Write-Host '  scripts/ci/install_dotnet_on_runner.ps1'[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6265701Z [36;1m    Write-Host 'Or install .NET 8 as administrator on the host and restart the runner service.'[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6266091Z [36;1m    exit 1[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6266229Z [36;1m  }[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6266347Z [36;1m}"[0m
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6273016Z shell: C:\Windows\system32\cmd.EXE /D /E:ON /V:OFF /S /C "CALL "{0}""
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.6273236Z ##[endgroup]
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7745829Z '}' di chiusura mancante nel blocco di istruzioni o nella definizione del tipo.
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7746360Z     + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7746796Z     + FullyQualifiedErrorId : MissingEndCurlyBrace
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7747020Z  
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7851424Z "Write-Host" non +¿ riconosciuto come comando interno o esterno,
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7851765Z  un programma eseguibile o un file batch.
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7868174Z "$dotnet" non +¿ riconosciuto come comando interno o esterno,
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7868540Z  un programma eseguibile o un file batch.
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7870020Z -ne non atteso.
+e2e-self-hosted	Verify system .NET (pre-check)	2026-01-27T14:08:26.7891838Z ##[error]Process completed with exit code 255.
+e2e-self-hosted	Upload E2E results	´++2026-01-27T14:08:26.8027717Z ##[group]Run actions/upload-artifact@v4
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8027930Z with:
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8028046Z   name: agent-e2e-selfhost
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8028205Z   path: server/AgentE2E.Tests/**/TestResults/*.trx
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8028388Z   if-no-files-found: warn
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8028519Z   compression-level: 6
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8028648Z   overwrite: false
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8028763Z   include-hidden-files: false
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:26.8028909Z ##[endgroup]
+e2e-self-hosted	Upload E2E results	2026-01-27T14:08:27.2197919Z ##[warning]No files were found with the provided path: server/AgentE2E.Tests/**/TestResults/*.trx. No artifacts will be uploaded.
+e2e-self-hosted	Post Checkout	´++2026-01-27T14:08:27.2381056Z Post job cleanup.
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.3346392Z [command]"C:\Program Files\Git\cmd\git.exe" version
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.3547919Z git version 2.52.0.windows.1
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.3596575Z Temporarily overriding HOME='C:\actions-runner\_work\_temp\346ee975-5dd5-4bed-a23a-366b095b9a3f' before making global git config changes
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.3597197Z Adding repository directory to the temporary git global config as a safe directory
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.3601942Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory C:\actions-runner\_work\USBDeviceManager\USBDeviceManager
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.3872478Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --name-only --get-regexp core\.sshCommand
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.4094449Z [command]"C:\Program Files\Git\cmd\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.8289560Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.8491316Z http.https://github.com/.extraheader
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.8518960Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --unset-all http.https://github.com/.extraheader
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:27.8762506Z [command]"C:\Program Files\Git\cmd\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:28.2840338Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+e2e-self-hosted	Post Checkout	2026-01-27T14:08:28.3059986Z [command]"C:\Program Files\Git\cmd\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+e2e-self-hosted	Complete job	´++2026-01-27T14:08:28.7076432Z Cleaning up orphan processes
+
+

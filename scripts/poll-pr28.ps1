@@ -1,6 +1,6 @@
 # Poll GitHub Actions runs for branch ci/restore-retry and report build-and-test job status
 $max = 30
-$repo = 'sbattywolf/USBDeviceManager'
+$repo = 'Sbatta/USBDeviceManager'
 $branch = 'ci/restore-retry'
 for ($i = 0; $i -lt $max; $i++) {
     Write-Host "Poll $($i+1)/$($max): $(Get-Date -Format o)"

@@ -74,6 +74,40 @@ if ($RunAgentTests) {
     Write-Host "Skipping agent tests (RunAgentTests not set)." -ForegroundColor Gray
 }
 
+# Run Pester-based PowerShell tests in scripts/interactive (if present)
+try {
+    $interactiveTestsPath = Join-Path $RepoRoot 'scripts\interactive\tests'
+    if (Test-Path $interactiveTestsPath) {
+        Write-Host "Running interactive Pester tests: $interactiveTestsPath" -ForegroundColor Yellow
+        Push-Location -Path $interactiveTestsPath
+        # Ensure Pester is available; try to install to CurrentUser scope if missing
+        if (-not (Get-Command Invoke-Pester -ErrorAction SilentlyContinue)) {
+            Write-Host 'Invoke-Pester not found; attempting to install Pester module (CurrentUser scope).' -ForegroundColor Yellow
+            try {
+                Install-Module -Name Pester -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
+                Import-Module Pester -ErrorAction Stop
+                Write-Host 'Pester installed and imported successfully.' -ForegroundColor Green
+            } catch {
+                Write-Host "Failed to install/import Pester: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
+        }
+
+        if (Get-Command Invoke-Pester -ErrorAction SilentlyContinue) {
+            $outFile = Join-Path $RepoRoot 'artifacts\interactive-pester-results.xml'
+            Invoke-Pester -Script @{ Path = $interactiveTestsPath; OutputFormat = 'NUnitXml'; OutputFile = $outFile }
+            if (-not (Test-Path $outFile)) { Write-Host "Pester did not produce results file." -ForegroundColor Yellow }
+        } else {
+            Write-Host 'Pester not available on this runner after install attempt; skipping interactive Pester tests.' -ForegroundColor Yellow
+        }
+        Pop-Location
+    } else {
+        Write-Host "No interactive tests found at $interactiveTestsPath" -ForegroundColor Gray
+    }
+} catch {
+    Write-Host "Interactive Pester tests failed: $($_.Exception.Message)" -ForegroundColor Red
+    $script:exitCode = 1
+}
+
 if ($script:exitCode -eq 0) { Write-Host "All tests passed." -ForegroundColor Green } else { Write-Host "Some tests failed." -ForegroundColor Red }
 
 exit $script:exitCode

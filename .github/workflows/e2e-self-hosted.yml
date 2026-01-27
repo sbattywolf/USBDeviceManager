@@ -20,30 +20,42 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
+      - name: Verify system .NET (pre-check)
+        shell: cmd
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\precheck_dotnet.ps1
 
-      - name: Restore
-        run: dotnet restore USBDeviceManager.sln
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        shell: cmd
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\restore_nuget_with_retries.ps1
 
       - name: Validate runner prerequisites
-        shell: pwsh
+        shell: cmd
         run: |
-          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-e2e-runner.ps1 -RunBuild
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-e2e-runner.ps1 -RunBuild
 
-      - name: Build
-        run: dotnet build server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Release --no-restore
-
-      - name: Run Agent E2E tests (self-hosted)
+      - name: Build and Run Agent E2E tests (self-hosted)
+        shell: cmd
         run: |
-          dotnet test server/AgentE2E.Tests/AgentE2E.Tests.csproj --configuration Debug --logger "trx;LogFileName=AgentE2E.selfhost.trx"
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_e2e_selfhost.ps1
 
       - name: Upload E2E results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: agent-e2e-selfhost
-          path: server/AgentE2E.Tests/**/TestResults/*.trx
+          path: |
+            artifacts/test-results/*.trx
+            server/AgentE2E.Tests/**/TestResults/*.trx
 

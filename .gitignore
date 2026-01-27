@@ -2,6 +2,9 @@
 **/bin/
 **/obj/
 
+# Local git worktree metadata (should not be committed)
+.worktrees/
+
 # Python virtualenv
 /.venv/
 
@@ -106,3 +109,30 @@ coverage.opencover.xml
 **/obj/
 **/bin/
 **/obj/
+
+# Allowlist: keep one merged TRX under version control for review
+!artifacts/test-results/all-tests.merged.trx
+
+# --- Sanitization: ignore common generated files that leak local absolute paths ---
+# Source link and related build metadata
+**/*.sourcelink.json
+**/*.nuget.dgspec.json
+**/*.FileListAbsolute.txt
+**/project.assets.json
+**/project.nuget.cache
+
+# Build/staticwebassets manifests that embed local ContentRoot paths
+**/staticwebassets.*.json
+
+# CI/job run logs and local run artifacts
+run-*.log
+run_*.log
+
+# Prevent committing virtualenv/site-packages and other vendor files
+/venv/
+/node_modules/
+
+# Artifacts and temporary folders (already mostly covered but reinforce)
+/artifacts/
+/publish/
+.tmp/

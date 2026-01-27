@@ -1,0 +1,461 @@
+**********************
+Inizio trascrizione Windows PowerShell
+Ora di inizio: 20260123140900
+Nome utente: LITTLE_BEAST\sbatt
+Esegui come utente: LITTLE_BEAST\sbatt
+Nome configurazione: 
+Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location -Path 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests'; Start-Transcript -Path full-agent-run-full-transcript.txt -Force; . .\TestRunner.ps1; Invoke-FullAgentTests; Stop-Transcript
+ID processo: 28324
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Trascrizione avviata. File di output: full-agent-run-full-transcript.txt
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
+DEBUG: Global Get-DefaultConfiguration available: True
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
+DEBUG: Global Get-DefaultConfiguration available: True
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Invoke-CompleteTestSuite started at 01/23/2026 14:09:00
+DEBUG: TestCategories requested: AgentUnit,AgentIntegration,AgentRegression
+DEBUG: IncludePerformance=True StopOnFirstFailure=False GenerateReport=False ReportPath=.\TestResults Parallel=False ShowVerbose=False
+SimRacing Complete Test Suite Execution
+=======================================
+Started at: 2026-01-23 14:09:00
+
+Test Categories to Execute:
+  ? AgentUnit
+  ? AgentIntegration
+  ? AgentRegression
+
+Executing AgentUnit Tests...
+========================
+Starting SimRacing Agent Core Unit Tests
+=======================================
+
+Running agent test suite: ConfigManager
+[PASS] ConfigManager - Get-DefaultConfiguration returns valid agent config
+[PASS] ConfigManager - Test-Configuration validates agent settings correctly
+[PASS] ConfigManager - Save-Configuration and Load-Configuration work for agent
+[PASS] ConfigManager - Configuration paths are agent-specific
+[PASS] ConfigManager - Export-Configuration uses agent naming
+
+Running agent test suite: AgentCore
+[PASS] AgentCore - Test-AgentRunning detects agent instances correctly
+[PASS] AgentCore - Set-AgentLock creates lock file with correct data
+[2026-01-23 14:09:00] [Info] [Test] Test agent message
+[PASS] AgentCore - Write-AgentLog writes agent-specific logs
+[PASS] AgentCore - Get-AgentStatus provides comprehensive agent information
+[PASS] AgentCore - Clear-AgentLock removes lock file properly
+
+Agent Core Test Summary
+======================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+Starting SimRacing Agent Monitoring Unit Tests
+=============================================
+
+Running agent monitoring test suite: USBMonitoring
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - Get-USBDevices returns device collection
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - Get-USBHealthCheck calculates agent-specific metrics
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - Initialize-USBMonitoring sets up agent monitoring
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+>> Errore fatale (): "WMI service unavailable"
+DEBUG: WMI/Get-WmiObject mock failed: WMI service unavailable. Surface ServiceUnavailable error.
+[PASS] USBMonitor - USB operations handle WMI failures gracefully
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] USBMonitor - USB device filtering works for agent monitoring
+
+Running agent monitoring test suite: ProcessManager
+[PASS] ProcessManager - Get-ProcessHealthCheck provides agent process metrics
+[PASS] ProcessManager - Test-ManagedProcess validates agent process definitions
+[PASS] ProcessManager - Start-ManagedProcess handles agent process startup
+[PASS] ProcessManager - Get-ProcessMetrics provides agent-relevant metrics
+[PASS] ProcessManager - Calculate-ProcessHealth uses agent-specific scoring
+
+Agent Monitoring Test Summary
+============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentUnit Test Results:
+  Duration: 00:00.368
+  Passed:   20
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing AgentIntegration Tests...
+===============================
+Starting SimRacing Agent Integration Tests
+==========================================
+
+Running agent integration test suite: HealthCheckWorkflow
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-HealthCheckWorkflow (stub) called
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-USBHealthCheck returned type: System.Collections.Hashtable
+DEBUG: Get-USBHealthCheck returned type=System.Object[] value=[
+    5,
+    {
+        "value":  "\/Date(1769173741205)\/",
+        "DisplayHint":  2,
+        "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
+    },
+    100,
+    5,
+    {
+        "HealthyDevices":  5,
+        "Timestamp":  {
+                          "value":  "\/Date(1769173741205)\/",
+                          "DisplayHint":  2,
+                          "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
+                      },
+        "OverallHealth":  100,
+        "DeviceCount":  5
+    }
+]
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-ProcessHealthCheck returned type: System.Collections.Hashtable
+DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
+    {
+        "value":  "\/Date(1769173741248)\/",
+        "DisplayHint":  2,
+        "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
+    },
+    3,
+    95,
+    3,
+    157286400,
+    {
+        "Timestamp":  {
+                          "value":  "\/Date(1769173741248)\/",
+                          "DisplayHint":  2,
+                          "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
+                      },
+        "HealthyProcesses":  3,
+        "OverallHealth":  95,
+        "ProcessCount":  3,
+        "MemoryUsage":  157286400
+    }
+]
+DEBUG: ComponentResult USB result type=System.Collections.Hashtable
+DEBUG: ComponentResult Process result type=System.Collections.Hashtable
+DEBUG: Returning health result type=System.Management.Automation.PSCustomObject payload={
+    "OverallHealth":  98,
+    "ComponentResults":  [
+                             {
+                                 "Result":  {
+                                                "HealthyDevices":  5,
+                                                "Timestamp":  {
+                                                                  "value":  "\/Date(1769173741205)\/",
+                                                                  "DisplayHint":  2,
+                                                                  "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
+                                                              },
+                                                "OverallHealth":  100,
+                                                "DeviceCount":  5
+                                            },
+                                 "Name":  "USB"
+                             },
+                             {
+                                 "Result":  {
+                                                "Timestamp":  {
+                                                                  "value":  "\/Date(1769173741248)\/",
+                                                                  "DisplayHint":  2,
+                                                                  "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
+                                                              },
+                                                "HealthyProcesses":  3,
+                                                "OverallHealth":  95,
+                                                "ProcessCount":  3,
+                                                "MemoryUsage":  157286400
+                                            },
+                                 "Name":  "Process"
+                             }
+                         ],
+    "Timestamp":  "2026-01-23T14:09:01.2642749+01:00"
+}
+[PASS] AgentWorkflow - Agent health check workflow executes end-to-end
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Initialize-AgentWorkflow (stub) called
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Initialize-AgentConfiguration returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Initialize-USBMonitoring returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Initialize-ProcessMonitoring returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Start-AgentLogging returned type: System.Boolean
+[PASS] AgentWorkflow - Agent initialization workflow sets up all components
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Stop-AgentWorkflow (stub) called
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Stop-USBMonitoring returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Stop-ProcessMonitoring returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Save-AgentConfiguration returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Stop-AgentLogging returned type: System.Boolean
+[PASS] AgentWorkflow - Agent shutdown workflow cleanly stops all components
+PS>Errore fatale (): "USB monitoring service unavailable"
+PS>Errore fatale (): "USB monitoring service unavailable"
+DEBUG: Get-USBHealthCheck returned: <null>
+DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
+    2,
+    90,
+    2,
+    {
+        "HealthyProcesses":  2,
+        "OverallHealth":  90,
+        "ProcessCount":  2
+    }
+]
+DEBUG: ComponentResult Process result type=System.Collections.Hashtable
+DEBUG: Returning health result type=System.Management.Automation.PSCustomObject payload={
+    "OverallHealth":  90,
+    "ComponentResults":  [
+                             {
+                                 "Result":  {
+                                                "HealthyProcesses":  2,
+                                                "OverallHealth":  90,
+                                                "ProcessCount":  2
+                                            },
+                                 "Name":  "Process"
+                             }
+                         ],
+    "Timestamp":  "2026-01-23T14:09:01.3084339+01:00",
+    "ComponentErrors":  [
+                            {
+                                "Error":  "USB monitoring service unavailable",
+                                "Name":  "USB"
+                            }
+                        ]
+}
+[PASS] AgentWorkflow - Agent handles component failures gracefully
+PS>Errore fatale (Set-AgentConfiguration): "Impossibile trovare un parametro corrispondente al nome 'Config'."
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Restart-USBMonitoring returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Stop-ProcessMonitoring returned type: System.Boolean
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Set-LoggingLevel returned type: System.Boolean
+[PASS] AgentWorkflow - Agent handles configuration changes dynamically
+
+Running agent integration test suite: MonitoringIntegration
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Get-CoordinatedMonitoringData (stub) called
+[PASS] MonitoringIntegration - USB and Process monitors coordinate data collection
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Initialize-MonitoringEvents (stub) called
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Process-MonitoringEvent (stub) invoked
+[PASS] MonitoringIntegration - Agent handles real-time monitoring events across components
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Get-AggregatedHealthScore (stub) called
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-USBHealthCheck returned type: System.Collections.Hashtable
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-ProcessHealthCheck returned type: System.Collections.Hashtable
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-SystemHealthCheck returned type: System.Collections.Hashtable
+[PASS] MonitoringIntegration - Agent aggregates health across all monitoring components
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Get-MonitoringPerformanceMetrics (stub) called
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-PerformanceCounter returned type: System.Int32
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-PerformanceCounter returned type: System.Int32
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Get-LatencyMs returned type: null
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Invoke-Mockable: Measure-Command returned type: System.TimeSpan
+[PASS] MonitoringIntegration - Agent tracks performance across monitoring components
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Sync-ComponentStates (stub) called
+[PASS] MonitoringIntegration - Agent maintains consistent state across components
+
+Agent Integration Test Summary
+==============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+AgentIntegration Test Results:
+  Duration: 00:00.253
+  Passed:   10
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Executing AgentRegression Tests...
+==============================
+Starting SimRacing Agent Regression Tests
+=========================================
+
+Running agent regression test suite: CoreRegression
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Import-AgentConfiguration (stub) called with path=agent-config.json
+DEBUG: Import-AgentConfiguration Test-Path via mock returned=True
+DEBUG: Import-AgentConfiguration invoked stored mock closure (args/no-args), raw type=System.String
+DEBUG: Import-AgentConfiguration parsed obj type=System.Management.Automation.PSCustomObject
+DEBUG: Import-AgentConfiguration found MonitoringSettings.USBPollingInterval=30
+DEBUG: LoadedConfig.MonitoringSettings.USBPollingInterval = [30] (type: System.Int32)
+[PASS] ConfigRegression - Agent maintains backwards compatibility with existing config files
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Get-AgentHealthStatus (stub) called
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] APIRegression - Health check API maintains stable response format
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Get-AgentHealthStatus (stub) called
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+[PASS] PerformanceRegression - Agent performance meets established benchmarks
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Register-MonitoringEvent (stub) called for DeviceChange
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=d95a0f07-f172-4e66-a52b-79581cc3faf8
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=423861a0-bda8-44f0-8d94-a802d1eba648
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=b489d961-ddd5-4c9f-b4db-6e932a93da1e
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=ab81be81-8000-4e0d-8be0-b4be6c76b1c0
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=d3850f4a-fd40-41ef-b851-170155da63b1
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=ac78fc6e-0989-47d7-b725-9a5771ed4eb3
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=412142ea-a9f2-40ca-bce0-e04c9135c971
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=d381a00c-0650-4ba1-a318-1e4b4b9326f8
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=4eefefee-3915-444b-a13d-c32cf5fa1204
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Unregister-MonitoringEvent (stub) called for Name= EventId=4faf453d-cf36-4e6f-9c79-9cfffa94f940
+[PASS] EventRegression - Agent event handling remains stable across scenarios
+PS>Errore fatale (ForEach-Object): "Impossibile associare il parametro 'RemainingScripts'. Impossibile convertire il valore "-join" di tipo "System.String" nel tipo "System.Management.Automation.ScriptBlock"."
+>> Errore fatale (): "The RPC server is unavailable"
+DEBUG: WMI/Get-WmiObject mock failed: The RPC server is unavailable. Surface ServiceUnavailable error.
+PS>Errore fatale (): "The RPC server is unavailable"
+DEBUG-CATCH: caught exception type=System.Management.Automation.ErrorRecord Category=ResourceUnavailable
+DEBUG-CATCH-DUMP: Exception full dump:
+The RPC server is unavailable
+
+
+PSMessageDetails      : 
+Exception             : System.Management.Automation.RuntimeException: 
+                        The RPC server is unavailable
+TargetObject          : 
+CategoryInfo          : ResourceUnavailable: (:) [], RuntimeException
+FullyQualifiedErrorId : WMIServiceUnavailable
+ErrorDetails          : 
+InvocationInfo        : System.Management.Automation.InvocationInfo
+ScriptStackTrace      : in Get-USBDevices, E:\Workspaces\Git\SimRacing\USB
+                        DeviceManager\agent\src\modules\USBMonitor.psm1: 
+                        riga 65
+                        in <ScriptBlock>, E:\Workspaces\Git\SimRacing\USBD
+                        eviceManager\agent\SimRacingAgent.Tests\Regression
+                        \AgentRegressionTests.ps1: riga 227
+                        in Invoke-Test, E:\Workspaces\Git\SimRacing\USBDev
+                        iceManager\agent\SimRacingAgent.Tests\shared\TestF
+                        ramework.psm1: riga 16
+                        in Test-AgentCoreRegression, E:\Workspaces\Git\Sim
+                        Racing\USBDeviceManager\agent\SimRacingAgent.Tests
+                        \Regression\AgentRegressionTests.ps1: riga 197
+                        in Invoke-AgentRegressionTests, E:\Workspaces\Git\
+                        SimRacing\USBDeviceManager\agent\SimRacingAgent.Te
+                        sts\Regression\AgentRegressionTests.ps1: riga 588
+                        in Invoke-CompleteTestSuite, E:\Workspaces\Git\Sim
+                        Racing\USBDeviceManager\agent\SimRacingAgent.Tests
+                        \TestRunner.ps1: riga 172
+                        in Invoke-FullAgentTests, E:\Workspaces\Git\SimRac
+                        ing\USBDeviceManager\agent\SimRacingAgent.Tests\Te
+                        stRunner.ps1: riga 468
+                        in <ScriptBlock>, <Nessun file>: riga 1
+PipelineIterationInfo : {}
+[2026-01-23 14:09:01] [Debug] [AdapterStubs] Import-AgentConfiguration (stub) called with path=test.json
+DEBUG: Import-AgentConfiguration Test-Path native returned=False
+PS>Errore fatale (): "Access denied"
+[PASS] ErrorRegression - Agent error handling maintains consistent behavior
+
+Running agent regression test suite: CompatibilityRegression
+[PASS] CompatibilityRegression - Agent functions correctly across PowerShell versions
+[PASS] CompatibilityRegression - Agent supports expected Windows versions
+[PASS] CompatibilityRegression - Agent module dependencies remain stable
+[PASS] CompatibilityRegression - Agent CLI maintains backwards compatibility
+DEBUG: ConvertTo-ConfigV2 received V1Config = {
+    "usb_polling_interval":  30,
+    "log_level":  "info",
+    "agent_name":  "SimRacingAgent",
+    "process_monitoring":  true
+}
+DEBUG: ConvertTo-ConfigV2 lookup keys = agent_name,log_level,usb_polling_interval,process_monitoring
+DEBUG: lookup[agent_name] = SimRacingAgent (type: System.String)
+DEBUG: lookup[log_level] = info (type: System.String)
+DEBUG: lookup[usb_polling_interval] = 30 (type: System.Int32)
+DEBUG: lookup[process_monitoring] = True (type: System.Boolean)
+DEBUG: MigratedConfig.MonitoringSettings.USBPollingInterval = [30] (type: System.Int32)
+DEBUG: MigratedConfig.LoggingSettings.LogLevel = [Info] (type: System.String)
+DEBUG: MigratedConfig.MonitoringSettings.ProcessMonitoringEnabled = [True] (type: System.Boolean)
+[PASS] CompatibilityRegression - Agent handles configuration format migrations
+
+Agent Regression Test Summary
+=============================
+Total Passed:  10
+Total Failed:  0
+Total Skipped: 0
+Overall Result: SUCCESS
+
+Performance Benchmarks:
+- Memory Usage: < 100MB
+- USB Query Time: < 500ms
+- Health Check Time: < 1000ms
+- CPU Usage: < 10%
+
+AgentRegression Test Results:
+  Duration: 00:00.507
+  Passed:   10
+  Failed:   0
+  Skipped:  0
+  Status:   SUCCESS
+
+Overall Test Suite Results
+==========================
+Total Duration:    00:00:01.162
+Categories Run:    3
+Total Tests:       40
+Total Passed:      40
+Total Failed:      0
+Total Skipped:     0
+Success Rate:      100%
+Overall Status:    SUCCESS
+
+Performance Benchmark Summary
+=============================
+Agent Memory Usage:    < 100MB
+USB Query Time:        < 500ms
+Health Check Time:     < 1000ms
+API Response Time:     < 1000ms
+Database Query Time:   < 200ms
+
+
+Name                           Value
+----                           -----
+Summary                        {Skipped, TotalTests, Failed, Passed}
+TotalDuration                  00:00:01.1622475
+TestCategories                 {System.Collections.Hashtable, System.Co...
+StartTime                      23/01/2026 14:09:00
+EndTime                        23/01/2026 14:09:01
+OverallSuccess                 True
+True
+**********************
+Fine trascrizione Windows PowerShell
+Ora di fine: 20260123140901
+**********************
+

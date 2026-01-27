@@ -1,0 +1,37 @@
+**********************
+Inizio trascrizione Windows PowerShell
+Ora di inizio: 20251224033622
+Nome utente: LITTLE_BEAST\Sbatta
+Esegui come utente: LITTLE_BEAST\Sbatta
+Nome configurazione: 
+Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location 'E:\Workspaces\Git\SimRacing\USBDeviceManager'; Start-Transcript -Path .\.tools\regression-run-transcript.txt -Force; . '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1'; Invoke-AgentRegressionTests -Verbose *>&1 | Tee-Object -FilePath '.\.tools\regression-run.log'; Stop-Transcript
+ID processo: 24436
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Trascrizione avviata. File di output: .\.tools\regression-run-transcript.txt
+AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
+[PASS] HeartbeatRegression - Agent handles heartbeat 404 response gracefully
+[PASS] HeartbeatRegression - Agent handles heartbeat 404 response gracefully
+[PASS] HeartbeatRegression - Agent heartbeat payload contains expected fields
+[PASS] HeartbeatRegression - Agent heartbeat payload contains expected fields
+
+Name                           Value
+----                           -----
+Summary                        {Skipped, Failed, Passed}
+Success                        True
+Results                        {System.Collections.Hashtable}
+**********************
+Fine trascrizione Windows PowerShell
+Ora di fine: 20251224033622
+**********************
+

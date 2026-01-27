@@ -1,0 +1,86 @@
+name: E2E Smoke (windows-latest)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore solution
+        run: |
+          dotnet restore ./USBDeviceManager.sln
+
+      - name: Build solution (Debug)
+        run: |
+          dotnet build ./USBDeviceManager.sln -c Debug --no-restore
+
+      - name: Publish server for tests
+        run: |
+          dotnet publish ./server/USBDeviceManager.csproj -c Debug -r win-x64 -o ./artifacts/published-server --no-restore
+
+      - name: Upload published server
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-server
+          path: ./artifacts/published-server
+
+  e2e-smoke:
+    name: E2E Smoke Tests
+    runs-on: windows-latest
+    needs: build
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download published server
+        uses: actions/download-artifact@v4
+        with:
+          name: published-server
+          path: ./artifacts/published-server
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Run E2E smoke tests (filtered)
+        env:
+          TEST_SERVER_EXE: ${{ github.workspace }}\artifacts\published-server\USBDeviceManager.exe
+        run: |
+          # Run a smoke subset via test filter; update filter as needed
+          dotnet test ./USBDeviceManager.sln -c Debug --no-build --logger "trx;LogFileName=e2e-smoke.trx" --filter "Category!=LongRunning" --results-directory ./artifacts/test-results
+        shell: pwsh
+
+      - name: List test-results for diagnostics
+        if: always()
+        run: |
+          Write-Host 'Listing artifacts/test-results contents:'
+          Get-ChildItem -Path ./artifacts/test-results -Recurse -Force | ForEach-Object { Write-Host $_.FullName }
+        shell: pwsh
+
+      - name: Upload smoke TRX
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-smoke-trx
+          path: ./artifacts/test-results/**/*.trx
+
+      - name: Upload test-results folder
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-smoke-test-results
+          path: ./artifacts/test-results

@@ -1,0 +1,100 @@
+**********************
+Inizio trascrizione Windows PowerShell
+Ora di inizio: 20251224033708
+Nome utente: LITTLE_BEAST\sbatt
+Esegui come utente: LITTLE_BEAST\sbatt
+Nome configurazione: 
+Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location 'E:\Workspaces\Git\SimRacing\USBDeviceManager'; .\.tools\run-unit-tests.ps1 *>&1 | Tee-Object .\.tools\unit-tests.log; Start-Transcript -Path .\.tools\full-run-transcript.txt -Force; . '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1'; Invoke-AgentRegressionTests -Verbose *>&1 | Tee-Object -FilePath '.\.tools\regression-run.log'; .\.tools\run-psa-per-file.ps1 *>&1 | Tee-Object .\.tools\psa-run.log; .\.tools\psa-summary.ps1 *>&1 | Tee-Object .\.tools\psa-summary-run.log; Stop-Transcript
+ID processo: 29504
+PSVersion: 5.1.26100.7462
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7462
+BuildVersion: 10.0.26100.7462
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Trascrizione avviata. File di output: .\.tools\full-run-transcript.txt
+. : Termine '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1' non riconosciuto come nome di cmdlet, 
+funzione, programma eseguibile o file script. Controllare l'ortografia del nome o verificare che il percorso sia 
+incluso e corretto, quindi riprovare.
+In riga:1 car:199
++ ... t -Force; . '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionT ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\agent\SimRaci...essionTests.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+. : Termine '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionTests.ps1' non
+riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script.
+Controllare l'ortografia del nome o verificare che il percorso sia incluso e
+corretto, quindi riprovare.
+In riga:1 car:199
++ ... t -Force; . '.\agent\SimRacingAgent.Tests\Regression\AgentRegressionT ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\agent\SimRaci...essionTests.ps1:St
+   ring) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+Invoke-AgentRegressionTests : Termine 'Invoke-AgentRegressionTests' non riconosciuto come nome di cmdlet, funzione, 
+programma eseguibile o file script. Controllare l'ortografia del nome o verificare che il percorso sia incluso e 
+corretto, quindi riprovare.
+In riga:1 car:267
++ ... ession\AgentRegressionTests.ps1'; Invoke-AgentRegressionTests -Verbos ...
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Invoke-AgentRegressionTests:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+Invoke-AgentRegressionTests : Termine 'Invoke-AgentRegressionTests' non
+riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script.
+Controllare l'ortografia del nome o verificare che il percorso sia incluso e
+corretto, quindi riprovare.
+In riga:1 car:267
++ ... ession\AgentRegressionTests.ps1'; Invoke-AgentRegressionTests -Verbos ...
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Invoke-AgentRegressionTests:String)
+   [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+.\.tools\run-psa-per-file.ps1 : Termine '.\.tools\run-psa-per-file.ps1' non riconosciuto come nome di cmdlet, funzione, 
+programma eseguibile o file script. Controllare l'ortografia del nome o verificare che il percorso sia incluso e 
+corretto, quindi riprovare.
+In riga:1 car:363
++ ...  '.\.tools\regression-run.log'; .\.tools\run-psa-per-file.ps1 *>&1 |  ...
++                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\.tools\run-psa-per-file.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+.\.tools\run-psa-per-file.ps1 : Termine '.\.tools\run-psa-per-file.ps1' non
+riconosciuto come nome di cmdlet, funzione, programma eseguibile o file script.
+Controllare l'ortografia del nome o verificare che il percorso sia incluso e
+corretto, quindi riprovare.
+In riga:1 car:363
++ ...  '.\.tools\regression-run.log'; .\.tools\run-psa-per-file.ps1 *>&1 |  ...
++                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\.tools\run-psa-per-file.ps1:String
+   ) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+.\.tools\psa-summary.ps1 : Termine '.\.tools\psa-summary.ps1' non riconosciuto come nome di cmdlet, funzione, programma 
+eseguibile o file script. Controllare l'ortografia del nome o verificare che il percorso sia incluso e corretto, quindi 
+riprovare.
+In riga:1 car:433
++ ... 1 | Tee-Object .\.tools\psa-run.log; .\.tools\psa-summary.ps1 *>&1 |  ...
++                                          ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\.tools\psa-summary.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+.\.tools\psa-summary.ps1 : Termine '.\.tools\psa-summary.ps1' non riconosciuto come
+nome di cmdlet, funzione, programma eseguibile o file script. Controllare
+l'ortografia del nome o verificare che il percorso sia incluso e corretto, quindi
+riprovare.
+In riga:1 car:433
++ ... 1 | Tee-Object .\.tools\psa-run.log; .\.tools\psa-summary.ps1 *>&1 |  ...
++                                          ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\.tools\psa-summary.ps1:String) [],
+    CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+**********************
+Fine trascrizione Windows PowerShell
+Ora di fine: 20251224033709
+**********************
+

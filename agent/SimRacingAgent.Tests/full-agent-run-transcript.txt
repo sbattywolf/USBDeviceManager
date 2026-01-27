@@ -1,10 +1,10 @@
-ï»¿**********************
+**********************
 Inizio trascrizione Windows PowerShell
 Ora di inizio: 20260123140027
-Nome utente: LITTLE_BEAST\sbatt
-Esegui come utente: LITTLE_BEAST\sbatt
+Nome utente: BRNMTHF\Sbatta
+Esegui come utente: BRNMTHF\Sbatta
 Nome configurazione: 
-Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Computer BRNMTHF (Microsoft Windows NT 10.0.26200.0)
 Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location -Path 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests'; Start-Transcript -Path full-agent-run-transcript.txt -Force; ./TestRunner.ps1 -Full -Verbose; Stop-Transcript
 ID processo: 2248
 PSVersion: 5.1.26100.7462
@@ -23,32 +23,34 @@ DEBUG: Global Get-DefaultConfiguration available: True
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
 DEBUG: Global Get-DefaultConfiguration available: True
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 **********************
 Fine trascrizione Windows PowerShell
 Ora di fine: 20260123140027
 **********************
+
+
