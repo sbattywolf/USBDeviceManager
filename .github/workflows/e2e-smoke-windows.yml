@@ -20,14 +20,14 @@ jobs:
         run: |
           dotnet restore ./USBDeviceManager.sln
 
-      - name: Build solution (Release)
+      - name: Build solution (Debug)
         run: |
-          dotnet build ./USBDeviceManager.sln -c Release --no-restore
+          dotnet build ./USBDeviceManager.sln -c Debug --no-restore
 
       - name: Run E2E smoke tests (filtered)
         run: |
           # Run a smoke subset via test filter; update filter as needed
-          dotnet test ./USBDeviceManager.sln -c Release --no-build --logger "trx;LogFileName=e2e-smoke.trx" --filter "Category!=LongRunning" --results-directory ./artifacts/test-results
+          dotnet test ./USBDeviceManager.sln -c Debug --no-build --logger "trx;LogFileName=e2e-smoke.trx" --filter "Category!=LongRunning" --results-directory ./artifacts/test-results
         shell: pwsh
 
       - name: Upload smoke TRX
