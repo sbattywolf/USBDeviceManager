@@ -1,0 +1,32 @@
+name: Artifact Scan
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+      - ci/sanitize-personal-info
+
+jobs:
+  artifact-scan:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test-artifacts
+          path: artifacts
+
+      - name: Run artifact scanner
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass ./scripts/ci/artifact_scan.ps1 -ArtifactsDir artifacts -OutputJson artifact-scan-report.json
+
+      - name: Upload artifact-scan report
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-scan-report
+          path: artifact-scan-report.json
