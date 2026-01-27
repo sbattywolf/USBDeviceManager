@@ -109,3 +109,6 @@ coverage.opencover.xml
 **/obj/
 **/bin/
 **/obj/
+
+# Allowlist: keep one merged TRX under version control for review
+!artifacts/test-results/all-tests.merged.trx
