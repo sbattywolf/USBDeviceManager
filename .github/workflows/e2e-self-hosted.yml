@@ -23,20 +23,7 @@ jobs:
       - name: Verify system .NET (pre-check)
         shell: cmd
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
-            Write-Host 'Checking for system-installed dotnet...'
-            $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
-            if ($null -ne $dotnet) {
-              Write-Host 'dotnet is present on this runner:'
-              dotnet --info
-            } else {
-              Write-Host 'ERROR: dotnet is not installed on this self-hosted runner.'
-              Write-Host 'Please run the runner maintenance script to install .NET system-wide:'
-              Write-Host '  scripts/ci/install_dotnet_on_runner.ps1'
-              Write-Host 'Or install .NET 8 as administrator on the host and restart the runner service.'
-              exit 1
-            }
-          }"
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\precheck_dotnet.ps1
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -51,29 +38,7 @@ jobs:
       - name: Restore NuGet (with retries)
         shell: cmd
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
-            # Retry wrapper for transient NuGet failures (3 attempts with exponential backoff)
-            $maxAttempts = 3
-            $baseDelay = 5
-            $success = $false
-            for ($i = 1; $i -le $maxAttempts; $i++) {
-              Write-Host \"dotnet restore attempt $i of $maxAttempts\"
-              dotnet restore ./USBDeviceManager.sln --verbosity minimal
-              if ($LASTEXITCODE -eq 0) {
-                $success = $true
-                break
-              }
-              if ($i -lt $maxAttempts) {
-                $delay = $baseDelay * [math]::Pow(2, $i - 1)
-                Write-Host \"Restore failed; sleeping $delay seconds before retrying...\"
-                Start-Sleep -Seconds $delay
-              }
-            }
-            if (-not $success) {
-              Write-Error \"dotnet restore failed after $maxAttempts attempts\"
-              exit 1
-            }
-          }"
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\restore_nuget_with_retries.ps1
 
       - name: Validate runner prerequisites
         shell: cmd
