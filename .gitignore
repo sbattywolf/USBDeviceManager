@@ -2,6 +2,9 @@
 **/bin/
 **/obj/
 
+# Local git worktree metadata (should not be committed)
+.worktrees/
+
 # Python virtualenv
 /.venv/
 
@@ -106,3 +109,6 @@ coverage.opencover.xml
 **/obj/
 **/bin/
 **/obj/
+
+# Allowlist: keep one merged TRX under version control for review
+!artifacts/test-results/all-tests.merged.trx
