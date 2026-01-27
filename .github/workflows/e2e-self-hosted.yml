@@ -20,33 +20,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check for dotnet
-        id: check_dotnet
+      - name: Verify system .NET (pre-check)
         shell: pwsh
         run: |
+          Write-Host 'Checking for system-installed dotnet...'
           $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
           if ($null -ne $dotnet) {
-            Write-Host 'dotnet present on runner'
-            Add-Content -Path $Env:GITHUB_OUTPUT -Value "present=true"
-          } else {
-            Write-Host 'dotnet NOT present on runner'
-            Add-Content -Path $Env:GITHUB_OUTPUT -Value "present=false"
-          }
-
-      - name: Setup .NET
-        if: ${{ steps.check_dotnet.outputs.present == 'false' }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Verify system .NET on runner
-        shell: pwsh
-        run: |
-          Write-Host "dotnet present: ${{ steps.check_dotnet.outputs.present }}"
-          if ('${{ steps.check_dotnet.outputs.present }}' -eq 'true') {
+            Write-Host 'dotnet is present on this runner:'
             dotnet --info
           } else {
-            Write-Host 'dotnet not installed on this runner'
+            Write-Host 'ERROR: dotnet is not installed on this self-hosted runner.'
+            Write-Host 'Please run the runner maintenance script to install .NET system-wide:'
+            Write-Host '  scripts/ci/install_dotnet_on_runner.ps1'
+            Write-Host 'Or install .NET 8 as administrator on the host and restart the runner service.'
+            exit 1
           }
 
       - name: Cache NuGet packages
