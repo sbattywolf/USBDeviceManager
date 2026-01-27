@@ -1,10 +1,10 @@
-﻿**********************
+**********************
 Inizio trascrizione Windows PowerShell
 Ora di inizio: 20260123140437
-Nome utente: LITTLE_BEAST\sbatt
-Esegui come utente: LITTLE_BEAST\sbatt
+Nome utente: BRNMTHF\sbatt
+Esegui come utente: BRNMTHF\sbatt
 Nome configurazione: 
-Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Computer BRNMTHF (Microsoft Windows NT 10.0.26200.0)
 Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location -Path 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests'; if (-not (Get-Command -Name Export-ModuleMember -CommandType Function -ErrorAction SilentlyContinue)) { New-Item -Path Function:\Export-ModuleMember -Value { param() } -Force | Out-Null }; Start-Transcript -Path full-agent-run-quick-exec-transcript.txt -Force; . .\TestRunner.ps1; Invoke-QuickAgentTests; Stop-Transcript
 ID processo: 14100
 PSVersion: 5.1.26100.7462
@@ -44,7 +44,7 @@ SimRacing Complete Test Suite Execution
 Started at: 2026-01-23 14:04:37
 
 Test Categories to Execute:
-  ✓ AgentUnit
+  ? AgentUnit
 
 Executing AgentUnit Tests...
 ========================
@@ -135,3 +135,4 @@ True
 Fine trascrizione Windows PowerShell
 Ora di fine: 20260123140438
 **********************
+

@@ -1,10 +1,10 @@
-ï»¿**********************
+**********************
 Inizio trascrizione Windows PowerShell
 Ora di inizio: 20260123140900
-Nome utente: LITTLE_BEAST\sbatt
-Esegui come utente: LITTLE_BEAST\sbatt
+Nome utente: BRNMTHF\sbatt
+Esegui come utente: BRNMTHF\sbatt
 Nome configurazione: 
-Computer LITTLE_BEAST (Microsoft Windows NT 10.0.26200.0)
+Computer BRNMTHF (Microsoft Windows NT 10.0.26200.0)
 Applicazione host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Set-Location -Path 'E:/Workspaces/Git/SimRacing/USBDeviceManager/agent/SimRacingAgent.Tests'; Start-Transcript -Path full-agent-run-full-transcript.txt -Force; . .\TestRunner.ps1; Invoke-FullAgentTests; Stop-Transcript
 ID processo: 28324
 PSVersion: 5.1.26100.7462
@@ -23,31 +23,31 @@ DEBUG: Global Get-DefaultConfiguration available: True
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'AdapterStubs' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 DEBUG: AdapterStubs imported from E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent.Tests\shared\AdapterStubs.psm1
 DEBUG: Global Get-DefaultConfiguration available: True
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'ProcessManager' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
 AVVISO: Alcuni nomi di comandi importati dal modulo 'TestFramework' includono verbi non approvati che possono renderli meno individuabili. Per trovare i comandi con verbi non approvati, eseguire di nuovo il comando Import-Module con il parametro Verbose. Per visualizzare l'elenco dei verbi approvati, digitare Get-Verb.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
-DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo.
-PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember puÃ² essere chiamato solo dall'interno di un modulo."
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
+DEBUG: Export-ModuleMember skipped (not running inside module): Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo.
+PS>Errore fatale (Export-ModuleMember): "Il cmdlet Export-ModuleMember può essere chiamato solo dall'interno di un modulo."
 DEBUG: Invoke-CompleteTestSuite started at 01/23/2026 14:09:00
 DEBUG: TestCategories requested: AgentUnit,AgentIntegration,AgentRegression
 DEBUG: IncludePerformance=True StopOnFirstFailure=False GenerateReport=False ReportPath=.\TestResults Parallel=False ShowVerbose=False
@@ -56,9 +56,9 @@ SimRacing Complete Test Suite Execution
 Started at: 2026-01-23 14:09:00
 
 Test Categories to Execute:
-  âœ“ AgentUnit
-  âœ“ AgentIntegration
-  âœ“ AgentRegression
+  ? AgentUnit
+  ? AgentIntegration
+  ? AgentRegression
 
 Executing AgentUnit Tests...
 ========================
@@ -137,7 +137,7 @@ DEBUG: Get-USBHealthCheck returned type=System.Object[] value=[
     {
         "value":  "\/Date(1769173741205)\/",
         "DisplayHint":  2,
-        "DateTime":  "venerdÃ¬ 23 gennaio 2026 14:09:01"
+        "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
     },
     100,
     5,
@@ -146,7 +146,7 @@ DEBUG: Get-USBHealthCheck returned type=System.Object[] value=[
         "Timestamp":  {
                           "value":  "\/Date(1769173741205)\/",
                           "DisplayHint":  2,
-                          "DateTime":  "venerdÃ¬ 23 gennaio 2026 14:09:01"
+                          "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
                       },
         "OverallHealth":  100,
         "DeviceCount":  5
@@ -157,7 +157,7 @@ DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
     {
         "value":  "\/Date(1769173741248)\/",
         "DisplayHint":  2,
-        "DateTime":  "venerdÃ¬ 23 gennaio 2026 14:09:01"
+        "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
     },
     3,
     95,
@@ -167,7 +167,7 @@ DEBUG: Get-ProcessHealthCheck returned type=System.Object[] value=[
         "Timestamp":  {
                           "value":  "\/Date(1769173741248)\/",
                           "DisplayHint":  2,
-                          "DateTime":  "venerdÃ¬ 23 gennaio 2026 14:09:01"
+                          "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
                       },
         "HealthyProcesses":  3,
         "OverallHealth":  95,
@@ -186,7 +186,7 @@ DEBUG: Returning health result type=System.Management.Automation.PSCustomObject 
                                                 "Timestamp":  {
                                                                   "value":  "\/Date(1769173741205)\/",
                                                                   "DisplayHint":  2,
-                                                                  "DateTime":  "venerdÃ¬ 23 gennaio 2026 14:09:01"
+                                                                  "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
                                                               },
                                                 "OverallHealth":  100,
                                                 "DeviceCount":  5
@@ -198,7 +198,7 @@ DEBUG: Returning health result type=System.Management.Automation.PSCustomObject 
                                                 "Timestamp":  {
                                                                   "value":  "\/Date(1769173741248)\/",
                                                                   "DisplayHint":  2,
-                                                                  "DateTime":  "venerdÃ¬ 23 gennaio 2026 14:09:01"
+                                                                  "DateTime":  "venerdì 23 gennaio 2026 14:09:01"
                                                               },
                                                 "HealthyProcesses":  3,
                                                 "OverallHealth":  95,
@@ -458,3 +458,4 @@ True
 Fine trascrizione Windows PowerShell
 Ora di fine: 20260123140901
 **********************
+
