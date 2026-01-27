@@ -152,3 +152,28 @@ jobs:
               Write-Host "$frameworkExe already exists; skipping copy"
             }
           }
+
+      - name: Create CI config (artifact indexes)
+        if: always()
+        run: |
+          cat > ci-config.json <<'JSON'
+          {
+            "artifacts": {
+              "longrunner": "artifacts/longrunner",
+              "server_publish": "server/USBDeviceManager/bin/Release/net8.0/win-x64"
+            },
+            "ports": {
+              "default_integration_port": 5010
+            }
+          }
+          JSON
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            artifacts/longrunner
+            server/USBDeviceManager/bin/Release/net8.0/win-x64
+            ci-config.json
+          if-no-files-found: ignore
