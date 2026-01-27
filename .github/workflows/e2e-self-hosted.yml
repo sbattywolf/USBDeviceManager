@@ -20,13 +20,69 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check for dotnet
+        id: check_dotnet
+        shell: pwsh
+        run: |
+          $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
+          if ($null -ne $dotnet) {
+            Write-Host 'dotnet present on runner'
+            Add-Content -Path $Env:GITHUB_OUTPUT -Value "present=true"
+          } else {
+            Write-Host 'dotnet NOT present on runner'
+            Add-Content -Path $Env:GITHUB_OUTPUT -Value "present=false"
+          }
+
       - name: Setup .NET
+        if: ${{ steps.check_dotnet.outputs.present != 'true' }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore
-        run: dotnet restore USBDeviceManager.sln
+      - name: Verify system .NET on runner
+        shell: pwsh
+        run: |
+          Write-Host "dotnet present: ${{ steps.check_dotnet.outputs.present }}"
+          if ('${{ steps.check_dotnet.outputs.present }}' -eq 'true') {
+            dotnet --info
+          } else {
+            Write-Host 'dotnet not installed on this runner'
+          }
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj','**/global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet (with retries)
+        shell: pwsh
+        run: |
+          # Retry wrapper for transient NuGet failures (3 attempts with exponential backoff)
+          $maxAttempts = 3
+          $baseDelay = 5
+          $success = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            Write-Host "dotnet restore attempt $i of $maxAttempts"
+            dotnet restore ./USBDeviceManager.sln --verbosity minimal
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+            if ($i -lt $maxAttempts) {
+              $delay = $baseDelay * [math]::Pow(2, $i - 1)
+              Write-Host "Restore failed; sleeping $delay seconds before retrying..."
+              Start-Sleep -Seconds $delay
+            }
+          }
+          if (-not $success) {
+            Write-Error "dotnet restore failed after $maxAttempts attempts"
+            exit 1
+          }
 
       - name: Validate runner prerequisites
         shell: pwsh
