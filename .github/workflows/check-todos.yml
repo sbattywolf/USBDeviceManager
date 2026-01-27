@@ -18,7 +18,8 @@ jobs:
           matches=$(git grep -n -I -E "\\bTODO\\b" -- '*.md' || true)
           # Exclude the centralized TODO file and docs archive/session folders
           # Also ignore the legacy TODO-IMPLEMENTATION-GUIDE.md which is archived
-          filtered=$(echo "$matches" | grep -v "^docs/TODOs-collected.md" | grep -v "^docs/" | grep -v "^TODO-IMPLEMENTATION-GUIDE.md" || true)
+          # Exclude vendored/virtualenv/worktree paths and the centralized TODO file
+          filtered=$(echo "$matches" | grep -v "^docs/TODOs-collected.md" | grep -v "^docs/" | grep -v "^TODO-IMPLEMENTATION-GUIDE.md" | grep -v "^\\.venv/" | grep -v "^\\.worktrees/" || true)
           if [ -n "$filtered" ]; then
             echo "Found TODOs outside docs/TODOs-collected.md:\n"
             echo "$filtered"
