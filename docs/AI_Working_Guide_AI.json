@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "title": "AI Working Guide (machine-readable)",
+  "generated": "2026-01-27",
+  "description": "Structured guide for programmatic consumption by AI agents and tools. Use this JSON to drive automated checklists, prompts, and validation flows.",
+  "agents": [
+    { "name": "LLM-Assistant", "capabilities": ["code-edit", "test-generator", "prompt-refinement"] },
+    { "name": "infra-agent", "capabilities": ["gh-cli", "bw-cli", "runner-config"] }
+  ],
+  "questions_for_user": [
+    { "id": "ai_target_models", "text": "Which AI models/agents should we target (examples: GPT-5-mini, GPT-4o, Claude-2, Llama2, Ollama local)?" }
+  ],
+  "chapters": {
+    "debugging": {
+      "roles": ["Developer", "CI/DevOps", "QA"],
+      "steps": [
+        { "id": "reproduce", "action": "Run failing workflow locally or reproduce in disposable environment", "check": "workflow run logs and artifacts available" },
+        { "id": "collect_artifacts", "action": "Download TRX and logs using gh run download", "cli": "gh run download <run-id> --dir artifacts_run<id>" },
+        { "id": "scan_sensitive", "action": "Search artifacts for tokens", "command": "Select-String -Path \"artifacts_run<id>\\**\\*\" -Pattern 'LITTLE_BEAST|sbatt|sbattywolf|BRNMTHF|Sbatta'" }
+      ]
+    },
+    "testing": {
+      "roles": ["QA", "Developer"],
+      "steps": [
+        { "id": "unit_tests", "action": "Run unit tests and produce TRX", "command": "dotnet test --logger:trx" },
+        { "id": "pester", "action": "Run Pester tests for PS scripts and upload TRX per job" }
+      ]
+    },
+    "tool_framework": {
+      "roles": ["CI/DevOps", "Developer"],
+      "steps": [ { "id": "cli_tools", "action": "Ensure tool availability and versions", "tools": ["gh", "bw", "pwsh"] } ]
+    },
+    "code_strategy": {
+      "roles": ["Developer", "AI Integrator"],
+      "steps": [ { "id": "prompt_first", "action": "Create small explicit prompts that include acceptance tests" }, { "id": "small_commits", "action": "Prefer small iterative commits with PR review" } ]
+    },
+    "testing_strategy": { "roles": ["QA", "Developer"], "steps": [ { "id": "artifact_scan", "action": "Add post-run artifact scanning job" } ] },
+    "lifecycle": { "roles": ["Project Owner", "DevOps"], "steps": [ { "id": "design", "action": "Document change, risks and tests" }, { "id": "implement", "action": "Implement with AI assistance and run tests" } ] }
+  },
+  "prompts": [
+    {
+      "id": "scan_for_tokens",
+      "system": "You are an automated auditor agent. Your job: given a run artifacts folder, list matches for forbidden tokens and output a short JSON report.",
+      "user": "Scan artifacts in folder {artifact_dir} for tokens: LITTLE_BEAST, sbatt, sbattywolf, BRNMTHF, Sbatta. Return JSON {found: bool, matches: [{path,line,text}]}"
+    }
+  ],
+  "validation": [
+    { "id": "trx_sanitized", "description": "TRX files must not contain forbidden tokens", "check_command": "Select-String -Path \"artifacts_run<id>\\**\\*.trx\" -Pattern 'LITTLE_BEAST|sbatt|sbattywolf|BRNMTHF|Sbatta' -Quiet" }
+  ],
+  "notes": [ "Use this JSON to feed agent workflows that create PRs, run checks, and open issues when violations found."]
+}
