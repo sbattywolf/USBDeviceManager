@@ -1,0 +1,9 @@
+name: Run Merge TRX
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  merge:
+    name: Merge TRX
+    uses: ./.github/workflows/merge-trx.yml
