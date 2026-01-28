@@ -1,0 +1,32 @@
+name: Interactive Tests (mock)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  interactive-tests:
+    name: Run interactive acceptance tests (mock-mode)
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run interactive tests (mock-mode)
+        shell: pwsh
+        env:
+          PROCESS_MENU_MOCK: '1'
+          PROCESS_MENU_ENABLE_AUTO_ADVANCE: '1'
+          PROCESS_MENU_TEST_MARKER: ${{ runner.temp }}/process_menu_marker.txt
+        run: |
+          Write-Host "Running interactive test runner (mock-mode)"
+          .\scripts\ci\run_interactive_tests.ps1
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: interactive-tests-artifacts
+          path: artifacts/

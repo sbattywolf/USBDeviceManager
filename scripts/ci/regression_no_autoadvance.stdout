@@ -1,0 +1,20 @@
+=== Process Menu: Server vs Agent ===
+Running in TESTING mode - srvmck:up agntmck:up
+Quick: press 1 to show full server info
+Tail poll interval: 30s
+--- Server ---
+1) Show server process info
+2) Start server (detached)
+3) Stop server process
+4) Tail server.log
+
+--- Agent ---
+5) Show agent process info
+6) Start agent (detached)
+7) Stop agent process
+8) Tail agent-run.log
+
+--- Setup ---
+9) Setup menu (ensure/clear logs, rebuild server)
+0) Exit
+Select an option 

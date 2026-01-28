@@ -1,0 +1,8 @@
+Write-AgentWarning : Termine 'Write-AgentWarning' non riconosciuto come nome di cmdlet, funzione, programma eseguibile 
+o file script. Controllare l'ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\agent\SimRacingAgent\SimRacingAgent.ps1:73 car:5
++     Write-AgentWarning "Failed to acquire single-instance mutex: $($_ ...
++     ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Write-AgentWarning:String) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 

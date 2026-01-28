@@ -1,0 +1,14 @@
+Out-File : Il processo non pu• accedere al file 'E:\Workspaces\G
+it\SimRacing\USBDeviceManager\server\USBDeviceManager\server.log
+' perch‚ Š in uso da un altro processo.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\process-
+menu.ps1:126 car:88
++ ... process started)" | Out-File -FilePath $outLog -Append 
+-Encoding UTF8
++                         
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (:) [Out-File], IOExce 
+   ption
+    + FullyQualifiedErrorId : FileOpenFailure,Microsoft.PowerSh 
+   ell.Commands.OutFileCommand
+ 
