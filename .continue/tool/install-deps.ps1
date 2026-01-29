@@ -52,6 +52,41 @@ function Check-7Zip {
     return $false
 }
 
+# Return the installed 7-Zip executable path if found via common locations or registry
+function Get-7ZipInstallPath {
+    $possible = @(
+        "$env:ProgramFiles\7-Zip\7z.exe",
+        "$env:ProgramFiles(x86)\7-Zip\7z.exe"
+    )
+    foreach ($p in $possible) { if (Test-Path $p) { return $p } }
+
+    $regRoots = @(
+        'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall',
+        'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall',
+        'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall'
+    )
+    foreach ($root in $regRoots) {
+        try {
+            $children = Get-ChildItem -Path $root -ErrorAction SilentlyContinue
+            foreach ($c in $children) {
+                $props = Get-ItemProperty -Path $c.PSPath -ErrorAction SilentlyContinue
+                if ($props -and $props.DisplayName -and ($props.DisplayName -match '7-?Zip')) {
+                    if ($props.InstallLocation) {
+                        $exe = Join-Path $props.InstallLocation '7z.exe'
+                        if (Test-Path $exe) { return $exe }
+                    }
+                    if ($props.UninstallString) {
+                        # sometimes the uninstall string contains the exe path
+                        $m = [regex]::Match($props.UninstallString, '"(?<p>.*?7z\.exe)"')
+                        if ($m.Success) { return $m.Groups['p'].Value }
+                    }
+                }
+            }
+        } catch { }
+    }
+    return $null
+}
+
 Write-Host "Checking environment..."
 
 $checks = @{}
@@ -62,6 +97,18 @@ $checks.winget = Check-Cmd 'winget'
 $checks.choco = Check-Cmd 'choco'
 $checks.docker = Check-Cmd 'docker'
 
+# Run a lightweight validation command for a tool and return a short result string
+function Run-ToolCheck($name, $cmdLine) {
+    try {
+        $out = Invoke-Expression $cmdLine 2>&1
+        if ($out -is [array]) { $first = $out[0] } else { $first = $out }
+        if ($first -eq $null -or $first -eq '') { $first = 'OK' }
+        return ([string]$first).Split("`n")[0]
+    } catch {
+        return "(error: $($_.Exception.Message))"
+    }
+}
+
 Write-Host "Results (OK = found, MISSING = not found):"
 foreach ($k in $checks.Keys) {
     $status = if ($checks[$k]) { 'OK' } else { 'MISSING' }
@@ -70,7 +117,31 @@ foreach ($k in $checks.Keys) {
         'choco'  { ' (package manager - optional; winget or manual installers work too)' }
         default  { '' }
     }
-    Write-Host (" - {0,-8}: {1}{2}" -f $k, $status, $note)
+    # Prepare a brief runtime check when present
+        if ($status -eq 'OK') {
+        switch ($k) {
+            'choco' { $checkOut = Run-ToolCheck $k 'choco --version' }
+            'winget' { $checkOut = Run-ToolCheck $k 'winget --version' }
+            'docker' { $checkOut = Run-ToolCheck $k 'docker --version' }
+            'ollama' { $checkOut = Run-ToolCheck $k 'ollama --version' }
+            'git' { $checkOut = Run-ToolCheck $k 'git --version' }
+                    '7z' {
+                        # If 7z is on PATH, run a lightweight check; otherwise, show install path if present
+                        if (Get-Command '7z' -ErrorAction SilentlyContinue) {
+                            $checkOut = Run-ToolCheck $k '7z'
+                        } else {
+                            $p = Get-7ZipInstallPath
+                            if ($p) { $checkOut = "installed at: $p; add to PATH to call directly" } else { $checkOut = '(not callable from PATH)' }
+                        }
+                    }
+            default { $checkOut = '' }
+        }
+            # If 7z was found via common locations but is not callable from PATH, include path info (handled above)
+            $info = if ($checkOut) { " - $checkOut" } else { '' }
+            Write-Host (" - {0,-8}: {1}{2}{3}" -f $k, $status, $note, $info)
+    } else {
+        Write-Host (" - {0,-8}: {1}{2}" -f $k, $status, $note)
+    }
 }
 
 if ($Suggest) {
