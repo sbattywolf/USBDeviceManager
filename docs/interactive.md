@@ -23,3 +23,40 @@ Next steps
 - Create `scripts/tools/set-install-defaults.ps1` to record installer-chosen defaults to a config JSON consumed by the menu on first-run.
 
 Please follow these guidelines when adding more interactive tests or changing behavior.
+
+## `process-menu.ps1` mock-mode and CI harness
+
+- The interactive menu `scripts/process-menu.ps1` supports a CI-safe mock mode. When `PROCESS_MENU_MOCK=1` the script will not start real processes; instead it emits small, deterministic artifacts that tests can assert on:
+	- `scripts/ci/process-menu-run.marker` — appended lines describing mock actions (sanitized, single-line entries).
+	- `scripts/ci/mock_server.pid` and `scripts/ci/mock_agent.pid` — written by helper scripts or by the menu when started in mock-mode.
+
+- Key environment variables used by the harness:
+	- `PROCESS_MENU_MOCK=1` — enable mock-mode (recommended for CI and non-elevated runs).
+	- `PROCESS_MENU_ENABLE_AUTO_ADVANCE=1` — opt-in to auto-run a default menu action and exit (useful for CI).
+	- `PROCESS_MENU_DEFAULT_ACTION` — default menu action number for auto-advance (e.g., `2` start server, `6` start agent).
+	- `PROCESS_MENU_TEST_MARKER` — path to marker file. When set the script writes `MOCK_MARK` lines into this file.
+
+## CI wrapper and assertion helpers
+
+Use the helper scripts under `scripts/ci` to run the menu in mock-mode and assert results automatically:
+
+- `run_process_menu_once.ps1 -Action <2|6>` — run the menu once and perform the selected auto-action (2=server, 6=agent).
+- `make_pids_from_marker.ps1` — parse the marker file and write `mock_server.pid` and `mock_agent.pid` so subsequent tooling can query process presence.
+- `assert_process_menu_mock_results.ps1 -Role <server|agent|both>` — assert marker entries and pid file presence; exits non-zero on failure and suitable for CI.
+- `run_process_menu_mock_capture.ps1` — convenience wrapper that runs the menu once and prints an escaped, single-line marker for easy CI log capture.
+
+Example CI sequence (mock-mode):
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_process_menu_once.ps1 -Action 2
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_process_menu_once.ps1 -Action 6
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\make_pids_from_marker.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\assert_process_menu_mock_results.ps1 -Role both
+```
+
+Archive `scripts/ci/process-menu-run.marker` and any log output from `run_process_menu_mock_capture.ps1` as CI artifacts for debugging failed runs.
+
+Notes
+
+- Marker writing is sanitized to avoid embedded newlines; assert scripts parse the marker programmatically (prefer `Get-Content -Raw`).
+- Real-mode acceptance tests are intentionally gated and require explicit environment flags and elevation — do not enable them in shared CI.

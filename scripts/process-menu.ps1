@@ -5,6 +5,19 @@ Run: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\process-menu.
 #>
 
 function Get-ServerProcess {
+    # Mock-mode emulation: if mock pid file exists, return a fake process object
+    try {
+        if ($env:PROCESS_MENU_MOCK -eq '1') {
+            $mockPidFile = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_server.pid'
+            if (Test-Path $mockPidFile) {
+                $pid = Get-Content -Path $mockPidFile -ErrorAction SilentlyContinue
+                if ($pid) {
+                    return [PSCustomObject]@{ ProcessId = [int]$pid; CreationDate = (Get-Date).ToString('o'); CommandLine = 'mock USBDeviceManager' }
+                }
+            }
+        }
+    } catch { }
+
     # Prefer the dedicated exe, fallback to dotnet process running the app
     $p = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match 'USBDeviceManager' } | Select-Object -First 1
     if ($p) { return $p }
@@ -14,6 +27,19 @@ function Get-ServerProcess {
 }
 
 function Get-AgentProcess {
+    # Mock-mode emulation: if mock agent pid file exists, return a fake process object
+    try {
+        if ($env:PROCESS_MENU_MOCK -eq '1') {
+            $mockPidFile = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_agent.pid'
+            if (Test-Path $mockPidFile) {
+                $pid = Get-Content -Path $mockPidFile -ErrorAction SilentlyContinue
+                if ($pid) {
+                    return [PSCustomObject]@{ ProcessId = [int]$pid; CreationDate = (Get-Date).ToString('o'); CommandLine = 'mock SimRacingAgent' }
+                }
+            }
+        }
+    } catch { }
+
     # Agent runs as PowerShell executing SimRacingAgent.ps1 or named process
     $p = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match 'SimRacingAgent|powershell' } | Select-Object -First 1
     $c = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'SimRacingAgent.ps1' } | Select-Object -First 1
@@ -90,6 +116,21 @@ function Format-CommandLine($cmd, $maxLen = 120) {
     } catch { return $cmd }
 }
 
+# Helper to write test marker files using an absolute path resolved from the repo root when a relative path is provided.
+function Write-TestMarker([string]$line) {
+    if (-not $env:PROCESS_MENU_TEST_MARKER) { return }
+    try {
+        $marker = $env:PROCESS_MENU_TEST_MARKER
+        if (-not [System.IO.Path]::IsPathRooted($marker)) {
+            $repoRoot = Split-Path -Path $PSScriptRoot -Parent
+            $marker = Join-Path -Path $repoRoot -ChildPath $marker
+        }
+        # Sanitize the line: collapse any embedded newlines and trim whitespace.
+        $safe = ($line -replace "[\r\n]+", ' ').Trim()
+        # Use Add-Content to append raw text without formatting/wrapping.
+        Add-Content -Path $marker -Value $safe -Encoding UTF8 -ErrorAction SilentlyContinue
+    } catch {}
+}
 function Tail-File($path) {
     if (-not (Test-Path $path)) { Write-Host "Log not found: $path"; return }
     Write-Host "Tailing $path - press Enter to stop"
@@ -159,15 +200,45 @@ function Start-ServerDetached {
         }
     }
 
-    if ($mock -or $dryRun) {
-        # create empty logs and write marker instead of launching
+    if ($dryRun) {
+        # Dry-run: do not start, write marker and exit
         try { "$((Get-Date).ToString('o')) MOCK/DRYRUN Start-ServerDetached (no process started)" | Out-File -FilePath $outLog -Append -Encoding UTF8 -ErrorAction Stop } catch {}
-        if ($env:PROCESS_MENU_TEST_MARKER) {
-            try { "$((Get-Date).ToString('o')) MOCK_MARK Start-ServerDetached" | Out-File -FilePath $env:PROCESS_MENU_TEST_MARKER -Append -Encoding UTF8 -ErrorAction SilentlyContinue } catch {}
-        }
-        Write-Host "[MOCK/DRYRUN] Skipping actual server start; logs -> $outLog"
+            if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) MOCK_MARK Start-ServerDetached" }
+        Write-Host "[DRYRUN] Skipping actual server start; logs -> $outLog"
         Pop-Location
         return [PSCustomObject]@{ Id = 0 }
+    }
+
+    if ($mock) {
+        # Mock-mode: emulate a running server using a pid file
+        $mockPidFile = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_server.pid'
+        try {
+            if (Test-Path $mockPidFile) {
+                $existingPid = Get-Content -Path $mockPidFile -ErrorAction SilentlyContinue
+                if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) SKIP_ALREADY_RUNNING Start-ServerDetached PID=$existingPid" }
+                Pop-Location
+                return [PSCustomObject]@{ Id = [int]$existingPid; ProcessId = [int]$existingPid }
+            }
+            $newPid = Get-Random -Minimum 20000 -Maximum 60000
+            Set-Content -Path $mockPidFile -Value $newPid -Force
+            if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) MOCK_MARK Start-ServerDetached PID=$newPid" }
+            try { "$((Get-Date).ToString('o')) MOCK Start-ServerDetached PID=$newPid" | Out-File -FilePath $outLog -Append -Encoding UTF8 -ErrorAction Stop } catch {}
+            Pop-Location
+            return [PSCustomObject]@{ Id = [int]$newPid; ProcessId = [int]$newPid; CreationDate = (Get-Date).ToString('o') }
+        } catch {
+            Pop-Location
+            return [PSCustomObject]@{ Id = 0 }
+        }
+    }
+
+    # Singleton guard: if a server process is already running, do not start another.
+    $existing = Get-ServerProcess
+    $existingId = Get-ProcId $existing
+    if ($existingId) {
+        Write-Host ("Server already running (PID={0}); skipping start." -f $existingId) -ForegroundColor Yellow
+        if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) SKIP_ALREADY_RUNNING Start-ServerDetached PID=$existingId" }
+        Pop-Location
+        return $existing
     }
 
     # Check for dotnet on PATH for safety
@@ -178,9 +249,7 @@ function Start-ServerDetached {
         Write-Host 'If you intentionally want to skip starting the server, set PROCESS_MENU_DRY_RUN=1 or PROCESS_MENU_ASSUME_DRYRUN=1.' -ForegroundColor Yellow
         if ($env:PROCESS_MENU_ASSUME_DRYRUN -eq '1') {
             try { "$((Get-Date).ToString('o')) ASSUME_DRYRUN Start-ServerDetached (dotnet missing)" | Out-File -FilePath $outLog -Append -Encoding UTF8 -ErrorAction Stop } catch {}
-            if ($env:PROCESS_MENU_TEST_MARKER) {
-                try { "$((Get-Date).ToString('o')) MOCK_MARK Start-ServerDetached_MISSING_DOTNET" | Out-File -FilePath $env:PROCESS_MENU_TEST_MARKER -Append -Encoding UTF8 -ErrorAction SilentlyContinue } catch {}
-            }
+                if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) MOCK_MARK Start-ServerDetached_MISSING_DOTNET" }
             Pop-Location
             return [PSCustomObject]@{ Id = 0 }
         }
@@ -192,9 +261,7 @@ function Start-ServerDetached {
         $proc = Start-Process -FilePath dotnet -ArgumentList 'run' -WorkingDirectory $cwd -RedirectStandardOutput $outLog -RedirectStandardError $errLog -PassThru -ErrorAction Stop
         Pop-Location
         Write-Host "Started server (detached); PID=$($proc.Id); logs -> $outLog"
-        if ($env:PROCESS_MENU_TEST_MARKER) {
-            try { "$((Get-Date).ToString('o')) STARTED Start-ServerDetached PID=$($proc.Id)" | Out-File -FilePath $env:PROCESS_MENU_TEST_MARKER -Append -Encoding UTF8 -ErrorAction SilentlyContinue } catch {}
-        }
+        if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) STARTED Start-ServerDetached PID=$($proc.Id)" }
         $exitLog = Join-Path -Path ([string]$cwd) -ChildPath 'server-exit-capture.log'
         Start-Job -Name "ServerExitWatcher_$($proc.Id)" -ScriptBlock {
             param($processId,$log)
@@ -211,9 +278,7 @@ function Start-ServerDetached {
     } catch {
         $err = $_.Exception.Message -replace "\r|\n"," "
         try { "$((Get-Date).ToString('o')) FAILED Start-ServerDetached Error:$err" | Out-File -FilePath $errLog -Append -Encoding UTF8 -ErrorAction SilentlyContinue } catch {}
-        if ($env:PROCESS_MENU_TEST_MARKER) {
-            try { "$((Get-Date).ToString('o')) FAIL_MARK Start-ServerDetached $err" | Out-File -FilePath $env:PROCESS_MENU_TEST_MARKER -Append -Encoding UTF8 -ErrorAction SilentlyContinue } catch {}
-        }
+        if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) FAIL_MARK Start-ServerDetached $err" }
         Write-Host "Failed to start server: $err" -ForegroundColor Red
         Pop-Location
         return $null
@@ -232,13 +297,25 @@ function Start-AgentDetached {
     if ($mock) {
         if (-not (Test-Path $outLog)) { New-Item -Path $outLog -ItemType File -Force | Out-Null }
         if (-not (Test-Path $errLog)) { New-Item -Path $errLog -ItemType File -Force | Out-Null }
-        try { "$((Get-Date).ToString('o')) MOCK Start-AgentDetached (no process started)" | Out-File -FilePath $outLog -Append -Encoding UTF8 -ErrorAction Stop } catch {}
-        if ($env:PROCESS_MENU_TEST_MARKER) {
-            try { "$((Get-Date).ToString('o')) MOCK_MARK Start-AgentDetached" | Out-File -FilePath $env:PROCESS_MENU_TEST_MARKER -Append -Encoding UTF8 -ErrorAction SilentlyContinue } catch {}
+        # Mock-mode: emulate agent PID file
+        $mockPidFile = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_agent.pid'
+        try {
+            if (Test-Path $mockPidFile) {
+                $existingPid = Get-Content -Path $mockPidFile -ErrorAction SilentlyContinue
+                    if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) SKIP_ALREADY_RUNNING Start-AgentDetached PID=$existingPid" }
+                Pop-Location
+                return [PSCustomObject]@{ Id = [int]$existingPid; ProcessId = [int]$existingPid }
+            }
+            $newPid = Get-Random -Minimum 20000 -Maximum 60000
+            Set-Content -Path $mockPidFile -Value $newPid -Force
+                if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) MOCK_MARK Start-AgentDetached PID=$newPid" }
+            try { "$((Get-Date).ToString('o')) MOCK Start-AgentDetached PID=$newPid" | Out-File -FilePath $outLog -Append -Encoding UTF8 -ErrorAction Stop } catch {}
+            Pop-Location
+            return [PSCustomObject]@{ Id = [int]$newPid; ProcessId = [int]$newPid; CreationDate = (Get-Date).ToString('o') }
+        } catch {
+            Pop-Location
+            return [PSCustomObject]@{ Id = 0 }
         }
-        Write-Host "[MOCK] Skipping actual agent start; logs -> agent/SimRacingAgent/agent-run.log"
-        Pop-Location
-        return [PSCustomObject]@{ Id = 0 }
     }
 
     $proc = Start-Process -FilePath powershell -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','.\SimRacingAgent.ps1' -WorkingDirectory $cwd -RedirectStandardOutput $outLog -RedirectStandardError $errLog -PassThru
@@ -322,41 +399,36 @@ while ($true) {
         $agtState = if ($curAgentId) { 'up' } else { 'dw' }
         Write-Host "Running in TESTING mode - srvmck:$srvState agntmck:$agtState" -ForegroundColor Magenta
     }
-    if ($curServerId) {
-        $serverOwner = Get-OwningTerminal $curServer
-        $srvStart = Get-ProcStartTimeString $curServer
-        if ($serverOwner) {
-            if ($srvStart) {
-                Write-Host "Server: running (PID=$curServerId, started=$srvStart) — started by $($serverOwner.ProcessName) PID=$($serverOwner.Pid)" -ForegroundColor Green
-            } else {
-                Write-Host "Server: running (PID=$curServerId) — started by $($serverOwner.ProcessName) PID=$($serverOwner.Pid)" -ForegroundColor Green
-            }
-        } else {
-            if ($srvStart) {
-                Write-Host "Server: running (PID=$curServerId, started=$srvStart)" -ForegroundColor Green
-            } else {
-                Write-Host "Server: running (PID=$curServerId)" -ForegroundColor Green
-            }
-        }
-        Write-Host "Quick: press 1 to show full server info" -ForegroundColor DarkCyan
-    } else { Write-Host "Server: not running" -ForegroundColor DarkYellow }
-    if ($curAgentId) {
-        $agentOwner = Get-OwningTerminal $curAgent
-        $agtStart = Get-ProcStartTimeString $curAgent
-        if ($agentOwner) {
-            if ($agtStart) {
-                Write-Host "Agent: running (PID=$curAgentId, started=$agtStart) — started by $($agentOwner.ProcessName) PID=$($agentOwner.Pid)" -ForegroundColor Green
-            } else {
-                Write-Host "Agent: running (PID=$curAgentId) — started by $($agentOwner.ProcessName) PID=$($agentOwner.Pid)" -ForegroundColor Green
-            }
-        } else {
-            if ($agtStart) {
-                Write-Host "Agent: running (PID=$curAgentId, started=$agtStart)" -ForegroundColor Green
-            } else {
-                Write-Host "Agent: running (PID=$curAgentId)" -ForegroundColor Green
-            }
-        }
-    } else { Write-Host "Agent: not running" -ForegroundColor DarkYellow }
+    # Display concise Server/Agent status line (human-readable start times)
+    $srvStatus = if ($env:PROCESS_MENU_MOCK -eq '1') { 'MOCKED' } elseif ($curServerId) { 'UP' } else { 'DOWN' }
+    $agtStatus = if ($env:PROCESS_MENU_MOCK -eq '1') { 'MOCKED' } elseif ($curAgentId) { 'UP' } else { 'DOWN' }
+
+    # Helper to format start time safely
+    function Format-StartTime($raw) {
+        if (-not $raw) { return 'N/A' }
+        try {
+            $dt = [datetime]::Parse($raw)
+            return $dt.ToString('yyyy MM dd HH:mm:ss')
+        } catch { return $raw }
+    }
+
+    $srvStartRaw = $null; $agtStartRaw = $null
+    try { $srvStartRaw = Get-ProcStartTimeString $curServer } catch { $srvStartRaw = $null }
+    try { $agtStartRaw = Get-ProcStartTimeString $curAgent } catch { $agtStartRaw = $null }
+
+    $srvStartFmt = Format-StartTime $srvStartRaw
+    $agtStartFmt = Format-StartTime $agtStartRaw
+
+    # Choose color for status summary
+    $srvColor = if ($srvStatus -eq 'UP') { 'Green' } elseif ($srvStatus -eq 'MOCKED') { 'Magenta' } else { 'DarkYellow' }
+    $agtColor = if ($agtStatus -eq 'UP') { 'Green' } elseif ($agtStatus -eq 'MOCKED') { 'Magenta' } else { 'DarkYellow' }
+
+    # Print summary lines
+    $srvPidText = if ($curServerId) { "PID=$curServerId" } else { 'PID=N/A' }
+    $agtPidText = if ($curAgentId) { "PID=$curAgentId" } else { 'PID=N/A' }
+    Write-Host ("Server: {0} ({1}, started={2})" -f $srvStatus, $srvPidText, $srvStartFmt) -ForegroundColor $srvColor
+    Write-Host "Quick: press 1 to show full server info" -ForegroundColor DarkCyan
+    Write-Host ("Agent: {0} ({1}, started={2})" -f $agtStatus, $agtPidText, $agtStartFmt) -ForegroundColor $agtColor
     Write-Host "Tail poll interval: $($TailPollSeconds)s" -ForegroundColor DarkCyan
     Write-Host "--- Server ---" -ForegroundColor Yellow
     Write-Host "1) Show server process info"
@@ -416,7 +488,21 @@ while ($true) {
         '3' {
             $sp = Get-ServerProcess
             $id = Get-ProcId $sp
-            if ($id) { Stop-ProcById $id; Start-Sleep -Milliseconds 200; $curServer = Get-ServerProcess; $curServerId = Get-ProcId $curServer; Write-Host "Server stopped." -ForegroundColor Yellow } else { Write-Host 'Server not found' }
+            if ($id) {
+                Stop-ProcById $id
+                # If mock-mode, remove mock pid file when stopping
+                if ($env:PROCESS_MENU_MOCK -eq '1') {
+                    $mockPidFile = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_server.pid'
+                    try {
+                        if (Test-Path $mockPidFile) {
+                            $mp = Get-Content $mockPidFile -ErrorAction SilentlyContinue
+                            Remove-Item -Path $mockPidFile -Force -ErrorAction SilentlyContinue
+                            if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) MOCK_MARK Stopped-Server PID=$mp" }
+                        }
+                    } catch {}
+                }
+                Start-Sleep -Milliseconds 200; $curServer = Get-ServerProcess; $curServerId = Get-ProcId $curServer; Write-Host "Server stopped." -ForegroundColor Yellow
+            } else { Write-Host 'Server not found' }
             Read-Host 'Press Enter to continue'
         }
         '4' {
@@ -450,7 +536,19 @@ while ($true) {
         '7' {
             $ap = Get-AgentProcess
             $id = Get-ProcId $ap
-            if ($id) { Stop-ProcById $id } else { Write-Host 'Agent not found' }
+            if ($id) {
+                Stop-ProcById $id
+                if ($env:PROCESS_MENU_MOCK -eq '1') {
+                    $mockPidFile = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_agent.pid'
+                    try {
+                        if (Test-Path $mockPidFile) {
+                            $mp = Get-Content $mockPidFile -ErrorAction SilentlyContinue
+                            Remove-Item -Path $mockPidFile -Force -ErrorAction SilentlyContinue
+                            if ($env:PROCESS_MENU_TEST_MARKER) { Write-TestMarker "$((Get-Date).ToString('o')) MOCK_MARK Stopped-Agent PID=$mp" }
+                        }
+                    } catch {}
+                }
+            } else { Write-Host 'Agent not found' }
             Read-Host 'Press Enter to continue'
         }
         '8' {
@@ -591,3 +689,12 @@ while ($true) {
 }
 
 Write-Host 'Exiting process-menu.'
+try {
+    # Cleanup stale mock pid files on exit
+    if ($env:PROCESS_MENU_MOCK -eq '1') {
+        $mockServer = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_server.pid'
+        $mockAgent  = Join-Path -Path $PSScriptRoot -ChildPath 'ci\mock_agent.pid'
+        try { if (Test-Path $mockServer) { Remove-Item -Path $mockServer -Force -ErrorAction SilentlyContinue } } catch {}
+        try { if (Test-Path $mockAgent)  { Remove-Item -Path $mockAgent -Force -ErrorAction SilentlyContinue } } catch {}
+    }
+} catch {}

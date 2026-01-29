@@ -1,0 +1,21 @@
+﻿
+   Id ProcessId
+   -- ---------
+46585     46585
+
+
+
+
+   Id ProcessId
+   -- ---------
+58039     58039
+
+
+
+
+OK: Found server start marker (PID=46585)
+OK: Found agent start marker (PID=58039)
+OK: mock_server.pid exists: 46585
+OK: mock_agent.pid exists: 58039
+All assertions passed.
+
