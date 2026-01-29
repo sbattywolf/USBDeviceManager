@@ -19,6 +19,16 @@ Passi raccomandati
 - Se usi un'estensione che può chiamare un endpoint locale (es. "Local AI" o "REST Client"), configura l'URL o il comando per eseguire lo script.
 - Alternativa semplice: usare un task o una command palette entry che invoca lo script locale e mostra output.
 
+Esempi aggiuntivi inclusi nel repository:
+- `.continue/agent-runner.ps1`: stub minimale che legge un prompt e risponde in JSON.
+- `.vscode/tasks.example.json`: task di esempio per eseguire il runner locale dalla palette dei task.
+
+Per provare localmente:
+1. Copia `docs/vscode-workspace-settings.example.json` → `.vscode/settings.json` per disabilitare telemetria in workspace.
+2. Apri la Command Palette → `Tasks: Run Task` → scegli `Run local agent` e inserisci il prompt.
+
+Se vuoi, posso implementare una versione che invia richieste al tuo server LLM locale (es. `ollama` REST) invece di rispondere con un echo.
+
 Esempio: aggiungere snippet in `.vscode/settings.json` per una estensione che supporta `localAgent.command`
 
 {
