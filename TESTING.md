@@ -131,3 +131,28 @@ Troubleshooting notes
 - **Recording investigations:** Add a short forensic note to `docs/diagnostics/ci-forensics-YYYY-MM-DD.md` with run-IDs and preserved artifact paths.
 
 I will keep these diagnostic notes updated after each investigation.
+
+## Interactive menu tests (mock-mode)
+
+We added a CI-safe harness for the interactive `scripts/process-menu.ps1` menu that runs in `mock` mode
+and emits marker files so automated runners can assert behavior without launching real processes.
+
+Quick run (mock-mode, CI-safe):
+
+```powershell
+# Run server auto-action then agent auto-action, generate pid files from marker, and assert both
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_process_menu_once.ps1 -Action 2
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_process_menu_once.ps1 -Action 6
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\make_pids_from_marker.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\assert_process_menu_mock_results.ps1 -Role both
+```
+
+Useful files:
+- `scripts/ci/run_process_menu_mock_capture.ps1` — wrapper that runs `process-menu` once and prints escaped markers; useful for log capture.
+- `scripts/ci/run_process_menu_once.ps1` — run `process-menu` with a single auto-action (`-Action 2`=server, `-Action 6`=agent).
+- `scripts/ci/make_pids_from_marker.ps1` — parse the marker file and produce `scripts/ci/mock_server.pid` and `scripts/ci/mock_agent.pid`.
+- `scripts/ci/assert_process_menu_mock_results.ps1` — CI assertion script; exits non-zero if expected marker/pid files are missing or malformed.
+
+CI integration suggestion:
+- Add a job step that runs the above sequence and uploads `scripts/ci/process-menu-mock-run.log` and `scripts/ci/process-menu-run.marker` as artifacts.
+

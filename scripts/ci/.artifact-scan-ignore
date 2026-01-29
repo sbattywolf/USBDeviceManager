@@ -1,0 +1,7 @@
+# sample ignore patterns (regex, one per line)
+# skip CI run folders
+\\ci-run-\d+
+# skip local tmp snapshots
+\\\bTemp\\\b
+# skip vendor/thirdparty folders
+thirdparty

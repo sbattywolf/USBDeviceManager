@@ -1,0 +1,8 @@
+PID=$curAgentId : Termine 'PID=$curAgentId' non riconosciuto come nome di cmdlet, funzione, programma eseguibile o 
+file script. Controllare l'ortografia del nome o verificare che il percorso sia incluso e corretto, quindi riprovare.
+In E:\Workspaces\Git\SimRacing\USBDeviceManager\scripts\process-menu.ps1:350 car:45
++                 Write-Host "Agent: running (PID=$curAgentId) ƒ?" star ...
++                                             ~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (PID=$curAgentId:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 

@@ -1,0 +1,126 @@
+name: Full Test CI (self-hosted modular)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_acceptance_real:
+        description: 'Run gated real-mode acceptance tests (requires self-hosted elevated runners)'
+        required: false
+        default: 'false'
+
+concurrency:
+  group: fulltest-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Unit tests (fast)
+  unit:
+    name: Unit Tests
+    runs-on: [self-hosted, windows]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: Run unit tests
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "dotnet test --no-build --logger trx;"
+      - name: Upload unit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-trx
+          path: '**/TestResults/**/*.trx'
+
+  # Integration (non-interactive)
+  integration:
+    name: Integration Tests (non-interactive)
+    runs-on: [self-hosted, windows]
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run integration wrapper (non-interactive)
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\run-integration-noninteractive.ps1 -Port 5010 -NonInteractive
+      - name: Upload integration artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-artifacts
+          path: artifacts/**
+
+  # Interactive mock tests - CI-safe
+  interactive-mock:
+    name: Interactive Mock Tests
+    runs-on: [self-hosted, windows]
+    needs: integration
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run interactive mock CI runner
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_and_assert_process_menu_mock.ps1
+      - name: Upload interactive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: interactive-artifacts
+          path: scripts/ci/process-menu-*.log
+
+  # Unhappy-path tests (mock-mode with simulated failures)
+  unhappy:
+    name: Unhappy-path Tests
+    runs-on: [self-hosted, windows]
+    needs: interactive-mock
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run unhappy-path scenario (mock)
+        env:
+          PROCESS_MENU_MOCK: '1'
+          PROCESS_MENU_ENABLE_AUTO_ADVANCE: '1'
+          PROCESS_MENU_DEFAULT_ACTION: '2'
+          PROCESS_MENU_TEST_MARKER: 'scripts/ci/process-menu-run.marker'
+          # Simulate missing dotnet or other fail signal for unhappy path
+          PROCESS_MENU_ASSUME_DRYRUN: '1'
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\run_process_menu_mock_capture.ps1
+      - name: Upload unhappy artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: unhappy-artifacts
+          path: scripts/ci/process-menu-*.log
+
+  # Acceptance (real-mode) - gated and optional
+  acceptance-real:
+    name: Acceptance (real-mode, gated)
+    if: ${{ github.event.inputs.run_acceptance_real == 'true' }}
+    runs-on: [self-hosted, windows, elevated]
+    needs: unhappy
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm run
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "Write-Host 'Running real acceptance tests (user opted in)';"
+      - name: Run guarded acceptance script
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\test_process_menu_acceptance_real.ps1
+      - name: Upload acceptance artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: acceptance-artifacts
+          path: scripts/ci/process-menu-acceptance-*.txt
+
+  # Final aggregator: collect summaries and publish a concise JSON summary
+  summary:
+    name: Publish Summary
+    runs-on: [self-hosted, windows]
+    needs: [interactive-mock, unhappy]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect summary files
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -Command "
+            $out = @{}
+            if (Test-Path 'scripts/ci/process-menu-run.marker') { $out.marker = (Get-Content 'scripts/ci/process-menu-run.marker' -Raw) }
+            if (Test-Path 'scripts/ci/mock_server.pid') { $out.mock_server_pid = (Get-Content 'scripts/ci/mock_server.pid' -Raw).Trim() }
+            if (Test-Path 'scripts/ci/mock_agent.pid') { $out.mock_agent_pid = (Get-Content 'scripts/ci/mock_agent.pid' -Raw).Trim() }
+            $json = $out | ConvertTo-Json -Depth 4
+            $json | Out-File -FilePath scripts/ci/last_run_summary.json -Encoding UTF8 -Force
+            Write-Host 'Wrote scripts/ci/last_run_summary.json'
+          "
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: interactive-summary
+          path: scripts/ci/last_run_summary.json

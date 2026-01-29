@@ -61,26 +61,59 @@ namespace USBDeviceManager.Tests.Functional
                     var debugExe = Path.Combine(projectDir, "bin", "Debug", "net8.0", "SMServer.exe");
                     if (File.Exists(releaseExe))
                     {
-                        psi = new ProcessStartInfo(releaseExe)
+                        var releaseDir = Path.GetDirectoryName(releaseExe) ?? projectDir;
+                        var releaseDll = Path.Combine(releaseDir, "SMServer.dll");
+                        if (File.Exists(releaseDll))
                         {
-                            WorkingDirectory = Path.GetDirectoryName(releaseExe) ?? projectDir,
-                            RedirectStandardOutput = true,
-                            RedirectStandardError = true,
-                            UseShellExecute = false,
-                            CreateNoWindow = true,
-                        };
+                            // Prefer launching the DLL via `dotnet` when available (works when shared framework not installed as host)
+                            psi = new ProcessStartInfo("dotnet", $"\"{releaseDll}\" --urls http://localhost:5006")
+                            {
+                                WorkingDirectory = releaseDir,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            };
+                        }
+                        else
+                        {
+                            psi = new ProcessStartInfo(releaseExe)
+                            {
+                                WorkingDirectory = releaseDir,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            };
+                        }
                         proc = Process.Start(psi);
                     }
                     else if (File.Exists(debugExe))
                     {
-                        psi = new ProcessStartInfo(debugExe)
+                        var debugDir = Path.GetDirectoryName(debugExe) ?? projectDir;
+                        var debugDll = Path.Combine(debugDir, "SMServer.dll");
+                        if (File.Exists(debugDll))
                         {
-                            WorkingDirectory = Path.GetDirectoryName(debugExe) ?? projectDir,
-                            RedirectStandardOutput = true,
-                            RedirectStandardError = true,
-                            UseShellExecute = false,
-                            CreateNoWindow = true,
-                        };
+                            psi = new ProcessStartInfo("dotnet", $"\"{debugDll}\" --urls http://localhost:5006")
+                            {
+                                WorkingDirectory = debugDir,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            };
+                        }
+                        else
+                        {
+                            psi = new ProcessStartInfo(debugExe)
+                            {
+                                WorkingDirectory = debugDir,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            };
+                        }
                         proc = Process.Start(psi);
                     }
                     else

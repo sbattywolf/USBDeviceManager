@@ -2,6 +2,40 @@ name: Artifact Scan
 
 on:
   workflow_dispatch: {}
+
+jobs:
+  artifact_scan:
+    name: Run streamed artifact scanner
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run artifact scanner (PowerShell)
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\artifact_scan_streamed.ps1 \
+            -ArtifactsDir .\artifacts \
+            -OutputJson .\artifacts\artifact-scan-streamed-$env:GITHUB_RUN_ID.json \
+            -IgnoreFile .\scripts\ci\.artifact-scan-ignore \
+            -MaxFileMB 50 \
+            -ProgressInterval 200
+
+      - name: Upload scan JSON
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-scan-json
+          path: artifacts/artifact-scan-streamed-*.json
+
+      - name: Upload scan log (if generated)
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-scan-log
+          path: artifacts/artifact-scan-streamed-*.log
+name: Artifact Scan
+
+on:
+  workflow_dispatch: {}
   push:
     branches:
       - main

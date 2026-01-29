@@ -1,0 +1,22 @@
+=== Process Menu: Server vs Agent ===
+Server: running (PID=29996)
+Agent: running (PID=21244)
+Tail poll interval: 30s
+--- Server ---
+1) Show server process info
+2) Start server (detached)
+3) Stop server process
+4) Tail server.log
+
+--- Agent ---
+5) Show agent process info
+6) Start agent (detached)
+7) Stop agent process
+8) Tail agent-run.log
+
+--- Setup ---
+9) Setup menu (ensure/clear logs, rebuild server)
+0) Exit
+[TESTINPUT] Select an option -> '2'
+[MOCK] Skipping actual server start; logs -> server/USBDeviceManager/server.log
+

@@ -25,6 +25,12 @@ jobs:
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\precheck_dotnet.ps1
 
+      - name: Check SMServer.exe presence (pre-check)
+        shell: cmd
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci\check-smserver.ps1 -SearchRoot . -OutDir artifacts/diagnostics
+          if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
+
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -58,4 +64,6 @@ jobs:
           path: |
             artifacts/test-results/*.trx
             server/AgentE2E.Tests/**/TestResults/*.trx
+            artifacts/diagnostics/**
+            diagnostics/**
 

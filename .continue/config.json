@@ -1,0 +1,36 @@
+{
+  "models": [
+    {
+      "title": "AGENT CONTROLLER (Regista Locale)",
+      "provider": "ollama",
+      "model": "deepseek-r1:8b",
+      "systemMessage": "Sei il coordinatore. Gestisci i task locali. Se un task riguarda Git o documentazione esterna, suggerisci di usare Copilot."
+    },
+    {
+      "title": "PRECISIONE CODING (3090 - 32B)",
+      "provider": "ollama",
+      "model": "qwen2.5-coder:32b",
+      "systemMessage": "Sei l'esperto senior. Scrivi codice accurato seguendo l' .editorconfig del progetto. Privacy locale garantita."
+    },
+    {
+      "title": "TECH COACH (Mentore Locale)",
+      "provider": "ollama",
+      "model": "deepseek-r1:14b",
+      "systemMessage": "Analizza il mio codice e proponimi esercizi per migliorare le mie basi tecniche."
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "Autocomplete Locale",
+    "provider": "ollama",
+    "model": "qwen2.5-coder:1.5b"
+  },
+  "tabAutocompleteOptions": {
+    "disable": false,
+    "useFileSuffix": true
+  },
+  "embeddingsProvider": {
+    "provider": "ollama",
+    "model": "nomic-embed-text"
+  },
+  "allowAnonymousTelemetry": false
+}
