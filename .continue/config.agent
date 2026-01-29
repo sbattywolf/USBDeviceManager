@@ -1,0 +1,25 @@
+{
+  "agents": [
+    {
+      "name": "CustomAgent",
+      "type": "local-script",
+      "entry": ".continue/agent-runner.ps1",
+      "description": "Default local agent (echo stub).",
+      "options": {
+        "model": "qwen2.5-coder:1.5b",
+        "mode": "default"
+      }
+    },
+    {
+      "name": "TurboAgent",
+      "type": "local-script",
+      "entry": ".continue/agent-runner.ps1",
+      "description": "High-performance agent profile (uses larger model).",
+      "options": {
+        "model": "qwen2.5-coder:32b",
+        "mode": "turbo"
+      }
+    }
+  ],
+  "default": "CustomAgent"
+}
