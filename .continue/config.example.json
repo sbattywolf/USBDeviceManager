@@ -1,0 +1,11 @@
+{
+  "processMenu": {
+    "autoAdvanceDefault": true,
+    "inputTimeoutSeconds": 5,
+    "defaultAction": 2
+  },
+  "ci": {
+    "markerPath": "scripts/ci/process-menu-run.marker",
+    "enableMock": true
+  }
+}
