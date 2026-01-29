@@ -1,7 +1,10 @@
 param(
     [switch]$DryRun,
     [int]$TimeoutSeconds = 0,
-    [switch]$NoTelemetry
+    [switch]$NoTelemetry,
+    [switch]$AutoDisableOnHighLoad,
+    [int]$VramThresholdMB = 12000,
+    [int]$TempThresholdC = 85
 )
 
 Write-Host "--- Avvio Ambiente AI Ibrido (3090 + HA) ---" -ForegroundColor Cyan
@@ -47,18 +50,30 @@ while ($true) {
         $elapsed = (Get-Date) - $start
         if ($elapsed.TotalSeconds -ge $TimeoutSeconds) { Write-Host "Telemetry timeout reached; exiting." -ForegroundColor Cyan; break }
     }
-    $vram = (nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits) 2>$null
-    $temp = (nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits) 2>$null
-    
+    $vramRaw = (nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits) 2>$null
+    $tempRaw = (nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits) 2>$null
+    $vram = if ($vramRaw) { [int]$vramRaw } else { 0 }
+    $temp = if ($tempRaw) { [int]$tempRaw } else { 0 }
+
+    # Auto-disable telemetry if enabled and we've been asked to monitor for high load
+    if ($AutoDisableOnHighLoad -and -not $NoTelemetry) {
+        if ($vram -ge $VramThresholdMB -or $temp -ge $TempThresholdC) {
+            $reason = "Auto-disabled telemetry: vram=${vram}MB temp=${temp}C (thresholds vram=${VramThresholdMB}MB temp=${TempThresholdC}C)"
+            Write-Host $reason -ForegroundColor Yellow
+            try { "$((Get-Date).ToString('o')) TELEMETRY_DISABLED $reason" | Out-File -FilePath $markerFile -Encoding UTF8 -Append } catch { }
+            break
+        }
+    }
+
     $payload = @{
-        gpu_vram_used = if ($vram) { [int]$vram } else { 0 }
-        gpu_temp = if ($temp) { [int]$temp } else { 0 }
+        gpu_vram_used = $vram
+        gpu_temp = $temp
         status = "Coding"
     } | ConvertTo-Json -Compress
 
     # Optionally publish to MQTT if configured (commented by default)
     # & "C:\Program Files\mosquitto\mosquitto_pub.exe" -h INDIRIZZO_IP_HA -t "pc/ai/telemetry" -m $payload
 
-    Write-Host "`rVRAM: $($payload | ConvertFrom-Json).gpu_vram_used MB | Temp: $($payload | ConvertFrom-Json).gpu_temp C " -NoNewline
+    Write-Host "`rVRAM: $vram MB | Temp: $temp C " -NoNewline
     Start-Sleep -Seconds 10
 }

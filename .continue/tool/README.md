@@ -16,6 +16,8 @@ Prerequisites
 
 Safety
 - The orchestrator can run indefinitely; use `-TimeoutSeconds` or run via a scheduled task.
+ - The orchestrator can run indefinitely; use `-TimeoutSeconds` or run via a scheduled task.
+ - Auto-disable telemetry: start the orchestrator with `-AutoDisableOnHighLoad` and optional thresholds `-VramThresholdMB` and `-TempThresholdC`. If the measured GPU VRAM usage or GPU temperature exceeds the thresholds, the orchestrator will stop publishing telemetry and append a `TELEMETRY_DISABLED` entry to `.continue/tool/ai_env.marker`.
 - Model downloads are large; the setup script warns if free disk is below 20GB.
 - Scripts write `.continue/tool/ai_env.pid` to track the environment. Use `Stop-AI-Env.ps1` to clean up.
 
