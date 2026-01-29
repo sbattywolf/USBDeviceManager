@@ -1,0 +1,6 @@
+{
+  "telemetry.telemetryLevel": "off",
+  "telemetry.enableTelemetry": false,
+  "extensions.autoUpdate": false,
+  "github.copilot.enable": false
+}
